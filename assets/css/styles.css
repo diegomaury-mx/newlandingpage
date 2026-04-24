@@ -460,6 +460,50 @@ section { position: relative; }
 }
 
 /* ═══════════════════════════════════════
+   EXPERIENCIA
+═══════════════════════════════════════ */
+.experience { padding-block: var(--section-pad); background: var(--ink); }
+.exp__list {
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--white-10);
+}
+.exp__item {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2rem;
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--white-10);
+}
+.exp__org { color: var(--white-60); font-size: 0.7rem; }
+.exp__period { color: var(--white-40); font-size: 0.65rem; margin-top: 0.25rem; }
+.exp__role {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+.exp__achievements { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.exp__achievements li {
+  font-size: 0.9rem;
+  color: var(--white-60);
+  padding-left: 1.25rem;
+  position: relative;
+  line-height: 1.55;
+}
+.exp__achievements li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--blaze);
+  font-size: 0.75rem;
+  top: 0.1rem;
+}
+@media (max-width: 767px) {
+  .exp__item { grid-template-columns: 1fr; gap: 0.75rem; }
+}
+
+/* ═══════════════════════════════════════
    SCROLL REVEAL
 ═══════════════════════════════════════ */
 [data-reveal] {
