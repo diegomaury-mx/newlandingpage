@@ -504,6 +504,49 @@ section { position: relative; }
 }
 
 /* ═══════════════════════════════════════
+   CONTACTO
+═══════════════════════════════════════ */
+.contact { padding-block: var(--section-pad); background: var(--purple); }
+.contact__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+.contact__channel { display: flex; flex-direction: column; gap: 0.75rem; }
+.contact__channel-label { color: var(--white-40); }
+.contact__channel-name {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--white);
+}
+.contact__channel-desc { color: var(--white-60); font-size: 0.9rem; flex: 1; }
+.contact__email { font-size: 0.8rem !important; letter-spacing: 0.04em; }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.footer { background: var(--purple); border-top: 1px solid var(--white-10); }
+.footer__tricolor {
+  height: 3px;
+  background: linear-gradient(to right, var(--purple) 33%, #1a0b2e 33% 66%, var(--blaze) 66%);
+}
+.footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 1.5rem;
+}
+.footer__tagline { color: var(--blaze); font-size: 0.7rem; letter-spacing: 0.1em; }
+.footer__copy { font-size: 0.75rem; color: var(--white-40); }
+@media (max-width: 899px) { .contact__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 599px) {
+  .contact__grid { grid-template-columns: 1fr; }
+  .footer__inner { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+
+/* ═══════════════════════════════════════
    SCROLL REVEAL
 ═══════════════════════════════════════ */
 [data-reveal] {
