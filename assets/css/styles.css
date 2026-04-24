@@ -108,6 +108,100 @@ button { cursor: pointer; font: inherit; border: none; background: none; }
 section { position: relative; }
 
 /* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--white-10);
+  z-index: 100;
+  transition: background var(--dur-norm);
+}
+.nav__inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.nav__logo {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
+}
+.nav__name {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--white);
+  letter-spacing: -0.01em;
+}
+.nav__links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+.nav__link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  transition: color var(--dur-fast);
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+.nav__link:hover,
+.nav__link.is-active {
+  color: var(--white);
+  border-bottom-color: var(--blaze);
+}
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+.nav__burger span {
+  display: block;
+  width: 22px; height: 2px;
+  background: var(--white);
+  transition: transform var(--dur-norm), opacity var(--dur-fast);
+}
+@media (max-width: 767px) {
+  .nav__links {
+    display: none;
+    position: fixed;
+    inset: var(--nav-h) 0 0 0;
+    background: var(--ink);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    z-index: 99;
+  }
+  .nav__links.is-open { display: flex; }
+  .nav__link { font-size: 1rem; }
+  .nav__burger { display: flex; }
+  .nav[aria-expanded="true"] .nav__burger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav[aria-expanded="true"] .nav__burger span:nth-child(2) { opacity: 0; }
+  .nav[aria-expanded="true"] .nav__burger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+/* ═══════════════════════════════════════
    SCROLL REVEAL
 ═══════════════════════════════════════ */
 [data-reveal] {
