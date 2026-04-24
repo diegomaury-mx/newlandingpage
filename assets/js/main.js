@@ -33,3 +33,25 @@ const navObserver = new IntersectionObserver(entries => {
 }, { rootMargin: '-40% 0px -55% 0px' });
 
 sections.forEach(s => navObserver.observe(s));
+
+// ── Scroll Reveal ──
+
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!prefersReduced) {
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    rootMargin: '0px 0px -80px 0px',
+    threshold: 0.1
+  });
+
+  document.querySelectorAll('[data-reveal]').forEach(el => {
+    revealObserver.observe(el);
+  });
+}
