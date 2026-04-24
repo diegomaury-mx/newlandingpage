@@ -407,6 +407,59 @@ section { position: relative; }
 @media (max-width: 599px) { .services__grid { grid-template-columns: 1fr; } }
 
 /* ═══════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════ */
+.about { padding-block: var(--section-pad); background: var(--ink); }
+.about__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+.about__bio { color: var(--white-60); margin-top: 1rem; font-size: 1rem; }
+.about__data { display: flex; flex-direction: column; gap: 2rem; }
+.about__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  background: var(--white-06);
+  color: var(--white-80);
+  border: 1px solid var(--white-10);
+}
+.about__how {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.about__how li {
+  font-size: 0.9rem;
+  color: var(--white-60);
+  padding-left: 1.25rem;
+  position: relative;
+}
+.about__how li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--blaze);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+@media (max-width: 767px) {
+  .about__inner { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+/* ═══════════════════════════════════════
    SCROLL REVEAL
 ═══════════════════════════════════════ */
 [data-reveal] {
