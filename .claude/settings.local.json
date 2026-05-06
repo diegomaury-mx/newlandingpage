@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:diegomaury.notion.site)",
+      "mcp__plugin_Notion_notion__notion-fetch",
+      "Bash(bash *)",
+      "WebFetch(domain:diegomaury.mx)",
+      "Bash(node *)",
+      "Bash(tasklist /FI \"PID eq 473\")",
+      "Bash(git init *)",
+      "Bash(echo \"node_modules/\")",
+      "Bash(echo \".worktrees/\")",
+      "Bash(echo \"*.tmp\")",
+      "Bash(git add *)",
+      "Bash(git worktree *)",
+      "Bash(mkdir -p assets/css assets/js assets/img cv)",
+      "Read(//c/c/Users/DiegoLocal/Documents/Claude/Projects/newlandingpage/.worktrees/**)",
+      "Bash(curl -o assets/img/isotipodm.svg https://diegomaury.mx/assets/img/isotipodm.svg)",
+      "Bash(curl -s -o assets/img/isotipodm.svg https://diegomaury.mx/assets/img/isotipodm.svg)",
+      "Bash(git commit *)",
+      "Bash(python -m http.server 8080)",
+      "Bash(netstat -ano)",
+      "PowerShell(Set-Location \"C:\\\\Users\\\\DiegoLocal\\\\Documents\\\\Claude\\\\Projects\\\\newlandingpage\\\\.worktrees\\\\build\"; Start-Process python -ArgumentList \"-m\",\"http.server\",\"8080\" -WindowStyle Hidden; Start-Sleep 2; try { \\(Invoke-WebRequest -Uri http://localhost:8080 -UseBasicParsing -TimeoutSec 3\\).StatusCode } catch { \"not ready\" })",
+      "mcp__plugin_ecc_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "Bash(git -C .worktrees/build commit -m \"feat: mejoras de conversión — CTAs jerarquizados, trust strip, testimonials, bullets escaneables, patrón reducido\")",
+      "Bash(git -C .worktrees/build add assets/css/styles.css index.html)",
+      "Bash(git -C .worktrees/build commit -m \"feat: hero 2 columnas con placeholder foto, thumbnails en work section\")"
+    ]
+  }
+}

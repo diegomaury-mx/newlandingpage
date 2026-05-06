@@ -1,0 +1,224 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Isotipo DM Diego Maury" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Isotipo DM" [ref=e5]
+        - generic [ref=e6]: Diego Maury
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "Work" [ref=e9] [cursor=pointer]:
+            - /url: "#work"
+        - listitem [ref=e10]:
+          - link "Servicios" [ref=e11] [cursor=pointer]:
+            - /url: "#servicios"
+        - listitem [ref=e12]:
+          - link "About" [ref=e13] [cursor=pointer]:
+            - /url: "#about"
+        - listitem [ref=e14]:
+          - link "Contacto" [ref=e15] [cursor=pointer]:
+            - /url: "#contacto"
+      - link "Agendar" [ref=e16] [cursor=pointer]:
+        - /url: https://calendly.com/diegomaurymx
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - paragraph [ref=e19]: Strategic Program & Innovation Manager
+      - heading "Programas y sistemas que convierten innovación en resultados medibles." [level=1] [ref=e20]:
+        - text: Programas y sistemas que convierten
+        - text: innovación en resultados medibles.
+      - paragraph [ref=e21]: Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.
+      - generic [ref=e22]:
+        - link "Agendar diagnóstico" [ref=e23] [cursor=pointer]:
+          - /url: https://calendly.com/diegomaurymx
+        - link "Descargar CV" [ref=e24] [cursor=pointer]:
+          - /url: cv/diego-maury-cv.pdf
+      - paragraph [ref=e25]: 30 min · sin compromiso
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: 30+
+        - generic [ref=e30]:
+          - text: Programas de
+          - text: innovación operados
+      - generic [ref=e31]:
+        - generic [ref=e32]: 900+
+        - generic [ref=e33]:
+          - text: Proyectos evaluados
+          - text: en programas
+      - generic [ref=e34]:
+        - generic [ref=e35]: 3,000+
+        - generic [ref=e36]:
+          - text: Emprendedores
+          - text: formados en LATAM
+  - generic [ref=e38]:
+    - generic [ref=e39]:
+      - paragraph [ref=e40]: Selected Work
+      - heading "3 casos, resultados reales." [level=2] [ref=e41]
+    - list [ref=e42]:
+      - listitem [ref=e43]:
+        - link "01 HEINEKEN Green Challenge Ecosistemas · Program Ops · 2019–2022 +600%" [ref=e44] [cursor=pointer]:
+          - /url: cases/heineken.html
+          - generic [ref=e45]: "01"
+          - generic [ref=e46]:
+            - heading "HEINEKEN Green Challenge" [level=3] [ref=e47]
+            - paragraph [ref=e48]: Ecosistemas · Program Ops · 2019–2022
+          - generic [ref=e49]: +600%
+          - generic [ref=e50]: →
+      - listitem [ref=e51]:
+        - link "02 Innovation Systems Builder Transformación · Producto · 2020–2022 +500%" [ref=e52] [cursor=pointer]:
+          - /url: cases/innovation-systems.html
+          - generic [ref=e53]: "02"
+          - generic [ref=e54]:
+            - heading "Innovation Systems Builder" [level=3] [ref=e55]
+            - paragraph [ref=e56]: Transformación · Producto · 2020–2022
+          - generic [ref=e57]: +500%
+          - generic [ref=e58]: →
+      - listitem [ref=e59]:
+        - link "03 REDUX + INCmty Challenges Metodología · Aceleración · 2020–2023 1,000+" [ref=e60] [cursor=pointer]:
+          - /url: cases/redux-incmty.html
+          - generic [ref=e61]: "03"
+          - generic [ref=e62]:
+            - heading "REDUX + INCmty Challenges" [level=3] [ref=e63]
+            - paragraph [ref=e64]: Metodología · Aceleración · 2020–2023
+          - generic [ref=e65]: 1,000+
+          - generic [ref=e66]: →
+    - link "Ver todos los proyectos →" [ref=e68] [cursor=pointer]:
+      - /url: portfolio/index.html
+  - generic [ref=e70]:
+    - generic [ref=e71]: Programas operados con
+    - generic [ref=e72]:
+      - generic [ref=e73]: HEINEKEN
+      - generic [ref=e74]: Tec de Monterrey
+      - generic [ref=e75]: INCmty
+      - generic [ref=e76]: FEMSA
+      - generic [ref=e77]: HackSureste
+  - generic [ref=e80]:
+    - paragraph [ref=e81]: Lo que dicen
+    - heading "Voces de quienes han trabajado conmigo." [level=2] [ref=e82]
+  - generic [ref=e85]:
+    - generic [ref=e86]:
+      - paragraph [ref=e87]: Servicios
+      - heading "Lo que construyo contigo." [level=2] [ref=e88]
+    - generic [ref=e89]:
+      - article [ref=e90]:
+        - paragraph [ref=e91]: Estrategia
+        - heading "Program Sprint" [level=3] [ref=e92]
+        - paragraph [ref=e93]: Diagnóstico, diseño y hoja de ruta de un programa de innovación o transformación. Desde cero o como rescate de iniciativas estancadas.
+        - list [ref=e94]:
+          - listitem [ref=e95]: → Diagnóstico y mapa de stakeholders
+          - listitem [ref=e96]: → Diseño del programa con KPIs
+          - listitem [ref=e97]: → Playbook operativo y calendario
+        - paragraph [ref=e98]: 4–6 semanas
+      - article [ref=e99]:
+        - paragraph [ref=e100]: Operación
+        - heading "Digital Ops Setup" [level=3] [ref=e101]
+        - paragraph [ref=e102]: "Implementación de sistemas de gestión digital: CRM, automatizaciones, dashboards y flujos de trabajo para equipos de innovación."
+        - list [ref=e103]:
+          - listitem [ref=e104]: → Mapeo de procesos actuales
+          - listitem [ref=e105]: → Setup de herramientas y automatizaciones
+          - listitem [ref=e106]: → Capacitación del equipo
+        - paragraph [ref=e107]: 6–8 semanas
+      - article [ref=e108]:
+        - paragraph [ref=e109]: Ecosistemas
+        - heading "Ecosystem Playbook" [level=3] [ref=e110]
+        - paragraph [ref=e111]: Diseño y operación de programas de aceleración, comunidades de innovación o alianzas estratégicas en LATAM.
+        - list [ref=e112]:
+          - listitem [ref=e113]: → Mapeo de actores del ecosistema
+          - listitem [ref=e114]: → Modelo de programa y convocatoria
+          - listitem [ref=e115]: → Sistema de seguimiento y métricas
+        - paragraph [ref=e116]: 8–12 semanas
+  - generic [ref=e118]:
+    - generic [ref=e119]:
+      - paragraph [ref=e120]: About
+      - heading "PM operativo. Sistemas que funcionan." [level=2] [ref=e121]:
+        - text: PM operativo.
+        - text: Sistemas que funcionan.
+      - paragraph [ref=e122]: Soy Strategic Program & Innovation Manager. Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM. Convierto objetivos ambiciosos en sistemas ejecutables con cadencia, stakeholders claros y métricas.
+      - paragraph [ref=e123]: Trabajo con playbooks, no con supuestos. Cada programa que opero tiene KPIs definidos, cadencia de revisión y un sistema que puede funcionar sin mí cuando termino.
+    - generic [ref=e124]:
+      - generic [ref=e125]:
+        - paragraph [ref=e126]: Herramientas
+        - generic [ref=e127]:
+          - generic [ref=e128]: Notion
+          - generic [ref=e129]: Airtable
+          - generic [ref=e130]: HubSpot
+          - generic [ref=e131]: Make / Zapier
+          - generic [ref=e132]: Figma
+          - generic [ref=e133]: Google Workspace
+          - generic [ref=e134]: Miro
+          - generic [ref=e135]: Slack
+      - generic [ref=e136]:
+        - paragraph [ref=e137]: Cómo trabajo
+        - list [ref=e138]:
+          - listitem [ref=e139]: · Diagnóstico antes de soluciones
+          - listitem [ref=e140]: · Playbook desde el día 1
+          - listitem [ref=e141]: · KPIs acordados con stakeholders
+          - listitem [ref=e142]: · Revisiones semanales de métricas
+          - listitem [ref=e143]: · Entregables documentados
+  - generic [ref=e145]:
+    - generic [ref=e146]:
+      - paragraph [ref=e147]: Selected Experience
+      - heading "4 roles, resultados medibles." [level=2] [ref=e148]
+    - generic [ref=e149]:
+      - article [ref=e150]:
+        - generic [ref=e151]:
+          - paragraph [ref=e152]: INCmty — Tec de Monterrey
+          - paragraph [ref=e153]: 2019 – 2023
+        - generic [ref=e154]:
+          - heading "Program Manager, Innovation Challenges" [level=3] [ref=e155]
+          - list [ref=e156]:
+            - listitem [ref=e157]: → +600% crecimiento · HEINEKEN Green Challenge Sureste — zona con mayor adopción nacional en 1 edición
+            - listitem [ref=e158]: → 4 convocatorias simultáneas · 900+ proyectos evaluados · 3,000+ emprendedores formados en 32 estados
+      - article [ref=e159]:
+        - generic [ref=e160]:
+          - paragraph [ref=e161]: HackSureste
+          - paragraph [ref=e162]: 2018 – 2022
+        - generic [ref=e163]:
+          - heading "Fundador & Director de Operaciones" [level=3] [ref=e164]
+          - list [ref=e165]:
+            - listitem [ref=e166]: → 0 → comunidad activa en 6 estados en 2 años · principal hackathon de innovación del sureste MX
+            - listitem [ref=e167]: → REDUX — metodología registrada en catálogo Tec de Monterrey · 1,000+ estudiantes · autor más joven
+      - article [ref=e168]:
+        - generic [ref=e169]:
+          - paragraph [ref=e170]: FlipHouse
+          - paragraph [ref=e171]: 2020 – 2021
+        - generic [ref=e172]:
+          - heading "Head of Operations & Growth" [level=3] [ref=e173]
+          - list [ref=e174]:
+            - listitem [ref=e175]: → +500% leads calificados en 6 meses · procesos manuales → flujos automatizados
+            - listitem [ref=e176]: → CRM + pipeline + dashboards → −40% tiempo de cierre · 0 pérdida de prospectos
+      - article [ref=e177]:
+        - generic [ref=e178]:
+          - paragraph [ref=e179]: CAVA Soft
+          - paragraph [ref=e180]: 2021 – 2022
+        - generic [ref=e181]:
+          - heading "Co-fundador & Product Manager" [level=3] [ref=e182]
+          - list [ref=e183]:
+            - listitem [ref=e184]: → Concepto → MVP funcional en 4 meses · equipo de 3 personas · app de gestión de cavas
+            - listitem [ref=e185]: → Roadmap, historias de usuario y criterios de aceptación para todo el desarrollo técnico
+  - generic [ref=e187]:
+    - generic [ref=e188]:
+      - paragraph [ref=e189]: Contacto
+      - heading "Hablemos." [level=2] [ref=e190]
+    - generic [ref=e191]:
+      - generic [ref=e192]:
+        - paragraph [ref=e193]: Para proyectos y consultoría
+        - heading "Agenda una llamada" [level=3] [ref=e194]
+        - paragraph [ref=e195]: 30 min para entender tu contexto y ver si puedo ayudarte.
+        - link "Agendar diagnóstico" [ref=e196] [cursor=pointer]:
+          - /url: https://calendly.com/diegomaurymx
+      - generic [ref=e197]:
+        - paragraph [ref=e198]: Para oportunidades de empleo
+        - heading "Escríbeme directo" [level=3] [ref=e199]
+        - paragraph [ref=e200]: diegomaurymx@gmail.com
+        - link "Enviar email" [ref=e201] [cursor=pointer]:
+          - /url: mailto:diegomaurymx@gmail.com
+      - generic [ref=e202]:
+        - paragraph [ref=e203]: Conectar profesionalmente
+        - heading "LinkedIn" [level=3] [ref=e204]
+        - paragraph [ref=e205]: Revisa mi trayectoria completa y conéctate.
+        - link "Ver perfil" [ref=e206] [cursor=pointer]:
+          - /url: https://linkedin.com/in/diegomaury
+  - contentinfo [ref=e207]:
+    - generic [ref=e209]:
+      - paragraph [ref=e210]: Hagamos que las cosas pasen.
+      - paragraph [ref=e211]: © 2026 Diego Maury
