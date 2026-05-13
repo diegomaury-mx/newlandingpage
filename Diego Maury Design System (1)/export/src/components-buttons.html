@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DM · Tu paleta — dos jerarquías</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#120D1A"/>
+    <circle cx="50" cy="50" r="22" fill="#7C3FBE"/>
+    <text x="50" y="56" font-family="sans-serif" font-size="18" font-weight="800" fill="#F5F5F7" text-anchor="middle">DM</text>
+  </svg>
+</template>
+<style>
+  :root {
+    --void: #120D1A;
+    --amethyst: #4B2672;
+    --amethyst-bright: #7C3FBE;
+    --ember: #FF5C39;
+    --quantum: #246BFD;
+    --grey: #B1B5C0;
+    --bone: #F5F5F7;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background: #050308; padding: 28px; font-family: 'Inter', sans-serif; color: var(--bone); }
+  .page-h { font-family: 'Satoshi', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 4px; }
+  .page-sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(245,245,247,0.5); margin-bottom: 26px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card { background: var(--void); border-radius: 16px; overflow: hidden; box-shadow: 0 14px 40px rgba(0,0,0,0.5); }
+
+  .label-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px 28px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .v-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--bone); }
+  .v-vibe { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(245,245,247,0.45); }
+
+  .top { padding: 32px 28px 8px; position: relative; }
+  .ttag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .head { font-family: 'Satoshi', sans-serif; font-weight: 800; font-size: 32px; line-height: 1.06; letter-spacing: -0.025em; }
+  .body-line { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.55; margin-top: 14px; color: var(--grey); max-width: 460px; }
+
+  .num-row { display: flex; gap: 28px; margin: 22px 0 16px; }
+  .num { font-family: 'Satoshi', sans-serif; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .num-lab { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(245,245,247,0.45); letter-spacing: 0.10em; text-transform: uppercase; margin-top: 5px; }
+
+  .btn-row { display: flex; gap: 10px; margin: 8px 0 4px; }
+  .btn { font-family: 'Satoshi', sans-serif; font-size: 13px; font-weight: 700; padding: 12px 22px; border-radius: 6px; border: none; cursor: pointer; }
+
+  .meta-row { display: flex; gap: 18px; margin-top: 22px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(245,245,247,0.45); display: flex; align-items: center; gap: 6px; }
+  .meta .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+  .meta a { color: var(--quantum); text-decoration: none; border-bottom: 1px dashed rgba(36,107,253,0.4); }
+
+  /* Footer with role swatches */
+  .roles { padding: 18px 28px 24px; }
+  .roles-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(245,245,247,0.4); margin-bottom: 12px; }
+  .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .role { display: flex; align-items: center; gap: 8px; }
+  .role .sw { width: 22px; height: 22px; border-radius: 5px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.06); }
+  .role .info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .role .rname { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(245,245,247,0.85); letter-spacing: 0.05em; }
+  .role .rfn { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(245,245,247,0.4); letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* ───── VERSION A — Tu paleta tal cual (Ember protagonista) ───── */
+  .vA .v-name { color: var(--ember); }
+  .vA .ttag { color: var(--ember); }
+  .vA .head { color: var(--bone); }
+  .vA .num.a-num1 { color: var(--ember); }
+  .vA .num.a-num2 { color: var(--bone); }
+  .vA .btn-1 { background: var(--ember); color: var(--void); }
+  .vA .btn-2 { background: transparent; color: var(--bone); border: 1.5px solid rgba(245,245,247,0.18); }
+  .vA .accent-bg { position: absolute; right: -40px; top: -20px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(75,38,114,0.55) 0%, transparent 65%); pointer-events: none; }
+
+  /* ───── VERSION B — Violeta protagonista, Ember spark ───── */
+  .vB .v-name { color: var(--amethyst-bright); }
+  .vB .ttag { color: var(--amethyst-bright); }
+  .vB .head { color: var(--bone); }
+  .vB .head .spark { color: var(--ember); }
+  .vB .num.b-num1 { color: var(--amethyst-bright); }
+  .vB .num.b-num2 { color: var(--bone); }
+  .vB .btn-1 { background: linear-gradient(135deg, var(--amethyst-bright) 0%, var(--amethyst) 100%); color: var(--bone); }
+  .vB .btn-2 { background: transparent; color: var(--ember); border: 1.5px solid rgba(255,92,57,0.4); }
+  .vB .accent-bg { position: absolute; right: -40px; top: -20px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(124,63,190,0.45) 0%, transparent 65%); pointer-events: none; }
+
+  /* Verdict bar */
+  .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+  .v-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 22px; }
+  .v-card h3 { font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: 14px; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .v-card ul { margin: 0; padding-left: 16px; }
+  .v-card li { font-family: 'Inter', sans-serif; font-size: 12px; line-height: 1.6; color: rgba(245,245,247,0.7); margin-bottom: 4px; }
+  .v-card .tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+  <h1 class="page-h">Misma paleta. Dos jerarquías.</h1>
+  <div class="page-sub">Comparación lado a lado · Mismo contenido, mismos colores, distinto protagonista</div>
+
+  <div class="grid">
+
+    <!-- ═════════ VERSION A ═════════ -->
+    <div class="card vA">
+      <div class="label-bar">
+        <div class="v-name">A · Ember protagonista</div>
+        <div class="v-vibe">Tu paleta original</div>
+      </div>
+      <div class="top">
+        <div class="accent-bg"></div>
+        <div class="ttag">Strategic Program &amp; Innovation</div>
+        <div class="head">Programas que convierten innovación en resultados.</div>
+        <div class="body-line">Diseño y opero programas de innovación, emprendimiento y transformación digital que mueven la aguja.</div>
+        <div class="num-row">
+          <div><div class="num a-num1">+600%</div><div class="num-lab">Crecimiento Heineken</div></div>
+          <div><div class="num a-num2">3,000+</div><div class="num-lab">Emprendedores formados</div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-1">Descargar CV</button>
+          <button class="btn btn-2">Ver servicios</button>
+        </div>
+        <div class="meta-row">
+          <div class="meta"><span class="dot" style="background:var(--quantum)"></span>Disponible Q1 2026</div>
+          <div class="meta"><a href="#">linkedin.com/in/martin</a></div>
+        </div>
+      </div>
+      <div class="roles">
+        <div class="roles-title">Roles aplicados</div>
+        <div class="roles-grid">
+          <div class="role"><div class="sw" style="background:#FF5C39"></div><div class="info"><div class="rname">Ember</div><div class="rfn">CTA · Identidad</div></div></div>
+          <div class="role"><div class="sw" style="background:#4B2672"></div><div class="info"><div class="rname">Amethyst</div><div class="rfn">Profundidad bg</div></div></div>
+          <div class="role"><div class="sw" style="background:#246BFD"></div><div class="info"><div class="rname">Quantum</div><div class="rfn">Links · Status</div></div></div>
+          <div class="role"><div class="sw" style="background:#120D1A"></div><div class="info"><div class="rname">Void</div><div class="rfn">Fondo</div></div></div>
+          <div class="role"><div class="sw" style="background:#B1B5C0"></div><div class="info"><div class="rname">Grey</div><div class="rfn">Texto sec.</div></div></div>
+          <div class="role"><div class="sw" style="background:#F5F5F7"></div><div class="info"><div class="rname">Bone</div><div class="rfn">Texto principal</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ VERSION B ═════════ -->
+    <div class="card vB">
+      <div class="label-bar">
+        <div class="v-name">B · Violeta protagonista</div>
+        <div class="v-vibe">Halloween elegante · Ember = spark</div>
+      </div>
+      <div class="top">
+        <div class="accent-bg"></div>
+        <div class="ttag">Strategic Program &amp; Innovation</div>
+        <div class="head">Programas que convierten innovación en <span class="spark">resultados</span>.</div>
+        <div class="body-line">Diseño y opero programas de innovación, emprendimiento y transformación digital que mueven la aguja.</div>
+        <div class="num-row">
+          <div><div class="num b-num1">+600%</div><div class="num-lab">Crecimiento Heineken</div></div>
+          <div><div class="num b-num2">3,000+</div><div class="num-lab">Emprendedores formados</div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-1">Descargar CV</button>
+          <button class="btn btn-2">Ver servicios</button>
+        </div>
+        <div class="meta-row">
+          <div class="meta"><span class="dot" style="background:var(--quantum)"></span>Disponible Q1 2026</div>
+          <div class="meta"><a href="#">linkedin.com/in/martin</a></div>
+        </div>
+      </div>
+      <div class="roles">
+        <div class="roles-title">Roles aplicados</div>
+        <div class="roles-grid">
+          <div class="role"><div class="sw" style="background:#7C3FBE"></div><div class="info"><div class="rname">Amethyst</div><div class="rfn">CTA · Identidad</div></div></div>
+          <div class="role"><div class="sw" style="background:#FF5C39"></div><div class="info"><div class="rname">Ember</div><div class="rfn">Spark · Highlight</div></div></div>
+          <div class="role"><div class="sw" style="background:#246BFD"></div><div class="info"><div class="rname">Quantum</div><div class="rfn">Links · Status</div></div></div>
+          <div class="role"><div class="sw" style="background:#120D1A"></div><div class="info"><div class="rname">Void</div><div class="rfn">Fondo</div></div></div>
+          <div class="role"><div class="sw" style="background:#B1B5C0"></div><div class="info"><div class="rname">Grey</div><div class="rfn">Texto sec.</div></div></div>
+          <div class="role"><div class="sw" style="background:#F5F5F7"></div><div class="info"><div class="rname">Bone</div><div class="rfn">Texto principal</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="verdict">
+    <div class="v-card">
+      <span class="tag" style="background:rgba(255,92,57,0.15); color:#FF5C39">A · Ember protagonista</span>
+      <h3 style="color:var(--bone)">Lee como: startup tech cálida</h3>
+      <ul>
+        <li><strong style="color:var(--bone)">Pros:</strong> Energía alta, urgencia, optimismo, muy "innovación"</li>
+        <li><strong style="color:var(--bone)">Contras:</strong> Pierdes Halloween, se parece a Stripe/HubSpot/mil más</li>
+        <li><strong style="color:var(--bone)">Mejor para:</strong> Producto SaaS, fintech, growth</li>
+      </ul>
+    </div>
+    <div class="v-card">
+      <span class="tag" style="background:rgba(124,63,190,0.18); color:#B98CFF">B · Violeta protagonista</span>
+      <h3 style="color:var(--bone)">Lee como: consultor de élite con personalidad</h3>
+      <ul>
+        <li><strong style="color:var(--bone)">Pros:</strong> Halloween elegante intacto, distintivo, premium</li>
+        <li><strong style="color:var(--bone)">Contras:</strong> Ember pierde rol de CTA — se vuelve detalle</li>
+        <li><strong style="color:var(--bone)">Mejor para:</strong> Personal brand, consultoría, advisor</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

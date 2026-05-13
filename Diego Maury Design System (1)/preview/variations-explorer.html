@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DM · Variaciones — Tipografía & Color</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=DM+Sans:wght@400;500;700&family=Geist:wght@400;500;700&family=Geist+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Bricolage+Grotesque:wght@400;500;700;800&family=Söhne&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#1a1020; padding: 28px; font-family: 'Inter', sans-serif; color: white; }
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.015em; margin: 0 0 4px; }
+  .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 24px; }
+  .section-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin: 28px 0 12px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .card { border-radius: 12px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.30); }
+  .top { padding: 22px 22px 20px; }
+  .label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .v-name { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; }
+  .v-tag  { font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; opacity: 0.65; }
+  .ttag   { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px; }
+  .head   { font-size: 28px; line-height: 1.10; letter-spacing: -0.02em; font-weight: 800; }
+  .body-line { font-size: 13px; line-height: 1.55; margin-top: 10px; opacity: 0.78; max-width: 480px; }
+  .meta-row { display: flex; gap: 14px; margin-top: 14px; }
+  .pill { padding: 6px 12px; border-radius: 999px; font-size: 11px; }
+  .btn  { padding: 10px 16px; border-radius: 6px; font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; font-weight: 500; display: inline-block; margin-top: 16px; }
+  .footer-band { display: flex; padding: 12px 22px; gap: 18px; font-family: inherit; font-size: 12px; align-items: center; justify-content: space-between; }
+  .swatches { display: flex; gap: 4px; }
+  .sw { width: 18px; height: 18px; border-radius: 4px; }
+  .num { font-size: 26px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .num-row { display: flex; gap: 24px; margin-top: 12px; }
+
+  /* ─── TYPE VARIATIONS ─── (color: shared baseline = current darker palette) */
+  .t1 { background: #2E1547; color: white; }
+  .t1 .head, .t1 .display-class { font-family: 'Satoshi', sans-serif; }
+  .t1 .body-class { font-family: 'Inter', sans-serif; }
+  .t1 .mono-class { font-family: 'JetBrains Mono', monospace; }
+
+  .t2 { background: #2E1547; color: white; }
+  .t2 .head, .t2 .display-class { font-family: 'Manrope', sans-serif; }
+  .t2 .body-class { font-family: 'Inter', sans-serif; }
+  .t2 .mono-class { font-family: 'JetBrains Mono', monospace; }
+
+  .t3 { background: #2E1547; color: white; }
+  .t3 .head, .t3 .display-class { font-family: 'Bricolage Grotesque', sans-serif; }
+  .t3 .body-class { font-family: 'IBM Plex Sans', sans-serif; }
+  .t3 .mono-class { font-family: 'IBM Plex Mono', monospace; }
+
+  .t4 { background: #2E1547; color: white; }
+  .t4 .head, .t4 .display-class { font-family: 'Space Grotesk', sans-serif; }
+  .t4 .body-class { font-family: 'DM Sans', sans-serif; }
+  .t4 .mono-class { font-family: 'JetBrains Mono', monospace; }
+
+  .t5 { background: #2E1547; color: white; }
+  .t5 .head, .t5 .display-class { font-family: 'Geist', sans-serif; letter-spacing: -0.025em; }
+  .t5 .body-class { font-family: 'Geist', sans-serif; }
+  .t5 .mono-class { font-family: 'Geist Mono', monospace; }
+
+  .t6 { background: #2E1547; color: white; }
+  .t6 .head, .t6 .display-class { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .t6 .body-class { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .t6 .mono-class { font-family: 'JetBrains Mono', monospace; }
+
+  /* ─── COLOR VARIATIONS ─── (font: Satoshi + Inter + JetBrains shared) */
+  .c-card .head, .c-card .display-class { font-family: 'Satoshi', sans-serif; }
+  .c-card .body-class { font-family: 'Inter', sans-serif; }
+  .c-card .mono-class, .c-card .ttag, .c-card .v-name, .c-card .v-tag, .c-card .btn { font-family: 'JetBrains Mono', monospace; }
+
+  /* C1 — current dark plum (baseline) */
+  .c1 { background: #2E1547; color: white; }
+  .c1 .ttag, .c1 .accent { color: #D94824; }
+  .c1 .num { color: #E6B800; }
+  .c1 .pill { background: rgba(255,255,255,0.10); }
+  .c1 .btn  { background: #D94824; color: white; }
+
+  /* C2 — Espresso & Saffron: warm dark brown + saffron + cream */
+  .c2 { background: #1F1410; color: #F4ECDA; }
+  .c2 .ttag, .c2 .accent { color: #E0A024; }
+  .c2 .num { color: #E0A024; }
+  .c2 .pill { background: rgba(244,236,218,0.10); color: #F4ECDA; }
+  .c2 .btn  { background: #C7421E; color: #F4ECDA; }
+
+  /* C3 — Forest & Copper: deep teal + copper highlight */
+  .c3 { background: #0F1F1B; color: #E5EFE9; }
+  .c3 .ttag, .c3 .accent { color: #C77A3F; }
+  .c3 .num { color: #D9A86C; }
+  .c3 .pill { background: rgba(229,239,233,0.08); color: #E5EFE9; }
+  .c3 .btn  { background: #B85A24; color: #E5EFE9; }
+
+  /* C4 — Midnight Indigo: navy + electric blue + bone */
+  .c4 { background: #0E1430; color: #EAEAF5; }
+  .c4 .ttag, .c4 .accent { color: #4A9CFF; }
+  .c4 .num { color: #4A9CFF; }
+  .c4 .pill { background: rgba(234,234,245,0.08); color: #EAEAF5; }
+  .c4 .btn  { background: #4A9CFF; color: #0E1430; }
+
+  /* C5 — Charcoal & Ember: graphite + the ember accent */
+  .c5 { background: #161417; color: #F5F1F0; }
+  .c5 .ttag, .c5 .accent { color: #D94824; }
+  .c5 .num { color: #F5F1F0; }
+  .c5 .pill { background: rgba(245,241,240,0.08); color: #F5F1F0; }
+  .c5 .btn  { background: #D94824; color: #F5F1F0; }
+
+  /* C6 — Bone (light): page-color brand. Off-white + plum + ember */
+  .c6 { background: #F4F0EA; color: #1A0F26; }
+  .c6 .ttag, .c6 .accent { color: #D94824; }
+  .c6 .num { color: #2E1547; }
+  .c6 .pill { background: #2E1547; color: #F4F0EA; }
+  .c6 .btn  { background: #2E1547; color: #F4F0EA; }
+  .c6 .body-line { opacity: 0.75; color: #1A0F26; }
+  .c6 .v-tag, .c6 .v-name { color: #1A0F26; }
+</style>
+</head>
+<body>
+  <h1>Variaciones — Tipografía &amp; Color</h1>
+  <div class="sub">Mismo contenido · 6 sistemas tipográficos · 6 paletas alternativas</div>
+
+  <!-- ═══ TIPOGRAFÍA ═══ -->
+  <div class="section-title">A · Tipografía (paleta fija — Catalyst dark)</div>
+  <div class="grid">
+    <!-- T1 -->
+    <div class="card t1">
+      <div class="top">
+        <div class="label-row"><div class="v-name mono-class">T1 · Sistema Actual</div><div class="v-tag mono-class">Satoshi + Inter + JetBrains</div></div>
+        <div class="ttag mono-class" style="color:#D94824">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class" style="color:#E6B800">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class" style="color:#E6B800">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn mono-class" style="background:#D94824">Agendar diagnóstico</span>
+      </div>
+    </div>
+    <!-- T2 -->
+    <div class="card t2">
+      <div class="top">
+        <div class="label-row"><div class="v-name mono-class">T2 · Manrope</div><div class="v-tag mono-class">Manrope + Inter + JetBrains</div></div>
+        <div class="ttag mono-class" style="color:#D94824">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class" style="color:#E6B800">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class" style="color:#E6B800">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn mono-class" style="background:#D94824">Agendar diagnóstico</span>
+      </div>
+    </div>
+    <!-- T3 -->
+    <div class="card t3">
+      <div class="top">
+        <div class="label-row"><div class="v-name mono-class">T3 · Bricolage + IBM Plex</div><div class="v-tag mono-class">Editorial · técnico</div></div>
+        <div class="ttag mono-class" style="color:#D94824">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class" style="color:#E6B800">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class" style="color:#E6B800">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn mono-class" style="background:#D94824">Agendar diagnóstico</span>
+      </div>
+    </div>
+    <!-- T4 -->
+    <div class="card t4">
+      <div class="top">
+        <div class="label-row"><div class="v-name mono-class">T4 · Space Grotesk + DM Sans</div><div class="v-tag mono-class">Tech-product</div></div>
+        <div class="ttag mono-class" style="color:#D94824">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class" style="color:#E6B800">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class" style="color:#E6B800">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn mono-class" style="background:#D94824">Agendar diagnóstico</span>
+      </div>
+    </div>
+    <!-- T5 -->
+    <div class="card t5">
+      <div class="top">
+        <div class="label-row"><div class="v-name mono-class">T5 · Geist (Vercel)</div><div class="v-tag mono-class">Mono-familia · minimalista</div></div>
+        <div class="ttag mono-class" style="color:#D94824">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class" style="color:#E6B800">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class" style="color:#E6B800">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn mono-class" style="background:#D94824">Agendar diagnóstico</span>
+      </div>
+    </div>
+    <!-- T6 -->
+    <div class="card t6">
+      <div class="top">
+        <div class="label-row"><div class="v-name mono-class">T6 · Plus Jakarta Sans</div><div class="v-tag mono-class">Sola — display + body</div></div>
+        <div class="ttag mono-class" style="color:#D94824">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class" style="color:#E6B800">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class" style="color:#E6B800">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn mono-class" style="background:#D94824">Agendar diagnóstico</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ COLOR ═══ -->
+  <div class="section-title">B · Paleta (tipografía fija — Satoshi + Inter + JetBrains)</div>
+  <div class="grid">
+    <!-- C1 -->
+    <div class="card c-card c1">
+      <div class="top">
+        <div class="label-row"><div class="v-name">C1 · Catalyst Dark (actual)</div><div class="v-tag">#2E1547 · #D94824 · #E6B800</div></div>
+        <div class="ttag accent">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn">Agendar diagnóstico</span>
+      </div>
+      <div class="footer-band" style="background:#180A26"><div class="swatches"><div class="sw" style="background:#2E1547"></div><div class="sw" style="background:#D94824"></div><div class="sw" style="background:#E6B800"></div><div class="sw" style="background:#1A4FCC"></div></div><div class="mono-class" style="font-size:10px; opacity:0.6; letter-spacing:0.12em; text-transform:uppercase;">Plum · Ember · Spark · Quantum</div></div>
+    </div>
+    <!-- C2 -->
+    <div class="card c-card c2">
+      <div class="top">
+        <div class="label-row"><div class="v-name">C2 · Espresso &amp; Saffron</div><div class="v-tag">#1F1410 · #C7421E · #E0A024</div></div>
+        <div class="ttag accent">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn">Agendar diagnóstico</span>
+      </div>
+      <div class="footer-band" style="background:#160C09"><div class="swatches"><div class="sw" style="background:#1F1410"></div><div class="sw" style="background:#C7421E"></div><div class="sw" style="background:#E0A024"></div><div class="sw" style="background:#F4ECDA"></div></div><div class="mono-class" style="font-size:10px; opacity:0.6; letter-spacing:0.12em; text-transform:uppercase; color:#F4ECDA">Espresso · Tile · Saffron · Cream</div></div>
+    </div>
+    <!-- C3 -->
+    <div class="card c-card c3">
+      <div class="top">
+        <div class="label-row"><div class="v-name">C3 · Forest &amp; Copper</div><div class="v-tag">#0F1F1B · #B85A24 · #D9A86C</div></div>
+        <div class="ttag accent">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn">Agendar diagnóstico</span>
+      </div>
+      <div class="footer-band" style="background:#091512"><div class="swatches"><div class="sw" style="background:#0F1F1B"></div><div class="sw" style="background:#B85A24"></div><div class="sw" style="background:#D9A86C"></div><div class="sw" style="background:#E5EFE9"></div></div><div class="mono-class" style="font-size:10px; opacity:0.6; letter-spacing:0.12em; text-transform:uppercase; color:#E5EFE9">Forest · Copper · Wheat · Linen</div></div>
+    </div>
+    <!-- C4 -->
+    <div class="card c-card c4">
+      <div class="top">
+        <div class="label-row"><div class="v-name">C4 · Midnight Indigo</div><div class="v-tag">#0E1430 · #4A9CFF · #EAEAF5</div></div>
+        <div class="ttag accent">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn">Agendar diagnóstico</span>
+      </div>
+      <div class="footer-band" style="background:#080C20"><div class="swatches"><div class="sw" style="background:#0E1430"></div><div class="sw" style="background:#4A9CFF"></div><div class="sw" style="background:#EAEAF5"></div><div class="sw" style="background:#D94824"></div></div><div class="mono-class" style="font-size:10px; opacity:0.6; letter-spacing:0.12em; text-transform:uppercase; color:#EAEAF5">Indigo · Sky · Bone · Ember</div></div>
+    </div>
+    <!-- C5 -->
+    <div class="card c-card c5">
+      <div class="top">
+        <div class="label-row"><div class="v-name">C5 · Charcoal &amp; Ember</div><div class="v-tag">#161417 · #D94824 · #F5F1F0</div></div>
+        <div class="ttag accent">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn">Agendar diagnóstico</span>
+      </div>
+      <div class="footer-band" style="background:#0E0D0E"><div class="swatches"><div class="sw" style="background:#161417"></div><div class="sw" style="background:#D94824"></div><div class="sw" style="background:#F5F1F0"></div><div class="sw" style="background:#E6B800"></div></div><div class="mono-class" style="font-size:10px; opacity:0.6; letter-spacing:0.12em; text-transform:uppercase; color:#F5F1F0">Charcoal · Ember · Bone · Spark</div></div>
+    </div>
+    <!-- C6 -->
+    <div class="card c-card c6">
+      <div class="top">
+        <div class="label-row"><div class="v-name">C6 · Bone (light brand)</div><div class="v-tag">#F4F0EA · #2E1547 · #D94824</div></div>
+        <div class="ttag accent">Strategic Program &amp; Innovation</div>
+        <div class="head display-class">Programas que convierten innovación en resultados.</div>
+        <div class="body-line body-class">Diseño y opero programas de innovación, emprendimiento y transformación digital en LATAM.</div>
+        <div class="num-row"><div><div class="num display-class">+600%</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Heineken</div></div><div><div class="num display-class">3,000+</div><div class="mono-class" style="font-size:10px; opacity:0.55; letter-spacing:0.10em; text-transform:uppercase; margin-top:4px;">Emprendedores</div></div></div>
+        <span class="btn">Agendar diagnóstico</span>
+      </div>
+      <div class="footer-band" style="background:#E8E2D8"><div class="swatches"><div class="sw" style="background:#F4F0EA"></div><div class="sw" style="background:#2E1547"></div><div class="sw" style="background:#D94824"></div><div class="sw" style="background:#E6B800"></div></div><div class="mono-class" style="font-size:10px; opacity:0.6; letter-spacing:0.12em; text-transform:uppercase; color:#1A0F26">Bone · Plum · Ember · Spark</div></div>
+    </div>
+  </div>
+</body>
+</html>

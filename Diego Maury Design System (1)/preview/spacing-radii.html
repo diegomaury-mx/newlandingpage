@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DM · Spacing & Radii</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; background:#120D1A; padding:20px; color:#F5F5F7; }
+  .label { font-family:var(--font-mono); font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(245,245,247,0.4); margin-bottom:12px; margin-top:20px; }
+  .label:first-child { margin-top:0; }
+  /* Spacing */
+  .sp-row { display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap; }
+  .sp { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .sp-bar { background:rgba(124,63,190,0.4); border-radius:2px; width:20px; }
+  .sp-name { font-family:var(--font-mono); font-size:8px; color:rgba(245,245,247,0.45); letter-spacing:0.06em; text-align:center; }
+  /* Radii */
+  .rad-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+  .rad { width:52px; height:52px; background:rgba(124,63,190,0.25); border:1px solid rgba(124,63,190,0.4); display:flex; align-items:center; justify-content:center; }
+  .rad-name { font-family:var(--font-mono); font-size:8px; color:rgba(245,245,247,0.45); text-align:center; margin-top:5px; }
+  /* Shadows */
+  .shad-row { display:flex; gap:14px; flex-wrap:wrap; }
+  .shad { width:64px; height:40px; background:#0F0A1A; display:flex; align-items:center; justify-content:center; border-radius:8px; font-family:var(--font-mono); font-size:8px; color:rgba(245,245,247,0.5); letter-spacing:0.06em; }
+  .sh1 { box-shadow:0 1px 2px rgba(15,10,26,0.30); }
+  .sh2 { box-shadow:0 4px 12px rgba(15,10,26,0.18); }
+  .sh3 { box-shadow:0 12px 32px rgba(15,10,26,0.30); }
+  .shg { box-shadow:0 0 0 1px rgba(255,92,57,0.25), 0 8px 24px rgba(255,92,57,0.20); }
+  .sha { box-shadow:0 4px 14px rgba(124,63,190,0.35); }
+</style>
+</head>
+<body>
+  <div class="label">Spacing scale — base 4px</div>
+  <div class="sp-row">
+    <div class="sp"><div class="sp-bar" style="height:4px"></div><div class="sp-name">1<br/>4</div></div>
+    <div class="sp"><div class="sp-bar" style="height:8px"></div><div class="sp-name">2<br/>8</div></div>
+    <div class="sp"><div class="sp-bar" style="height:12px"></div><div class="sp-name">3<br/>12</div></div>
+    <div class="sp"><div class="sp-bar" style="height:16px"></div><div class="sp-name">4<br/>16</div></div>
+    <div class="sp"><div class="sp-bar" style="height:24px"></div><div class="sp-name">5<br/>24</div></div>
+    <div class="sp"><div class="sp-bar" style="height:32px"></div><div class="sp-name">6<br/>32</div></div>
+    <div class="sp"><div class="sp-bar" style="height:40px"></div><div class="sp-name">7<br/>40</div></div>
+    <div class="sp"><div class="sp-bar" style="height:48px"></div><div class="sp-name">8<br/>48</div></div>
+    <div class="sp"><div class="sp-bar" style="height:64px"></div><div class="sp-name">10<br/>64</div></div>
+    <div class="sp"><div class="sp-bar" style="height:96px"></div><div class="sp-name">12<br/>96</div></div>
+  </div>
+  <div class="label">Border radii</div>
+  <div class="rad-row">
+    <div><div class="rad" style="border-radius:4px"></div><div class="rad-name">xs · 4</div></div>
+    <div><div class="rad" style="border-radius:6px"></div><div class="rad-name">sm · 6</div></div>
+    <div><div class="rad" style="border-radius:10px"></div><div class="rad-name">md · 10</div></div>
+    <div><div class="rad" style="border-radius:16px"></div><div class="rad-name">lg · 16</div></div>
+    <div><div class="rad" style="border-radius:999px"></div><div class="rad-name">pill</div></div>
+  </div>
+  <div class="label">Shadows</div>
+  <div class="shad-row">
+    <div><div class="shad sh1">sh-1</div></div>
+    <div><div class="shad sh2">sh-2</div></div>
+    <div><div class="shad sh3">sh-3</div></div>
+    <div><div class="shad shg">glow-ember</div></div>
+    <div><div class="shad sha">glow-violet</div></div>
+  </div>
+</body>
+</html>

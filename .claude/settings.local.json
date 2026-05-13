@@ -28,5 +28,9 @@
       "Bash(git -C .worktrees/build add assets/css/styles.css index.html)",
       "Bash(git -C .worktrees/build commit -m \"feat: hero 2 columnas con placeholder foto, thumbnails en work section\")"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "supabase"
+  ],
+  "enableAllProjectMcpServers": true
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DM · Section Label</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; background:#120D1A; padding:24px; display:flex; flex-direction:column; gap:22px; }
+  .label-meta { font-family:var(--font-mono); font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(245,245,247,0.3); margin-top:4px; }
+  /* Variant A — accent line left */
+  .sl-a { display:flex; align-items:center; gap:12px; }
+  .sl-a .bar { width:3px; height:24px; background:linear-gradient(180deg,#7C3FBE,#FF5C39); border-radius:2px; }
+  .sl-a .text { font-family:var(--font-mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,245,247,0.55); }
+  /* Variant B — dot + tag */
+  .sl-b { display:flex; align-items:center; gap:8px; }
+  .sl-b .dot { width:6px; height:6px; border-radius:50%; background:#7C3FBE; }
+  .sl-b .text { font-family:var(--font-mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:#7C3FBE; }
+  /* Variant C — numbered */
+  .sl-c { display:flex; align-items:baseline; gap:10px; }
+  .sl-c .num { font-family:var(--font-mono); font-size:11px; color:#FF5C39; letter-spacing:0.10em; }
+  .sl-c .text { font-family:var(--font-mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,245,247,0.55); }
+  /* Variant D — pill chip */
+  .sl-d { display:inline-flex; align-items:center; padding:5px 12px; background:rgba(124,63,190,0.15); border:1px solid rgba(124,63,190,0.25); border-radius:999px; }
+  .sl-d .text { font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#7C3FBE; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="sl-a"><div class="bar"></div><div class="text">Experiencia · Work</div></div>
+    <div class="label-meta">A · Bar accent izquierdo · tricolor</div>
+  </div>
+  <div>
+    <div class="sl-b"><div class="dot"></div><div class="text">Servicios</div></div>
+    <div class="label-meta">B · Dot amethyst</div>
+  </div>
+  <div>
+    <div class="sl-c"><div class="num">01 /</div><div class="text">Sobre mí</div></div>
+    <div class="label-meta">C · Numerado · ember number</div>
+  </div>
+  <div>
+    <div class="sl-d"><div class="text">Casos de estudio</div></div>
+    <div class="label-meta">D · Pill chip amethyst</div>
+  </div>
+</body>
+</html>

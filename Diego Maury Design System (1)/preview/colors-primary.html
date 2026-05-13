@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DM · Colors — Primary</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; background:#120D1A; padding:20px; font-family:var(--font-body); }
+  .row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+  .swatch { border-radius:10px; overflow:hidden; }
+  .chip { height:100px; display:flex; flex-direction:column; justify-content:flex-end; padding:12px 14px; }
+  .ramp { display:grid; grid-template-columns:1fr 1fr; }
+  .ramp > div { height:26px; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:8px; color:rgba(245,245,247,0.6); letter-spacing:0.06em; }
+  .meta { padding:10px 14px 12px; background:rgba(255,255,255,0.05); }
+  .name { font-family:var(--font-display); font-weight:800; font-size:13px; color:#F5F5F7; letter-spacing:-0.01em; }
+  .hex  { font-family:var(--font-mono); font-size:10px; color:rgba(245,245,247,0.5); margin-top:2px; letter-spacing:0.04em; }
+  .role { font-family:var(--font-mono); font-size:8px; color:rgba(245,245,247,0.6); text-transform:uppercase; letter-spacing:0.12em; }
+  .label { font-family:var(--font-mono); font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(245,245,247,0.4); margin-bottom:10px; }
+</style>
+</head>
+<body>
+  <div class="label">Colors · Primary · v3 Violeta Protagonista</div>
+  <div class="row">
+    <div class="swatch">
+      <div class="chip" style="background:#7C3FBE"><span class="role">CTA · Identidad</span></div>
+      <div class="ramp">
+        <div style="background:#5E2A95">600</div>
+        <div style="background:#4B2672">deep</div>
+      </div>
+      <div class="meta"><div class="name">Digital Amethyst</div><div class="hex">#7C3FBE · protagonist</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#246BFD"><span class="role">Links · Status</span></div>
+      <div class="ramp">
+        <div style="background:#1A4FCC">mid</div>
+        <div style="background:#0E2A6B">deep</div>
+      </div>
+      <div class="meta"><div class="name">Quantum Blue</div><div class="hex">#246BFD · functional</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#FF5C39"><span class="role">Spark · Highlight</span></div>
+      <div class="ramp">
+        <div style="background:#D94824">dim</div>
+        <div style="background:#7A2812">deep</div>
+      </div>
+      <div class="meta"><div class="name">Electric Ember</div><div class="hex">#FF5C39 · spark</div></div>
+    </div>
+  </div>
+</body>
+</html>

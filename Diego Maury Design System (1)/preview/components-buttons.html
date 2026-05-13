@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DM · Buttons</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; background:#120D1A; padding:22px; }
+  .label { font-family:var(--font-mono); font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(245,245,247,0.4); margin-bottom:10px; margin-top:18px; }
+  .label:first-child { margin-top:0; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+</style>
+</head>
+<body>
+  <div class="label">Dark surface · Jerarquía primaria</div>
+  <div class="row">
+    <button class="dm-btn dm-btn-primary">Descargar CV</button>
+    <button class="dm-btn dm-btn-secondary">Agendar llamada</button>
+    <button class="dm-btn dm-btn-ghost">Ver servicios →</button>
+  </div>
+  <div class="label">Light surface · Sobre fondo claro</div>
+  <div class="row" style="background:#FAF8FC;padding:16px;border-radius:10px;">
+    <button class="dm-btn dm-btn-primary-light">Descargar CV</button>
+    <button class="dm-btn dm-btn-secondary-light">Agendar llamada</button>
+  </div>
+  <div class="label">Sistema · Satoshi 700 · Violeta protagonist · Ember spark</div>
+  <div class="row">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.10em;color:rgba(245,245,247,0.35)">Primary = #7C3FBE grad · Secondary = Ember outline · Ghost = bone border</span>
+  </div>
+</body>
+</html>

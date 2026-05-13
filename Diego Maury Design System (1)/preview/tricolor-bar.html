@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DM · Tricolor Bar</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; background:#120D1A; padding:24px; }
+  .label { font-family:var(--font-mono); font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(245,245,247,0.4); margin-bottom:14px; }
+  .bar { height:6px; background:linear-gradient(90deg,#7C3FBE 0%,#4B2672 55%,#FF5C39 100%); border-radius:3px; }
+  .bar-thin { height:2px; background:linear-gradient(90deg,#7C3FBE 0%,#4B2672 55%,#FF5C39 100%); margin-top:14px; }
+  .bar-glow { height:4px; background:linear-gradient(90deg,#7C3FBE 0%,#4B2672 55%,#FF5C39 100%); border-radius:2px; margin-top:14px; box-shadow:0 0 12px rgba(124,63,190,0.5),0 0 24px rgba(255,92,57,0.3); }
+  .meta { font-family:var(--font-mono); font-size:9px; letter-spacing:0.08em; color:rgba(245,245,247,0.3); margin-top:8px; }
+</style>
+</head>
+<body>
+  <div class="label">Brand · Tricolor Signature</div>
+  <div class="bar"></div>
+  <div class="meta">6px · Amethyst #7C3FBE → Catalyst #4B2672 → Ember #FF5C39</div>
+  <div class="bar-thin"></div>
+  <div class="meta">2px · Footer separator, section divider</div>
+  <div class="bar-glow"></div>
+  <div class="meta">4px + glow · Hero banner, feature accent</div>
+</body>
+</html>
