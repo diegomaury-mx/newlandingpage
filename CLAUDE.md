@@ -1,5 +1,9 @@
 # CLAUDE.md
 
+# CLAUDE.md
+
+> **IMPORTANTE:** Toda implementación, documentación o contribución debe seguir el esquema definido en `.claude/esquema` ubicado en la raíz del repositorio (`C:\Users\DiegoLocal\ClaudeCode\Projects\products\newlandingpage\.claude\esquema`). Consulta este archivo antes de crear o modificar cualquier sección, archivo o estructura.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Proyecto

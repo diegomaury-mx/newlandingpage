@@ -1,6 +1,10 @@
 
 # Diego Maury Design System — New Landing Page
 
+# Diego Maury Design System — New Landing Page
+
+> **IMPORTANTE:** Toda contribución, archivo o estructura debe seguir el esquema definido en `.claude/esquema` (raíz del repo). Consulta este archivo antes de modificar o agregar contenido.
+
 > Sistema de diseño personal y kit de componentes para proyectos de Diego Maury.
 
 ---
