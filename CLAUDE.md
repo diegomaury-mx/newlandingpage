@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Portafolio profesional de Diego Maury — sitio estático desplegado en GitHub Pages.
 
-URL objetivo: `diegomaury.mx` (GitHub Pages con dominio personalizado)
+URL: `https://diegomaury.mx` — **LIVE desde 2026-05-13**
 
 ## Stack técnico
 
@@ -24,7 +24,7 @@ La implementación real vive en el worktree `.worktrees/build/`. El directorio r
 
 ```
 .worktrees/build/               # ← AQUÍ vive el código
-├── index.html                  # Página principal (6 secciones) — IMPLEMENTADO
+├── index.html                  # Página principal (8 secciones) — LIVE
 ├── robots.txt                  # SEO — IMPLEMENTADO
 ├── assets/
 │   ├── css/styles.css          # Tokens DS v3 + todos los componentes
@@ -121,21 +121,24 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
 
 ## Estado del contenido
 
-### Implementado
-- `index.html` completo con 8 secciones, nav, footer
-- Design system v3 tokens en CSS (migración en progreso)
-- Fuentes locales copiadas a `assets/fonts/`
+### Implementado (LIVE — 2026-05-13)
+- `index.html` con 8 secciones: Hero, Work, Trust Strip, Testimonios, Servicios, About, Experiencia, Contacto
+- Design System v3 "Violeta Protagonista" — tokens completos en CSS
+- Fuentes locales: Satoshi Variable + JetBrains Mono
 - SEO básico (meta tags, OG, robots.txt)
+- `cases/heineken.html` — caso +600% con contenido completo
+- `cases/innovation-systems.html` — 3 subcasos: FlipHouse, HackSureste, CAVA Soft
+- `cases/redux-incmty.html` — REDUX + INCmty Challenges
+- `cv/diego-maury-cv.pdf` — CV 2026 subido
+- Senja embed activo (`93ff9581-ba54-4ba8-a053-f7d0889cd4d0`)
+- Deploy en GitHub Pages → rama `gh-pages`
+- Dominio `diegomaury.mx` con HTTPS activo
+- Email `hola@diegomaury.mx` en sección Contacto
 
 ### Pendiente
-- **`cases/heineken.html`**: contenido completo disponible en Notion
-- **`cases/innovation-systems.html`**: contenido pendiente (entrevista en Notion)
-- **`cases/redux-incmty.html`**: contenido pendiente
 - **`portfolio/index.html`**: galería filtrable — no iniciado
-- **`cv/diego-maury-cv.pdf`**: agregar archivo PDF
-- **Senja embed**: activar testimonials con widget de senja.io/p/diegomaury/9awUK8
 - **Foto real**: reemplazar placeholder `DM` en hero
-- **Despliegue a GitHub Pages**: dominio `diegomaury.mx` pendiente de configurar
+- **Testimonios Senja**: recolectar testimonios reales (embed activo)
 
 ## Idioma de respuestas
 

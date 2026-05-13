@@ -26,11 +26,23 @@
       "mcp__plugin_playwright_playwright__browser_take_screenshot",
       "Bash(git -C .worktrees/build commit -m \"feat: mejoras de conversión — CTAs jerarquizados, trust strip, testimonials, bullets escaneables, patrón reducido\")",
       "Bash(git -C .worktrees/build add assets/css/styles.css index.html)",
-      "Bash(git -C .worktrees/build commit -m \"feat: hero 2 columnas con placeholder foto, thumbnails en work section\")"
+      "Bash(git -C .worktrees/build commit -m \"feat: hero 2 columnas con placeholder foto, thumbnails en work section\")",
+      "Bash(mkdir -p \"C:/Users/DiegoLocal/Documents/Claude/Projects/products/newlandingpage/.worktrees/build/assets/fonts\")",
+      "Bash(cp \"C:/Users/DiegoLocal/ClaudeCode/Projects/products/newlandingpage/Diego Maury Design System \\(1\\)/fonts/Satoshi-Variable.ttf\" \"C:/Users/DiegoLocal/Documents/Claude/Projects/products/newlandingpage/.worktrees/build/assets/fonts/\")",
+      "Bash(cp \"C:/Users/DiegoLocal/ClaudeCode/Projects/products/newlandingpage/Diego Maury Design System \\(1\\)/fonts/Satoshi-VariableItalic.ttf\" \"C:/Users/DiegoLocal/Documents/Claude/Projects/products/newlandingpage/.worktrees/build/assets/fonts/\")",
+      "Bash(cp \"C:/Users/DiegoLocal/ClaudeCode/Projects/products/newlandingpage/Diego Maury Design System \\(1\\)/fonts/JetBrainsMono-Italic-VariableFont_wght.ttf\" \"C:/Users/DiegoLocal/Documents/Claude/Projects/products/newlandingpage/.worktrees/build/assets/fonts/\")",
+      "Bash(git -C C:/Users/DiegoLocal/Documents/Claude/Projects/products/newlandingpage log --oneline --since=\"90 days ago\" -- docs/)",
+      "mcp__claude_ai_Notion__notion-fetch",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080)",
+      "mcp__plugin_everything-claude-code_playwright__browser_navigate",
+      "Bash(gh repo *)",
+      "mcp__plugin_everything-claude-code_github__get_file_contents",
+      "mcp__claude_ai_Notion__notion-search",
+      "mcp__claude_ai_Notion__notion-update-page"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "supabase"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }
