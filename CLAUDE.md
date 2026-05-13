@@ -23,24 +23,29 @@ URL objetivo: `diegomaury.mx` (GitHub Pages con dominio personalizado)
 La implementación real vive en el worktree `.worktrees/build/`. El directorio raíz contiene solo docs, specs y configuración.
 
 ```
-.worktrees/build/          # ← AQUÍ vive el código
-├── index.html             # Página principal (6 secciones)
+.worktrees/build/               # ← AQUÍ vive el código
+├── index.html                  # Página principal (6 secciones) — IMPLEMENTADO
+├── robots.txt                  # SEO — IMPLEMENTADO
 ├── assets/
-│   ├── css/styles.css     # Tokens + todos los componentes
-│   ├── js/main.js         # Nav activa + scroll reveal (IntersectionObserver)
-│   └── img/isotipodm.svg  # Usado como bg-pattern vía CSS background-image
-├── cases/
-│   ├── heineken.html      # Caso completo — contenido disponible
-│   ├── innovation-systems.html  # Estructura lista, contenido pendiente
-│   └── redux-incmty.html        # Estructura lista, contenido pendiente
-├── portfolio/
-│   └── index.html         # Galería filtrable por año
+│   ├── css/styles.css          # Tokens DS v3 + todos los componentes
+│   ├── fonts/                  # Satoshi Variable + JetBrains Mono (local)
+│   ├── js/main.js              # Nav activa + scroll reveal (IntersectionObserver)
+│   └── img/isotipodm.svg       # Usado como bg-pattern vía CSS background-image
+├── cases/                      # PENDIENTE — páginas de casos de estudio
+│   ├── heineken.html           # Pendiente — contenido disponible en Notion
+│   ├── innovation-systems.html # Pendiente
+│   └── redux-incmty.html       # Pendiente
+├── portfolio/                  # PENDIENTE — galería filtrable por año
 └── cv/
-    └── diego-maury-cv.pdf
+    └── diego-maury-cv.pdf      # PENDIENTE — agregar PDF
 
-docs/superpowers/specs/    # Spec completa con diseño, copy y casos
-docs/superpowers/plans/    # Plan de implementación task-by-task
+docs/superpowers/specs/         # Spec completa con diseño, copy y casos
+docs/superpowers/plans/         # Plan de implementación (completado mayo 2026)
 ```
+
+**Design System de referencia (fuente de verdad):**
+`C:\Users\DiegoLocal\ClaudeCode\Projects\products\newlandingpage\Diego Maury Design System (1)\`
+Contiene: `README.md`, `colors_and_type.css`, `assets/`, `fonts/`, `ui_kits/`
 
 ## Comandos de desarrollo
 
@@ -56,39 +61,49 @@ python -m http.server 8080
 npx gh-pages -d .worktrees/build
 ```
 
-## Design system
+## Design system — v3 "Violeta Protagonista"
+
+Fuente de verdad: `Diego Maury Design System (1)/README.md` y `colors_and_type.css`.
 
 ### Paleta de color (tokens CSS en `:root`)
 
 | Token | Hex | Uso |
 |-------|-----|-----|
-| `--purple` | `#2E1547` | Hero, Contacto, Footer |
-| `--ink` | `#0F0A1A` | Todas las secciones interiores |
-| `--blaze` | `#EA580C` | CTAs primarios, tagline, accents |
-| `--spark` | `#E6B800` | Números de caso, tags, énfasis puntual |
+| `--dm-amethyst` | `#7C3FBE` | CTA primario, isotipo, identidad |
+| `--dm-amethyst-600` | `#5E2A95` | Hover, depth |
+| `--dm-catalyst` | `#4B2672` | Gradientes, bg bloques |
+| `--dm-catalyst-700` | `#2E1547` | Hero bg, Contacto, Footer |
+| `--dm-catalyst-900` | `#120D1A` | Hero backdrop, fondos oscuros |
+| `--dm-ember` | `#FF5C39` | Highlights, tagline, accent border (NO CTA primario) |
+| `--dm-spark` | `#E6B800` | Solo en KPIs y métricas de impacto |
+| `--dm-quantum` | `#246BFD` | Links funcionales, status |
+| `--dm-ink` | `#0F0A1A` | Secciones interiores, body bg |
+| `--dm-bone` | `#F5F5F7` | Texto sobre oscuro |
 
-Regla 60·30·10: Purple/Ink dominan · Blaze solo en CTAs y tagline · Spark solo en métricas y tags.
+Gradiente tricolor (firma): `--dm-tricolor` = Amethyst → Catalyst → Ember
 
 ### Tipografía
 
-| Familia | Peso | Uso |
-|---------|------|-----|
-| Satoshi (Fontshare) | 800/700 | Headlines, sección títulos, números |
-| Inter (Google Fonts) | 400/500 | Body, descripciones |
-| JetBrains Mono (Google Fonts) | 400 | Labels, tags, métricas, nav links |
+| Familia | Carga | Uso |
+|---------|-------|-----|
+| Satoshi Variable | Local `assets/fonts/` | Headlines, sección títulos, números |
+| Inter | Google Fonts | Body, descripciones |
+| JetBrains Mono | Google Fonts (upright) + Local italic | Labels, tags, métricas, nav links |
 
 ### Isotipo bg-pattern
 
-El SVG `isotipodm.svg` se usa como fondo decorativo en todas las secciones via `.bg-pattern::before` con `background-image` CSS. Opacidad 0.06 en Ink, 0.05 en Purple. No modificar este patrón — es parte de la identidad visual.
+El SVG `isotipodm.svg` se usa como fondo decorativo en todas las secciones via `.bg-pattern::before` con `background-image` CSS. Opacidad 0.022 en Ink, 0.03 en Catalyst. No modificar este patrón — es parte de la identidad visual.
 
 ## Secciones (orden en index.html)
 
-1. **Hero** (fondo Purple) — tag Blaze, headline Satoshi 800, sub, 2 CTAs, banda de 3 métricas
-2. **Selected Work** (Ink) — 3 filas editoriales con número Spark, nombre, meta, métrica Blaze
-3. **Servicios** (Ink) — 3 tarjetas en grid con tag Spark, nombre, entregables, tiempo
-4. **About** (Ink) — 2 cols: bio texto izquierda, herramientas/chips + cómo trabajo derecha
-5. **Experiencia** (Ink) — 4 roles en lista vertical: meta izquierda 220px, contenido derecha
-6. **Contacto** (Purple) — 3 canales: calendario, email, LinkedIn
+1. **Hero** (fondo Catalyst-700) — tag Ember, headline Satoshi 800, sub, 2 CTAs, banda de 3 métricas
+2. **Selected Work** (Ink) — 3 filas editoriales con número Spark, nombre, meta, métrica
+3. **Trust Strip** (Ink) — logos de marcas: HEINEKEN, Tec, INCmty, FEMSA, HackSureste
+4. **Testimonials** (Ink) — embed de Senja (pendiente de activar)
+5. **Servicios** (Ink) — 3 tarjetas en grid con tag, nombre, entregables, tiempo
+6. **About** (Ink) — 2 cols: bio texto izquierda, herramientas/chips + cómo trabajo derecha
+7. **Experiencia** (Ink) — 4 roles en lista vertical: meta izquierda 220px, contenido derecha
+8. **Contacto** (Catalyst-700) — 3 canales: calendario, email, LinkedIn
 
 ## Reglas de diseño
 
@@ -106,10 +121,21 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
 
 ## Estado del contenido
 
-- **Heineken Green Challenge**: contenido completo disponible en transcripción de Notion
-- **Innovation Systems Builder**: estructura lista, contenido pendiente (entrevista en Notion sin transcribir)
-- **REDUX + INCmty**: estructura lista, contenido pendiente (respuestas pendientes en Notion)
-- **Copy de About, Experiencia y Servicios**: redactado e implementado
+### Implementado
+- `index.html` completo con 8 secciones, nav, footer
+- Design system v3 tokens en CSS (migración en progreso)
+- Fuentes locales copiadas a `assets/fonts/`
+- SEO básico (meta tags, OG, robots.txt)
+
+### Pendiente
+- **`cases/heineken.html`**: contenido completo disponible en Notion
+- **`cases/innovation-systems.html`**: contenido pendiente (entrevista en Notion)
+- **`cases/redux-incmty.html`**: contenido pendiente
+- **`portfolio/index.html`**: galería filtrable — no iniciado
+- **`cv/diego-maury-cv.pdf`**: agregar archivo PDF
+- **Senja embed**: activar testimonials con widget de senja.io/p/diegomaury/9awUK8
+- **Foto real**: reemplazar placeholder `DM` en hero
+- **Despliegue a GitHub Pages**: dominio `diegomaury.mx` pendiente de configurar
 
 ## Idioma de respuestas
 
