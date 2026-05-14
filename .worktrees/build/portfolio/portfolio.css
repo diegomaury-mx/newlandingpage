@@ -1,0 +1,80 @@
+/* ═══════════════════════════════════════
+   PORTFOLIO PAGE
+   Depende de: ../assets/css/styles.css (tokens DS en :root)
+═══════════════════════════════════════ */
+
+/* ── PAGE BASE ── */
+.pf-page {
+  background: var(--dm-ink);
+  color: var(--dm-bone);
+}
+
+/* ── HEADER ── */
+.pf-header {
+  padding: calc(var(--nav-h) + 5rem) 0 4rem;
+  background: linear-gradient(180deg, var(--dm-catalyst-900) 0%, var(--dm-ink) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.pf-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/img/isotipodm.svg');
+  background-repeat: repeat;
+  background-size: 120px;
+  opacity: 0.022;
+  pointer-events: none;
+}
+
+.pf-header__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.pf-header__tag {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dm-ember);
+  margin: 0 0 1rem;
+}
+
+.pf-header__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--dm-bone);
+  margin: 0 0 1.25rem;
+}
+
+.pf-header__sub {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(245, 245, 247, 0.60);
+  margin: 0;
+}
+
+/* ── TIMELINE LAYOUT ── */
+.pf-timeline {
+  padding: 5rem 0 6rem;
+}
+
+.pf-timeline__inner {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+@media (max-width: 1023px) {
+  .pf-timeline__inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
