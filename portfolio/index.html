@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — Diego Maury</title>
+  <meta name="description" content="Todos los proyectos de Diego Maury: programas de innovación, sistemas digitales y aceleración en LATAM.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="portfolio.css">
+</head>
+<body class="pf-page">
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="/" class="nav__brand">
+        <img src="../assets/img/isotipodm.svg" alt="Isotipo DM" class="nav__logo">
+        <span class="nav__name">Diego Maury</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="/#work"      class="nav__link is-active">Work</a></li>
+        <li><a href="/#servicios" class="nav__link">Servicios</a></li>
+        <li><a href="/#about"     class="nav__link">About</a></li>
+        <li><a href="/#contacto"  class="nav__link">Contacto</a></li>
+      </ul>
+      <a href="https://calendly.com/diegomaurymx" target="_blank" rel="noopener" class="btn btn--primary nav__cta">Agendar</a>
+      <button class="nav__burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="pf-header">
+    <div class="container pf-header__inner">
+      <p class="pf-header__tag">ALL PROJECTS</p>
+      <h1 class="pf-header__title">Una trayectoria<br>de ejecución.</h1>
+      <p class="pf-header__sub">30+ programas. Tres eras. Resultados medibles.</p>
+    </div>
+  </header>
+
+  <!-- TIMELINE -->
+  <section class="pf-timeline" aria-label="Proyectos por era">
+    <div class="container pf-timeline__inner">
+
+      <!-- ÍNDICE LATERAL -->
+      <nav class="pf-index" aria-label="Eras de trabajo">
+        <div class="pf-index__line" aria-hidden="true"></div>
+        <ol class="pf-index__list">
+          <li class="pf-index__item is-active" data-era="era-01">
+            <button class="pf-index__btn" aria-current="true" data-target="era-01">
+              <span class="pf-index__dot" aria-hidden="true"></span>
+              <span class="pf-index__label">
+                <span class="pf-index__num">ERA 01</span>
+                <span class="pf-index__range">2019–2021</span>
+                <span class="pf-index__name">Ecosistemas corporativos</span>
+              </span>
+            </button>
+          </li>
+          <li class="pf-index__item" data-era="era-02">
+            <button class="pf-index__btn" aria-current="false" data-target="era-02">
+              <span class="pf-index__dot" aria-hidden="true"></span>
+              <span class="pf-index__label">
+                <span class="pf-index__num">ERA 02</span>
+                <span class="pf-index__range">2020–2022</span>
+                <span class="pf-index__name">Sistemas y operaciones</span>
+              </span>
+            </button>
+          </li>
+          <li class="pf-index__item" data-era="era-03">
+            <button class="pf-index__btn" aria-current="false" data-target="era-03">
+              <span class="pf-index__dot" aria-hidden="true"></span>
+              <span class="pf-index__label">
+                <span class="pf-index__num">ERA 03</span>
+                <span class="pf-index__range">2021–2023</span>
+                <span class="pf-index__name">Metodología y alcance nacional</span>
+              </span>
+            </button>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- ERAS + CARDS -->
+      <div class="pf-eras">
+
+        <!-- ERA 01 -->
+        <div class="pf-era" id="era-01">
+          <div class="pf-era__heading">
+            <span class="pf-era__num">ERA 01</span>
+            <h2 class="pf-era__title">Ecosistemas corporativos</h2>
+            <p class="pf-era__tagline">"De convocatoria local a referente nacional."</p>
+          </div>
+          <div class="pf-era__cards">
+            <article class="pf-card" data-reveal>
+              <div class="pf-card__topbar" aria-hidden="true"></div>
+              <div class="pf-card__inner">
+                <div class="pf-card__badges">
+                  <span class="pf-badge pf-badge--amethyst">ERA 01</span>
+                  <span class="pf-badge pf-badge--ember">Programa de Innovación</span>
+                </div>
+                <h3 class="pf-card__name">HEINEKEN Green Challenge</h3>
+                <p class="pf-card__desc">Diseño y operación del programa nacional de innovación en sustentabilidad de HEINEKEN México.</p>
+                <div class="pf-card__meta">
+                  <div class="pf-card__cambios">
+                    <span class="pf-card__cambios-num">4</span>
+                    <span class="pf-card__cambios-label">cambios aterrizados</span>
+                  </div>
+                  <span class="pf-card__years">2019–2022</span>
+                </div>
+                <a href="../cases/heineken.html" class="pf-card__cta"
+                   aria-label="Ver caso completo: HEINEKEN Green Challenge">
+                  Ver caso completo →
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- ERA 02 -->
+        <div class="pf-era" id="era-02">
+          <div class="pf-era__heading">
+            <span class="pf-era__num">ERA 02</span>
+            <h2 class="pf-era__title">Sistemas y operaciones</h2>
+            <p class="pf-era__tagline">"Procesos que funcionan sin el operador."</p>
+          </div>
+          <div class="pf-era__cards">
+            <article class="pf-card" data-reveal>
+              <div class="pf-card__topbar" aria-hidden="true"></div>
+              <div class="pf-card__inner">
+                <div class="pf-card__badges">
+                  <span class="pf-badge pf-badge--amethyst">ERA 02</span>
+                  <span class="pf-badge pf-badge--ember">Digital Ops</span>
+                </div>
+                <h3 class="pf-card__name">Innovation Systems</h3>
+                <p class="pf-card__desc">Construcción de sistemas de innovación para FlipHouse, HackSureste y CAVA Soft.</p>
+                <div class="pf-card__meta">
+                  <div class="pf-card__cambios">
+                    <span class="pf-card__cambios-num">4</span>
+                    <span class="pf-card__cambios-label">cambios aterrizados</span>
+                  </div>
+                  <span class="pf-card__years">2020–2022</span>
+                </div>
+                <a href="../cases/innovation-systems.html" class="pf-card__cta"
+                   aria-label="Ver caso completo: Innovation Systems">
+                  Ver caso completo →
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- ERA 03 -->
+        <div class="pf-era" id="era-03">
+          <div class="pf-era__heading">
+            <span class="pf-era__num">ERA 03</span>
+            <h2 class="pf-era__title">Metodología y alcance nacional</h2>
+            <p class="pf-era__tagline">"Una metodología clara vale más que un mentor brillante."</p>
+          </div>
+          <div class="pf-era__cards">
+            <article class="pf-card" data-reveal>
+              <div class="pf-card__topbar" aria-hidden="true"></div>
+              <div class="pf-card__inner">
+                <div class="pf-card__badges">
+                  <span class="pf-badge pf-badge--amethyst">ERA 03</span>
+                  <span class="pf-badge pf-badge--ember">Aceleración</span>
+                </div>
+                <h3 class="pf-card__name">REDUX + INCmty Challenges</h3>
+                <p class="pf-card__desc">Framework de aceleración de 8 semanas operado en los 32 estados de México.</p>
+                <div class="pf-card__meta">
+                  <div class="pf-card__cambios">
+                    <span class="pf-card__cambios-num">4</span>
+                    <span class="pf-card__cambios-label">cambios aterrizados</span>
+                  </div>
+                  <span class="pf-card__years">2021–2023</span>
+                </div>
+                <a href="../cases/redux-incmty.html" class="pf-card__cta"
+                   aria-label="Ver caso completo: REDUX + INCmty Challenges">
+                  Ver caso completo →
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+      </div><!-- /pf-eras -->
+    </div><!-- /container -->
+  </section>
+
+  <!-- CTA -->
+  <section class="pf-cta">
+    <div class="container pf-cta__inner">
+      <p class="pf-cta__question">¿Quieres ver cómo aplica esto a tu organización?</p>
+      <a href="https://calendly.com/diegomaurymx" target="_blank" rel="noopener" class="btn btn--primary">
+        Agendar diagnóstico →
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__bar"></div>
+    <div class="container footer__inner">
+      <span class="footer__tagline">Hagamos que las cosas pasen</span>
+      <span class="footer__copy">© 2026 Diego Maury · CDMX</span>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="portfolio.js"></script>
+</body>
+</html>
