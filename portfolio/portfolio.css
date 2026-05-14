@@ -209,3 +209,185 @@
     gap: 0.5rem;
   }
 }
+
+/* ── ERAS ── */
+.pf-eras {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+
+.pf-era {
+  scroll-margin-top: calc(var(--nav-h) + 2rem);
+}
+
+.pf-era__heading {
+  margin-bottom: 2rem;
+}
+
+.pf-era__num {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dm-ember);
+  display: block;
+  margin-bottom: 0.375rem;
+}
+
+.pf-era__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  color: var(--dm-bone);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.pf-era__tagline {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: rgba(245, 245, 247, 0.60);
+  font-style: italic;
+  margin: 0;
+}
+
+.pf-era__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── CASE CARD ── */
+.pf-card {
+  background: linear-gradient(180deg, var(--dm-catalyst-900) 0%, var(--dm-ink) 100%);
+  border: 1px solid rgba(124, 63, 190, 0.20);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pf-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124, 63, 190, 0.45);
+  box-shadow: 0 8px 32px rgba(124, 63, 190, 0.15);
+}
+
+.pf-card__topbar {
+  height: 2px;
+  background: linear-gradient(90deg, #7C3FBE 0%, #4B2672 55%, #FF5C39 100%);
+}
+
+.pf-card__inner {
+  padding: 2rem;
+}
+
+.pf-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.pf-badge {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3125rem 0.625rem;
+  border-radius: 4px;
+}
+
+.pf-badge--amethyst {
+  background: rgba(124, 63, 190, 0.18);
+  color: var(--dm-amethyst);
+}
+
+.pf-badge--ember {
+  background: rgba(255, 92, 57, 0.14);
+  color: var(--dm-ember);
+}
+
+.pf-card__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  color: var(--dm-bone);
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.pf-card__desc {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: rgba(245, 245, 247, 0.75);
+  margin: 0 0 1.5rem;
+}
+
+.pf-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pf-card__cambios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.pf-card__cambios-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--dm-spark);
+  letter-spacing: -0.02em;
+}
+
+.pf-card__cambios-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--dm-grey);
+}
+
+.pf-card__years {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--dm-grey);
+  letter-spacing: 0.04em;
+}
+
+.pf-card__cta {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--dm-bone);
+  text-decoration: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.20);
+  border-radius: 6px;
+  padding: 0.625rem 1.125rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1),
+              background   150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pf-card__cta:hover {
+  border-color: rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.06);
+}
