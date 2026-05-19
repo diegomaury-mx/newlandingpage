@@ -20,27 +20,31 @@ URL: `https://diegomaury.mx` — **LIVE desde 2026-05-13**
 
 ## Estructura del repositorio
 
-La implementación real vive en el worktree `.worktrees/build/`. El directorio raíz contiene solo docs, specs y configuración.
+El código vive en el worktree `.worktrees/build/` (desplegado vía `gh-pages`). La rama `master` contiene el mismo código más docs, specs y configuración.
 
 ```
-.worktrees/build/               # ← AQUÍ vive el código
+.worktrees/build/               # ← AQUÍ vive el código (deploy source)
 ├── index.html                  # Página principal (8 secciones) — LIVE
-├── robots.txt                  # SEO — IMPLEMENTADO
+├── robots.txt                  # SEO — LIVE
+├── CNAME                       # diegomaury.mx
 ├── assets/
 │   ├── css/styles.css          # Tokens DS v3 + todos los componentes
 │   ├── fonts/                  # Satoshi Variable + JetBrains Mono (local)
 │   ├── js/main.js              # Nav activa + scroll reveal (IntersectionObserver)
 │   └── img/isotipodm.svg       # Usado como bg-pattern vía CSS background-image
-├── cases/                      # PENDIENTE — páginas de casos de estudio
-│   ├── heineken.html           # Pendiente — contenido disponible en Notion
-│   ├── innovation-systems.html # Pendiente
-│   └── redux-incmty.html       # Pendiente
-├── portfolio/                  # PENDIENTE — galería filtrable por año
+├── cases/
+│   ├── heineken.html           # Caso +600% — LIVE
+│   ├── innovation-systems.html # 3 subcasos FlipHouse/HackSureste/CAVA — LIVE
+│   └── redux-incmty.html       # REDUX + INCmty Challenges — LIVE
+├── portfolio/                  # Galería por eras — LIVE (2026-05-18)
+│   ├── index.html
+│   ├── portfolio.css
+│   └── portfolio.js
 └── cv/
-    └── diego-maury-cv.pdf      # PENDIENTE — agregar PDF
+    └── diego-maury-cv.pdf      # CV 2026 — LIVE
 
-docs/superpowers/specs/         # Spec completa con diseño, copy y casos
-docs/superpowers/plans/         # Plan de implementación (completado mayo 2026)
+docs/superpowers/specs/         # Specs de diseño
+docs/superpowers/plans/         # Planes de implementación
 ```
 
 **Design System de referencia (fuente de verdad):**
@@ -121,8 +125,8 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
 
 ## Estado del contenido
 
-### Implementado (LIVE — 2026-05-13)
-- `index.html` con 8 secciones: Hero, Work, Trust Strip, Testimonios, Servicios, About, Experiencia, Contacto
+### Implementado (LIVE)
+- `index.html` con 8 secciones: Hero, Work, Trust Strip, Testimonios, Servicios, About, Experiencia, Contacto — desde 2026-05-13
 - Design System v3 "Violeta Protagonista" — tokens completos en CSS
 - Fuentes locales: Satoshi Variable + JetBrains Mono
 - SEO básico (meta tags, OG, robots.txt)
@@ -131,12 +135,12 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
 - `cases/redux-incmty.html` — REDUX + INCmty Challenges
 - `cv/diego-maury-cv.pdf` — CV 2026 subido
 - Senja embed activo (`93ff9581-ba54-4ba8-a053-f7d0889cd4d0`)
+- `portfolio/index.html` — galería por eras con timeline vertical — desde 2026-05-18
 - Deploy en GitHub Pages → rama `gh-pages`
 - Dominio `diegomaury.mx` con HTTPS activo
 - Email `hola@diegomaury.mx` en sección Contacto
 
 ### Pendiente
-- **`portfolio/index.html`**: galería filtrable — no iniciado
 - **Foto real**: reemplazar placeholder `DM` en hero
 - **Testimonios Senja**: recolectar testimonios reales (embed activo)
 
