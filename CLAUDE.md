@@ -1,10 +1,8 @@
 # CLAUDE.md
 
-# CLAUDE.md
-
-> **IMPORTANTE:** Toda implementación, documentación o contribución debe seguir el esquema definido en `.claude/esquema` ubicado en la raíz del repositorio (`C:\Users\DiegoLocal\ClaudeCode\Projects\products\newlandingpage\.claude\esquema`). Consulta este archivo antes de crear o modificar cualquier sección, archivo o estructura.
-
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+> **IMPORTANTE:** Toda implementación, documentación o contribución debe seguir el esquema definido en `.claude/esquema` ubicado en la raíz del repositorio. Consulta este archivo antes de crear o modificar cualquier sección, archivo o estructura.
 
 ## Proyecto
 
@@ -29,9 +27,12 @@ El código vive en el worktree `.worktrees/build/` (desplegado vía `gh-pages`).
 ├── CNAME                       # diegomaury.mx
 ├── assets/
 │   ├── css/styles.css          # Tokens DS v3 + todos los componentes
+│   ├── css/colors_and_type.css # Copia del token file del DS (fuente de verdad en DS folder)
 │   ├── fonts/                  # Satoshi Variable + JetBrains Mono (local)
 │   ├── js/main.js              # Nav activa + scroll reveal (IntersectionObserver)
-│   └── img/isotipodm.svg       # Usado como bg-pattern vía CSS background-image
+│   └── img/                    # isotipodm.svg (bg-pattern), isotipo.svg, logos, hexagon patterns
+├── render_card.html            # Tarjeta social 1080×1080 para exportar (10 variantes)
+├── export_cards.js             # Script Puppeteer: `node export_cards.js` → exported_cards/
 ├── cases/
 │   ├── heineken.html           # Caso +600% — LIVE
 │   ├── innovation-systems.html # 3 subcasos FlipHouse/HackSureste/CAVA — LIVE
@@ -48,7 +49,7 @@ docs/superpowers/plans/         # Planes de implementación
 ```
 
 **Design System de referencia (fuente de verdad):**
-`C:\Users\DiegoLocal\ClaudeCode\Projects\products\newlandingpage\Diego Maury Design System (1)\`
+`Diego Maury Design System (1)/` en la raíz del repo
 Contiene: `README.md`, `colors_and_type.css`, `assets/`, `fonts/`, `ui_kits/`
 
 ## Comandos de desarrollo
@@ -63,6 +64,11 @@ python -m http.server 8080
 ```bash
 # Despliegue (desde raíz del repo)
 npx gh-pages -d .worktrees/build
+```
+
+```bash
+# Exportar tarjetas sociales (desde .worktrees/build/)
+node export_cards.js   # requiere puppeteer; genera exported_cards/card-01..10.png
 ```
 
 ## Design system — v3 "Violeta Protagonista"
