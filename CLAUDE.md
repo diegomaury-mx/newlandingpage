@@ -14,66 +14,67 @@ URL: `https://diegomaury.mx` — **LIVE desde 2026-05-13**
 
 - HTML5 + CSS3 + JavaScript vanilla (sin frameworks)
 - Sin build system; si se añade uno, usar Vite
-- Despliegue: GitHub Pages (rama `gh-pages` o carpeta `/docs` en `main`)
+- Despliegue: GitHub Pages sirviendo desde **`master` / raíz** (CNAME `diegomaury.mx`). Cada push a `master` redespliega automáticamente. No hay rama `gh-pages` ni worktree (consolidado el 2026-06-15).
 
 ## Estructura del repositorio
 
-El código vive en el worktree `.worktrees/build/` (desplegado vía `gh-pages`). La rama `master` contiene el mismo código más docs, specs y configuración.
+El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy source). No hay worktree.
 
 ```
-.worktrees/build/               # ← AQUÍ vive el código (deploy source)
-├── index.html                  # Página principal (8 secciones) — LIVE
+/                               # ← raíz de master = sitio (deploy source)
+├── index.html                  # Página principal v2 — LIVE
 ├── robots.txt                  # SEO — LIVE
 ├── CNAME                       # diegomaury.mx
+├── llms.txt / llms-full.txt    # Contexto para LLMs — LIVE
 ├── assets/
 │   ├── css/styles.css          # Tokens DS v3 + todos los componentes
-│   ├── css/colors_and_type.css # Copia del token file del DS (fuente de verdad en DS folder)
+│   ├── css/colors_and_type.css # Token file del DS
 │   ├── fonts/                  # Satoshi Variable + JetBrains Mono (local)
+│   ├── fonts-v2/               # Montserrat + Bitter + Space Mono (v2)
 │   ├── js/main.js              # Nav activa + scroll reveal (IntersectionObserver)
-│   └── img/                    # isotipodm.svg (bg-pattern), isotipo.svg, logos, hexagon patterns
+│   └── img/                    # isotipodm.svg (bg-pattern), isotipo, logos, hexagon patterns
 ├── render_card.html            # Tarjeta social 1080×1080 para exportar (10 variantes)
 ├── export_cards.js             # Script Puppeteer: `node export_cards.js` → exported_cards/
+├── exported_cards/             # PNGs generados card-01..10
 ├── cases/
 │   ├── heineken.html           # Caso +600% — LIVE
 │   ├── innovation-systems.html # 3 subcasos FlipHouse/HackSureste/CAVA — LIVE
-│   └── redux-incmty.html       # REDUX + INCmty Challenges — LIVE
-├── portfolio/                  # Galería por eras — LIVE (2026-05-18)
+│   ├── redux-incmty.html       # REDUX + INCmty Challenges — LIVE
+│   └── fliphouse.html          # FlipHouse RevOps & AI — LIVE
+├── portfolio/                  # Galería por eras — LIVE
 │   ├── index.html
 │   ├── portfolio.css
 │   └── portfolio.js
-└── cv/
-    └── diego-maury-cv.pdf      # CV 2026 — LIVE
-
-docs/superpowers/specs/         # Specs de diseño
-docs/superpowers/plans/         # Planes de implementación
+├── cv/
+│   └── diego-maury-cv.pdf      # CV 2026 — LIVE
+├── backups/                    # index-v1-backup.html, index-v2.html (respaldos)
+├── src/services/pgPool.js      # Backend Phase 2 (chatbot RAG, pendiente)
+└── docs/superpowers/           # specs/ y plans/ de diseño
 ```
 
-**Design System de referencia (fuente de verdad):**
-`Diego Maury Design System (1)/` en la raíz del repo
-Contiene: `README.md`, `colors_and_type.css`, `assets/`, `fonts/`, `ui_kits/`
+> **Analítica:** todas las páginas del sitio llevan Google Tag Manager (`GTM-NHT5827J`) y Microsoft Clarity (`x7ns7c22xi`) en el `<head>`.
 
 ## Comandos de desarrollo
 
 ```bash
-# Desde .worktrees/build/
-cd .worktrees/build
+# Servidor local (desde la raíz del repo)
 python -m http.server 8080
 # o: npx serve .
 ```
 
 ```bash
-# Despliegue (desde raíz del repo)
-npx gh-pages -d .worktrees/build
+# Despliegue: simplemente push a master. GitHub Pages reconstruye solo.
+git add -A && git commit -m "..." && git push origin master
 ```
 
 ```bash
-# Exportar tarjetas sociales (desde .worktrees/build/)
+# Exportar tarjetas sociales (desde la raíz)
 node export_cards.js   # requiere puppeteer; genera exported_cards/card-01..10.png
 ```
 
 ## Design system — v3 "Violeta Protagonista"
 
-Fuente de verdad: `Diego Maury Design System (1)/README.md` y `colors_and_type.css`.
+Tokens implementados en `assets/css/styles.css` (`:root`) y `assets/css/colors_and_type.css`. El folder externo del Design System fue eliminado el 2026-06-15; se migrará a otra herramienta (por definir).
 
 ### Paleta de color (tokens CSS en `:root`)
 
