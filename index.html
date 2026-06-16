@@ -73,41 +73,157 @@
        TOKENS — "Deep Tech & Friction"
        ─────────────────────────────────────────────── */
     :root {
-      --purple:        #4b2a87;
-      --purple-deep:   #3a2170;
-      --purple-darker: #2a1854;
-      --ember:         #f0592a;
-      --ember-hover:   #d4451c;
-      --ember-text:    #c8431a;
-      --ember-soft:    rgba(240,89,42,0.14);
+      /* ═══════════════════════════════════════════════
+         DESIGN SYSTEM v4 — "Deep Tech & Friction"
+         Fuente canónica: _ds/.../dm-brand.css
+         5 roles: Morado Maury · Ember · Quantum · Spark · Catalyst 900
+         ─────────────────────────────────────────────── */
+
+      /* ── DOMINANTE · Morado Maury ─────────────────── */
+      --purple:        #4b2a87;   /* identidad, titulares, isotipo */
+      --purple-deep:   #3a2170;   /* fondos, hover, depth */
+      --purple-darker: #2a1854;   /* Catalyst 900 — suelo */
+      --purple-100:    #efe9fb;
+      --purple-300:    #a98fdb;   /* SOLO superficies/bordes, nunca texto */
+      --purple-500:    #4b2a87;
+      --purple-700:    #3a2170;
+      --purple-900:    #2a1854;
+
+      /* ── PROVOCADOR · Ember (rampa completa) ──────── */
+      --orange:        #f0592a;
+      --orange-deep:   #d4451c;
+      --ember:         #f0592a;   /* fricción, CTA, palabra clave */
       --ember-100:     #fde7df;
-      --quantum:       #2862cf;
-      --quantum-dark:  #7aa6ff;
+      --ember-200:     #f9bca6;
+      --ember-500:     #f0592a;
+      --ember-600:     #d4451c;   /* hover */
+      --ember-700:     #a83514;
+      --ember-900:     #5e1d0a;
+      --ember-text:    #c8431a;   /* TEXTO sobre claro — AA 4.8:1 */
+      --ember-soft:    rgba(240,89,42,0.14);
+
+      /* ── TÉCNICO · Quantum (rampa · estratégico) ──── */
+      --blue:          #2862cf;
+      --blue-on-dark:  #7aa6ff;
+      --quantum:       #2862cf;   /* links, estados UI, navegación */
+      --quantum-100:   #e4ecfb;
+      --quantum-200:   #a9c2f2;
+      --quantum-300:   #7aa6ff;   /* sobre oscuro */
+      --quantum-500:   #2862cf;
+      --quantum-700:   #1c4699;
+      --quantum-900:   #0f2a5e;
       --quantum-soft:  rgba(40,98,207,0.14);
-      --spark:         #e6a100;
-      --spark-dark:    #f0b429;
+
+      /* ── ENFOQUE · Spark (rampa · estratégico) ────── */
+      --spark:         #e6a100;   /* KPI, dato crítico (máx 2/vista) */
+      --spark-on-dark: #f0b429;   /* sobre oscuro */
+      --spark-100:     #fbf0cf;
+      --spark-200:     #f5d77a;
+      --spark-300:     #f0b429;
+      --spark-500:     #e6a100;
+      --spark-700:     #a8740a;
+      --spark-900:     #5e4106;
+      --spark-text:    #8a6200;   /* TEXTO sobre claro — AA 5.1:1 */
       --spark-soft:    rgba(230,161,0,0.16);
-      --ink:           #241f33;
-      --grey:          #5e4f86;
-      --pale:          #efe9fb;
-      --off-white:     #f6f4f1;
-      --bone:          #f3f0ec;
-      --neutral-200:   #e7e2dc;
-      --neutral-300:   #dcd5e4;
-      --success:       #1f8a5b;
-      --surface-900:   #2a1854;
-      --surface-800:   #352066;
-      --surface-700:   #3a2170;
-      --surface-deep:  #1d1138;
-      --w90:  rgba(243,240,236,0.90);
-      --w80:  rgba(243,240,236,0.80);
-      --w60:  rgba(243,240,236,0.60);
-      --w40:  rgba(243,240,236,0.40);
-      --w20:  rgba(243,240,236,0.20);
-      --w10:  rgba(243,240,236,0.10);
-      --font-display: 'Montserrat', system-ui, sans-serif;
-      --font-serif:   'Bitter', Georgia, serif;
-      --font-mono:    'Space Mono', ui-monospace, monospace;
+
+      /* ── NEUTRALES (rampa violeta-tintada · sin gris) */
+      --ink:        #241f33;   /* texto principal sobre claro · 14:1 */
+      --ink-2:      #463f5e;   /* texto secundario · 8:1 */
+      --muted:      #5e4f86;   /* texto terciario sobre claro · 6.5:1 (NUNCA gris #808080) */
+      --paper:      #f6f4f1;   /* page bg claro */
+      --pale:       #efe9fb;   /* bloques, chips, secciones suaves */
+      --card:       #ffffff;
+      --line:       #e7e2dc;   /* bordes, divisores */
+      --bone:       #f3f0ec;   /* texto primario sobre oscuro */
+      --neutral-50:   #f6f4f1;
+      --neutral-100:  #ece8f1;
+      --neutral-200:  #dcd5e4;
+      --neutral-300:  #b8aecb;
+      --neutral-400:  #8c7fa8;
+      --neutral-600:  #5e4f86;
+      --neutral-800:  #3b3354;
+      --neutral-900:  #241f33;
+
+      /* ── SUPERFICIES OSCURAS · elevación ──────────── */
+      --surface-recessed: #1d1238;   /* hundido — hero bg, feature */
+      --surface-900:      #2a1854;   /* suelo — Catalyst 900 */
+      --surface-800:      #352066;   /* tarjeta sobre suelo */
+      --surface-700:      #3a2170;   /* elevado / hover */
+
+      /* ── CAPA SEMÁNTICA DE ESTADO (marca ≠ estado) ── */
+      --success:        #1f8a5b;
+      --success-bright: #2ecc8a;
+      --success-soft:   rgba(31,138,91,0.16);
+      --danger:         #d6342c;   /* error — separado de Ember */
+      --danger-soft:    rgba(214,52,44,0.16);
+      --warning:        #e6a100;
+      --warning-text:   #8a6200;
+      --warning-soft:   rgba(230,161,0,0.16);
+      --info:           #2862cf;
+      --info-soft:      rgba(40,98,207,0.14);
+
+      /* ── TEXTO SOBRE OSCURO (blanco-base · sin lavanda) */
+      --on-dark-1:  #f3f0ec;
+      --on-dark-2:  rgba(255,255,255,0.78);
+      --on-dark-3:  rgba(255,255,255,0.55);
+      --accent-on-dark: #7aa6ff;
+
+      /* ── ALFAS sobre superficies oscuras ──────────── */
+      --white-90: rgba(255,255,255,0.90);
+      --white-80: rgba(255,255,255,0.80);
+      --white-70: rgba(255,255,255,0.70);
+      --white-50: rgba(255,255,255,0.50);
+      --white-30: rgba(255,255,255,0.30);
+      --white-14: rgba(255,255,255,0.14);
+      --white-08: rgba(255,255,255,0.08);
+      --ink-70: rgba(36,31,51,0.70);
+      --ink-55: rgba(36,31,51,0.55);
+      --ink-40: rgba(36,31,51,0.40);
+      --ink-12: rgba(36,31,51,0.12);
+      --ink-08: rgba(36,31,51,0.08);
+
+      /* ── GRADIENTES ───────────────────────────────── */
+      --grad-tricolor: linear-gradient(90deg, #4b2a87 0%, #6a3a9e 50%, #f0592a 100%);
+      --grad-purple:   linear-gradient(135deg, #4b2a87 0%, #3a2170 100%);
+
+      /* ── PALETA ALTERNA · High Voltage ────────────── */
+      --hv-bg:     #2a1854;
+      --hv-fg:     #ffffff;
+      --hv-ember:  #f0592a;
+      --hv-spark:  #e6a100;
+
+      /* ── TIPOGRAFÍA ───────────────────────────────── */
+      --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
+      --font-serif:   'Bitter', Georgia, 'Times New Roman', serif;
+      --font-mono:    'Space Mono', ui-monospace, 'Menlo', monospace;
+
+      /* ── RADIOS ───────────────────────────────────── */
+      --r-xs: 4px;  --r-sm: 8px;  --r-md: 14px;  --r-lg: 20px;  --r-pill: 999px;
+
+      /* ── SOMBRAS ──────────────────────────────────── */
+      --shadow-1: 0 1px 2px rgba(36,31,51,0.06);
+      --shadow-2: 0 6px 20px -10px rgba(75,42,135,0.30);
+      --shadow-3: 0 18px 48px -18px rgba(75,42,135,0.40);
+      --shadow-glow: 0 0 0 1px rgba(240,89,42,0.25), 0 10px 30px -8px rgba(240,89,42,0.30);
+
+      /* ── ESPACIADO (base 4px) ─────────────────────── */
+      --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+      --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px; --space-9: 96px;
+
+      /* ── MOTION ───────────────────────────────────── */
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --dur: 200ms;
+
+      /* ── COMPAT · nombres heredados del sitio ─────────
+         Aliases para que el markup existente siga funcionando
+         apuntando al sistema canónico v4. */
+      --grey:         var(--muted);
+      --off-white:    var(--paper);
+      --spark-dark:   var(--spark-on-dark);
+      --quantum-dark: var(--quantum-300);
+      --ember-hover:  var(--ember-600);
+      --surface-deep: #1d1138;
+      --neutral-200:  var(--line);   /* bordes del sitio = #e7e2dc (en v4 este nombre es #dcd5e4) */
     }
 
     /* ═══════════════════════════════════════════════
@@ -390,7 +506,7 @@
       font-size: clamp(1.9rem, 3vw, 2.7rem);
       line-height: 1;
       letter-spacing: -0.03em;
-      color: var(--spark-dark);
+      color: var(--on-dark-1);   /* DS v4: cifras en blanco; Spark queda solo en el eyebrow (máx 2/vista) */
     }
     .metric-l {
       font-size: 13.5px;
@@ -403,7 +519,7 @@
       font-family: var(--font-mono);
       font-size: 10.5px;
       letter-spacing: 0.04em;
-      color: rgba(243,240,236,0.5);
+      color: rgba(243,240,236,0.62);   /* DS v4: contraste AA en texto pequeño sobre oscuro */
       margin-top: 5px;
       text-transform: uppercase;
     }
@@ -643,7 +759,7 @@
       margin-top: 18px;
       font-weight: 700;
       font-size: 13.5px;
-      color: var(--ember);
+      color: var(--quantum-300);   /* DS v4: navegación/links = Quantum; libera Ember para el único CTA */
     }
     .projects-wiki {
       margin-top: 30px;
@@ -1198,7 +1314,7 @@
     .contacto-meta {
       font-family: var(--font-mono);
       font-size: 12px;
-      color: rgba(243,240,236,0.5);
+      color: rgba(243,240,236,0.62);   /* DS v4: contraste AA en texto pequeño sobre oscuro */
       margin-top: 22px;
     }
     .contacto-cv {

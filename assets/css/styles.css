@@ -1,46 +1,62 @@
 /* ═══════════════════════════════════════
-   FONTS
+   FONTS — Montserrat · Bitter · Space Mono (DS v4, locales)
 ═══════════════════════════════════════ */
 @font-face {
-  font-family: 'Satoshi';
-  src: url('../fonts/Satoshi-Variable.ttf') format('truetype-variations');
-  font-weight: 300 900;
-  font-style: normal;
-  font-display: swap;
+  font-family: 'Montserrat';
+  src: url('../fonts-v2/Montserrat-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: 'Satoshi';
-  src: url('../fonts/Satoshi-VariableItalic.ttf') format('truetype-variations');
-  font-weight: 300 900;
-  font-style: italic;
-  font-display: swap;
+  font-family: 'Montserrat';
+  src: url('../fonts-v2/Montserrat-Italic-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900; font-style: italic; font-display: swap;
 }
 @font-face {
-  font-family: 'JetBrains Mono';
-  src: url('../fonts/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 100 800;
-  font-style: italic;
-  font-display: swap;
+  font-family: 'Bitter';
+  src: url('../fonts-v2/Bitter-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900; font-style: normal; font-display: swap;
 }
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+@font-face {
+  font-family: 'Bitter';
+  src: url('../fonts-v2/Bitter-Italic-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Space Mono';
+  src: url('../fonts-v2/SpaceMono-Regular.ttf') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Space Mono';
+  src: url('../fonts-v2/SpaceMono-Italic.ttf') format('truetype');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Space Mono';
+  src: url('../fonts-v2/SpaceMono-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
 
 /* ═══════════════════════════════════════
-   TOKENS — Design System v3 · Violeta Protagonista
+   TOKENS — Design System v4 · "Deep Tech & Friction"
+   Re-skin de los nombres --dm-* heredados a la paleta v4
+   (Morado Maury · Ember · Quantum · Spark · Catalyst 900).
+   Fuente canónica: _ds/.../dm-brand.css
 ═══════════════════════════════════════ */
 :root {
-  /* Brand colors */
-  --dm-amethyst:      #7C3FBE;
-  --dm-amethyst-600:  #5E2A95;
-  --dm-catalyst:      #4B2672;
-  --dm-catalyst-700:  #2E1547;
-  --dm-catalyst-900:  #120D1A;
-  --dm-ember:         #FF5C39;
-  --dm-ember-soft:    rgba(255, 92, 57, 0.14);
-  --dm-spark:         #E6B800;
-  --dm-quantum:       #246BFD;
-  --dm-ink:           #0F0A1A;
-  --dm-bone:          #F5F5F7;
-  --dm-grey:          #B1B5C0;
+  /* Brand colors — mapeados a v4 */
+  --dm-amethyst:      #4b2a87;   /* Morado Maury — identidad */
+  --dm-amethyst-600:  #3a2170;   /* purple-deep — hover/depth */
+  --dm-catalyst:      #3a2170;   /* purple-700 — bloques medios */
+  --dm-catalyst-700:  #2a1854;   /* Catalyst 900 — superficies */
+  --dm-catalyst-900:  #1d1238;   /* surface-recessed — fondo hundido */
+  --dm-ember:         #f0592a;   /* Ember v4 */
+  --dm-ember-soft:    rgba(240, 89, 42, 0.14);
+  --dm-spark:         #f0b429;   /* Spark sobre oscuro (on-dark) */
+  --dm-quantum:       #7aa6ff;   /* Quantum sobre oscuro (on-dark) */
+  --dm-ink:           #1d1238;   /* fondo base oscuro v4 */
+  --dm-bone:          #f3f0ec;   /* texto sobre oscuro */
+  --dm-grey:          rgba(255, 255, 255, 0.55);   /* terciario sobre oscuro (sin gris plano) */
 
   /* Alphas */
   --dm-white-90:  rgba(255, 255, 255, 0.90);
@@ -52,14 +68,15 @@
   --dm-white-06:  rgba(255, 255, 255, 0.06);
   --dm-white-04:  rgba(255, 255, 255, 0.04);
 
-  /* Gradients */
-  --dm-tricolor:      linear-gradient(90deg, #7C3FBE 0%, #4B2672 55%, #FF5C39 100%);
-  --dm-amethyst-grad: linear-gradient(135deg, #7C3FBE 0%, #5E2A95 100%);
+  /* Gradients — firma tricolor v4 */
+  --dm-tricolor:      linear-gradient(90deg, #4b2a87 0%, #6a3a9e 50%, #f0592a 100%);
+  --dm-amethyst-grad: linear-gradient(135deg, #4b2a87 0%, #3a2170 100%);
 
-  /* Fonts */
-  --font-display: 'Satoshi', 'Helvetica Neue', system-ui, sans-serif;
-  --font-body:    'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono:    'JetBrains Mono', 'Menlo', monospace;
+  /* Fonts — v4 */
+  --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-body:    'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-serif:   'Bitter', Georgia, 'Times New Roman', serif;
+  --font-mono:    'Space Mono', ui-monospace, 'Menlo', monospace;
 
   /* Layout */
   --nav-bg:      rgba(18, 13, 26, 0.88);
