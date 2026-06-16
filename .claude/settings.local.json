@@ -76,7 +76,9 @@
       "Bash(cp -f __TRACKED_VAR__/index.html ./index.html)",
       "Bash(cp -f __TRACKED_VAR__/robots.txt ./robots.txt)",
       "Bash(cp -f __TRACKED_VAR__/CNAME ./CNAME)",
-      "Bash(cp -f __TRACKED_VAR__/llms.txt ./llms.txt)"
+      "Bash(cp -f __TRACKED_VAR__/llms.txt ./llms.txt)",
+      "Bash(gh api *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('branch:', d['source']['branch']\\); print\\('path:', d['source']['path']\\); print\\('status:', d['status']\\); print\\('cname:', d['cname']\\)\")"
     ]
   },
   "enableAllProjectMcpServers": true,
