@@ -34,6 +34,10 @@ const navObserver = new IntersectionObserver(entries => {
 
 sections.forEach(s => navObserver.observe(s));
 
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('is-scrolled', window.scrollY > 20);
+}, { passive: true });
+
 // ── Scroll Reveal ──
 
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "x7ns7c22xi");
+  </script>
+  <!-- End Microsoft Clarity -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REDUX + INCmty Challenges — Diego Maury</title>
+  <meta name="description" content="Metodología propia registrada en el Tec de Monterrey. 3,000+ emprendedores impactados. Program Architect + Methodology Designer en INCmty 2019–2022.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+
+  <style>
+    .case-hero { background: var(--dm-catalyst-700); padding: 8rem 0 5rem; position: relative; overflow: hidden; }
+    .case-hero::before { content: ''; position: absolute; inset: 0; background-image: url('../assets/img/isotipodm.svg'); background-size: 320px; background-repeat: repeat; opacity: 0.03; pointer-events: none; }
+    .case-hero__back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--dm-white-40); font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3rem; transition: color 0.2s; }
+    .case-hero__back:hover { color: var(--dm-bone); }
+    .case-hero__num { font-family: var(--font-display); font-size: clamp(6rem, 18vw, 14rem); font-weight: 900; line-height: 0.85; color: var(--dm-spark); opacity: 0.18; position: absolute; top: 4rem; right: -1rem; user-select: none; pointer-events: none; }
+    .case-hero__tag { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dm-ember); margin-bottom: 1.25rem; }
+    .case-hero__title { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800; color: var(--dm-bone); line-height: 1.1; max-width: 640px; margin-bottom: 1rem; }
+    .case-hero__sub { font-family: var(--font-mono); font-size: 0.85rem; color: var(--dm-white-40); margin-bottom: 2.5rem; }
+    .case-hero__kpis { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+    .case-hero__kpi { display: inline-flex; flex-direction: column; gap: 0.25rem; border-left: 3px solid var(--dm-amethyst); padding-left: 1.25rem; }
+    .case-hero__kpi-num { font-family: var(--font-display); font-size: 2.4rem; font-weight: 800; color: var(--dm-spark); line-height: 1; }
+    .case-hero__kpi-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--dm-white-40); letter-spacing: 0.06em; text-transform: uppercase; }
+    .case-body { background: var(--dm-ink); padding: 5rem 0 8rem; }
+    .case-content { max-width: 740px; margin: 0 auto; padding: 0 2rem; }
+    .case-section { margin-bottom: 4rem; }
+    .case-section__label { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dm-amethyst); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-section__label::after { content: ''; flex: 1; height: 1px; background: rgba(124,63,190,0.25); }
+    .case-section__title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--dm-bone); margin-bottom: 1rem; line-height: 1.3; }
+    .case-section p { color: var(--dm-white-60); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
+    .subcase { border: 1px solid rgba(124,63,190,0.2); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+    .subcase__header { background: rgba(124,63,190,0.08); padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .subcase__name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--dm-bone); }
+    .subcase__tag { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dm-ember); background: rgba(255,92,57,0.1); padding: 0.3rem 0.75rem; border-radius: 999px; }
+    .subcase__body { padding: 1.5rem; }
+    .subcase__body p { color: var(--dm-white-60); font-size: 0.95rem; line-height: 1.75; margin-bottom: 0.75rem; }
+    .subcase__list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+    .subcase__list li { color: var(--dm-white-60); font-size: 0.92rem; line-height: 1.65; padding-left: 1.25rem; position: relative; }
+    .subcase__list li::before { content: '→'; position: absolute; left: 0; color: var(--dm-amethyst); font-family: var(--font-mono); font-size: 0.8rem; }
+    .subcase__metrics { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
+    .subcase__metric { display: flex; flex-direction: column; gap: 0.15rem; }
+    .subcase__metric-num { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--dm-spark); line-height: 1; }
+    .subcase__metric-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--dm-white-40); text-transform: uppercase; letter-spacing: 0.05em; }
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: rgba(124,63,190,0.15); border: 1px solid rgba(124,63,190,0.15); border-radius: 12px; overflow: hidden; margin-top: 1.5rem; }
+    .result-card { background: rgba(15,10,26,0.95); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .result-card__num { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--dm-spark); line-height: 1; }
+    .result-card__label { font-family: var(--font-mono); font-size: 0.68rem; color: var(--dm-white-40); text-transform: uppercase; letter-spacing: 0.06em; }
+    .result-card__def { font-size: 0.82rem; color: var(--dm-white-40); line-height: 1.5; margin-top: 0.25rem; }
+    .case-learnings { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .case-learnings li { color: var(--dm-white-60); font-size: 1rem; line-height: 1.7; padding-left: 1.5rem; position: relative; }
+    .case-learnings li::before { content: '→'; position: absolute; left: 0; color: var(--dm-amethyst); font-family: var(--font-mono); }
+    .case-divider { height: 3px; background: var(--dm-tricolor); border: none; margin: 3rem 0; border-radius: 2px; }
+    .case-nav-footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; }
+    @media (max-width: 767px) { .case-hero { padding: 6rem 0 3.5rem; } .case-hero__num { font-size: 30vw; top: 2rem; } .results-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="../" class="nav__brand">
+        <img src="../assets/img/isotipodm.svg" alt="Isotipo DM" class="nav__logo">
+        <span class="nav__name">Diego Maury</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="../#work"      class="nav__link">Work</a></li>
+        <li><a href="../#servicios" class="nav__link">Servicios</a></li>
+        <li><a href="../#about"     class="nav__link">About</a></li>
+        <li><a href="../#contacto"  class="nav__link">Contacto</a></li>
+      </ul>
+      <a href="https://calendly.com/diegomaurymx" target="_blank" rel="noopener" class="btn btn--primary nav__cta">Agendar</a>
+      <button class="nav__burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="case-hero">
+    <div class="container" style="position:relative;">
+      <span class="case-hero__num" aria-hidden="true">03</span>
+      <a href="../#work" class="case-hero__back">← Volver a Work</a>
+      <p class="case-hero__tag">Programas · Metodología · Ecosistemas · 2019–2022</p>
+      <h1 class="case-hero__title">REDUX + INCmty Challenges</h1>
+      <p class="case-hero__sub">Program Architecture &amp; Methodology Design · INCmty / Tec de Monterrey</p>
+      <div class="case-hero__kpis">
+        <div class="case-hero__kpi">
+          <span class="case-hero__kpi-num">3,000+</span>
+          <span class="case-hero__kpi-label">emprendedores impactados</span>
+        </div>
+        <div class="case-hero__kpi">
+          <span class="case-hero__kpi-num">12</span>
+          <span class="case-hero__kpi-label">convocatorias nacionales</span>
+        </div>
+        <div class="case-hero__kpi">
+          <span class="case-hero__kpi-num">Tec</span>
+          <span class="case-hero__kpi-label">metodología en directorio oficial</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="case-body">
+    <div class="case-content">
+
+      <section class="case-section" data-reveal>
+        <p class="case-section__label">Contexto</p>
+        <p>INCmty / Tecnológico de Monterrey. Operación continua 2018–2022. Diseño y gestión de programas de emprendimiento e innovación a escala nacional.</p>
+        <p><strong style="color:var(--dm-bone)">Problema:</strong> No existían metodologías suficientemente dinámicas para formación emprendedora sostenible en formato virtual. Las convocatorias nacionales requerían arquitectura de procesos replicable entre regiones y verticales.</p>
+      </section>
+
+      <hr class="case-divider">
+
+      <section class="case-section" data-reveal>
+        <p class="case-section__label">Mi rol</p>
+        <p><strong style="color:var(--dm-bone)">Fundador y Diseñador Metodológico</strong> (REDUX) · Productor y Coordinador de Convocatorias (INCmty Challenges).</p>
+        <p><strong style="color:var(--dm-bone)">Stakeholders:</strong> INCmty · Tec de Monterrey · Partners corporativos (Daikin) · gobierno · academia · ecosistema emprendedor.</p>
+      </section>
+
+      <hr class="case-divider">
+
+      <section class="case-section" data-reveal>
+        <p class="case-section__label">Subcaso A — REDUX</p>
+        <div class="subcase">
+          <div class="subcase__header">
+            <span class="subcase__name">Bootcamp de emprendimiento sostenible</span>
+            <span class="subcase__tag">2020–2022</span>
+          </div>
+          <div class="subcase__body">
+            <p><strong style="color:var(--dm-bone)">5 ediciones en 3 modalidades:</strong> REDUX (Economía Circular, 2 ed.) · REDUX Agro (Agricultura Sustentable, 2 ed.) · REDUX Energy (Eficiencia Energética, 1 ed.)</p>
+            <p><strong style="color:var(--dm-bone)">Cobertura:</strong> 32 estados en 2 regiones — Sureste (11 estados) y Noreste (21 estados) con misma agenda operativa.</p>
+            <p><strong style="color:var(--dm-bone)">Metodología propia:</strong> Actividades asincrónicas + momentos de conexión estructurada + checkpoints estratégicos. Equipos multidisciplinarios de 2–5 integrantes.</p>
+            <div class="subcase__metrics">
+              <div class="subcase__metric">
+                <span class="subcase__metric-num">200+</span>
+                <span class="subcase__metric-label">emprendedores capacitados</span>
+              </div>
+              <div class="subcase__metric">
+                <span class="subcase__metric-num">1,000+</span>
+                <span class="subcase__metric-label">estudiantes primer año</span>
+              </div>
+              <div class="subcase__metric">
+                <span class="subcase__metric-num">Tec</span>
+                <span class="subcase__metric-label">directorio oficial</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section" data-reveal>
+        <p class="case-section__label">Subcaso B — INCmty Challenges</p>
+        <div class="subcase">
+          <div class="subcase__header">
+            <span class="subcase__name">Convocatorias nacionales</span>
+            <span class="subcase__tag">2018–2022</span>
+          </div>
+          <div class="subcase__body">
+            <p><strong style="color:var(--dm-bone)">4 años consecutivos operando convocatorias:</strong></p>
+            <ul class="subcase__list">
+              <li><strong style="color:var(--dm-bone)">INCmty Accelerator</strong> (2021) — aceleración de startups con inversores y paneles</li>
+              <li><strong style="color:var(--dm-bone)">B-Challenge</strong> (2020, 2021) — bootcamp virtual con tecnologías inmersivas</li>
+              <li><strong style="color:var(--dm-bone)">DisruptAir Challenge</strong> (2022) — reto especializado HVAC con Daikin</li>
+              <li><strong style="color:var(--dm-bone)">INC Prototype</strong> (2021) — competencia por TRL 3–8 con bolsa &gt;$120K MXN</li>
+            </ul>
+            <p><strong style="color:var(--dm-bone)">Acciones clave:</strong></p>
+            <ul class="subcase__list">
+              <li>Arquitectura de convocatoria por segmentos de madurez tecnológica</li>
+              <li>Rieles operativos end-to-end: registro → evaluación → selección → pitches</li>
+              <li>Partnership management multi-actor para alcance y legitimidad</li>
+              <li>Rúbricas técnicas: Problemática, Propuesta de Valor, Modelo de Negocio, Impacto</li>
+            </ul>
+            <div class="subcase__metrics">
+              <div class="subcase__metric">
+                <span class="subcase__metric-num">3,000+</span>
+                <span class="subcase__metric-label">emprendedores</span>
+              </div>
+              <div class="subcase__metric">
+                <span class="subcase__metric-num">&gt;$4M</span>
+                <span class="subcase__metric-label">USD valuación startups</span>
+              </div>
+              <div class="subcase__metric">
+                <span class="subcase__metric-num">12</span>
+                <span class="subcase__metric-label">convocatorias</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="case-divider">
+
+      <section class="case-section" data-reveal>
+        <p class="case-section__label">Resultados consolidados</p>
+        <div class="results-grid">
+          <div class="result-card">
+            <span class="result-card__num">200+</span>
+            <span class="result-card__label">REDUX · Emprendedores</span>
+            <span class="result-card__def">Participantes en 5 ediciones del bootcamp sostenible</span>
+          </div>
+          <div class="result-card">
+            <span class="result-card__num">3,000+</span>
+            <span class="result-card__label">INCmty · Impactados</span>
+            <span class="result-card__def">Beneficiados en 4 años de convocatorias nacionales</span>
+          </div>
+          <div class="result-card">
+            <span class="result-card__num">&gt;$4M</span>
+            <span class="result-card__label">INCmty · Valuación</span>
+            <span class="result-card__def">USD — Startups aceleradas via INCmty Accelerator</span>
+          </div>
+          <div class="result-card">
+            <span class="result-card__num">Tec</span>
+            <span class="result-card__label">Validación institucional</span>
+            <span class="result-card__def">Metodología REDUX en directorio oficial del Tec de Monterrey</span>
+          </div>
+          <div class="result-card">
+            <span class="result-card__num">12</span>
+            <span class="result-card__label">Convocatorias</span>
+            <span class="result-card__def">Nacionales diseñadas y ejecutadas durante el período</span>
+          </div>
+        </div>
+      </section>
+
+      <hr class="case-divider">
+
+      <section class="case-section" data-reveal>
+        <p class="case-section__label">Aprendizajes</p>
+        <ul class="case-learnings">
+          <li>Procesos claros de punta a punta son la palanca para escalar sin perder calidad.</li>
+          <li>Especializar convocatorias por vertical mejora el fit del applicant pool.</li>
+          <li>La replicabilidad se sustenta en metodología formalizada + infraestructura digital escalable.</li>
+          <li>El impacto es más defendible cuando se diseña con partners desde el inicio.</li>
+        </ul>
+      </section>
+
+      <hr class="case-divider">
+
+      <div class="case-nav-footer">
+        <a href="innovation-systems.html" class="btn btn--outline">← Caso 02</a>
+        <a href="../#contacto" class="btn btn--primary">Hablemos →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer__tricolor"></div>
+    <div class="container footer__inner">
+      <p class="footer__tagline mono">Hagamos que las cosas pasen.</p>
+      <p class="footer__copy">© 2026 Diego Maury</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

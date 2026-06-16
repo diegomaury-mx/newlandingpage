@@ -1,0 +1,150 @@
+# Diego Maury | Operational Architect: Bridging Strategy & Trench Execution.
+## Ecosystem Builder · Strategic Program Director · Operational Architect
+Contact: dm@diegomaury.mx | +52 56 5926 7516
+Portfolio: https://diegomaury.mx
+Full profile (extended): https://diegomaury.mx/llms-full.txt
+Location: Mexico (LATAM)
+
+---
+
+## Role & Positioning
+
+Diego Maury is an Operational Architect who designs and operates innovation systems that translate strategy into measurable business results. He works at the intersection of corporate innovation, RevOps, and open ecosystem programs, bridging the gap between C-suite vision and trench-level execution.
+
+As founder and operator of southeast Mexico's flagship innovation ecosystem (HackSureste), he acts as the Strategic Router of the region: the connective layer that gives corporates, funds, and national programs a safe, structured soft landing into the local innovation network. Few operators control comparable access to talent, startups, and institutional partners in the southeast.
+
+He offers fractional engagement models for organizations that need senior innovation leadership without a full-time hire.
+
+---
+
+## Metrics (audit-ready)
+
+- 9,905 entrepreneurs impacted across national programs
+- +600% regional participation growth (HEINEKEN Green Challenge, southeast Mexico)
+- 3,231 projects evaluated across 4 editions
+- 3,000+ ecosystem participants and 30+ programs (HackSureste)
+- 200+ entrepreneurs trained on a proprietary methodology (REDUX, in Tec de Monterrey's registry)
+
+---
+
+## Core Services
+
+### Fractional Innovation Leadership
+Senior innovation leadership on a retainer or project basis: program architecture, team coordination, stakeholder alignment, and execution oversight. Built for mid-market companies and family holdings that need to compress their innovation learning curve without a full-time C-level hire.
+
+### Open Innovation Programs
+End-to-end design and operation of corporate innovation challenges, accelerators, and ecosystems. Proven at national scale (HEINEKEN, Tec de Monterrey / INCmty).
+
+### RevOps & Process Automation
+CRM architecture (HubSpot), workflow automation (Make, WhatsApp), and AI-native system integration for growth-stage companies. Removes manual bottlenecks and installs scalable operating infrastructure.
+
+### Proprietary Methodology (REDUX)
+Design and facilitation of structured programs for entrepreneurs, corporate teams, and ecosystems. Built on the REDUX methodology, registered in Tec de Monterrey's official program directory.
+
+---
+
+## Key Projects & Metrics
+
+### HEINEKEN Green Challenge × INCmty (2019–2022)
+[HEINEKEN Green Challenge](https://diegomaury.mx/llms-full.txt): detailed case study on end-to-end virtualization and +600% regional scaling using Lean Operations.
+- National open innovation program for sustainable entrepreneurship
+- Scaled southeast Mexico from 36 registrations to 300+ (+600%) in one edition
+- 3,231 projects evaluated across 4 editions
+- 9,905 entrepreneurs impacted
+- 100+ mentors coordinated per edition
+- Virtualized a 6-month national program during COVID with above-benchmark completion rates
+
+### SOFI · FlipHouse (2025–present)
+[SOFI · FlipHouse](https://diegomaury.mx/llms-full.txt): RevOps + AI automation architecture that compressed speed-to-lead from days to minutes.
+- PropTech (Adelanto de Venta, La Laguna): deployed SOFI, an AI agent for lead qualification and operations via WhatsApp
+- Stack: Make + Railway + WhatsApp Cloud API + OpenRouter/Claude + HubSpot as SSOT
+- Automated lead qualification and reduced operational overhead, with one system covering 4–5 roles
+- +500% leads to CRM | Speed-to-lead: 1–3 days → <5 minutes
+- RODI (Return on Digital Investment): verified figures available on request
+
+### HackSureste Ecosystem (2018–2023)
+[HackSureste](https://diegomaury.mx/llms-full.txt): building a regional innovation ecosystem from zero, including the southeast's largest hackathon.
+- Southeast Mexico's flagship innovation and hackathon ecosystem
+- 3,000+ participants, 100+ startups mentored, 30+ programs developed
+- Designed modular architecture (WIRE framework, ideaLab)
+- Full digital migration 2020–2022
+
+### REDUX Bootcamp (2019–2022)
+- Sustainable entrepreneurship methodology designed and operated
+- 200+ entrepreneurs trained
+- Included in Tec de Monterrey's official program registry
+
+### INCmty Challenges (Tec de Monterrey)
+- Multiple open innovation challenges: BTEM, Brain Mexico, Demo Day, INC Prototype
+- $120,000+ MXN in prizes (INC Prototype edition)
+- TRL-based evaluation framework implemented
+
+### CAVA Soft MVP (2025)
+- Inventory management software for physical operations
+- Functional MVP in production with real-time inventory and photographic traceability
+- Stack: Apphive (no-code), Firebase, web
+
+---
+
+## Operational Dissections (competence under pressure)
+
+### The 900+ project evaluation bottleneck (HEINEKEN Green Challenge)
+High-volume editions threatened to collapse the project-review process: too many submissions, inconsistent criteria, and reviewer fatigue degrading evaluation quality.
+- Problem: manual review could not scale past a few hundred projects without quality loss
+- Response: designed an escalated evaluation protocol (binary go/no-go pre-filter on 3 criteria → weighted rubric by thematic vertical → regional selection)
+- Result: sustained evaluation quality across 900+ projects per edition, with a defensible, auditable trail
+- Transferable lesson: process design, not more reviewers, is the lever that protects quality at scale
+
+---
+
+## Methodology
+
+### REDUX
+Structured bootcamp methodology for sustainable entrepreneurship. Covers ideation, validation, pitch, and impact measurement. Designed iteratively over 4 program editions.
+
+### Customer Journey Mapping for Innovation Programs
+Applied to open innovation: mapping participant touchpoints to identify friction, drop-off, and conversion opportunities at each stage of a program funnel.
+
+### Lean Operations for Virtual Events
+Protocol for designing digital-native program experiences (not replicas of in-person events): sessions ≤45 min, async components, structured networking, immersive environments. Developed 2020 without an existing framework reference.
+
+### Evaluation System Design
+Escalated evaluation protocols for high-volume project review: binary pre-filter (go/no-go on 3 criteria) → weighted rubric by thematic vertical → regional selection. Built to handle 900+ projects per edition without quality degradation.
+
+---
+
+## Tech Stack
+
+- **CRM & RevOps:** HubSpot, Make (formerly Integromat), WhatsApp Cloud API, VAPI
+- **Development:** Railway (Node.js), Firebase, basic web stack
+- **AI Tools:** OpenRouter, Claude API, LLM-assisted process design
+- **Program Operations:** Notion, Discord, Zoom, Rushframe (virtual immersive environments)
+- **Design:** Figma
+
+---
+
+## Background
+
+- Strategic Program Director with 7+ years in corporate innovation and ecosystem building
+- Operated programs across HEINEKEN México, Tec de Monterrey (INCmty), HackSureste, and growth-stage startups
+- Experience spanning open innovation, accelerators, RevOps, and software product management
+- Based in Mexico; works with organizations across LATAM
+
+---
+
+## Engagement Models
+
+Engagements are scoped per organization and priced on the value of the system installed, not by the hour. Specific investment ranges are shared during a fit conversation. Built for organizations ready to invest in senior operating infrastructure, not for the lowest-cost vendor search.
+
+- **Monthly Retainer:** Ongoing fractional innovation leadership, 20h/month. Best fit for mid-market companies and family holdings compressing their innovation learning curve.
+- **Scoped Project:** Diagnosis + roadmap + implementation, 4–8 weeks
+- **Advisory:** Bi-weekly sessions for strategic decision review
+
+---
+
+## Annotated Links
+
+- [Full profile (llms-full.txt)](https://diegomaury.mx/llms-full.txt): extended case studies, detailed metrics, and methodology breakdowns.
+- [Portfolio](https://diegomaury.mx): live site and selected work.
+
+To evaluate fit: dm@diegomaury.mx or https://wa.me/525659267516

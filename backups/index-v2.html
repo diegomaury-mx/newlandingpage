@@ -2,22 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NHT5827J');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Microsoft Clarity -->
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "x7ns7c22xi");
-  </script>
-  <!-- End Microsoft Clarity -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Diego Maury — Strategic Program & Innovation Manager</title>
   <meta name="description" content="Strategic Program & Innovation Manager. Convierto estrategia en programas que se ejecutan y se miden. 30+ programas, 3,000+ personas impactadas, LATAM.">
@@ -27,8 +11,7 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://diegomaury.mx/">
-  <link rel="icon" type="image/png" href="assets/img/isotipo-gradient.png">
-  <link rel="apple-touch-icon" href="assets/img/isotipo-gradient.png">
+  <link rel="icon" type="image/svg+xml" href="assets/img/isotipo.svg">
   <style>
     /* ═══════════════════════════════════════════════
        FONTS — Montserrat · Bitter · Space Mono
@@ -603,39 +586,17 @@
       margin: 10px 0 0;
       flex-grow: 1;
     }
-    .project-rodi {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: rgba(243,240,236,0.1);
-      border-radius: 11px;
-      overflow: hidden;
-      border: 1px solid rgba(243,240,236,0.1);
-    }
-    .rodi-cell {
-      background: rgba(243,240,236,0.04);
-      padding: 10px 11px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .rodi-key {
+    .project-metric {
+      margin-top: 16px;
       font-family: var(--font-mono);
-      font-size: 8.5px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(243,240,236,0.42);
-    }
-    .rodi-val {
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      font-weight: 700;
-      line-height: 1.3;
       color: var(--spark-dark);
+      background: rgba(240,180,41,0.13);
+      padding: 8px 12px;
+      border-radius: 9px;
+      align-self: flex-start;
     }
-    .rodi-val--dim { color: rgba(243,240,236,0.7); }
     .project-cta {
       display: flex;
       align-items: center;
@@ -809,348 +770,6 @@
       line-height: 1.4;
     }
     .fit-check { font-weight: 800; flex-shrink: 0; }
-
-    /* ═══════════════════════════════════════════════
-       TRINCHERA
-       ─────────────────────────────────────────────── */
-    #trinchera {
-      background:
-        radial-gradient(700px 400px at 4% 110%, rgba(240,89,42,0.12), transparent 55%),
-        var(--surface-900);
-      color: var(--bone);
-      border-top: 1px solid rgba(243,240,236,0.06);
-    }
-    .trinchera-intro { max-width: 62ch; }
-    .trinchera-h2 {
-      font-size: clamp(1.75rem, 3vw, 2.4rem);
-      font-weight: 800;
-      letter-spacing: -0.022em;
-      line-height: 1.13;
-      color: var(--bone);
-      margin: 12px 0 0;
-    }
-    .trinchera-h2 em { color: var(--ember); font-style: normal; }
-    .trinchera-sub {
-      font-family: var(--font-serif);
-      font-size: 1.08rem;
-      line-height: 1.55;
-      color: rgba(243,240,236,0.62);
-      margin: 14px 0 0;
-    }
-    .trinchera-card {
-      margin-top: 52px;
-      background: rgba(243,240,236,0.03);
-      border: 1px solid rgba(243,240,236,0.1);
-      border-radius: 22px;
-      overflow: hidden;
-    }
-    .trinchera-card-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-      padding: 30px 34px 28px;
-      border-bottom: 1px solid rgba(243,240,236,0.08);
-      background: rgba(240,89,42,0.06);
-    }
-    .trinchera-card-left {}
-    .trinchera-card-tag {
-      font-family: var(--font-mono);
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--ember);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .trinchera-card-tag::before {
-      content: '';
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--ember);
-    }
-    .trinchera-card-name {
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: -0.015em;
-      color: var(--bone);
-      margin: 10px 0 0;
-    }
-    .trinchera-card-meta {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: rgba(243,240,236,0.48);
-      margin: 8px 0 0;
-    }
-    .trinchera-card-kpis {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
-    }
-    @media (max-width: 640px) { .trinchera-card-kpis { align-items: flex-start; } }
-    .trinchera-kpi {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(243,240,236,0.55);
-      background: rgba(243,240,236,0.06);
-      border: 1px solid rgba(243,240,236,0.1);
-      border-radius: 7px;
-      padding: 5px 10px;
-    }
-    .trinchera-kpi span { color: var(--spark-dark); }
-    .trinchera-context {
-      font-family: var(--font-serif);
-      font-size: 1rem;
-      line-height: 1.62;
-      color: rgba(243,240,236,0.68);
-      padding: 26px 34px;
-      border-bottom: 1px solid rgba(243,240,236,0.07);
-      margin: 0;
-    }
-    .trinchera-fallos {
-      padding: 0 34px 34px;
-    }
-    .trinchera-fallos-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(243,240,236,0.3);
-      padding-top: 28px;
-      margin-bottom: 20px;
-    }
-    .fallo {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 0 24px;
-      padding: 20px 0;
-      border-bottom: 1px solid rgba(243,240,236,0.07);
-    }
-    .fallo:last-child { border-bottom: none; padding-bottom: 0; }
-    @media (max-width: 640px) { .fallo { grid-template-columns: 1fr; gap: 10px; } }
-    .fallo-num {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--ember);
-      padding-top: 2px;
-    }
-    .fallo-body {}
-    .fallo-title {
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--bone);
-      letter-spacing: -0.01em;
-      margin: 0 0 10px;
-    }
-    .fallo-rows { display: flex; flex-direction: column; gap: 7px; }
-    .fallo-row {
-      display: grid;
-      grid-template-columns: 100px 1fr;
-      gap: 8px;
-      align-items: baseline;
-    }
-    @media (max-width: 480px) { .fallo-row { grid-template-columns: 1fr; gap: 2px; } }
-    .fallo-row-key {
-      font-family: var(--font-mono);
-      font-size: 8.5px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(243,240,236,0.35);
-      padding-top: 2px;
-    }
-    .fallo-row-val {
-      font-size: 0.91rem;
-      line-height: 1.45;
-      color: rgba(243,240,236,0.72);
-    }
-    .fallo-row-val--fix { color: rgba(243,240,236,0.86); }
-    .fallo-row-val--system {
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--quantum-dark);
-    }
-    .trinchera-quote {
-      margin: 30px 34px 34px;
-      padding: 20px 24px;
-      border-left: 3px solid var(--ember);
-      background: rgba(240,89,42,0.06);
-      border-radius: 0 12px 12px 0;
-    }
-    .trinchera-quote p {
-      font-family: var(--font-serif);
-      font-size: 1.06rem;
-      line-height: 1.6;
-      color: rgba(243,240,236,0.82);
-      font-style: italic;
-      margin: 0;
-    }
-    .trinchera-quote cite {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(243,240,236,0.35);
-      margin-top: 10px;
-      font-style: normal;
-    }
-    .trinchera-next {
-      margin-top: 32px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: rgba(243,240,236,0.3);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .trinchera-next::before {
-      content: '';
-      display: inline-block;
-      width: 28px; height: 1px;
-      background: rgba(243,240,236,0.18);
-    }
-
-    /* ═══════════════════════════════════════════════
-       FRACCIONAL
-       ─────────────────────────────────────────────── */
-    #fraccional {
-      background:
-        radial-gradient(860px 480px at 95% -8%, rgba(75,42,135,0.09), transparent 58%),
-        var(--off-white);
-    }
-    .frac-intro {
-      max-width: 60ch;
-    }
-    .frac-h2 {
-      font-size: clamp(1.75rem, 3vw, 2.4rem);
-      font-weight: 800;
-      letter-spacing: -0.022em;
-      line-height: 1.13;
-      color: var(--ink);
-      margin: 12px 0 0;
-    }
-    .frac-h2 em { color: var(--purple); font-style: normal; }
-    .frac-sub {
-      font-family: var(--font-serif);
-      font-size: 1.1rem;
-      line-height: 1.55;
-      color: #463f5e;
-      margin: 14px 0 0;
-    }
-    .frac-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-      margin-top: 48px;
-    }
-    @media (max-width: 900px) { .frac-grid { grid-template-columns: 1fr; } }
-    .frac-card {
-      display: flex;
-      flex-direction: column;
-      background: #fff;
-      border: 1px solid var(--neutral-200);
-      border-radius: 20px;
-      padding: 32px 28px;
-      box-shadow: 0 1px 3px rgba(36,31,51,0.04);
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .frac-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-    }
-    .frac-card--retainer::before { background: var(--purple); }
-    .frac-card--proyecto::before { background: var(--ember); }
-    .frac-card--asesoria::before { background: var(--quantum); }
-    .frac-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 24px 52px -24px rgba(36,31,51,0.24);
-      border-color: #dcd4ea;
-    }
-    .frac-label {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-    .frac-label--retainer { color: var(--purple); }
-    .frac-label--proyecto { color: var(--ember-text); }
-    .frac-label--asesoria { color: var(--quantum); }
-    .frac-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      letter-spacing: -0.015em;
-      line-height: 1.2;
-      color: var(--ink);
-      margin: 14px 0 0;
-    }
-    .frac-body {
-      font-family: var(--font-serif);
-      font-size: 0.98rem;
-      line-height: 1.55;
-      color: #463f5e;
-      margin: 10px 0 0;
-      flex-grow: 1;
-    }
-    .frac-meta {
-      margin-top: 22px;
-      padding-top: 18px;
-      border-top: 1px solid var(--neutral-200);
-    }
-    .frac-meta-row {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .frac-meta-row:last-child { margin-bottom: 0; }
-    .frac-meta-key {
-      font-family: var(--font-mono);
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--grey);
-      white-space: nowrap;
-      flex-shrink: 0;
-      min-width: 76px;
-    }
-    .frac-meta-val {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--ink);
-      line-height: 1.35;
-    }
-    .frac-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      margin-top: 24px;
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      color: var(--purple);
-      text-decoration: none;
-      transition: gap 0.2s;
-    }
-    .frac-cta:hover { gap: 11px; }
-    .frac-cta svg { flex-shrink: 0; }
 
     /* ═══════════════════════════════════════════════
        CONTACTO
@@ -1426,89 +1045,6 @@
       transition: background 0.18s, transform 0.18s;
     }
     .modal-cta:hover { background: var(--ember-hover); transform: translateY(-1px); }
-    /* ── MODAL RODI BLOCK ──────────────────────── */
-    .modal-rodi {
-      background: var(--surface-900);
-      border-radius: 14px;
-      padding: 20px 22px;
-      color: var(--bone);
-    }
-    .modal-rodi-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--spark-dark);
-      margin-bottom: 14px;
-      display: block;
-    }
-    .modal-rodi table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .modal-rodi thead th {
-      font-family: var(--font-mono);
-      font-size: 8px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(243,240,236,0.38);
-      padding-bottom: 8px;
-      text-align: left;
-    }
-    .modal-rodi tbody td {
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      font-weight: 600;
-      color: rgba(243,240,236,0.78);
-      padding: 8px 8px 8px 0;
-      border-top: 1px solid rgba(243,240,236,0.07);
-      vertical-align: middle;
-    }
-    .modal-rodi tbody td.rodi-hi { color: var(--spark-dark); font-weight: 800; }
-    .modal-rodi tbody tr.rodi-base-row td {
-      background: rgba(240,180,41,0.06);
-    }
-    .modal-rodi-anchor {
-      font-family: var(--font-serif);
-      font-size: 0.84rem;
-      line-height: 1.5;
-      color: rgba(243,240,236,0.52);
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(243,240,236,0.09);
-    }
-    .rodi-axis {
-      padding: 9px 0;
-      border-bottom: 1px solid rgba(243,240,236,0.08);
-    }
-    .rodi-axis:last-child { border-bottom: none; }
-    .rodi-axis-key {
-      font-family: var(--font-mono);
-      font-size: 8.5px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(243,240,236,0.4);
-      margin-bottom: 4px;
-    }
-    .rodi-axis-val {
-      font-size: 0.91rem;
-      font-weight: 600;
-      color: rgba(243,240,236,0.86);
-      line-height: 1.4;
-    }
-    .modal-rodi-note {
-      font-family: var(--font-serif);
-      font-size: 0.83rem;
-      line-height: 1.5;
-      color: rgba(243,240,236,0.44);
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(243,240,236,0.08);
-      font-style: italic;
-    }
 
     /* ═══════════════════════════════════════════════
        UTILITIES
@@ -1522,27 +1058,21 @@
   </style>
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NHT5827J"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
 <!-- ══════════════════════════════════
      NAV
 ════════════════════════════════════ -->
 <nav id="nav" aria-label="Navegación principal">
   <div class="nav-inner">
-    <a href="#hero" class="nav-logo" onclick="scrollToSection('hero',event)">
+    <a href="#hero" class="nav-logo" onclick="scrollTo('hero',event)">
       <img src="assets/img/isotipo-white.png" alt="DM" id="nav-logo-img">
       <span class="nav-logo-name">Diego Maury</span>
     </a>
     <div class="nav-links" id="nav-links">
-      <button class="nav-link" data-section="que-hago" onclick="scrollToSection('que-hago',event)">Qué hago</button>
-      <button class="nav-link" data-section="proyectos" onclick="scrollToSection('proyectos',event)">Proyectos</button>
-      <button class="nav-link" data-section="trinchera" onclick="scrollToSection('trinchera',event)">Trinchera</button>
-      <button class="nav-link" data-section="testimonios" onclick="scrollToSection('testimonios',event)">Testimonios</button>
-      <button class="nav-link" data-section="fraccional" onclick="scrollToSection('fraccional',event)">Fraccional</button>
-      <button class="nav-link" data-section="contacto" onclick="scrollToSection('contacto',event)">Contacto</button>
+      <button class="nav-link" data-section="que-hago" onclick="scrollTo('que-hago',event)">Qué hago</button>
+      <button class="nav-link" data-section="proyectos" onclick="scrollTo('proyectos',event)">Proyectos</button>
+      <button class="nav-link" data-section="testimonios" onclick="scrollTo('testimonios',event)">Testimonios</button>
+      <button class="nav-link" data-section="contacto" onclick="scrollTo('contacto',event)">Contacto</button>
     </div>
     <a href="https://wa.me/525659267516" target="_blank" rel="noopener" class="nav-cta">Agenda una llamada</a>
   </div>
@@ -1567,7 +1097,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </p>
     <div class="reveal reveal-d3 hero-ctas">
       <a href="https://wa.me/525659267516" target="_blank" rel="noopener" class="btn-primary">Agenda una llamada</a>
-      <button class="btn-ghost" onclick="scrollToSection('proyectos',event)">Ver proyectos →</button>
+      <button class="btn-ghost" onclick="scrollTo('proyectos',event)">Ver proyectos →</button>
     </div>
     <div class="reveal reveal-d4 hero-metrics">
       <div>
@@ -1660,20 +1190,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <h3 class="project-name">HEINEKEN Green Challenge</h3>
         <p class="project-what">Programa nacional de innovación abierta en sostenibilidad de HEINEKEN México.</p>
-        <div class="project-rodi">
-          <div class="rodi-cell">
-            <span class="rodi-key">Crecimiento</span>
-            <span class="rodi-val">+600% sureste</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Volumen</span>
-            <span class="rodi-val rodi-val--dim">9,905 emprendedores</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Continuidad</span>
-            <span class="rodi-val rodi-val--dim">4 ediciones</span>
-          </div>
-        </div>
+        <div class="project-metric">900+ proyectos · 6x registros sureste</div>
         <div class="project-cta">Ver caso completo →</div>
       </button>
       <button class="reveal reveal-d1 project-card" onclick="openCase('fliphouse')">
@@ -1681,22 +1198,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="project-accent" style="background:#2862cf;"></div>
           <span class="project-years">2025–presente</span>
         </div>
-        <h3 class="project-name">SOFI · FlipHouse</h3>
-        <p class="project-what">Agente IA de calificación de leads (WhatsApp + HubSpot + Make) para PropTech de Adelanto de Venta.</p>
-        <div class="project-rodi">
-          <div class="rodi-cell">
-            <span class="rodi-key">RODI base</span>
-            <span class="rodi-val">+1,291%</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Payback</span>
-            <span class="rodi-val rodi-val--dim">&lt;1 mes</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Leads CRM</span>
-            <span class="rodi-val rodi-val--dim">+500%</span>
-          </div>
-        </div>
+        <h3 class="project-name">FlipHouse</h3>
+        <p class="project-what">Operación inmobiliaria que necesitaba escalar sin depender de trabajo manual.</p>
+        <div class="project-metric">+500% en flujo de leads al CRM</div>
         <div class="project-cta">Ver caso completo →</div>
       </button>
       <button class="reveal reveal-d2 project-card" onclick="openCase('hacksureste')">
@@ -1706,20 +1210,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <h3 class="project-name">HackSureste</h3>
         <p class="project-what">El hackatón más grande del sureste de México.</p>
-        <div class="project-rodi">
-          <div class="rodi-cell">
-            <span class="rodi-key">Resultado</span>
-            <span class="rodi-val">3,000+ personas</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Timeframe</span>
-            <span class="rodi-val rodi-val--dim">5 años</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Escala</span>
-            <span class="rodi-val rodi-val--dim">Sureste MX</span>
-          </div>
-        </div>
+        <div class="project-metric">3,000+ participantes · 100+ startups</div>
         <div class="project-cta">Ver caso completo →</div>
       </button>
       <button class="reveal reveal-d1 project-card" onclick="openCase('redux')">
@@ -1729,20 +1220,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <h3 class="project-name">REDUX</h3>
         <p class="project-what">Bootcamp de emprendimiento sostenible con metodología propia.</p>
-        <div class="project-rodi">
-          <div class="rodi-cell">
-            <span class="rodi-key">Resultado</span>
-            <span class="rodi-val">200+ capacitados</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Timeframe</span>
-            <span class="rodi-val rodi-val--dim">3 ediciones</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Tipo</span>
-            <span class="rodi-val rodi-val--dim">Metodología</span>
-          </div>
-        </div>
+        <div class="project-metric">200+ emprendedores capacitados</div>
         <div class="project-cta">Ver caso completo →</div>
       </button>
       <button class="reveal reveal-d2 project-card" onclick="openCase('incmty')">
@@ -1752,20 +1230,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <h3 class="project-name">INCmty Challenges</h3>
         <p class="project-what">Paraguas de convocatorias y retos de innovación abierta (BTEM, Brain Mexico, Demo Day, INC Prototype).</p>
-        <div class="project-rodi">
-          <div class="rodi-cell">
-            <span class="rodi-key">Resultado</span>
-            <span class="rodi-val">$120k+ en especie</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Retos</span>
-            <span class="rodi-val rodi-val--dim">4 convocatorias</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Institución</span>
-            <span class="rodi-val rodi-val--dim">Tec MTY</span>
-          </div>
-        </div>
+        <div class="project-metric">Bolsa de $120,000+ en especie</div>
         <div class="project-cta">Ver caso completo →</div>
       </button>
       <button class="reveal reveal-d3 project-card" onclick="openCase('cavasoft')">
@@ -1775,20 +1240,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <h3 class="project-name">CAVA Soft</h3>
         <p class="project-what">MVP de software de inventario para operación física.</p>
-        <div class="project-rodi">
-          <div class="rodi-cell">
-            <span class="rodi-key">Resultado</span>
-            <span class="rodi-val">MVP en prod.</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Timeframe</span>
-            <span class="rodi-val rodi-val--dim">2025</span>
-          </div>
-          <div class="rodi-cell">
-            <span class="rodi-key">Etapa</span>
-            <span class="rodi-val rodi-val--dim">Early-stage</span>
-          </div>
-        </div>
+        <div class="project-metric">MVP funcional en producción</div>
         <div class="project-cta">Ver caso completo →</div>
       </button>
     </div>
@@ -1797,128 +1249,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         Ver documentación completa en mi wiki →
       </a>
     </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     TRINCHERA
-════════════════════════════════════ -->
-<section id="trinchera" class="section-dark">
-  <div class="section-inner">
-
-    <div class="trinchera-intro reveal">
-      <div class="section-tag" style="color:var(--ember);">La Trinchera</div>
-      <h2 class="trinchera-h2">Lo que no aparece en el <em>highlights reel</em>.</h2>
-      <p class="trinchera-sub">Autopsias operativas de proyectos reales. Qué se rompió, cómo se detectó y qué sistema se construyó para que no vuelva a pasar. Esto genera más confianza B2B que cualquier caso de éxito pulido.</p>
-    </div>
-
-    <!-- Post-mortem 01: HEINEKEN Green Challenge -->
-    <div class="trinchera-card reveal">
-
-      <div class="trinchera-card-head">
-        <div class="trinchera-card-left">
-          <div class="trinchera-card-tag">Autopsia clínica · Post-mortem estratégico</div>
-          <div class="trinchera-card-name">HEINEKEN Green Challenge</div>
-          <div class="trinchera-card-meta">2019–2022 · 4 ediciones · HEINEKEN México × INCmty (Tec de Monterrey)</div>
-        </div>
-        <div class="trinchera-card-kpis">
-          <div class="trinchera-kpi">Proyectos evaluados: <span>3,231</span></div>
-          <div class="trinchera-kpi">Emprendedores: <span>9,905</span></div>
-          <div class="trinchera-kpi">Equipo operativo: <span>~6 → ~30 (5x)</span></div>
-        </div>
-      </div>
-
-      <p class="trinchera-context">Este documento no es un caso de éxito. Es una disección operativa del programa de innovación abierta en sustentabilidad más grande de HEINEKEN México. Lo que sigue analiza cómo se escaló un programa corporativo rígido en una región con cero tracción previa, cómo se virtualizó una operación nacional durante una pandemia sin framework de referencia, y qué se rompió en el proceso.</p>
-
-      <div class="trinchera-fallos">
-        <div class="trinchera-fallos-label">Vulnerabilidades documentadas</div>
-
-        <div class="fallo">
-          <div class="fallo-num">Fallo 01</div>
-          <div class="fallo-body">
-            <p class="fallo-title">Cuello de botella en filtrado de proyectos</p>
-            <div class="fallo-rows">
-              <div class="fallo-row">
-                <span class="fallo-row-key">Qué falló</span>
-                <span class="fallo-row-val">El sistema de preselección colapsó al pasar de ~200 a 900+ proyectos. Los evaluadores tenían criterios diseñados para el volumen anterior: el tiempo por proyecto se volvió insostenible y la calidad del filtrado se deterioró.</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Cómo se detectó</span>
-                <span class="fallo-row-val">Proyectos que no cumplían criterios mínimos pasaron a selección regional; proyectos sólidos quedaron fuera por inconsistencias en la aplicación de rúbricas.</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Solución</span>
-                <span class="fallo-row-val fallo-row-val--fix">Rediseño de la rúbrica con pesos diferenciados por vertical temática. Implementación de una capa de pre-filtrado rápido (3 criterios binarios go/no-go) antes de la evaluación completa, reduciendo la carga ~40%.</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Sistema resultante</span>
-                <span class="fallo-row-val fallo-row-val--system">Protocolo de evaluación escalonada → estándar para ediciones subsecuentes</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="fallo">
-          <div class="fallo-num">Fallo 02</div>
-          <div class="fallo-body">
-            <p class="fallo-title">Fricción en coordinación multisectorial</p>
-            <div class="fallo-rows">
-              <div class="fallo-row">
-                <span class="fallo-row-key">Qué falló</span>
-                <span class="fallo-row-val">HEINEKEN México, INCmty y equipos regionales operaban con calendarios y procesos de aprobación distintos. Una decisión que requería 24 horas en terreno tomaba 2 semanas en el circuito corporativo.</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Cómo se detectó</span>
-                <span class="fallo-row-val">Retrasos acumulados en lanzamiento de convocatorias regionales. Ventanas de difusión perdidas. Contenido llegando tarde o desalineado con el calendario operativo.</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Solución</span>
-                <span class="fallo-row-val fallo-row-val--fix">Modelo de aprobación por excepción: todo lo que caía dentro de parámetros preaprobados se ejecutaba sin escalamiento. Solo desviaciones significativas pasaban por el circuito corporativo completo.</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Sistema resultante</span>
-                <span class="fallo-row-val fallo-row-val--system">Matriz de decisión con umbrales de autonomía → tiempo de aprobación de 2 semanas a 48h para el 80% de decisiones</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="fallo">
-          <div class="fallo-num">Fallo 03</div>
-          <div class="fallo-body">
-            <p class="fallo-title">Brecha entre experiencia virtual y expectativa presencial</p>
-            <div class="fallo-rows">
-              <div class="fallo-row">
-                <span class="fallo-row-key">Qué falló</span>
-                <span class="fallo-row-val">Los primeros bootcamps virtuales intentaron replicar la dinámica presencial en Zoom. Los participantes se desconectaban emocionalmente después de 90 minutos. El networking orgánico simplemente no se trasladaba.</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Cómo se detectó</span>
-                <span class="fallo-row-val">Caída abrupta de asistencia en sesiones de tarde. Feedback cualitativo: "se siente como una clase, no como un programa de emprendimiento".</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Solución</span>
-                <span class="fallo-row-val fallo-row-val--fix">Se descartó el modelo de réplica presencial y se diseñó un formato nativo digital: sesiones de máx. 45 min, componentes asíncronos, escenarios virtuales inmersivos con Rushframe, networking estructurado en Discord con roles y canales temáticos.</span>
-              </div>
-              <div class="fallo-row">
-                <span class="fallo-row-key">Sistema resultante</span>
-                <span class="fallo-row-val fallo-row-val--system">Framework de experiencia virtual nativa → adoptado como referente interno en INCmty</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <blockquote class="trinchera-quote">
-        <p>El sureste no tenía baja participación porque le faltara potencial. Le faltaba alguien que creyera que el potencial estaba ahí y diseñara un sistema para activarlo. Esa diferencia entre "falta de demanda" y "falta de diseño de oferta" es la raíz de la mayoría de los fallos en programas de innovación corporativa.</p>
-        <cite>— Diego Maury, Coordinador General HEINEKEN Green Challenge 2019–2022</cite>
-      </blockquote>
-
-    </div>
-
-    <div class="trinchera-next reveal">Segundo caso en preparación</div>
-
   </div>
 </section>
 
@@ -1983,97 +1313,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     FRACCIONAL
-════════════════════════════════════ -->
-<section id="fraccional" class="section-light">
-  <div class="section-inner">
-    <div class="frac-intro reveal">
-      <div class="section-tag section-tag--quantum">Liderazgo fraccional</div>
-      <h2 class="frac-h2">Capacidad estratégica real, <em>sin el overhead de una contratación</em></h2>
-      <p class="frac-sub">Tres modelos de colaboración diseñados para contextos distintos. Sin rangos de precio en pantalla porque cada proyecto es diferente — me cuentas el problema y te digo cuál encaja.</p>
-    </div>
-    <div class="frac-grid">
-
-      <!-- Card 1 — Retainer mensual -->
-      <div class="frac-card frac-card--retainer reveal">
-        <div class="frac-label frac-label--retainer">Retainer mensual</div>
-        <div class="frac-title">La dirección estratégica que no tienes en nómina</div>
-        <p class="frac-body">Capacidad senior dedicada de forma continua. Tomo ownership de un área, programa o función — y la dejo operando con sistemas, métricas y equipo alineado.</p>
-        <div class="frac-meta">
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Dedicación</span>
-            <span class="frac-meta-val">20 horas/mes</span>
-          </div>
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Cadencia</span>
-            <span class="frac-meta-val">Reunión semanal + consulta async</span>
-          </div>
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Ideal para</span>
-            <span class="frac-meta-val">Empresas que necesitan dirección sin contratar un perfil senior de tiempo completo</span>
-          </div>
-        </div>
-        <a href="#contacto" onclick="scrollToSection('contacto',event)" class="frac-cta">
-          Cuéntame tu contexto
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <!-- Card 2 — Proyecto acotado -->
-      <div class="frac-card frac-card--proyecto reveal">
-        <div class="frac-label frac-label--proyecto">Proyecto acotado</div>
-        <div class="frac-title">Un problema claro, una solución que se entrega</div>
-        <p class="frac-body">Diseño, ejecuto y entrego un sistema, programa o diagnóstico con fecha de cierre definida. Al final tienes documentación, métricas y un equipo que sabe operarlo.</p>
-        <div class="frac-meta">
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Duración</span>
-            <span class="frac-meta-val">4 a 8 semanas</span>
-          </div>
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Formato</span>
-            <span class="frac-meta-val">Kick-off · hitos semanales · entrega documentada</span>
-          </div>
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Ideal para</span>
-            <span class="frac-meta-val">Lanzar un programa, automatizar una operación o diagnosticar un sistema con fecha límite</span>
-          </div>
-        </div>
-        <a href="#contacto" onclick="scrollToSection('contacto',event)" class="frac-cta">
-          Cuéntame tu contexto
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <!-- Card 3 — Asesoría estratégica -->
-      <div class="frac-card frac-card--asesoria reveal">
-        <div class="frac-label frac-label--asesoria">Asesoría estratégica</div>
-        <div class="frac-title">Un co-pensador con ejecución real encima</div>
-        <p class="frac-body">Sesiones de trabajo donde revisamos decisiones, sistemas y bloqueos con alguien que ha operado programas similares. Sin marcos teóricos — solo experiencia práctica y preguntas correctas.</p>
-        <div class="frac-meta">
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Formato</span>
-            <span class="frac-meta-val">Sesiones quincenales + consulta por canal</span>
-          </div>
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Entregable</span>
-            <span class="frac-meta-val">Notas de sesión · próximos pasos · contexto acumulado</span>
-          </div>
-          <div class="frac-meta-row">
-            <span class="frac-meta-key">Ideal para</span>
-            <span class="frac-meta-val">Founders o directivos que toman decisiones de alta consecuencia sin un par técnico-estratégico</span>
-          </div>
-        </div>
-        <a href="#contacto" onclick="scrollToSection('contacto',event)" class="frac-cta">
-          Cuéntame tu contexto
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-
     </div>
   </div>
 </section>
@@ -2162,7 +1401,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <ul class="modal-list" id="modal-results"></ul>
         </div>
       </div>
-      <div id="modal-rodi" class="modal-rodi" style="display:none;"></div>
       <a href="https://wa.me/525659267516" target="_blank" rel="noopener" class="modal-cta">¿Algo parecido en mente? Hablemos →</a>
     </div>
   </div>
@@ -2173,64 +1411,41 @@ const CASES = {
   heineken: {
     accent: '#f0592a', years: '2019–2022',
     name: 'HEINEKEN Green Challenge',
-    metric: '+600% sureste · 9,905 emprendedores · 4 ediciones',
-    context: 'Programa nacional de innovación abierta y emprendimiento sostenible de HEINEKEN México. Mi rol: diseño y operación de la experiencia completa — convocatoria, evaluación, mentoría — incluyendo la virtualización total del proceso durante 2020–2022.',
-    problem: 'Conectar corporativo, startups, mentores y evaluadores a escala nacional sin perder rigor operativo. En 2020, además, virtualizar el proceso completo sin perder el nivel de compromiso de los participantes.',
-    decision: 'Operar el programa como sistema (convocatoria → evaluación → acompañamiento) en lugar de como evento, y escalar el equipo operativo de ~6 a ~30 personas para sostener el volumen de 3,231+ proyectos.',
+    metric: '900+ proyectos · 6x registros sureste',
+    context: 'Programa nacional de emprendimiento sostenible de HEINEKEN México para identificar y acelerar startups de impacto, operado dentro del ecosistema emprendedor.',
+    problem: 'Conectar corporativo, startups, mentores y evaluadores en un proceso de convocatoria y selección a escala nacional sin perder rigor ni eficiencia. En 2020 se sumó la necesidad de virtualizar todo el proceso.',
+    decision: 'Operar el programa como sistema (convocatoria, evaluación, acompañamiento) en lugar de como evento, y migrar a un modelo 100% virtual manteniendo el nivel de compromiso de los participantes.',
     actions: [
-      'Customer Journey Mapping + Lean para rediseñar la captación regional — sureste pasó de rezagado a líder nacional',
-      'Escalamiento del equipo operativo de ~6 a ~30 personas y 100+ mentores por edición',
-      'Virtualización completa del proceso 2020–2022 manteniendo alto nivel de finalización de etapas',
-      'Gestión de 3,231 proyectos y 9,905 emprendedores en 4 ediciones consecutivas',
-      'REDUX integrado al directorio oficial del Tec de Monterrey como metodología referente'
+      'Diseño y operación del sistema de evaluación de proyectos',
+      'Coordinación de mentores, evaluadores y aliados',
+      'Gestión de convocatorias y procesos de selección',
+      'Alianzas con instituciones educativas y organizaciones regionales',
+      'Customer journey mapping + Lean para virtualizar y estandarizar el proceso'
     ],
     results: [
-      '+600% en registros del sureste: de 36 a ~300 en el primer año de rediseño — región pasó a liderar a nivel nacional',
-      'Equipo escalado 5x: de ~6 a ~30 personas operativas por edición',
-      '9,905 emprendedores y 3,231 proyectos en volumen acumulado (2019–2022)',
-      '4 ediciones sostenidas consecutivamente — la continuidad es la métrica de éxito en programas de este tipo',
-      'Framework de experiencia virtual adoptado como referente interno en INCmty'
-    ],
-    rodi: {
-      type: 'axes',
-      note: 'Presupuesto del programa bajo NDA. El retorno se expresa en tres ejes verificables y defendibles ante cualquier junta directiva sin revelar cifras confidenciales.',
-      axes: [
-        { key: 'Escala operativa', val: 'Equipo 6→30 (5x) · 100+ mentores/edición · 3,231 proyectos · 9,905 emprendedores' },
-        { key: 'Crecimiento medible', val: '+600% registros sureste (36→~300) — región pasó de rezagada a líder nacional en un ciclo' },
-        { key: 'Continuidad institucional', val: '4 ediciones sostenidas · REDUX en directorio Tec MTY · framework virtual adoptado como referente en INCmty' }
-      ]
-    }
+      '900+ proyectos evaluados',
+      '3,000 emprendedores involucrados',
+      '6x en registros del sureste en el primer año — región pasó a liderar a nivel nacional',
+      'Virtualización completa con alto nivel de finalización de etapas'
+    ]
   },
   fliphouse: {
     accent: '#2862cf', years: '2025–presente',
-    name: 'SOFI · FlipHouse',
-    metric: 'RODI base +1,291% · Payback <1 mes',
-    context: 'PropTech de Adelanto de Venta en La Laguna. Implementé SOFI, un agente IA de calificación y operación de leads vía WhatsApp, con HubSpot como SSOT. Stack: Make + Railway + WhatsApp Cloud API + OpenRouter/Claude. Proyecto en curso.',
-    problem: 'Al escalar, los procesos manuales generaban pérdida de leads, dependencia de personas clave y un speed-to-lead de 1–3 días que hacía perder oportunidades de cierre.',
-    decision: 'No resolver con más personas sino desplegar SOFI — un sistema autónomo que cubriera 4–5 roles operativos a una fracción del costo humano, con HubSpot como única fuente de verdad.',
+    name: 'FlipHouse',
+    metric: '+500% en flujo de leads al CRM',
+    context: 'Operación inmobiliaria con ideas fuertes pero procesos manuales que no escalaban.',
+    problem: 'Al escalar, los procesos manuales y las decisiones ambiguas generaban errores, pérdida de control y dependencia de personas clave.',
+    decision: 'No resolver con más gente sino con sistemas: CRM canónico y automatización end-to-end.',
     actions: [
-      'Arquitectura de SOFI: agente IA vía WhatsApp Cloud API + Railway + OpenRouter/Claude',
-      'CRM canónico en HubSpot con 2 pipelines y Lead Status como eje operativo del proceso',
-      'Automatizaciones Make end-to-end: calificación, seguimiento, notificaciones internas',
-      'Speed-to-lead reducido de 1–3 días a menos de 5 minutos',
-      'CAPEX de implementación: $23,000 MXN · OPEX mensual: $1,318 MXN'
+      'CRM canónico en HubSpot con 2 pipelines',
+      'Lead Status como eje operativo del proceso',
+      'Automatizaciones con Make + WhatsApp',
+      'Documentación de workflows y capacidades instaladas en el equipo'
     ],
     results: [
-      '+500% de leads entrando al CRM desde la implementación de SOFI',
-      'Speed-to-lead: de 1–3 días a menos de 5 minutos',
-      '4–5 roles operativos distintos cubiertos por un solo sistema',
-      'Revenue real bajo NDA — el RODI mostrado es solo por eficiencia: es el piso, no el techo'
-    ],
-    rodi: {
-      type: 'table',
-      note: 'RODI calculado exclusivamente por eficiencia operativa (costo de roles cubiertos). Revenue e ingresos por operación cerrada bajo NDA y no incluidos.',
-      anchor: 'Ancla sin supuestos: con un OPEX de $1,318/mes, SOFI se paga sola ahorrando ~11 horas/mes de trabajo manual. Payback menor a 1 mes en los tres escenarios.',
-      rows: [
-        { scenario: 'Conservador', detail: '4 roles × $8,000', monthly: '$32,000/mes', rodi: '+889%', payback: '0.75 meses', base: false },
-        { scenario: 'Base', detail: '4.5 roles × $10,000', monthly: '$45,000/mes', rodi: '+1,291%', payback: '0.53 meses', base: true },
-        { scenario: 'Optimista', detail: '5 roles × $12,000', monthly: '$60,000/mes', rodi: '+1,755%', payback: '0.39 meses', base: false }
-      ]
-    }
+      '+500% en flujo de leads nuevos al CRM',
+      'Automatización que cubre tareas de casi 7 roles en 3 departamentos'
+    ]
   },
   hacksureste: {
     accent: '#e6a100', years: '2018–2023',
@@ -2302,7 +1517,7 @@ const CASES = {
 };
 
 // ── SCROLL UTILS ──────────────────────────────
-function scrollToSection(id, e) {
+function scrollTo(id, e) {
   if (e) e.preventDefault();
   const el = document.getElementById(id);
   if (!el) return;
@@ -2313,7 +1528,7 @@ function scrollToSection(id, e) {
 // ── NAV ───────────────────────────────────────
 const nav = document.getElementById('nav');
 const navLinks = document.querySelectorAll('.nav-link');
-const sectionIds = ['hero','que-hago','proyectos','trinchera','testimonios','about','fraccional','contacto'];
+const sectionIds = ['hero','que-hago','proyectos','testimonios','about','contacto'];
 
 const navLogoImg = document.getElementById('nav-logo-img');
 window.addEventListener('scroll', () => {
@@ -2346,38 +1561,6 @@ if ('IntersectionObserver' in window) {
 // ── MODAL ─────────────────────────────────────
 const backdrop = document.getElementById('modal-backdrop');
 
-function buildRodiHTML(rodi) {
-  if (!rodi) return '';
-  let html = `<span class="modal-rodi-label">RODI — Retorno sobre Inversión Digital</span>`;
-  if (rodi.type === 'table') {
-    html += `<table>
-      <thead><tr>
-        <th>Escenario</th><th>Roles × Costo</th><th>Beneficio/mes</th><th>RODI 12m</th><th>Payback</th>
-      </tr></thead>
-      <tbody>`;
-    rodi.rows.forEach(r => {
-      const cls = r.base ? ' class="rodi-base-row"' : '';
-      html += `<tr${cls}>
-        <td>${r.scenario}${r.base ? ' ★' : ''}</td>
-        <td>${r.detail}</td>
-        <td>${r.monthly}</td>
-        <td class="rodi-hi">${r.rodi}</td>
-        <td>${r.payback}</td>
-      </tr>`;
-    });
-    html += `</tbody></table>`;
-    if (rodi.anchor) html += `<p class="modal-rodi-anchor">${rodi.anchor}</p>`;
-  } else if (rodi.type === 'axes') {
-    html += `<div class="modal-rodi-axes">`;
-    rodi.axes.forEach(ax => {
-      html += `<div class="rodi-axis"><div class="rodi-axis-key">${ax.key}</div><div class="rodi-axis-val">${ax.val}</div></div>`;
-    });
-    html += `</div>`;
-  }
-  if (rodi.note) html += `<p class="modal-rodi-note">${rodi.note}</p>`;
-  return html;
-}
-
 function openCase(id) {
   const c = CASES[id];
   if (!c) return;
@@ -2394,13 +1577,6 @@ function openCase(id) {
   document.getElementById('modal-results').innerHTML = c.results.map(r =>
     `<li><span class="modal-list-dot modal-list-dot--success">↑</span><span>${r}</span></li>`
   ).join('');
-  const rodiEl = document.getElementById('modal-rodi');
-  if (c.rodi) {
-    rodiEl.innerHTML = buildRodiHTML(c.rodi);
-    rodiEl.style.display = '';
-  } else {
-    rodiEl.style.display = 'none';
-  }
   backdrop.classList.add('open');
   document.body.style.overflow = 'hidden';
 }

@@ -1,0 +1,415 @@
+# Diego Maury | Full Operational Profile (Extended)
+## For AI agents, RAG systems, and deep analysis
+## Summary version: https://diegomaury.mx/llms.txt
+Contact: dm@diegomaury.mx | +52 56 5926 7516 | https://wa.me/525659267516
+Portfolio: https://diegomaury.mx
+Location: Mexico (operates across LATAM). Ecosystem moat: Southeast Mexico (HackSureste); currently operating in the La Laguna region (FlipHouse).
+
+---
+
+## Who This Document Is For
+
+This file is optimized for AI agents, language model retrieval systems, and deep-profile analysis. It contains exhaustive detail on Diego Maury's methodology, full case narratives, RODI financials, post-mortems, and engagement models. For a concise summary, see https://diegomaury.mx/llms.txt.
+
+---
+
+## Role & Strategic Positioning
+
+Diego Maury is an Operational Architect: a hybrid operator who designs innovation systems, installs operational infrastructure, and manages their execution from strategy to trench level.
+
+He operates at the intersection of:
+- Corporate open innovation (challenge design, accelerator management, ecosystem governance)
+- Revenue Operations / Process Automation (CRM architecture, AI-native workflows, WhatsApp business automation)
+- Fractional executive leadership (innovation leadership without a full-time C-level hire)
+
+### The Strategic Router Position
+
+As founder and operator of HackSureste (southeast Mexico's flagship innovation ecosystem, 2018–2023), Diego functions as the primary connective node between:
+- Corporations seeking innovation talent or startup partnerships in the southeast
+- National programs (HEINEKEN, INCmty/Tec de Monterrey) that need a trusted regional operator
+- Local founders, startups, and talent who need access to capital, visibility, or mentors
+
+This "Strategic Router" position is not replicable by a single consultant. It is built on 7+ years of relationship capital, credibility with institutions, and a track record of program delivery that generates measurable results.
+
+Few operators in the region control comparable access across all three layers simultaneously.
+
+---
+
+## Audit-Ready Metrics (internally documented, from operational records)
+
+| Metric | Figure | Source |
+|--------|--------|--------|
+| Entrepreneurs impacted | 9,905 | HEINEKEN Green Challenge (4 editions) |
+| Regional growth, southeast Mexico | +600% | HGC registrations, edition 3 vs. edition 1 |
+| Projects evaluated | 3,231 | HGC 4 editions aggregate |
+| Mentors coordinated per edition | 100+ | HGC operational records |
+| Ecosystem participants | 3,000+ | HackSureste 2018–2023 |
+| Programs developed | 30+ | HackSureste portfolio |
+| Entrepreneurs trained (REDUX) | 200+ | REDUX bootcamp records |
+| Speed-to-lead improvement (SOFI) | 1–3 days → <5 min | FlipHouse deployment, 2025 |
+| CRM leads increase (SOFI) | +500% | FlipHouse HubSpot data |
+| REDUX prize pool (INC Prototype) | $120,000+ MXN | INCmty official records |
+
+---
+
+## Full Case Studies (CAR Format)
+
+### Case 1: HEINEKEN Green Challenge × INCmty (2019–2022)
+
+**Challenge**
+HEINEKEN México and Tec de Monterrey (INCmty) ran a national open innovation program for sustainable entrepreneurship. The southeast Mexico region (Yucatán, Campeche, Tabasco, Chiapas, Quintana Roo) was chronically underperforming: low registration volumes, limited mentor access, and no local institutional anchor to drive participation.
+
+By the second edition, the program faced a structural constraint: how do you scale a 6-month, in-person program nationally during a pandemic without sacrificing quality or participant completion rates?
+
+**Actions**
+
+1. **Regional anchor strategy**: Established HackSureste as the operational node for the southeast, giving the program a local face, a trusted network, and on-the-ground recruitment infrastructure. This was not a sponsorship arrangement - it was an integrated operating model where HGC ran through HackSureste's existing ecosystem relationships.
+
+2. **Lean virtualization protocol**: When COVID closed in-person operations in 2020, designed a digital-native program structure from scratch (no existing framework). Key design principles: sessions ≤45 minutes, async delivery for high-cognitive content, immersive digital environments (Rushframe), structured networking replacing hallway conversations. Completion rates exceeded benchmark.
+
+3. **Escalated evaluation system**: As the program scaled, the project evaluation bottleneck became critical. Designed a 3-stage protocol: binary pre-filter (go/no-go on 3 criteria) → weighted rubric by thematic vertical → regional panel selection. This system processed 900+ projects per edition without quality degradation.
+
+4. **Regional recruitment engine**: Built structured outreach into universities, government innovation programs, and entrepreneurship networks across 5 states. Coordinated 100+ mentors per edition, recruited from corporate partners, academia, and HackSureste's alumni.
+
+5. **Institutional continuity**: Secured 4 consecutive editions, leading to the REDUX methodology being formally registered in Tec de Monterrey's official program directory - institutional validation that opened future program access.
+
+**Results**
+
+- Southeast Mexico: 36 registrations (edition 1) → 300+ registrations (edition 3) = **+600% regional growth**
+- Aggregate impact: **9,905 entrepreneurs, 3,231 projects evaluated, 4 editions**
+- Completion rates above benchmark despite full virtualization
+- REDUX registered in Tec de Monterrey's official directory
+- Program continued independently after Diego's direct operational involvement ended
+
+**RODI: Institutional / Strategic**
+Budget under NDA. RODI calculation framed across 3 axes (institutional budget was not monetized directly):
+
+- **Operational scale**: Team 6→30 members (5x), 100+ mentors/edition, 3,231 projects evaluated, 9,905 entrepreneurs
+- **Measurable growth**: +600% regional registrations (36→300+), 4 consecutive editions, above-benchmark completion
+- **Institutional continuity**: REDUX in Tec de Monterrey's registry, HEINEKEN program sustained for 4 editions, HackSureste recognized as the southeast's operational anchor
+
+---
+
+### Case 2: SOFI · FlipHouse (2025–present)
+
+**Challenge**
+FlipHouse is a PropTech company operating "Adelanto de Venta" (property advance-sale) services in La Laguna (Torreón, Gómez Palacio, Lerdo). As lead volume grew, the company faced a critical operational constraint: leads were being lost because the qualification and follow-up process was manual, dependent on specific team members, and generating a speed-to-lead of 1–3 days.
+
+In competitive PropTech, a 3-day response time means the lead is already with a competitor. The company was scaling the top of the funnel without the operational infrastructure to convert it.
+
+**Actions**
+
+1. **Diagnosis and system architecture**: Mapped the full lead lifecycle from WhatsApp entry to CRM to closing. Identified 4–5 manual roles that were bottlenecking conversion: initial response, qualification, CRM logging, document pre-check, and follow-up scheduling.
+
+2. **SOFI deployment**: Built and deployed SOFI - an AI-native agent running on WhatsApp Cloud API, orchestrated via Make (formerly Integromat), hosted on Railway, and using OpenRouter/Claude for language model processing. SOFI handles: lead qualification dialogue (natural language), CRM entry into HubSpot (SSOT), document pre-screening, and follow-up triggering.
+
+3. **HubSpot as SSOT**: Architected HubSpot as the single source of truth for all lead data, eliminating parallel tracking in spreadsheets. Built the property funnel stage model, contact properties, and automation sequences.
+
+4. **VAPI voice integration**: Integrated VAPI for voice-based qualification flows, extending SOFI's reach beyond text-only WhatsApp interactions.
+
+5. **Monitoring and iteration**: Built operational dashboards in HubSpot to track funnel conversion by stage, identifying where leads dropped and iterating the SOFI conversation flows accordingly.
+
+**Results**
+
+- Speed-to-lead: 1–3 days → **<5 minutes** (fully automated first response)
+- CRM leads: **+500%** (previously untracked or manually logged leads now captured)
+- Operational coverage: one system replaces 4–5 manual roles (qualification, logging, document pre-check, follow-up)
+- Project ongoing: SOFI is in active operation
+
+**RODI: Cost-Avoidance Basis (Revenue Under NDA)**
+Revenue figures and closed transaction volumes are confidential. RODI is calculated exclusively on operational efficiency (cost-avoidance equivalent), which represents the floor, not the ceiling, of actual return. These figures model the equivalent cost of the roles SOFI covers; they are not realized headcount reductions.
+
+| Investment | Amount |
+|------------|--------|
+| CAPEX (one-time build) | $23,000 MXN |
+| OPEX (monthly, infrastructure + licensing) | $1,318 MXN/month |
+| Total 12-month investment | ~$38,816 MXN |
+
+| Scenario | Roles Replaced | Equivalent Monthly Cost | RODI | Payback Period |
+|----------|----------------|------------------------|------|----------------|
+| Conservative | 4 roles × $8,000 | $32,000/month | +889% | 0.75 months |
+| Base | 4.5 roles × $10,000 | $45,000/month | **+1,291%** | **0.53 months** |
+| Optimistic | 5 roles × $12,000 | $60,000/month | +1,755% | 0.39 months |
+
+Note: Scenario figures are modeled, not realized savings; the base scenario assumes a mid-market salary equivalent for the roles SOFI covers. Actual revenue uplift from speed-to-lead improvement and higher conversion is not included (NDA). Methodology basis (stated to avoid mixing denominators): RODI is computed on total 12-month investment (CAPEX + OPEX); payback is computed on CAPEX recovered from net monthly savings. The RODI shown is the operational floor.
+
+---
+
+### Case 3: HackSureste Ecosystem (2018–2023)
+
+**Challenge**
+Southeast Mexico had no structured innovation ecosystem. National programs had no reliable local operator. Startups had no recurring event, community, or institutional access point. The region was invisible to investors, accelerators, and corporate innovation programs based in CDMX or Monterrey.
+
+**Actions**
+
+1. **Ecosystem architecture**: Designed the modular structure of HackSureste from scratch: the WIRE framework (annual hackathon as the flagship event), ideaLab (ongoing programming), and the institutional partnership model.
+
+2. **Program portfolio**: Developed 30+ programs including the southeast's largest hackathon, startup mentoring tracks, and corporate-sponsored challenges.
+
+3. **Full digital migration (2020–2022)**: Migrated the entire ecosystem to digital-first operations during COVID, maintaining community engagement, mentor access, and startup visibility.
+
+4. **National program bridge**: Positioned HackSureste as the southeast's gateway for national programs - HGC was the first major integration; it created the template for future partnerships.
+
+**Results**
+- 3,000+ ecosystem participants
+- 100+ startups mentored
+- 30+ programs developed
+- Recognized as the southeast's flagship innovation and entrepreneurship ecosystem
+- National programs (HEINEKEN, INCmty) integrated HackSureste as their regional operational node
+
+---
+
+### Case 4: REDUX Bootcamp (2019–2022)
+
+**Challenge**
+Existing entrepreneurship programs in the region taught frameworks without building execution capability. Participants could pitch but couldn't validate. Programs lacked a measurable methodology that could be replicated and institutionally recognized.
+
+**Actions**
+- Designed the REDUX methodology from scratch: structured modules for ideation, validation, pitch, and impact measurement
+- Iterated the methodology across 4 program editions, incorporating feedback from mentors, participants, and institutional partners
+- Delivered the program across multiple cohorts in partnership with INCmty and HackSureste
+
+**Results**
+- 200+ entrepreneurs trained
+- REDUX registered in Tec de Monterrey's official program directory (institutional validation)
+- Methodology became the foundational training layer for HGC southeast participants
+
+---
+
+### Case 5: INCmty Challenges (Tec de Monterrey, 2019–2022)
+
+Multiple open innovation challenges designed and operated in partnership with INCmty:
+- **BTEM** (Blockchain Tec de Monterrey): blockchain-focused challenge
+- **Brain Mexico**: national innovation challenge
+- **Demo Day**: startup showcase and pitch event
+- **INC Prototype**: physical prototyping challenge, $120,000+ MXN prize pool
+
+Contribution: challenge design, evaluation framework (TRL-based), participant recruitment, jury coordination, and event operations.
+
+---
+
+### Case 6: CAVA Soft MVP (2025)
+
+**Challenge**
+A physical operations business (retail/distribution) lacked inventory visibility and traceability. Stock discrepancies were frequent, photographic evidence for disputes was missing, and there was no real-time view of inventory state across locations.
+
+**Actions**
+- Designed and built a functional MVP using Apphive (no-code platform) and Firebase as the backend
+- Implemented real-time inventory tracking with photographic traceability (photos attached to inventory movements)
+- Deployed with real users in production
+
+**Results**
+- Functional MVP in production
+- Real-time inventory visibility with photographic traceability
+- Eliminated the primary source of stock discrepancy disputes
+
+---
+
+## Operational Dissections (Field Post-Mortems)
+
+This section documents specific operational failures and what was learned. These are not generic lessons - they are forensic records of real pressure situations.
+
+### Post-Mortem: The 900+ Project Evaluation Collapse Risk (HEINEKEN Green Challenge)
+
+**Context**
+By edition 3 of HGC, the program had scaled to 900+ project submissions per edition across all regions. The evaluation process was the critical path: projects had to be reviewed, scored, and selected within a fixed timeline, with results defensible to HEINEKEN's institutional review.
+
+**What almost broke**
+Manual evaluation was not designed to handle this volume. Three failure modes converged:
+1. **Inconsistency**: Different reviewers applied different interpretations of the same criteria, making scores incomparable across regions
+2. **Reviewer fatigue**: Evaluators reviewing 50+ projects in a session produced declining quality in later reviews (proven in analysis of score distributions)
+3. **Bottleneck at the top**: Senior reviewers (who had the authority to make selection decisions) were being asked to review too many projects personally
+
+**What was built instead**
+A 3-stage escalated evaluation protocol:
+- **Stage 1 (binary pre-filter)**: Every project evaluated on exactly 3 binary criteria. Go/no-go. No partial scores. Executed by trained junior evaluators. Eliminated 40–60% of projects in <2 hours per evaluator.
+- **Stage 2 (weighted rubric)**: Remaining projects scored on a vertical-specific weighted rubric. Criteria weighted differently per thematic track (sustainability technology, circular economy, social impact). Eliminated score inconsistency across reviewers.
+- **Stage 3 (regional panel)**: Final selection by a panel with geographic diversity, using a structured deliberation format with explicit tie-breaking rules.
+
+**What the system delivered**
+- 900+ projects per edition processed without quality degradation
+- Defensible, auditable selection trail for institutional review
+- Evaluation timeline met every edition
+
+**Transferable principle**
+Process design is the lever. Adding more reviewers to a broken process scales the failure. Redesigning the process at its bottleneck scales the quality.
+
+---
+
+## Methodology Detail
+
+### REDUX (Structured Entrepreneurship Bootcamp)
+
+A methodology designed for training entrepreneurs in sustainable business model development, built iteratively over 4 editions.
+
+**Module structure:**
+1. **Ideation**: Structured problem identification using a systems-thinking lens. Participants identify root causes vs. symptoms.
+2. **Validation**: Lean validation protocol. Emphasis on disconfirmation (testing whether the problem is real, not whether the solution is liked).
+3. **Business model**: Revenue model and cost structure canvas adapted for early-stage sustainability ventures.
+4. **Pitch**: Evidence-based pitch structure. Participants present validation data, not just ideas.
+5. **Impact measurement**: SROI-adjacent framework for estimating and communicating social/environmental impact.
+
+Registered in Tec de Monterrey's official program directory.
+
+### Customer Journey Mapping for Innovation Programs
+
+Applied not to products but to program participants: mapping the touchpoints a founder or team experiences from first contact with a program through application, selection, active participation, mentoring, pitch, and post-program outcome.
+
+Used to identify:
+- Drop-off points in the application funnel
+- Friction in the mentoring matching process
+- Post-program engagement gaps that reduce long-term impact
+
+### Lean Operations for Virtual Events (2020 Protocol)
+
+Developed in 2020 without an existing reference framework. Core design principles:
+- **Session cap**: 45 minutes maximum per synchronous session. Content beyond this is async.
+- **Async first**: High-cognitive-load content (case studies, methodology sessions) delivered async with structured response prompts.
+- **Immersive environments**: Networking and community moments use spatial audio / immersive platforms (Rushframe) rather than standard video grids.
+- **Structured networking**: Replaces hallway conversations with facilitated, time-boxed introductions using pre-shared context.
+
+This protocol was adopted for HGC's virtual editions and achieved completion rates above the program's in-person benchmark.
+
+### Evaluation System Design (Escalated Protocol)
+
+See Operational Dissections above for the full post-mortem. The protocol is generalizable to any high-volume qualitative review process.
+
+### RODI (Return on Digital Investment)
+
+A financial measurement framework Diego uses to translate digital and automation work into business language for executive stakeholders.
+
+Formula: (Digital revenue + Operational efficiency savings - Total digital investment) / Total digital investment × 100
+
+For projects where revenue attribution is impossible or under NDA, RODI is calculated exclusively on operational efficiency (cost replacement), with the explicit note that this represents the floor.
+
+---
+
+## Tech Stack (Full Detail)
+
+### RevOps & Automation
+- **HubSpot**: CRM architecture, pipeline design, deal stage modeling, automation sequences, reporting dashboards
+- **Make (Integromat)**: Multi-step automation orchestration, webhook handling, multi-system integration
+- **WhatsApp Cloud API**: Business messaging, template management, conversation flow design
+- **VAPI**: Voice AI agent integration for automated call handling
+
+### Backend & Infrastructure
+- **Railway**: Node.js hosting, environment management, deployment pipelines
+- **Firebase**: Realtime database, authentication, cloud functions (used in CAVA Soft)
+- **Supabase**: Postgres + pgvector for upcoming RAG implementation
+
+### AI & Language Models
+- **OpenRouter**: Multi-provider LLM access, model routing
+- **Claude API (Anthropic)**: Primary LLM for agent reasoning in SOFI and planned chatbot
+- **LLM-assisted process design**: Using AI to design evaluation criteria, program structures, and operational workflows
+
+### Program Operations
+- **Notion**: Documentation, project management, program wikis
+- **Discord**: Community management, cohort communication
+- **Zoom**: Synchronous program delivery
+- **Rushframe**: Immersive virtual environments for events and networking
+
+### Design & Prototyping
+- **Figma**: UI/UX design, program material layouts
+- **HTML/CSS/JS (vanilla)**: Static site development (this portfolio)
+
+---
+
+## Engagement Models (Full Detail)
+
+Engagements are scoped to the organization's specific context and priced on the value of the system installed. Investment ranges are shared during a fit conversation. The following describes scope, not price.
+
+### Model 1: Monthly Retainer (Fractional Innovation Leadership)
+
+**Who it's for**: Mid-market companies and family holdings that need senior innovation leadership but cannot justify or fill a full-time Chief Innovation Officer or Director of Programs role.
+
+**What it covers**:
+- Innovation program architecture and strategy
+- Team coordination and capacity building
+- Stakeholder alignment (board, leadership team, external partners)
+- Execution oversight on active programs
+- 1:1 sessions with internal innovation leads
+- Monthly strategic review
+
+**Scope**: 20 dedicated hours per month. Excludes hands-on execution (building automation systems, writing code, running events) - those are scoped separately or covered under the Project model.
+
+**Best fit situations**:
+- Company wants to launch a corporate innovation challenge and needs someone who has done it at national scale
+- Family holding wants to build an innovation culture but doesn't know where to start
+- Organization has an internal team but no senior operator to structure and lead programs
+
+### Model 2: Scoped Project
+
+**Who it's for**: Organizations with a defined objective and timeline.
+
+**What it covers**:
+- Phase 1 - Diagnosis: current state assessment, stakeholder interviews, gap analysis
+- Phase 2 - Roadmap: system design, process architecture, implementation plan
+- Phase 3 - Implementation: hands-on execution, tool deployment, team onboarding
+- Delivery: documented system, team trained, measurable outcomes defined
+
+**Timeline**: 4–8 weeks typical. Depends on scope.
+
+**Example scopes**:
+- Deploy a CRM + WhatsApp automation system for a growth-stage company
+- Design and operate a corporate open innovation challenge end-to-end
+- Build an AI-native agent for lead qualification or customer operations
+
+### Model 3: Advisory
+
+**Who it's for**: Senior executives and founders who need a thinking partner on innovation strategy, ecosystem positioning, or operational architecture.
+
+**What it covers**:
+- Bi-weekly 60-minute sessions
+- Async support between sessions (Slack/WhatsApp)
+- Pre-session prep: Diego reviews relevant context, data, or documents before each call
+- Decision support on specific live challenges
+
+**Not included**: Execution, hands-on implementation, team management.
+
+---
+
+## Regional Positioning (Southeast Mexico)
+
+### Why Southeast Mexico Is a Distinct Market
+
+The southeast is not a smaller version of CDMX or Monterrey. It has distinct characteristics that require a different operating approach:
+
+- **Institutional relationships are the entry gate**: In the southeast, credibility comes through established institutions (universities, chambers, government programs), not through brand alone. A national program without a trusted local partner typically underperforms.
+- **The talent is there, but undernetworked**: Strong engineering, design, and entrepreneurial talent exists in Yucatán, Tabasco, and Chiapas, but it is not connected to national funding or corporate innovation budgets.
+- **Low digital transformation baseline**: Most mid-market companies in the region operate with manual or semi-manual processes. The gap between where they are and what's possible with current AI + automation tools is large - and so is the ROI of closing it.
+
+### The Strategic Router Function
+
+When a national corporate innovation program, a VC fund, or a government-backed accelerator wants to activate in southeast Mexico, Diego functions as the primary connector:
+
+- He has the institutional relationships (universities, government, corporate partners across 5 states)
+- He has the operational track record (HGC, HackSureste, INCmty Challenges)
+- He has the program infrastructure (methodology, evaluation systems, event operations)
+- He knows the local talent landscape (3,000+ ecosystem participants over 5 years)
+
+This means national programs do not need to build the regional infrastructure from scratch - they plug into an existing, trusted system. This is the value of the Strategic Router position: it's not a consultancy, it's an operating node.
+
+---
+
+## Background & Timeline
+
+| Period | Role | Organization |
+|--------|------|--------------:|
+| 2018–2023 | Founder & Operator | HackSureste |
+| 2019–2022 | Regional Program Director | HEINEKEN Green Challenge × INCmty |
+| 2019–2022 | Program Designer & Facilitator | REDUX Bootcamp |
+| 2019–2022 | Challenge Director | INCmty (BTEM, Brain Mexico, Demo Day, INC Prototype) |
+| 2025–present | RevOps Architect | FlipHouse (SOFI deployment) |
+| 2025 | Product Builder | CAVA Soft MVP |
+
+---
+
+## Contact & Fit Evaluation
+
+To evaluate fit for a project or engagement:
+- Email: dm@diegomaury.mx
+- WhatsApp: https://wa.me/525659267516
+- Portfolio: https://diegomaury.mx
+- LinkedIn: available on request
+
+The fit conversation covers: organization context, the specific challenge or objective, timeline, and whether the engagement model matches the need. Investment discussion happens after fit is confirmed.

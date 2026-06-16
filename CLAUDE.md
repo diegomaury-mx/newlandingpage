@@ -132,23 +132,37 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
 ## Estado del contenido
 
 ### Implementado (LIVE)
-- `index.html` con 8 secciones: Hero, Work, Trust Strip, Testimonios, Servicios, About, Experiencia, Contacto — desde 2026-05-13
-- Design System v3 "Violeta Protagonista" — tokens completos en CSS
-- Fuentes locales: Satoshi Variable + JetBrains Mono
-- SEO básico (meta tags, OG, robots.txt)
-- `cases/heineken.html` — caso +600% con contenido completo
-- `cases/innovation-systems.html` — 3 subcasos: FlipHouse, HackSureste, CAVA Soft
-- `cases/redux-incmty.html` — REDUX + INCmty Challenges
-- `cv/diego-maury-cv.pdf` — CV 2026 subido
-- Senja embed activo (`93ff9581-ba54-4ba8-a053-f7d0889cd4d0`)
-- `portfolio/index.html` — galería por eras con timeline vertical — desde 2026-05-18
-- Deploy en GitHub Pages → rama `gh-pages`
+- `index.html` — **v2 "Deep Tech & Friction"** activo desde 2026-06-13
+  - Fuentes: Montserrat Variable + Bitter Variable + Space Mono (`assets/fonts-v2/`)
+  - Secciones: NAV, HERO, QUÉ HAGO, PROYECTOS, TRINCHERA, TESTIMONIOS, ABOUT, FRACCIONAL, CONTACTO, FOOTER + MODAL
+  - Proyectos como modales JS (6 casos en objeto CASES inline: heineken, fliphouse, hacksureste, redux, incmty, cavasoft)
+  - Tarjetas de proyecto con métricas RODI (SOFI/FlipHouse: RODI base +1,291%)
+  - `index-v1-backup.html` conservado como respaldo
+- `llms.txt` — live en raíz, visible en `diegomaury.mx/llms.txt`
+- GTM-NHT5827J — instalado en `<head>` y `<body>` de index.html
+- `cases/heineken.html`, `cases/innovation-systems.html`, `cases/redux-incmty.html` — LIVE (navegación desde v1; no enlazados desde v2 aún)
+- `portfolio/index.html` — galería por eras — LIVE
+- `cv/diego-maury-cv.pdf` — CV 2026
 - Dominio `diegomaury.mx` con HTTPS activo
-- Email `hola@diegomaury.mx` en sección Contacto
 
-### Pendiente
-- **Foto real**: reemplazar placeholder `DM` en hero
-- **Testimonios Senja**: recolectar testimonios reales (embed activo)
+### Portfolio Upgrade v2 — Phase 1 COMPLETA (LIVE 2026-06-14)
+Plan completo en Notion: "Plan de Acción — Portfolio Upgrade v2 (2026-06-13)"
+
+Phase 1 (LIVE):
+- Sección "Trinchera" — post-mortem HEINEKEN Green Challenge (3 fallos documentados); 2do caso "en preparación"
+- Sección "Fraccional" — 3 modelos (Retainer mensual, Proyecto acotado, Asesoría estratégica) **sin rangos de precio**
+- Tarjetas RODI — formato financiero en tarjetas de proyectos
+- `llms.txt` y `llms-full.txt` publicados en raíz
+
+Pendiente Phase 1:
+- 2do post-mortem en Trinchera (por definir)
+
+Pendiente Phase 2 (semana siguiente):
+- Railway backend + Supabase pgvector + Claude API → chatbot RAG
+- Widget chatbot en index.html
+
+### Nota de diseño: nav scrollToSection
+La función de scroll se llama `scrollToSection` (no `scrollTo` — conflicto con `window.scrollTo`).
 
 ## Idioma de respuestas
 

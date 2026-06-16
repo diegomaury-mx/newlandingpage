@@ -1,3 +1,7 @@
 node_modules/
-.worktrees/
 *.tmp
+.DS_Store
+
+# Artefactos de tooling local (no son parte del sitio)
+.playwright-mcp/
+.superpowers/
