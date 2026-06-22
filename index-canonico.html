@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diego Maury — Strategic Program &amp; Operations Director</title>
+  <meta name="description" content="Tomo operaciones ambiguas y las dejo funcionando como sistemas medibles. Programas, RevOps y ecosistemas.">
+
+  <!-- PREVIEW: no indexar. Se retira al promover a LIVE. -->
+  <meta name="robots" content="noindex,nofollow">
+
+  <!-- ANALÍTICA DESACTIVADA EN PREVIEW.
+       GTM-NHT5827J y Clarity x7ns7c22xi NO se inyectan mientras sea preview.
+       Activar (descomentar) solo al promover a LIVE. -->
+
+  <style>
+    /* ── FONTS (locales, reutilizadas del repo) ── */
+    @font-face {
+      font-family: 'Satoshi';
+      src: url('assets/fonts/Satoshi-Variable.ttf') format('truetype-variations');
+      font-weight: 300 900; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Satoshi';
+      src: url('assets/fonts/Satoshi-VariableItalic.ttf') format('truetype-variations');
+      font-weight: 300 900; font-style: italic; font-display: swap;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('assets/fonts/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype-variations');
+      font-weight: 100 800; font-style: italic; font-display: swap;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    /* ── TOKENS — DS v3 Violeta Protagonista (auditados WCAG) ── */
+    :root {
+      --dm-catalyst-900: #120D1A;   /* fondo base oscuro */
+      --dm-catalyst-700: #2E1547;   /* hero/contacto bg */
+      --dm-bento: #1D1430;          /* celdas bento */
+      --dm-bento-border: #2E1547;   /* borde decorativo sutil (1.10:1) */
+      --dm-border-interactive: #5A2C87; /* borde celda interactiva (~3:1) */
+      --dm-amethyst: #7C3FBE;       /* SOLO fill: CTA, badges, hero */
+      --dm-amethyst-text: #B07FE8;  /* texto/enlaces sobre oscuro (~6:1) */
+      --dm-spark: #E6B800;          /* SOLO números de impacto / KPIs */
+      --dm-bone: #F5F5F7;           /* texto sobre oscuro (17.5:1) */
+      --dm-bone-60: rgba(245,245,247,0.62);
+      --dm-bone-40: rgba(245,245,247,0.42);
+
+      --font-display: 'Satoshi', system-ui, sans-serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+      --space-section: clamp(4rem, 3rem + 5vw, 8rem);
+      --maxw: 1180px;
+      --radius: 16px;
+      --dur: 300ms;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--dm-catalyst-900);
+      color: var(--dm-bone);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--dm-amethyst-text); text-decoration: none; }
+    .container { max-width: var(--maxw); margin-inline: auto; padding-inline: clamp(1.25rem, 1rem + 2vw, 2.5rem); }
+    section { padding-block: var(--space-section); }
+
+    /* Foco visible — WCAG 2.4.11 */
+    :focus-visible { outline: 2px solid var(--dm-amethyst); outline-offset: 2px; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(18,13,26,0.82);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--dm-bento-border);
+    }
+    .nav__inner { display: flex; align-items: center; gap: 1.5rem; padding-block: 0.9rem; }
+    .nav__brand { font-family: var(--font-display); font-weight: 700; color: var(--dm-bone); font-size: 1.05rem; }
+    .nav__links { display: flex; gap: 1.4rem; margin-left: auto; }
+    .nav__links a { font-family: var(--font-mono); font-size: 0.8rem; color: var(--dm-bone-60); transition: color var(--dur) var(--ease); }
+    .nav__links a:hover, .nav__links a.is-active { color: var(--dm-bone); }
+    .nav__cta { white-space: nowrap; }
+
+    /* ── BOTONES ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.7rem 1.3rem; border-radius: 999px;
+      font-family: var(--font-mono); font-size: 0.82rem; font-weight: 500;
+      border: 1px solid transparent; cursor: pointer;
+      transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    }
+    .btn--primary { background: var(--dm-amethyst); color: var(--dm-bone); }
+    .btn--primary:hover { transform: translateY(-2px); background: #8B4FCF; }
+    .btn--ghost { background: transparent; color: var(--dm-bone); border-color: var(--dm-border-interactive); }
+    .btn--ghost:hover { transform: translateY(-2px); border-color: var(--dm-amethyst-text); }
+
+    /* ── HERO ── */
+    .hero { background: var(--dm-catalyst-700); padding-block: clamp(4rem, 3rem + 8vw, 9rem); }
+    .hero__tag { font-family: var(--font-mono); color: var(--dm-amethyst-text); font-size: 0.85rem; letter-spacing: 0.04em; margin-bottom: 1.2rem; }
+    .hero__title { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.6rem, 1.5rem + 6vw, 5.5rem); line-height: 1.02; }
+    .hero__role { font-family: var(--font-mono); color: var(--dm-bone-60); font-size: clamp(0.95rem, 0.9rem + 0.4vw, 1.15rem); margin-top: 0.6rem; }
+    .hero__tagline { font-size: clamp(1.15rem, 1rem + 0.8vw, 1.6rem); max-width: 38ch; margin-top: 1.5rem; color: var(--dm-bone); }
+    .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2rem; }
+
+    /* ── BENTO de métricas ── */
+    .metrics {
+      list-style: none; margin-top: 3.5rem;
+      display: grid; gap: 1px;
+      grid-template-columns: repeat(5, 1fr);
+      background: var(--dm-bento-border);
+      border: 1px solid var(--dm-bento-border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+    .metric { background: var(--dm-bento); padding: 1.4rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .metric__num { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2.4rem); color: var(--dm-spark); }
+    .metric__label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--dm-bone-60); line-height: 1.35; }
+
+    /* ── ENCABEZADOS DE SECCIÓN ── */
+    .sec__kicker { font-family: var(--font-mono); color: var(--dm-amethyst-text); font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 0.6rem; }
+    .sec__title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 1.3rem + 2.5vw, 3rem); margin-bottom: 2.5rem; line-height: 1.1; }
+
+    /* ── CARDS 3 ── */
+    .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .card { background: var(--dm-bento); border: 1px solid var(--dm-bento-border); border-radius: var(--radius); padding: 1.8rem; }
+    .card__title { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; margin-bottom: 0.8rem; }
+    .card__body { color: var(--dm-bone-60); font-size: 0.95rem; }
+
+    /* ── BENTO PROYECTOS ── */
+    .bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+    .bento__cell {
+      position: relative; background: var(--dm-bento);
+      border: 1px solid var(--dm-bento-border); border-radius: var(--radius);
+      padding: 1.8rem; overflow: hidden;
+      transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    }
+    .bento__cell::before {
+      content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--accent);
+    }
+    .bento__cell:hover, .bento__cell:focus-visible {
+      transform: translateY(-4px); border-color: var(--dm-border-interactive);
+    }
+    .bento__name { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem; padding-left: 0.6rem; }
+    .bento__metrics { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; padding-left: 0.6rem; }
+    .bento__metrics li { font-family: var(--font-mono); font-size: 0.85rem; color: var(--dm-bone-60); }
+    .bento__metrics b { color: var(--dm-spark); font-weight: 700; }
+
+    /* ── TRINCHERA ── */
+    .postmortem { background: var(--dm-bento); border: 1px solid var(--dm-bento-border); border-left: 4px solid var(--dm-amethyst); border-radius: var(--radius); padding: 2rem; }
+    .postmortem__label { font-family: var(--font-mono); color: var(--dm-amethyst-text); font-size: 0.8rem; margin-bottom: 1.5rem; }
+    .postmortem__list { list-style: none; counter-reset: pm; display: flex; flex-direction: column; gap: 1.6rem; }
+    .postmortem__list li { counter-increment: pm; }
+    .postmortem__list h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.4rem; }
+    .postmortem__list h3::before { content: counter(pm, decimal-leading-zero) "  "; color: var(--dm-spark); font-family: var(--font-mono); }
+    .postmortem__list p { color: var(--dm-bone-60); font-size: 0.95rem; }
+
+    /* ── ABOUT ── */
+    .about-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+    .about-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .about-list li { color: var(--dm-bone-60); font-size: 0.95rem; padding-left: 1.2rem; position: relative; }
+    .about-list li::before { content: "→"; position: absolute; left: 0; color: var(--dm-amethyst-text); }
+
+    /* ── TABLA EXPERIENCIA ── */
+    .table-wrap { overflow-x: auto; border: 1px solid var(--dm-bento-border); border-radius: var(--radius); }
+    .exp-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+    .exp-table th, .exp-table td { text-align: left; padding: 1rem 1.2rem; border-bottom: 1px solid var(--dm-bento-border); }
+    .exp-table th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dm-bone-40); background: var(--dm-bento); }
+    .exp-table td { font-size: 0.9rem; color: var(--dm-bone); }
+    .exp-table tbody tr:last-child td { border-bottom: none; }
+    .exp-table td:first-child { font-family: var(--font-display); font-weight: 600; }
+
+    /* ── CONTACTO + FOOTER ── */
+    .contacto { background: var(--dm-catalyst-700); }
+    .contacto__link { display: block; font-family: var(--font-mono); font-size: 0.85rem; color: var(--dm-amethyst-text); margin-top: 0.7rem; }
+    .footer { background: var(--dm-catalyst-900); border-top: 1px solid var(--dm-bento-border); padding-block: 2.5rem; }
+    .footer p { font-family: var(--font-mono); font-size: 0.78rem; color: var(--dm-bone-40); text-align: center; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav__links { display: none; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .cards-3 { grid-template-columns: 1fr; }
+      .bento { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 375px) {
+      .metrics { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#hero" class="nav__brand" data-scroll>Diego Maury</a>
+      <nav class="nav__links" aria-label="Navegación principal">
+        <a href="#proyectos" data-scroll>Proyectos</a>
+        <a href="#trinchera" data-scroll>La Trinchera</a>
+        <a href="#fraccional" data-scroll>Fraccional</a>
+        <a href="#contacto" data-scroll>Contacto</a>
+      </nav>
+      <a href="#contacto" class="nav__cta btn btn--primary" data-scroll>Agenda un diagnóstico</a>
+    </div>
+  </header>
+
+  <section id="hero" class="hero">
+    <div class="container">
+      <p class="hero__tag">// Strategic Program &amp; Operations Director</p>
+      <h1 class="hero__title">Diego Maury</h1>
+      <p class="hero__role">Strategic Program &amp; Operations Director</p>
+      <p class="hero__tagline">Tomo operaciones ambiguas y las dejo funcionando como sistemas medibles.</p>
+      <div class="hero__ctas">
+        <a href="#contacto" class="btn btn--primary" data-scroll>Agenda un diagnóstico</a>
+        <a href="#proyectos" class="btn btn--ghost" data-scroll>Ver proyectos</a>
+      </div>
+
+      <ul class="metrics" aria-label="Impacto rápido">
+        <li class="metric"><span class="metric__num">10+</span><span class="metric__label">años (7+ en innovación)</span></li>
+        <li class="metric"><span class="metric__num">9,905</span><span class="metric__label">participantes (4 ediciones)</span></li>
+        <li class="metric"><span class="metric__num">3,231</span><span class="metric__label">evaluados (900+/edición)</span></li>
+        <li class="metric"><span class="metric__num">+600%</span><span class="metric__label">crecimiento programa</span></li>
+        <li class="metric"><span class="metric__num">+500%</span><span class="metric__label">leads en CRM</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="que-hago" class="reveal">
+    <div class="container">
+      <p class="sec__kicker">// Qué hago</p>
+      <h2 class="sec__title">Tres frentes, un sistema</h2>
+      <div class="cards-3">
+        <article class="card">
+          <h3 class="card__title">Diseño y operación de programas</h3>
+          <p class="card__body">Programas de innovación y aceleración end-to-end: convocatoria, filtrado, mentoría y medición.</p>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Sistemas y automatización (RevOps)</h3>
+          <p class="card__body">CRM, speed-to-lead y automatización de procesos comerciales para que la operación deje de depender de heroísmos.</p>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Ecosistemas y partnerships</h3>
+          <p class="card__body">Articulación de aliados, academia, gobierno e industria alrededor de un objetivo medible.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="proyectos" class="reveal">
+    <div class="container">
+      <p class="sec__kicker">// Proyectos</p>
+      <h2 class="sec__title">Resultados, no narrativas</h2>
+      <div class="bento">
+        <article class="bento__cell" style="--accent:#16A34A" tabindex="0">
+          <p class="bento__name">HEINEKEN Green Challenge</p>
+          <ul class="bento__metrics">
+            <li><b>+600%</b> crecimiento</li>
+            <li><b>9,905</b> participantes</li>
+            <li><b>3,231</b> evaluados</li>
+            <li><b>100+</b> mentores/edición</li>
+          </ul>
+        </article>
+        <article class="bento__cell" style="--accent:#246BFD" tabindex="0">
+          <p class="bento__name">SOFI / FlipHouse</p>
+          <ul class="bento__metrics">
+            <li><b>&lt;5 min</b> speed-to-lead</li>
+            <li><b>+500%</b> leads</li>
+            <li>RODI disponible a solicitud</li>
+            <li>cost-avoidance modelado</li>
+          </ul>
+        </article>
+        <article class="bento__cell" style="--accent:#7C3FBE" tabindex="0">
+          <p class="bento__name">HackSureste</p>
+          <ul class="bento__metrics">
+            <li><b>3,000+</b> participantes</li>
+            <li><b>200+</b> capacitados en REDUX</li>
+          </ul>
+        </article>
+        <article class="bento__cell" style="--accent:#FF5C39" tabindex="0">
+          <p class="bento__name">REDUX</p>
+          <ul class="bento__metrics">
+            <li>Autor de la metodología</li>
+            <li>Directorio Tec de Monterrey</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="trinchera" class="reveal">
+    <div class="container">
+      <p class="sec__kicker">// La Trinchera</p>
+      <h2 class="sec__title">Lo que no salió, y qué aprendí</h2>
+      <article class="postmortem">
+        <p class="postmortem__label">Post-mortem 01 · HEINEKEN Green Challenge</p>
+        <ol class="postmortem__list">
+          <li>
+            <h3>Filtrado insuficiente al inicio</h3>
+            <p>El primer corte dejaba pasar ~200 proyectos sin viabilidad. Rediseñé la rúbrica de evaluación hasta sostener 900+ proyectos evaluados con criterio por edición.</p>
+          </li>
+          <li>
+            <h3>Fricción en la coordinación multisectorial</h3>
+            <p>Alinear academia, industria y gobierno tomaba ~2 semanas por decisión. Monté un protocolo que bajó ese ciclo a 48 horas.</p>
+          </li>
+          <li>
+            <h3>Brecha en la experiencia virtual</h3>
+            <p>La edición remota perdía participantes en la mentoría. Documenté la brecha y ajusté el formato para la edición siguiente.</p>
+          </li>
+        </ol>
+      </article>
+    </div>
+  </section>
+
+  <section id="fraccional" class="reveal">
+    <div class="container">
+      <p class="sec__kicker">// Liderazgo Fraccional</p>
+      <h2 class="sec__title">Cómo trabajar conmigo</h2>
+      <div class="cards-3">
+        <article class="card">
+          <h3 class="card__title">Retainer mensual</h3>
+          <p class="card__body">~20 h/mes. Dirección continua de operaciones y programas, con cadencia y métricas fijas.</p>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Proyecto acotado</h3>
+          <p class="card__body">4–8 semanas. Diagnóstico y montaje de un sistema concreto, con entregables definidos.</p>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Asesoría estratégica</h3>
+          <p class="card__body">Sesiones puntuales para destrabar decisiones de operación, programa o RevOps.</p>
+        </article>
+      </div>
+      <div class="hero__ctas" style="margin-top:2.2rem">
+        <a href="#contacto" class="btn btn--primary" data-scroll>Cuéntame tu contexto</a>
+        <a href="#contacto" class="btn btn--ghost" data-scroll>Agenda una llamada</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="reveal">
+    <div class="container">
+      <p class="sec__kicker">// About</p>
+      <h2 class="sec__title">Para quién trabajo</h2>
+      <div class="about-grid">
+        <article class="card">
+          <h3 class="card__title">Para quién trabajo</h3>
+          <ul class="about-list">
+            <li>Organizaciones con operaciones ambiguas que necesitan volverse medibles.</li>
+            <li>Programas de innovación, aceleración o ecosistema que deben escalar con criterio.</li>
+            <li>Equipos comerciales que quieren dejar de depender de heroísmos individuales.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Para quién no</h3>
+          <ul class="about-list">
+            <li>Quien busca un ejecutor de tareas sin mandato para cambiar el sistema.</li>
+            <li>Proyectos sin disposición a medir resultados.</li>
+            <li>Quien quiere humo de innovación sin operación detrás.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="experiencia" class="reveal">
+    <div class="container">
+      <p class="sec__kicker">// Selected Experience</p>
+      <h2 class="sec__title">Trayectoria</h2>
+      <div class="table-wrap">
+        <table class="exp-table">
+          <thead>
+            <tr><th scope="col">Organización</th><th scope="col">Rol</th><th scope="col">Resultado clave</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>FlipHouse</td><td>RevOps &amp; AI</td><td>Speed-to-lead &lt;5 min · +500% leads en CRM</td></tr>
+            <tr><td>INCmty · HEINEKEN</td><td>Director nacional / operador regional sureste</td><td>+600% crecimiento · 9,905 participantes</td></tr>
+            <tr><td>HackSureste</td><td>Diseño y operación</td><td>3,000+ participantes · 200+ capacitados en REDUX</td></tr>
+            <tr><td>Tec de Monterrey y EBC</td><td>Docencia / programa</td><td>Autor de la metodología REDUX (directorio Tec)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- S8 TESTIMONIOS — OCULTA en PREVIEW. Pendiente de recolección (solo fuentes verificables). -->
+  <section id="testimonios" class="reveal" hidden aria-hidden="true">
+    <div class="container">
+      <p class="sec__kicker">// Testimonios</p>
+      <h2 class="sec__title">Pendiente de recolección</h2>
+    </div>
+  </section>
+
+  <!-- S9 INSIGHTS / NEWSLETTER — OCULTA en PREVIEW. Campos [PENDING] en el SSOT (Substack, posts, cadencia). -->
+  <section id="insights" class="reveal" hidden aria-hidden="true">
+    <div class="container">
+      <p class="sec__kicker">// Insights</p>
+      <h2 class="sec__title">Pendiente</h2>
+    </div>
+  </section>
+
+  <section id="contacto" class="contacto reveal">
+    <div class="container">
+      <p class="sec__kicker">// Contacto</p>
+      <h2 class="sec__title">Hablemos</h2>
+      <div class="cards-3">
+        <article class="card">
+          <h3 class="card__title">Para proyectos</h3>
+          <p class="card__body">Agenda un diagnóstico para revisar tu operación o programa.</p>
+          <a href="mailto:dm@diegomaury.mx" class="contacto__link">dm@diegomaury.mx</a>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Para empleo</h3>
+          <p class="card__body">Entrevista o revisión de CV para roles de dirección de operaciones / programas.</p>
+          <a href="mailto:dm@diegomaury.mx" class="contacto__link">dm@diegomaury.mx</a>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Contacto directo</h3>
+          <p class="card__body">Correo y LinkedIn.</p>
+          <a href="mailto:dm@diegomaury.mx" class="contacto__link">dm@diegomaury.mx</a>
+          <a href="https://www.linkedin.com/in/diegomaury/" class="contacto__link" target="_blank" rel="noopener">LinkedIn</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© Diego Maury · Strategic Program &amp; Operations Director · <a href="mailto:dm@diegomaury.mx">dm@diegomaury.mx</a> · diegomaury.mx</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll suave a secciones. Nombre scrollToSection (no scrollTo: evita choque con window.scrollTo).
+    function scrollToSection(id) {
+      var el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    document.querySelectorAll('a[data-scroll]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        var href = a.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          scrollToSection(href.slice(1));
+        }
+      });
+    });
+
+    // Nav activa por sección visible.
+    var navLinks = document.querySelectorAll('.nav__links a');
+    var navObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function(l) {
+            l.classList.toggle('is-active', l.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    document.querySelectorAll('section[id]').forEach(function(s) { navObserver.observe(s); });
+
+    // Scroll reveal — respeta prefers-reduced-motion.
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) {
+      var revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('is-visible'); });
+    }
+  </script>
+</body>
+</html>
