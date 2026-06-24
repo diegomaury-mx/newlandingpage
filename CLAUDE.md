@@ -133,12 +133,13 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
 ## Estado del contenido
 
 ### Implementado (LIVE)
-- `index.html` — **v2 "Deep Tech & Friction"** activo desde 2026-06-13
-  - Fuentes: Montserrat Variable + Bitter Variable + Space Mono (`assets/fonts-v2/`)
-  - Secciones: NAV, HERO, QUÉ HAGO, PROYECTOS, TRINCHERA, TESTIMONIOS, ABOUT, FRACCIONAL, CONTACTO, FOOTER + MODAL
-  - Proyectos como modales JS (6 casos en objeto CASES inline: heineken, fliphouse, hacksureste, redux, incmty, cavasoft)
-  - Tarjetas de proyecto con métricas RODI (SOFI/FlipHouse: RODI base +1,291%)
-  - `index-v1-backup.html` conservado como respaldo
+- `index.html` — **v3 "Ember on Ink" (Variante F canónica)** activo desde 2026-06-22
+  - DS v2: Plus Jakarta Sans + DM Mono, bg `#0A0612`, acento único `--ember: #FF5C39`
+  - Secciones S1-S9: Hero, Tesis/Traductor, Patrón Spine, Selected Work (H1/H2/H3 S-T-A-R), IP Propia, Evidencia Forense, Servicios, AI-Native, CTA Final
+  - JS inline: scroll reveal (`data-reveal`/`is-visible`), contadores animados, nav activa, burger mobile
+  - GTM-NHT5827J + Clarity x7ns7c22xi preservados
+  - **Invariante DS:** el index.html usa tokens DS v2 inline; los casos y portfolio usan DS v3 de `assets/css/styles.css`
+  - `backups/index-v2.html` — respaldo del diseño anterior "Deep Tech & Friction"
 - `llms.txt` — live en raíz, visible en `diegomaury.mx/llms.txt`
 - GTM-NHT5827J — instalado en `<head>` y `<body>` de index.html
 - `cases/heineken.html`, `cases/innovation-systems.html`, `cases/redux-incmty.html` — LIVE (navegación desde v1; no enlazados desde v2 aún)
