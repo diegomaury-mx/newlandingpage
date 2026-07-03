@@ -5,3 +5,6 @@ node_modules/
 # Artefactos de tooling local (no son parte del sitio)
 .playwright-mcp/
 .superpowers/
+.claude-design/
+_ds_import/
+*.zip
