@@ -24,6 +24,7 @@ He offers fractional engagement models for organizations that need senior innova
 - 3,231 projects evaluated across 4 editions
 - 3,000+ ecosystem participants and 30+ programs (HackSureste)
 - 200+ entrepreneurs trained on a proprietary methodology (REDUX, in Tec de Monterrey's registry)
+- SOFI (FlipHouse): 89.5% automatic coverage over 191 leads, 74.9% response rate without advisor intervention, 173 leads contacted in ~1.5 hours in a single campaign, speed-to-lead under 5 minutes, RODI +1,291% modeled (payback under 1 month, 2025-2026)
 
 ---
 
@@ -56,11 +57,13 @@ Design and facilitation of structured programs for entrepreneurs, corporate team
 
 ### SOFI · FlipHouse (2025–present)
 [SOFI · FlipHouse](https://diegomaury.mx/llms-full.txt): RevOps + AI automation architecture that compressed speed-to-lead from days to minutes.
-- PropTech (Adelanto de Venta, La Laguna): deployed SOFI, an AI agent for lead qualification and operations via WhatsApp
+- PropTech (Adelanto de Venta, La Laguna): deployed SOFI, an AI agent for lead qualification and operations via WhatsApp, orchestrating 3 models (reasoning, voice, transcription) over HubSpot, Make, VAPI and Twilio
 - Stack: Make + Railway + WhatsApp Cloud API + OpenRouter/Claude + HubSpot as SSOT
-- Automated lead qualification and reduced operational overhead, with one system covering 4–5 roles
+- 89.5% automatic coverage over 191 leads | 74.9% response rate without advisor intervention
+- 173 leads contacted in ~1.5 hours in a single campaign
 - +500% leads to CRM | Speed-to-lead: 1–3 days → <5 minutes
-- RODI (Return on Digital Investment): verified figures available on request
+- RODI (Return on Digital Investment): +1,291% modeled, payback under 1 month (2025-2026)
+- Meta-approved technology provider (WhatsApp Flows, LFPDPPP compliance)
 
 ### HackSureste Ecosystem (2018–2023)
 [HackSureste](https://diegomaury.mx/llms-full.txt): building a regional innovation ecosystem from zero, including the southeast's largest hackathon.
@@ -125,7 +128,7 @@ Escalated evaluation protocols for high-volume project review: binary pre-filter
 
 ## Background
 
-- Strategic Program Director with 7+ years in corporate innovation and ecosystem building
+- Strategic Program Director with 10+ years in programs and operations (7+ years in corporate innovation and ecosystem building)
 - Operated programs across HEINEKEN México, Tec de Monterrey (INCmty), HackSureste, and growth-stage startups
 - Experience spanning open innovation, accelerators, RevOps, and software product management
 - Based in Mexico; works with organizations across LATAM

@@ -224,18 +224,18 @@
 
     /* ── METRICS ── */
     .metrics {
-      display: grid; grid-template-columns: repeat(4, 1fr);
+      display: grid; grid-template-columns: repeat(3, 1fr);
       border-top: 1px solid var(--border);
     }
-    @media (max-width: 720px) { .metrics { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 720px) { .metrics { grid-template-columns: 1fr; } }
     .metric {
       padding: 28px 28px 28px 0;
       border-right: 1px solid var(--border);
     }
-    .metric:nth-child(4n), .metric:last-child { border-right: none; }
+    .metric:last-child { border-right: none; }
     @media (max-width: 720px) {
-      .metric:nth-child(2n) { border-right: none; padding-right: 0; }
-      .metric:nth-child(n+3) { border-top: 1px solid var(--border); padding-top: 22px; }
+      .metric { border-right: none; padding-right: 0; }
+      .metric:not(:first-child) { border-top: 1px solid var(--border); padding-top: 22px; }
     }
     .metric-n {
       font-size: clamp(1.7rem, 2.5vw, 2.4rem); font-weight: 800;
@@ -400,41 +400,6 @@
       text-transform: uppercase; color: var(--t3); margin-top: 5px;
     }
 
-    /* ── FORENSIC (S6) ── */
-    .forensic { background: var(--bg-2); }
-    .aut-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    @media (max-width: 900px) { .aut-grid { grid-template-columns: 1fr; } }
-    .aut {
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: 13px; padding: 28px 28px 30px;
-      position: relative;
-      transition: border-color 200ms;
-    }
-    .aut::before {
-      content: ''; position: absolute; left: 0; top: 20px; bottom: 20px;
-      width: 2px; background: var(--accent-secondary); border-radius: 0 2px 2px 0;
-    }
-    .aut:hover { border-color: var(--t3); }
-    .aut-tag {
-      font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--accent-secondary-text); margin-bottom: 14px;
-    }
-    .aut-q { font-size: 14px; font-weight: 700; line-height: 1.3; margin-bottom: 18px; }
-    .aut-item { margin-bottom: 14px; }
-    .aut-k {
-      font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--t3); display: block; margin-bottom: 4px;
-    }
-    .aut-v { font-size: 13px; line-height: 1.5; }
-    .aut-v.wrong { color: var(--t3); }
-    .aut-v.fix { color: var(--t1); }
-    .aut-result {
-      margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em;
-      text-transform: uppercase; color: var(--t2);
-    }
-    .aut-result strong { color: var(--accent-secondary-text); }
-
     /* ── SERVICES (S7) ── */
     .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     @media (max-width: 900px) { .svc-grid { grid-template-columns: 1fr; } }
@@ -465,7 +430,7 @@
       border: 1px solid var(--border); border-radius: 4px; padding: 4px 9px; display: inline-block;
     }
 
-    /* ── AI-NATIVE (S8) ── */
+    /* ── AI-NATIVE (fusionado en S5) ── */
     .ainative-chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .ainative-chip {
       font-family: var(--mono); font-size: 10px; font-weight: 500;
@@ -570,9 +535,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </a>
     <div class="nav__links" id="navLinks">
       <a href="#tesis" class="nav__link">Propuesta</a>
-      <a href="#trabajo" class="nav__link">Trabajo</a>
+      <a href="#trabajo" class="nav__link">Evidencia</a>
       <a href="#ip" class="nav__link">Sistemas</a>
-      <a href="#forense" class="nav__link">Evidencia</a>
+      <a href="#patron" class="nav__link">Como trabajo</a>
       <a href="#servicios" class="nav__link">Servicios</a>
     </div>
     <a href="https://calendly.com/diegomaurymx/diagnostico" class="nav-cta" target="_blank" rel="noopener">Agendar diagnostico</a>
@@ -592,7 +557,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       Tomo operaciones ambiguas y las dejo funcionando como <span class="accent">sistemas medibles</span>.
     </h1>
     <p class="hero-sub" data-reveal style="--delay:.14s">
-      Diseño y opero la infraestructura que cierra la brecha entre la estrategia C-level y la ejecucion en la trinchera: programas de innovacion, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM.
+      ¿CRM en caos, leads que se enfrían en días, programas que dependen de una sola persona? Diseño y opero la infraestructura que cierra la brecha entre la estrategia C-level y la ejecución en la trinchera. Y la construyo para que sobreviva a mi salida.
     </p>
     <div class="hero-ctas" data-reveal style="--delay:.2s">
       <a href="https://calendly.com/diegomaurymx/diagnostico" class="btn-primary" target="_blank" rel="noopener">
@@ -609,19 +574,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="metric-s">4 ediciones nacionales</div>
       </div>
       <div class="metric">
-        <div class="metric-n" data-count="3231" data-suffix="">3,231</div>
-        <div class="metric-l">Proyectos evaluados</div>
-        <div class="metric-s">Sostenibilidad 2018-2022</div>
-      </div>
-      <div class="metric">
-        <div class="metric-n">+600%</div>
-        <div class="metric-l">Crecimiento regional</div>
-        <div class="metric-s">Sureste #1 nacional</div>
-      </div>
-      <div class="metric">
         <div class="metric-n">10+</div>
-        <div class="metric-l">Anos disenando programas</div>
-        <div class="metric-s">30+ iniciativas operadas</div>
+        <div class="metric-l">Años de trayectoria</div>
+        <div class="metric-s">7+ en innovación y ecosistemas</div>
+      </div>
+      <div class="metric">
+        <div class="metric-n">+1,291%</div>
+        <div class="metric-l">RODI modelado</div>
+        <div class="metric-s">Cost-avoidance, 2025-2026</div>
       </div>
     </div>
     <div class="trust" data-reveal style="--delay:.32s">
@@ -642,7 +602,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- S2 TESIS / TRANSLATOR -->
 <section class="section" id="tesis">
   <div class="section-inner">
-    <div class="section-label" data-reveal>S2 · Propuesta de valor</div>
+    <div class="section-label" data-reveal>El problema que resuelvo</div>
     <h2 class="section-title" data-reveal style="--delay:.06s">No soy un consultor que entrega un deck. Soy el traductor entre dos idiomas.</h2>
     <p class="section-sub" data-reveal style="--delay:.12s">La innovacion corporativa muere en la brecha entre el lenguaje financiero y el operativo. Mi trabajo es construir la tuberia por donde fluye, no opinar sobre ella.</p>
     <div class="translator" data-reveal style="--delay:.18s">
@@ -661,11 +621,113 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
+<!-- S4 SELECTED WORK -->
+<section class="section" id="trabajo">
+  <div class="section-inner">
+    <div class="section-label" data-reveal>Evidencia</div>
+    <h2 class="section-title" data-reveal style="--delay:.06s">Tres intervenciones. El mismo patron.</h2>
+    <p class="section-sub" data-reveal style="--delay:.12s">Balanceadas por horizonte (operacion core, crecimiento adyacente y apuesta transformacional) para mostrar gestion de riesgo, no solo entregables.</p>
+    <div class="work-grid">
+      <div class="work" data-reveal style="--delay:.1s">
+        <div class="work-head">
+          <div class="work-cat">Operacion core · RevOps &amp; AI automation</div>
+          <div class="work-name">FlipHouse</div>
+          <div class="work-role">Fractional Strategic Operations Director · 2025-2026</div>
+        </div>
+        <div class="work-body">
+          <div class="star-item">
+            <span class="star-k">Situacion</span>
+            <span class="star-v">Leads de Meta Ads dispersos y speed-to-lead de 1 a 3 dias: las oportunidades se enfriaban antes del primer contacto humano.</span>
+          </div>
+          <div class="star-item">
+            <span class="star-k">Accion</span>
+            <span class="star-v">En lugar de contratar mas SDRs, construi SOFI: un agente de IA (voz + WhatsApp) que orquesta tres modelos sobre HubSpot, Make, VAPI y Twilio para contactar y calificar cada lead en minutos.</span>
+          </div>
+          <div class="work-result">
+            <div class="work-n">89.5%</div>
+            <div class="work-n-l">de cobertura automatica sobre 191 leads · 74.9% de respuesta sin asesor · 173 leads contactados en ~1.5 horas en una sola campaña · +500% leads al CRM · speed-to-lead a menos de 5 minutos · RODI +1,291% (payback menor a 1 mes, cost-avoidance modelado 2025-2026).</div>
+          </div>
+          <div class="star-item">
+            <span class="star-k">Autopsia</span>
+            <span class="star-v">La primera version perdia leads en estados intermedios. El arreglo no fue mas IA: fue un sistema de control que garantiza que cada lead termina en un estado claro.</span>
+          </div>
+          <div class="work-tags">
+            <span class="work-tag">HubSpot</span>
+            <span class="work-tag">VAPI</span>
+            <span class="work-tag">Make</span>
+            <span class="work-tag">WhatsApp API</span>
+          </div>
+        </div>
+      </div>
+      <div class="work" data-reveal style="--delay:.18s">
+        <div class="work-head">
+          <div class="work-cat">Crecimiento adyacente · Innovacion abierta corporativa</div>
+          <div class="work-name">HEINEKEN Green Challenge</div>
+          <div class="work-role">Coordinador General · Process Designer · 2019-2022</div>
+        </div>
+        <div class="work-body">
+          <div class="star-item">
+            <span class="star-k">Situacion</span>
+            <span class="star-v">Programa nacional de innovacion abierta; el sureste arranco con 36 registros y lectura de "no hay demanda".</span>
+          </div>
+          <div class="star-item">
+            <span class="star-k">Accion</span>
+            <span class="star-v">Rediseno de la oferta, alianzas regionales y virtualizacion del programa con Lean durante 2020.</span>
+          </div>
+          <div class="work-result">
+            <div class="work-n">+600%</div>
+            <div class="work-n-l">crecimiento regional (2019-2022) · sureste a #1 nacional · 9,905 emprendedores y 3,231 proyectos en 4 ediciones.</div>
+          </div>
+          <div class="star-item">
+            <span class="star-k">Autopsia</span>
+            <span class="star-v">La hipotesis inicial ("la region no tiene apetito") era erronea: faltaba diseño de oferta y alianzas, no demanda. Y el cuello de botella no era la evaluacion: era el registro. Rediseño de punta a punta para evaluar 900+ proyectos por edicion.</span>
+          </div>
+          <div class="work-tags">
+            <span class="work-tag">Program Ops</span>
+            <span class="work-tag">Virtualizacion</span>
+            <span class="work-tag">Lean</span>
+          </div>
+        </div>
+      </div>
+      <div class="work" data-reveal style="--delay:.26s">
+        <div class="work-head">
+          <div class="work-cat">Apuesta transformacional · Ecosistema de innovacion</div>
+          <div class="work-name">HackSureste + REDUX</div>
+          <div class="work-role">Founder &amp; Program Architect · 2018-2023</div>
+        </div>
+        <div class="work-body">
+          <div class="star-item">
+            <span class="star-k">Situacion</span>
+            <span class="star-v">El sureste sin infraestructura de innovacion ni metodologia replicable de validacion.</span>
+          </div>
+          <div class="star-item">
+            <span class="star-k">Accion</span>
+            <span class="star-v">Diseno del hackathon HackSureste y de la metodologia REDUX, institucionalizada en el directorio del Tec de Monterrey.</span>
+          </div>
+          <div class="work-result">
+            <div class="work-n">3,000+</div>
+            <div class="work-n-l">participantes en HackSureste (2018-2023) · 200+ capacitados en REDUX · 5 ediciones (2020-2022).</div>
+          </div>
+          <div class="star-item">
+            <span class="star-k">Autopsia</span>
+            <span class="star-v">Virtualizar una operacion nacional en 2020, sin referentes: framework Lean de hipotesis, prototipo, prueba e iteracion. Retencion superior al benchmark del mercado.</span>
+          </div>
+          <div class="work-tags">
+            <span class="work-tag">Programas</span>
+            <span class="work-tag">Metodologia</span>
+            <span class="work-tag">Comunidad</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- S3 PATRON -->
 <section class="section" id="patron">
   <div class="section-inner">
-    <div class="section-label" data-reveal>S3 · El patron</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">El mismo metodo en cada intervencion. 7 anos, distintos verticales.</h2>
+    <div class="section-label" data-reveal>Como trabajo</div>
+    <h2 class="section-title" data-reveal style="--delay:.06s">El mismo metodo en cada intervencion. 10+ anos en programas y operaciones, 7+ en innovacion.</h2>
     <p class="section-sub" data-reveal style="--delay:.12s">No improviso por cliente. Aplico una secuencia que ya probo escalar sin colapsar las operaciones.</p>
     <div class="spine" data-reveal style="--delay:.18s">
       <div class="spine-step">
@@ -697,100 +759,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
-<!-- S4 SELECTED WORK -->
-<section class="section" id="trabajo">
-  <div class="section-inner">
-    <div class="section-label" data-reveal>S4 · Selected work</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">Tres intervenciones. El mismo patron.</h2>
-    <p class="section-sub" data-reveal style="--delay:.12s">Balanceadas por horizonte (H1 core, H2 crecimiento, H3 transformacional) para mostrar gestion de riesgo, no solo entregables.</p>
-    <div class="work-grid">
-      <div class="work" data-reveal style="--delay:.1s">
-        <div class="work-head">
-          <div class="work-cat">H1 Core · RevOps &amp; AI automation</div>
-          <div class="work-name">FlipHouse</div>
-          <div class="work-role">Strategic RevOps &amp; Growth · 2025-Presente</div>
-        </div>
-        <div class="work-body">
-          <div class="star-item">
-            <span class="star-k">Situacion</span>
-            <span class="star-v">Leads dispersos y speed-to-lead de 1 a 3 dias: las oportunidades se enfriaban antes del primer contacto.</span>
-          </div>
-          <div class="star-item">
-            <span class="star-k">Accion</span>
-            <span class="star-v">Arquitectura RevOps en HubSpot + Make + VAPI: lead routing, lifecycle automation y agente de voz para contacto inmediato.</span>
-          </div>
-          <div class="work-result">
-            <div class="work-n">+500%</div>
-            <div class="work-n-l">leads al CRM · speed-to-lead a menos de 5 minutos · RODI +1,291% como cost-avoidance modelado.</div>
-          </div>
-          <div class="work-tags">
-            <span class="work-tag">HubSpot</span>
-            <span class="work-tag">VAPI</span>
-            <span class="work-tag">Make</span>
-            <span class="work-tag">OpenAI</span>
-          </div>
-        </div>
-      </div>
-      <div class="work" data-reveal style="--delay:.18s">
-        <div class="work-head">
-          <div class="work-cat">H2 Adyacente · Innovacion abierta corporativa</div>
-          <div class="work-name">HEINEKEN Green Challenge</div>
-          <div class="work-role">Coordinador General · Process Designer · 2019-2022</div>
-        </div>
-        <div class="work-body">
-          <div class="star-item">
-            <span class="star-k">Situacion</span>
-            <span class="star-v">Programa nacional de innovacion abierta; el sureste arranco con 36 registros y lectura de "no hay demanda".</span>
-          </div>
-          <div class="star-item">
-            <span class="star-k">Accion</span>
-            <span class="star-v">Rediseno de la oferta, alianzas regionales y virtualizacion del programa con Lean durante 2020.</span>
-          </div>
-          <div class="work-result">
-            <div class="work-n">+600%</div>
-            <div class="work-n-l">crecimiento regional · sureste a #1 nacional · 9,905 emprendedores y 3,231 proyectos en 4 ediciones.</div>
-          </div>
-          <div class="work-tags">
-            <span class="work-tag">Program Ops</span>
-            <span class="work-tag">Virtualizacion</span>
-            <span class="work-tag">Lean</span>
-          </div>
-        </div>
-      </div>
-      <div class="work" data-reveal style="--delay:.26s">
-        <div class="work-head">
-          <div class="work-cat">H3 Transformacional · Ecosistema de innovacion</div>
-          <div class="work-name">HackSureste + REDUX</div>
-          <div class="work-role">Founder &amp; Program Architect · 2018-2023</div>
-        </div>
-        <div class="work-body">
-          <div class="star-item">
-            <span class="star-k">Situacion</span>
-            <span class="star-v">El sureste sin infraestructura de innovacion ni metodologia replicable de validacion.</span>
-          </div>
-          <div class="star-item">
-            <span class="star-k">Accion</span>
-            <span class="star-v">Diseno del hackathon HackSureste y de la metodologia REDUX, institucionalizada en el directorio del Tec de Monterrey.</span>
-          </div>
-          <div class="work-result">
-            <div class="work-n">3,000+</div>
-            <div class="work-n-l">participantes en HackSureste · 200+ capacitados en REDUX · 5 ediciones.</div>
-          </div>
-          <div class="work-tags">
-            <span class="work-tag">Programas</span>
-            <span class="work-tag">Metodologia</span>
-            <span class="work-tag">Comunidad</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- S5 IP / SISTEMAS -->
 <section class="section" id="ip">
   <div class="section-inner">
-    <div class="section-label" data-reveal>S5 · Biblioteca de sistemas / IP propia</div>
+    <div class="section-label" data-reveal>Sistemas propios</div>
     <h2 class="section-title" data-reveal style="--delay:.06s">Metodologia registrada. No consultoria generalista.</h2>
     <p class="section-sub" data-reveal style="--delay:.12s">Frameworks documentados que desvinculan el tiempo del dinero y posicionan el servicio como un activo, no como horas.</p>
     <div class="ip-grid">
@@ -824,56 +796,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div><div class="ip-stat-n">#1</div><div class="ip-stat-l">Sureste MX</div></div>
         </div>
       </div>
+      <div class="ip" data-reveal style="--delay:.26s">
+        <div class="ip-row">
+          <div>
+            <div class="ip-label">Sistema de IA en produccion</div>
+            <div class="ip-name">SOFI · Agente de calificacion de leads</div>
+          </div>
+          <span class="ip-badge">Aprobado por Meta</span>
+        </div>
+        <div class="ip-desc">Orquestacion de tres modelos de IA (razonamiento, voz y transcripcion) con gobernanza de estados, Redis y PostgreSQL. Proveedor de tecnologia aprobado por Meta para WhatsApp Flows (2025-2026).</div>
+        <div class="ip-stats">
+          <div><div class="ip-stat-n">89.5%</div><div class="ip-stat-l">Cobertura</div></div>
+          <div><div class="ip-stat-n">74.9%</div><div class="ip-stat-l">Respuesta</div></div>
+          <div><div class="ip-stat-n">&lt;5 min</div><div class="ip-stat-l">Speed-to-lead</div></div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
-
-<!-- S6 EVIDENCIA FORENSE -->
-<section class="section forensic" id="forense">
-  <div class="section-inner">
-    <div class="section-label" data-reveal>S6 · Evidencia forense / Autopsias clinicas</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">No te muestro casos pulidos. Te muestro que fallo y el sistema que lo corrigio.</h2>
-    <p class="section-sub" data-reveal style="--delay:.12s">La vulnerabilidad controlada genera mas confianza B2B que el caso de exito perfecto. Esto es lo que protege tu presupuesto: alguien que ya cometio el error y diseno el arreglo.</p>
-    <div class="aut-grid">
-      <div class="aut" data-reveal style="--delay:.1s">
-        <div class="aut-tag">Autopsia 01 · HEINEKEN</div>
-        <div class="aut-q">36 registros en el sureste. Falta de demanda?</div>
-        <div class="aut-item">
-          <span class="aut-k">Hipotesis inicial (erronea)</span>
-          <span class="aut-v wrong">La region no tiene apetito de innovacion.</span>
-        </div>
-        <div class="aut-item">
-          <span class="aut-k">Diagnostico real</span>
-          <span class="aut-v fix">No era falta de demanda. Era falta de diseno de oferta y alianzas regionales.</span>
-        </div>
-        <div class="aut-result">Resultado: <strong>+600%</strong> de registros, region #1 nacional.</div>
-      </div>
-      <div class="aut" data-reveal style="--delay:.18s">
-        <div class="aut-tag">Autopsia 02 · Pandemia 2020</div>
-        <div class="aut-q">Programa nacional de 6 meses, sin framework virtual.</div>
-        <div class="aut-item">
-          <span class="aut-k">Restriccion</span>
-          <span class="aut-v wrong">Cero referentes para virtualizar una operacion internacional de esa escala.</span>
-        </div>
-        <div class="aut-item">
-          <span class="aut-k">Sistema disenado</span>
-          <span class="aut-v fix">Framework de virtualizacion con Lean: hipotesis, prototipo, prueba, iteracion.</span>
-        </div>
-        <div class="aut-result">Resultado: <strong>retencion</strong> superior al benchmark del mercado.</div>
-      </div>
-      <div class="aut" data-reveal style="--delay:.26s">
-        <div class="aut-tag">Autopsia 03 · Filtrado a escala</div>
-        <div class="aut-q">3,231 proyectos. El registro era el cuello de botella.</div>
-        <div class="aut-item">
-          <span class="aut-k">Sintoma visible</span>
-          <span class="aut-v wrong">Evaluacion lenta y saturada en cada edicion.</span>
-        </div>
-        <div class="aut-item">
-          <span class="aut-k">Causa raiz</span>
-          <span class="aut-v fix">Customer Journey Mapping revelo que el bloqueo era el registro, no la evaluacion.</span>
-        </div>
-        <div class="aut-result">Resultado: flujo rediseado de punta a punta, <strong>900+</strong> proyectos evaluados por edicion.</div>
-      </div>
+    <p class="section-sub" data-reveal style="--delay:.3s">Opero IA a nivel de sistema, no como buzzword. El propio sitio es evidencia operativa: construido para humanos y para los agentes de IA que hoy filtran talento via RAG.</p>
+    <div class="ainative-chips" data-reveal style="--delay:.36s">
+      <span class="ainative-chip">llms.txt · RAG-ready</span>
+      <span class="ainative-chip">MCP · Model Context Protocol</span>
+      <span class="ainative-chip">Agent Mode · Claude Code</span>
+      <span class="ainative-chip">HTML · CSS · JS vanilla</span>
+      <span class="ainative-chip">GitHub Pages · CD automatico</span>
+      <span class="ainative-chip">LCP menor a 2.5s</span>
+      <span class="ainative-chip">Make + HubSpot + Notion</span>
     </div>
   </div>
 </section>
@@ -881,7 +828,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- S7 SERVICIOS -->
 <section class="section" id="servicios">
   <div class="section-inner">
-    <div class="section-label" data-reveal>S7 · Oferta de liderazgo</div>
+    <div class="section-label" data-reveal>Formas de trabajar conmigo</div>
     <h2 class="section-title" data-reveal style="--delay:.06s">Tres formas de trabajar conmigo.</h2>
     <p class="section-sub" data-reveal style="--delay:.12s">Precios basados en outcome (RODI), no en horas. Publico los modelos y filtro por intencion e impacto, no por titulo.</p>
     <div class="svc-grid">
@@ -919,24 +866,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="svc-time">Cadencia quincenal</span>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- S8 AI-NATIVE -->
-<section class="section" id="ainative">
-  <div class="section-inner">
-    <div class="section-label" data-reveal>S8 · Operacion AI-Native</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">Opero IA a nivel de sistema. No la cito como buzzword.</h2>
-    <p class="section-sub" data-reveal style="--delay:.12s">El propio sitio es evidencia operativa: construido para humanos y para los agentes de IA que hoy filtran talento via RAG.</p>
-    <div class="ainative-chips" data-reveal style="--delay:.18s">
-      <span class="ainative-chip">llms.txt · RAG-ready</span>
-      <span class="ainative-chip">MCP · Model Context Protocol</span>
-      <span class="ainative-chip">Agent Mode · Claude Code</span>
-      <span class="ainative-chip">HTML · CSS · JS vanilla</span>
-      <span class="ainative-chip">GitHub Pages · CD automatico</span>
-      <span class="ainative-chip">LCP menor a 2.5s</span>
-      <span class="ainative-chip">Make + HubSpot + Notion · SSOT</span>
-    </div>
+    <p class="section-sub" data-reveal style="--delay:.32s"><strong>¿Estas contratando full time?</strong> Trabajo como director fraccional o por proyecto, y tambien considero roles full time de direccion de programas y operaciones donde el reto sea construir el sistema, no solo administrarlo. <a href="/cv/diego-maury-cv.pdf" download>Descargar CV</a> · <a href="https://www.linkedin.com/in/diegomaury" target="_blank" rel="noopener">LinkedIn</a></p>
   </div>
 </section>
 
@@ -944,7 +874,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section cta-section" id="contacto">
   <div class="section-inner">
     <div class="cta-inner">
-      <div class="cta-label-center" data-reveal>S9 · Siguiente paso</div>
+      <div class="cta-label-center" data-reveal>Siguiente paso</div>
       <h2 class="cta-h" data-reveal style="--delay:.08s">Listo para convertir tu estrategia en un sistema que opera?</h2>
       <p class="cta-sub" data-reveal style="--delay:.14s">Diagnostico de 30 minutos: gratuito, confidencial y sin pitch. Una conversacion para ver si lo que construyo es lo que necesitas.</p>
       <div class="cta-steps" data-reveal style="--delay:.2s">
