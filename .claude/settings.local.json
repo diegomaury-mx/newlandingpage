@@ -96,7 +96,11 @@
       "PowerShell($content = Get-Content \"C:\\\\Users\\\\DiegoLocal\\\\.claude\\\\projects\\\\C--Users-DiegoLocal-Documents-Claude-Projects-Claude-Code-newlandingpage\\\\1c9ab540-cd09-43d2-9795-0a7667dc9620\\\\tool-results\\\\mcp-claude_ai_Notion-notion-fetch-1782104008280.txt\" -Raw; $textStart = $content.IndexOf\\('\"text\":\"'\\); $textContent = $content.Substring\\($textStart, [Math]::Min\\(5000, $content.Length - $textStart\\)\\); Write-Host $textContent)",
       "WebFetch(domain:docs.google.com)",
       "Read(//c/Users/DiegoLocal/Downloads/**)",
-      "Bash(unzip -o \"Diego Maury Design System V 2 blue.zip\" -d \"Diego_Maury_DS_V2_blue\")"
+      "Bash(unzip -o \"Diego Maury Design System V 2 blue.zip\" -d \"Diego_Maury_DS_V2_blue\")",
+      "Bash(curl -sS https://diegomaury.mx/)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:8080)",
+      "Bash(ipconfig)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -248,19 +248,108 @@
       margin-top: 4px; letter-spacing: 0.08em; text-transform: uppercase;
     }
 
-    /* ── TRUST CHIPS ── */
+    /* ── TRUST MARQUEE ── */
     .trust { margin-top: 44px; }
     .trust-label {
       font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
       text-transform: uppercase; color: var(--t3); margin-bottom: 12px;
     }
-    .trust-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-    .trust-chip {
-      font-size: 12px; font-weight: 500; color: var(--t2);
-      padding: 6px 13px; border: 1px solid var(--border); border-radius: 5px;
-      transition: border-color 150ms, color 150ms;
+    .trust-track-wrap {
+      overflow: hidden; position: relative;
+      mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
     }
-    .trust-chip:hover { border-color: var(--t3); color: var(--t1); }
+    .trust-track { display: flex; width: max-content; animation: marquee 24s linear infinite; }
+    .trust-track:hover { animation-play-state: paused; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .trust-logo {
+      display: flex; align-items: center; justify-content: center;
+      width: 132px; height: 52px; margin: 0 6px; flex-shrink: 0;
+      background: rgba(250,248,252,0.04); border: 1px solid var(--border); border-radius: 10px;
+      transition: background 200ms, border-color 200ms;
+    }
+    .trust-logo:hover { background: rgba(250,248,252,0.08); border-color: var(--t3); }
+    .trust-logo img {
+      height: 24px; width: 90px; object-fit: contain; object-position: center;
+      opacity: 0.82; transition: opacity 200ms;
+    }
+    .trust-logo:hover img { opacity: 1; }
+    @media (prefers-reduced-motion: reduce) { .trust-track { animation: none; } }
+
+    /* ── ABOUT ── */
+    .about-section { padding: 0; border-bottom: 1px solid var(--border); overflow: hidden; }
+    .about-body {
+      max-width: 1160px; margin: 0 auto; padding: clamp(72px,7vw,112px) 32px 0;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 40px;
+    }
+    @media (max-width: 960px) { .about-body { grid-template-columns: 1fr; align-items: center; text-align: center; } }
+    .about-left { display: flex; flex-direction: column; gap: 24px; padding-bottom: 56px; }
+    .about-name { font-size: clamp(2.2rem, 3.6vw, 3.2rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+    .about-title-txt {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--ember); margin-top: 6px;
+    }
+    .about-tagline { font-size: 14px; color: var(--t2); line-height: 1.65; max-width: 36ch; }
+    .about-roles { display: flex; flex-direction: column; gap: 9px; }
+    .about-role { display: flex; align-items: center; gap: 10px; }
+    @media (max-width: 960px) { .about-role { justify-content: center; } }
+    .about-role-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); flex-shrink: 0; }
+    .about-role-txt { font-size: 13px; color: var(--t2); }
+    .about-role-txt strong { color: var(--t1); }
+
+    .about-photo-wrap { position: relative; display: flex; justify-content: center; flex-shrink: 0; align-self: flex-end; }
+    .about-circle-bg {
+      width: clamp(220px, 22vw, 300px); height: clamp(220px, 22vw, 300px); border-radius: 50%;
+      background: rgba(255,92,57,0.08); border: 1px solid rgba(255,92,57,0.15);
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    }
+    .about-photo-slot {
+      width: clamp(200px, 20vw, 280px); height: clamp(260px, 28vw, 360px);
+      position: relative; z-index: 1; display: flex; align-items: flex-end; justify-content: center;
+      overflow: hidden;
+    }
+    .about-photo-slot img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+      display: block; mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+    }
+    @media (max-width: 960px) {
+      .about-circle-bg { position: relative; left: auto; transform: none; margin: 0 auto; }
+      .about-photo-wrap { flex-direction: column; align-items: center; }
+    }
+
+    .about-right { display: flex; flex-direction: column; gap: 28px; padding-bottom: 56px; }
+    .about-bio { font-size: 13.5px; color: var(--t2); line-height: 1.7; max-width: 36ch; }
+    .about-bio strong { color: var(--t1); }
+    .about-stats-inline { display: flex; flex-direction: column; gap: 14px; }
+    .about-stat { display: flex; flex-direction: column; gap: 3px; }
+    .about-stat-n { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: var(--t1); line-height: 1; }
+    .about-stat-n em { color: var(--ember); font-style: normal; }
+    .about-stat-l {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--t3);
+    }
+    @media (max-width: 960px) { .about-right { align-items: center; } .about-bio { text-align: center; } }
+
+    .about-strip { background: var(--bg-2); border-top: 1px solid var(--border); }
+    .about-strip-inner {
+      max-width: 1160px; margin: 0 auto; padding: 0 32px;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 600px) { .about-strip-inner { grid-template-columns: 1fr; } }
+    .as-item { padding: 26px 32px 26px 0; border-right: 1px solid var(--border); }
+    .as-item:first-child { padding-left: 0; }
+    .as-item:last-child { border-right: none; }
+    @media (max-width: 600px) {
+      .as-item { border-right: none; padding: 20px 0; }
+      .as-item:not(:first-child) { border-top: 1px solid var(--border); }
+    }
+    .as-n { font-size: clamp(1.5rem, 2.3vw, 2rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ember); line-height: 1; }
+    .as-l { font-size: 12.5px; color: var(--t2); margin-top: 5px; font-weight: 500; }
+    .as-s {
+      font-family: var(--mono); font-size: 9px; color: var(--t3);
+      margin-top: 3px; letter-spacing: 0.08em; text-transform: uppercase;
+    }
 
     /* ── TRANSLATOR (S2) ── */
     .translator {
@@ -295,55 +384,115 @@
     .tr-h { font-size: 1.15rem; font-weight: 700; line-height: 1.25; margin-bottom: 10px; }
     .tr-p { font-size: 13.5px; color: var(--t2); line-height: 1.6; }
 
-    /* ── PATTERN SPINE (S3) ── */
-    .spine {
-      display: grid; grid-template-columns: repeat(5, 1fr);
-      gap: 1px; background: var(--border);
+    /* ── PATTERN ACCORDION (S3) ── */
+    .accordion-wrap {
+      display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start;
+    }
+    @media (max-width: 760px) { .accordion-wrap { grid-template-columns: 1fr; gap: 0; } }
+
+    .accordion-list {
+      display: flex; flex-direction: column;
       border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      background: var(--bg-2);
     }
-    @media (max-width: 860px) { .spine { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 480px) { .spine { grid-template-columns: 1fr; } }
-    .spine-step {
-      background: var(--bg-2); padding: 26px 22px 30px;
-      position: relative; overflow: hidden;
-    }
-    .spine-step::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0;
-      height: 2px; background: transparent;
+    .acc-item { border-bottom: 1px solid var(--border); cursor: pointer; }
+    .acc-item:last-child { border-bottom: none; }
+    .acc-item-head {
+      display: flex; align-items: center; gap: 16px; padding: 20px 22px;
       transition: background 200ms;
     }
-    .spine-step:hover::before { background: var(--accent-secondary); }
-    .spine-n {
-      font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--accent-secondary-text); margin-bottom: 16px;
+    .acc-item:hover .acc-item-head { background: rgba(250,248,252,0.03); }
+    .acc-item-n {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+      color: var(--t3); flex-shrink: 0; width: 24px; transition: color 200ms;
     }
-    .spine-t { font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 8px; }
-    .spine-d { font-size: 12.5px; color: var(--t2); line-height: 1.55; }
+    .acc-item.is-active .acc-item-n { color: var(--accent-secondary-text); }
+    .acc-item-t { font-size: 14.5px; font-weight: 700; color: var(--t2); transition: color 200ms; }
+    .acc-item.is-active .acc-item-t { color: var(--t1); }
+    .acc-item-head::after {
+      content: '+'; margin-left: auto; font-family: var(--mono); font-size: 16px;
+      color: var(--t3);
+    }
+    .acc-item.is-active .acc-item-head::after { content: '\2212'; color: var(--accent-secondary-text); }
+    .acc-detail { max-height: 0; overflow: hidden; transition: max-height 300ms var(--ease); }
+    .acc-item.is-active .acc-detail { max-height: 90px; }
+    .acc-d { font-size: 12.5px; color: var(--t2); line-height: 1.6; padding: 0 22px 20px 62px; }
+    .acc-deliverable {
+      display: none;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent-secondary-text); padding: 0 22px 20px 62px;
+    }
+    @media (max-width: 760px) {
+      .acc-deliverable { display: block; }
+      .acc-item.is-active .acc-detail { max-height: 160px; }
+    }
 
-    /* ── WORK CARDS (S4) ── */
-    .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    @media (max-width: 900px) { .work-grid { grid-template-columns: 1fr; } }
-    .work {
-      background: var(--bg-2); border: 1px solid var(--border);
-      border-radius: 13px; overflow: hidden;
-      transition: border-color 200ms, transform 250ms var(--ease);
+    .acc-panel {
+      position: sticky; top: 100px;
+      border: 1px solid var(--border); border-radius: 12px;
+      background: var(--bg-2); padding: 28px 26px;
     }
-    .work:hover { border-color: var(--t3); transform: translateY(-4px); }
-    .work-head {
-      padding: 24px 26px 20px; border-bottom: 1px solid var(--border);
-      position: relative;
+    @media (max-width: 760px) { .acc-panel { display: none; } }
+    .acc-panel-n {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent-secondary-text); margin-bottom: 14px;
     }
-    .work-head::before {
+    .acc-panel-t { font-size: 20px; font-weight: 800; color: var(--t1); margin-bottom: 12px; }
+    .acc-panel-d { font-size: 13px; color: var(--t2); line-height: 1.65; margin-bottom: 18px; }
+    .acc-panel-deliv {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--t3); padding-top: 16px; border-top: 1px solid var(--border); margin-bottom: 18px;
+    }
+    .acc-pips { display: flex; gap: 6px; }
+    .acc-pip { width: 20px; height: 3px; border-radius: 2px; background: var(--border); transition: background 200ms; }
+    .acc-pip.is-active { background: var(--accent-secondary); }
+
+    /* ── WORK LIST (S4) ── */
+    .work-list {
+      display: flex; flex-direction: column; gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    }
+    .work-item {
+      background: var(--bg-2); display: grid; grid-template-columns: 200px 1fr 220px;
+      position: relative; overflow: hidden; transition: background 200ms;
+    }
+    @media (max-width: 900px) { .work-item { grid-template-columns: 1fr; } }
+    .work-item::before {
       content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 2px; background: var(--accent-secondary);
+      width: 0; background: var(--accent-secondary); transition: width 250ms var(--ease);
     }
+    .work-item:hover::before { width: 2px; }
+    .work-item:hover { background: rgba(26,17,40,0.85); }
+    .work-n-col {
+      padding: 30px 28px; display: flex; flex-direction: column; gap: 18px;
+      border-right: 1px solid var(--border);
+    }
+    @media (max-width: 900px) { .work-n-col { border-right: none; border-bottom: 1px solid var(--border); } }
+    .work-big-n {
+      font-size: clamp(2rem, 3vw, 2.6rem); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1; color: var(--t1); transition: color 250ms;
+    }
+    .work-item:hover .work-big-n { color: var(--accent-secondary); }
+    .work-big-n-l { font-size: 11px; color: var(--t3); margin-top: 6px; line-height: 1.4; }
+    .work-img-slot {
+      width: 100%; aspect-ratio: 16/10; border-radius: 8px; border: 1px dashed var(--border);
+      background: rgba(250,248,252,0.04);
+      display: flex; align-items: center; justify-content: center; text-align: center; padding: 14px;
+      color: var(--t3); font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .work-img-slot img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .work-cat {
       font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
       text-transform: uppercase; color: var(--accent-secondary-text); margin-bottom: 7px;
     }
     .work-name { font-size: 15px; font-weight: 700; line-height: 1.2; }
     .work-role { font-size: 11.5px; color: var(--t3); margin-top: 4px; }
-    .work-body { padding: 22px 26px 26px; }
+    .work-main { padding: 26px 28px; display: flex; flex-direction: column; gap: 12px; }
+    .work-aside {
+      padding: 26px 28px; border-left: 1px solid var(--border);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    @media (max-width: 900px) { .work-aside { border-left: none; border-top: 1px solid var(--border); } }
     .star-item { margin-bottom: 12px; }
     .star-k {
       font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
@@ -415,6 +564,13 @@
     }
     .svc:hover { border-color: var(--t3); transform: translateY(-3px); }
     .svc:hover::before { background: var(--accent-secondary); }
+    .svc-head { position: relative; padding-right: 46px; }
+    .svc-num {
+      font-family: var(--mono); font-size: 38px; font-weight: 400;
+      color: rgba(255,92,57,0.12); line-height: 1; position: absolute; top: -2px; right: 0;
+      letter-spacing: -0.04em; transition: color 250ms;
+    }
+    .svc:hover .svc-num { color: rgba(255,92,57,0.22); }
     .svc-tag {
       font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
       text-transform: uppercase; color: var(--accent-secondary-text); margin-bottom: 12px;
@@ -424,11 +580,21 @@
     .svc-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
     .svc-item { display: flex; gap: 10px; font-size: 12.5px; color: var(--t2); line-height: 1.4; }
     .svc-item::before { content: '→'; font-family: var(--mono); font-size: 10px; color: var(--ember); flex-shrink: 0; padding-top: 1px; }
+    .svc-footer {
+      margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
     .svc-time {
       font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--t3);
-      border: 1px solid var(--border); border-radius: 4px; padding: 4px 9px; display: inline-block;
     }
+    .svc-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--t1); border: 1px solid var(--border); border-radius: 5px; padding: 7px 12px;
+      text-decoration: none; transition: border-color 150ms, background 150ms, transform 150ms;
+    }
+    .svc-cta:hover { border-color: var(--ember); background: rgba(255,92,57,0.08); transform: translateY(-1px); }
 
     /* ── AI-NATIVE (fusionado en S5) ── */
     .ainative-chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -494,6 +660,12 @@
       text-transform: uppercase; color: var(--t3);
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;
     }
+    .cta-headshot {
+      width: 32px; height: 32px; border-radius: 50%; border: 1px dashed var(--border);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      font-size: 7px; color: var(--t3); text-align: center; line-height: 1.1; letter-spacing: 0;
+      text-transform: none;
+    }
     .dot { width: 2px; height: 2px; border-radius: 50%; background: var(--border); }
 
     /* ── FOOTER ── */
@@ -534,6 +706,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="nav-name">Diego Maury</span>
     </a>
     <div class="nav__links" id="navLinks">
+      <a href="#about" class="nav__link">Sobre mí</a>
       <a href="#tesis" class="nav__link">Propuesta</a>
       <a href="#trabajo" class="nav__link">Evidencia</a>
       <a href="#ip" class="nav__link">Sistemas</a>
@@ -586,14 +759,77 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="trust" data-reveal style="--delay:.32s">
       <div class="trust-label">Respaldo institucional</div>
-      <div class="trust-chips">
-        <span class="trust-chip">HEINEKEN Mexico</span>
-        <span class="trust-chip">Tec de Monterrey</span>
-        <span class="trust-chip">INCmty</span>
-        <span class="trust-chip">FlipHouse</span>
-        <span class="trust-chip">FEMSA</span>
-        <span class="trust-chip">EBC</span>
-        <span class="trust-chip">Platzi</span>
+      <div class="trust-track-wrap">
+        <div class="trust-track">
+          <div class="trust-logo"><img src="assets/img/logos/heineken.png" alt="HEINEKEN Mexico" loading="lazy"></div>
+          <div class="trust-logo"><img src="assets/img/logos/tec-de-monterrey.png" alt="Tec de Monterrey" loading="lazy"></div>
+          <div class="trust-logo"><img src="assets/img/logos/incmty.png" alt="INCmty" loading="lazy"></div>
+          <div class="trust-logo"><img src="assets/img/logos/fliphouse.png" alt="FlipHouse" loading="lazy"></div>
+          <div class="trust-logo"><img src="assets/img/logos/ebc.png" alt="EBC" loading="lazy"></div>
+          <div class="trust-logo"><img src="assets/img/logos/platzi.png" alt="Platzi" loading="lazy"></div>
+          <div class="trust-logo"><img src="assets/img/logos/talentland.png" alt="Talentland" loading="lazy"></div>
+          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/heineken.png" alt="" loading="lazy"></div>
+          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/tec-de-monterrey.png" alt="" loading="lazy"></div>
+          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/incmty.png" alt="" loading="lazy"></div>
+          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/fliphouse.png" alt="" loading="lazy"></div>
+          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/ebc.png" alt="" loading="lazy"></div>
+          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/platzi.png" alt="" loading="lazy"></div>
+          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/talentland.png" alt="" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-body">
+    <div class="about-left" data-reveal>
+      <div>
+        <div class="about-name">Diego Maury</div>
+        <div class="about-title-txt">Strategic Program Director</div>
+      </div>
+      <p class="about-tagline">Diseño y opero sistemas que convierten estrategia en ejecución real. Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM.</p>
+      <div class="about-roles">
+        <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Emprendedor</strong> · HackSureste, el hackathon más grande del sureste de México</div></div>
+        <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Coordinador</strong> · HEINEKEN Green Challenge nacional, 9,905 emprendedores</div></div>
+        <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Habilitador</strong> · SOFI, agente de IA en producción aprobado por Meta</div></div>
+      </div>
+    </div>
+
+    <div class="about-photo-wrap" data-reveal style="--delay:.1s">
+      <div class="about-circle-bg"></div>
+      <div class="about-photo-slot">
+        <img src="assets/img/diego-maury.png" width="700" height="700" alt="Diego Maury" loading="lazy">
+      </div>
+    </div>
+
+    <div class="about-right" data-reveal style="--delay:.18s">
+      <p class="about-bio">Entro a operaciones que dependen de la memoria de una persona, de un Excel o de la buena voluntad del equipo. Mapeo el proceso real, diseño el sistema que lo reemplaza y lo opero hasta que funciona <strong>sin mí</strong>. El entregable no es un reporte: es capacidad instalada.</p>
+      <div class="about-stats-inline">
+        <div class="about-stat"><div class="about-stat-n"><em>10+</em> años</div><div class="about-stat-l">De trayectoria profesional</div></div>
+        <div class="about-stat"><div class="about-stat-n"><em>30+</em> programas</div><div class="about-stat-l">Diseñados y operados</div></div>
+        <div class="about-stat"><div class="about-stat-n"><em>7+</em> años</div><div class="about-stat-l">En innovación y ecosistemas</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-strip" data-reveal style="--delay:.24s">
+    <div class="about-strip-inner">
+      <div class="as-item">
+        <div class="as-n">9,905</div>
+        <div class="as-l">Emprendedores movilizados</div>
+        <div class="as-s">4 ediciones nacionales</div>
+      </div>
+      <div class="as-item">
+        <div class="as-n">+1,291%</div>
+        <div class="as-l">RODI modelado</div>
+        <div class="as-s">Cost-avoidance 2025-2026</div>
+      </div>
+      <div class="as-item">
+        <div class="as-n">3,000+</div>
+        <div class="as-l">Participantes HackSureste</div>
+        <div class="as-s">5 ediciones · 2018-2023</div>
       </div>
     </div>
   </div>
@@ -627,14 +863,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="section-label" data-reveal>Evidencia</div>
     <h2 class="section-title" data-reveal style="--delay:.06s">Tres intervenciones. El mismo patrón.</h2>
     <p class="section-sub" data-reveal style="--delay:.12s">Balanceadas por horizonte (operación core, crecimiento adyacente y apuesta transformacional) para mostrar gestión de riesgo, no solo entregables.</p>
-    <div class="work-grid">
-      <div class="work" data-reveal style="--delay:.1s">
-        <div class="work-head">
-          <div class="work-cat">Operación core · RevOps &amp; AI automation</div>
-          <div class="work-name">FlipHouse</div>
-          <div class="work-role">Fractional Strategic Operations Director · 2025-2026</div>
+    <div class="work-list">
+      <div class="work-item" data-reveal style="--delay:.1s">
+        <div class="work-n-col">
+          <div>
+            <div class="work-big-n">89.5%</div>
+            <div class="work-big-n-l">Cobertura automática<br>RODI +1,291%</div>
+          </div>
+          <div class="work-img-slot"><img src="assets/img/logos/fliphouse-square.png" alt="FlipHouse" loading="lazy"></div>
         </div>
-        <div class="work-body">
+        <div class="work-main">
+          <div>
+            <div class="work-cat">Operación core · RevOps &amp; AI automation</div>
+            <div class="work-name">FlipHouse</div>
+            <div class="work-role">Fractional Strategic Operations Director · 2025-2026</div>
+          </div>
           <div class="star-item">
             <span class="star-k">Situación</span>
             <span class="star-v">Leads de Meta Ads dispersos y speed-to-lead de 1 a 3 dias: las oportunidades se enfriaban antes del primer contacto humano.</span>
@@ -647,10 +890,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="work-n">89.5%</div>
             <div class="work-n-l">de cobertura automática sobre 191 leads · 74.9% de respuesta sin asesor · 173 leads contactados en ~1.5 horas en una sola campaña · +500% leads al CRM · speed-to-lead a menos de 5 minutos · RODI +1,291% mediante un modelo de cost avoidance (payback menor a 1 mes, 2025-2026).</div>
           </div>
-          <div class="star-item">
-            <span class="star-k">Autopsia</span>
-            <span class="star-v">La primera versión perdía leads en estados intermedios. El arreglo no fue más IA: fue un sistema de control que garantiza que cada lead termina en un estado claro.</span>
-          </div>
           <div class="work-tags">
             <span class="work-tag">HubSpot</span>
             <span class="work-tag">VAPI</span>
@@ -658,14 +897,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span class="work-tag">WhatsApp API</span>
           </div>
         </div>
-      </div>
-      <div class="work" data-reveal style="--delay:.18s">
-        <div class="work-head">
-          <div class="work-cat">Crecimiento adyacente · Innovación abierta corporativa</div>
-          <div class="work-name">HEINEKEN Green Challenge</div>
-          <div class="work-role">Coordinador General · Process Designer · 2019-2022</div>
+        <div class="work-aside">
+          <div class="star-item">
+            <span class="star-k">Autopsia</span>
+            <span class="star-v">La primera versión perdía leads en estados intermedios. El arreglo no fue más IA: fue un sistema de control que garantiza que cada lead termina en un estado claro.</span>
+          </div>
         </div>
-        <div class="work-body">
+      </div>
+      <div class="work-item" data-reveal style="--delay:.18s">
+        <div class="work-n-col">
+          <div>
+            <div class="work-big-n">+600%</div>
+            <div class="work-big-n-l">Crecimiento regional<br>Sureste → #1 nacional</div>
+          </div>
+          <div class="work-img-slot"><img src="assets/img/logos/heineken.png" alt="HEINEKEN Green Challenge" loading="lazy"></div>
+        </div>
+        <div class="work-main">
+          <div>
+            <div class="work-cat">Crecimiento adyacente · Innovación abierta corporativa</div>
+            <div class="work-name">HEINEKEN Green Challenge</div>
+            <div class="work-role">Coordinador General · Process Designer · 2019-2022</div>
+          </div>
           <div class="star-item">
             <span class="star-k">Situación</span>
             <span class="star-v">Programa nacional de innovación abierta; el sureste arrancó con 36 registros y lectura de "no hay demanda".</span>
@@ -678,24 +930,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="work-n">+600%</div>
             <div class="work-n-l">crecimiento regional (2019-2022) · sureste a #1 nacional · 9,905 emprendedores y 3,231 proyectos en 4 ediciones.</div>
           </div>
-          <div class="star-item">
-            <span class="star-k">Autopsia</span>
-            <span class="star-v">La hipótesis inicial ("la región no tiene apetito") era errónea: faltaba diseño de oferta y alianzas, no demanda. Y el cuello de botella no era la evaluación: era el registro. Rediseño de punta a punta para evaluar 900+ proyectos por edición.</span>
-          </div>
           <div class="work-tags">
             <span class="work-tag">Program Ops</span>
             <span class="work-tag">Virtualización</span>
             <span class="work-tag">Lean</span>
           </div>
         </div>
-      </div>
-      <div class="work" data-reveal style="--delay:.26s">
-        <div class="work-head">
-          <div class="work-cat">Apuesta transformacional · Ecosistema de innovación</div>
-          <div class="work-name">HackSureste + REDUX</div>
-          <div class="work-role">Founder &amp; Program Architect · 2018-2023</div>
+        <div class="work-aside">
+          <div class="star-item">
+            <span class="star-k">Autopsia</span>
+            <span class="star-v">La hipótesis inicial ("la región no tiene apetito") era errónea: faltaba diseño de oferta y alianzas, no demanda. Y el cuello de botella no era la evaluación: era el registro. Rediseño de punta a punta para evaluar 900+ proyectos por edición.</span>
+          </div>
         </div>
-        <div class="work-body">
+      </div>
+      <div class="work-item" data-reveal style="--delay:.26s">
+        <div class="work-n-col">
+          <div>
+            <div class="work-big-n">3,000+</div>
+            <div class="work-big-n-l">Participantes<br>5 ediciones</div>
+          </div>
+          <div class="work-img-slot">Logo / foto<br>HackSureste</div>
+        </div>
+        <div class="work-main">
+          <div>
+            <div class="work-cat">Apuesta transformacional · Ecosistema de innovación</div>
+            <div class="work-name">HackSureste + REDUX</div>
+            <div class="work-role">Founder &amp; Program Architect · 2018-2023</div>
+          </div>
           <div class="star-item">
             <span class="star-k">Situación</span>
             <span class="star-v">El sureste sin infraestructura de innovación ni metodología replicable de validación.</span>
@@ -708,14 +969,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="work-n">3,000+</div>
             <div class="work-n-l">participantes en HackSureste (2018-2023) · 200+ capacitados en REDUX · 5 ediciones (2020-2022).</div>
           </div>
-          <div class="star-item">
-            <span class="star-k">Autopsia</span>
-            <span class="star-v">Virtualizar una operación nacional en 2020, sin referentes: framework Lean de hipótesis, prototipo, prueba e iteración. Retención superior al benchmark del mercado.</span>
-          </div>
           <div class="work-tags">
             <span class="work-tag">Programas</span>
             <span class="work-tag">Metodología</span>
             <span class="work-tag">Comunidad</span>
+          </div>
+        </div>
+        <div class="work-aside">
+          <div class="star-item">
+            <span class="star-k">Autopsia</span>
+            <span class="star-v">Virtualizar una operación nacional en 2020, sin referentes: framework Lean de hipótesis, prototipo, prueba e iteración. Retención superior al benchmark del mercado.</span>
           </div>
         </div>
       </div>
@@ -729,31 +992,71 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="section-label" data-reveal>Cómo trabajo</div>
     <h2 class="section-title" data-reveal style="--delay:.06s">El mismo método en cada intervención. 10+ años en programas y operaciones, 7+ en innovación.</h2>
     <p class="section-sub" data-reveal style="--delay:.12s">No improviso por cliente. Aplico una secuencia que ya probo escalar sin colapsar las operaciones.</p>
-    <div class="spine" data-reveal style="--delay:.18s">
-      <div class="spine-step">
-        <div class="spine-n">01</div>
-        <div class="spine-t">Caos</div>
-        <div class="spine-d">Procesos manuales, decisiones ambiguas, dependencia de personas clave.</div>
+    <div class="accordion-wrap" data-reveal style="--delay:.18s">
+      <div class="accordion-list" id="accList">
+        <div class="acc-item is-active" data-n="01" data-t="Caos" data-deliv="Diagnóstico de entrada">
+          <div class="acc-item-head">
+            <div class="acc-item-n">01</div>
+            <div class="acc-item-t">Caos</div>
+          </div>
+          <div class="acc-detail">
+            <div class="acc-d">Procesos manuales, decisiones ambiguas, dependencia de personas clave. Nadie tiene claridad de dónde se pierde tiempo o dinero.</div>
+            <div class="acc-deliverable">Diagnóstico de entrada</div>
+          </div>
+        </div>
+        <div class="acc-item" data-n="02" data-t="Diagnóstico" data-deliv="Mapa de procesos · Priorización">
+          <div class="acc-item-head">
+            <div class="acc-item-n">02</div>
+            <div class="acc-item-t">Diagnóstico</div>
+          </div>
+          <div class="acc-detail">
+            <div class="acc-d">Mapeo de procesos reales desde adentro, no desde el organigrama. Identifico el cuello de botella real, no el síntoma que reportan.</div>
+            <div class="acc-deliverable">Mapa de procesos · Priorización</div>
+          </div>
+        </div>
+        <div class="acc-item" data-n="03" data-t="Diseño de sistema" data-deliv="Blueprint · Criterios de aceptación">
+          <div class="acc-item-head">
+            <div class="acc-item-n">03</div>
+            <div class="acc-item-t">Diseño de sistema</div>
+          </div>
+          <div class="acc-detail">
+            <div class="acc-d">Arquitectura operativa en capas: governance, datos, automatización y KPIs. Cada capa con su criterio de aceptación.</div>
+            <div class="acc-deliverable">Blueprint · Criterios de aceptación</div>
+          </div>
+        </div>
+        <div class="acc-item" data-n="04" data-t="Implementación" data-deliv="Sistema operando · Docs transferibles">
+          <div class="acc-item-head">
+            <div class="acc-item-n">04</div>
+            <div class="acc-item-t">Implementación</div>
+          </div>
+          <div class="acc-detail">
+            <div class="acc-d">Construido en el stack que el equipo ya usa. Documentado paso a paso para que cualquiera lo pueda operar, no solo yo.</div>
+            <div class="acc-deliverable">Sistema operando · Docs transferibles</div>
+          </div>
+        </div>
+        <div class="acc-item" data-n="05" data-t="Escala" data-deliv="Capacidad instalada · Handoff">
+          <div class="acc-item-head">
+            <div class="acc-item-n">05</div>
+            <div class="acc-item-t">Escala</div>
+          </div>
+          <div class="acc-detail">
+            <div class="acc-d">El sistema opera por sí solo. Capacidad instalada que no depende de mí, con handoff completo al equipo.</div>
+            <div class="acc-deliverable">Capacidad instalada · Handoff</div>
+          </div>
+        </div>
       </div>
-      <div class="spine-step">
-        <div class="spine-n">02</div>
-        <div class="spine-t">Diagnostico</div>
-        <div class="spine-d">Mapeo de procesos reales desde adentro. Identifico el cuello de botella, no el síntoma.</div>
-      </div>
-      <div class="spine-step">
-        <div class="spine-n">03</div>
-        <div class="spine-t">Diseño de sistema</div>
-        <div class="spine-d">Arquitectura operativa en capas: governance, datos, automatización y KPIs.</div>
-      </div>
-      <div class="spine-step">
-        <div class="spine-n">04</div>
-        <div class="spine-t">Implementación</div>
-        <div class="spine-d">Construido en el stack que el equipo ya usa. Documentado y transferible.</div>
-      </div>
-      <div class="spine-step">
-        <div class="spine-n">05</div>
-        <div class="spine-t">Escala</div>
-        <div class="spine-d">El sistema opera por sí solo. Capacidad instalada que no depende de mí.</div>
+      <div class="acc-panel">
+        <div class="acc-panel-n" id="accPanelN">01</div>
+        <div class="acc-panel-t" id="accPanelT">Caos</div>
+        <div class="acc-panel-d" id="accPanelD">Procesos manuales, decisiones ambiguas, dependencia de personas clave. Nadie tiene claridad de dónde se pierde tiempo o dinero.</div>
+        <div class="acc-panel-deliv" id="accPanelDeliv">Diagnóstico de entrada</div>
+        <div class="acc-pips" id="accPips">
+          <div class="acc-pip is-active"></div>
+          <div class="acc-pip"></div>
+          <div class="acc-pip"></div>
+          <div class="acc-pip"></div>
+          <div class="acc-pip"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -833,37 +1136,55 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="section-sub" data-reveal style="--delay:.12s">Precios basados en outcome (RODI), no en horas. Publico los modelos y filtro por intención e impacto, no por título.</p>
     <div class="svc-grid">
       <div class="svc" data-reveal style="--delay:.1s">
-        <div class="svc-tag">Modelo 01 · Retainer</div>
-        <div class="svc-name">Liderazgo fraccional</div>
-        <div class="svc-desc">Dirección estratégica de un área o programa sin el costo de una contratación C-Suite.</div>
+        <div class="svc-head">
+          <span class="svc-num">01</span>
+          <div class="svc-tag">Modelo 01 · Retainer</div>
+          <div class="svc-name">Liderazgo fraccional</div>
+          <div class="svc-desc">Dirección estratégica de un área o programa sin el costo de una contratación C-Suite.</div>
+        </div>
         <div class="svc-list">
           <div class="svc-item">Fractional Director / Program Lead</div>
           <div class="svc-item">Governance + sistema de KPIs</div>
           <div class="svc-item">Coordinación cross-functional</div>
         </div>
-        <span class="svc-time">Retainer mensual</span>
+        <div class="svc-footer">
+          <span class="svc-time">Retainer mensual</span>
+          <a href="https://calendly.com/diegomaurymx/diagnostico" class="svc-cta" target="_blank" rel="noopener">Agendar</a>
+        </div>
       </div>
       <div class="svc" data-reveal style="--delay:.18s">
-        <div class="svc-tag">Modelo 02 · Proyecto</div>
-        <div class="svc-name">Proyecto acotado</div>
-        <div class="svc-desc">Diseño, ejecución y entrega de un sistema o diagnóstico con fecha de cierre definida.</div>
+        <div class="svc-head">
+          <span class="svc-num">02</span>
+          <div class="svc-tag">Modelo 02 · Proyecto</div>
+          <div class="svc-name">Proyecto acotado</div>
+          <div class="svc-desc">Diseño, ejecución y entrega de un sistema o diagnóstico con fecha de cierre definida.</div>
+        </div>
         <div class="svc-list">
           <div class="svc-item">Process mapping + diagnóstico</div>
           <div class="svc-item">Diseño e implementación del sistema</div>
           <div class="svc-item">Documentación transferible + criterio de salida</div>
         </div>
-        <span class="svc-time">4 a 12 semanas</span>
+        <div class="svc-footer">
+          <span class="svc-time">4 a 12 semanas</span>
+          <a href="https://calendly.com/diegomaurymx/diagnostico" class="svc-cta" target="_blank" rel="noopener">Agendar</a>
+        </div>
       </div>
       <div class="svc" data-reveal style="--delay:.26s">
-        <div class="svc-tag">Modelo 03 · Advisory</div>
-        <div class="svc-name">Asesoría estratégica</div>
-        <div class="svc-desc">Revisión de decisiones, sistemas y bloqueos operativos con cadencia fija.</div>
+        <div class="svc-head">
+          <span class="svc-num">03</span>
+          <div class="svc-tag">Modelo 03 · Advisory</div>
+          <div class="svc-name">Asesoría estratégica</div>
+          <div class="svc-desc">Revisión de decisiones, sistemas y bloqueos operativos con cadencia fija.</div>
+        </div>
         <div class="svc-list">
           <div class="svc-item">Revisión de decisiones y trade-offs</div>
           <div class="svc-item">Gobernanza de datos y stack</div>
           <div class="svc-item">Desbloqueo operativo continuo</div>
         </div>
-        <span class="svc-time">Cadencia quincenal</span>
+        <div class="svc-footer">
+          <span class="svc-time">Cadencia quincenal</span>
+          <a href="https://calendly.com/diegomaurymx/diagnostico" class="svc-cta" target="_blank" rel="noopener">Agendar</a>
+        </div>
       </div>
     </div>
     <p class="section-sub" data-reveal style="--delay:.32s"><strong>¿Estás contratando full time?</strong> Trabajo como director fraccional o por proyecto, y también considero roles full time de dirección de programas y operaciones donde el reto sea construir el sistema, no solo administrarlo. <a href="/cv/diego-maury-cv.pdf" download>Descargar CV</a> · <a href="https://www.linkedin.com/in/diegomaury" target="_blank" rel="noopener">LinkedIn</a></p>
@@ -902,6 +1223,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           Agendar diagnóstico (30 min)
         </a>
         <div class="cta-trust">
+          <div class="cta-headshot" aria-hidden="true">Foto</div>
           <span>Sin compromiso</span>
           <span class="dot"></span>
           <span>Confidencial</span>
@@ -980,6 +1302,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   } else {
     document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
   }
+
+  // ── Accordion proceso (S3) ──
+  const accItems = document.querySelectorAll('#accList .acc-item');
+  const accPanelN = document.getElementById('accPanelN');
+  const accPanelT = document.getElementById('accPanelT');
+  const accPanelD = document.getElementById('accPanelD');
+  const accPanelDeliv = document.getElementById('accPanelDeliv');
+  const accPips = document.querySelectorAll('#accPips .acc-pip');
+
+  accItems.forEach((item, idx) => {
+    item.querySelector('.acc-item-head').addEventListener('click', () => {
+      accItems.forEach(i => i.classList.remove('is-active'));
+      item.classList.add('is-active');
+
+      accPanelN.textContent = item.dataset.n;
+      accPanelT.textContent = item.dataset.t;
+      accPanelD.textContent = item.querySelector('.acc-d').textContent;
+      accPanelDeliv.textContent = item.dataset.deliv;
+
+      accPips.forEach((pip, pIdx) => pip.classList.toggle('is-active', pIdx === idx));
+    });
+  });
 
   // ── Metric counters ──
   if (!prefersReduced) {
