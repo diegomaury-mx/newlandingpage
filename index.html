@@ -19,15 +19,15 @@
   </script>
   <!-- End Microsoft Clarity -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Diego Maury — Strategic Program Director</title>
+  <title>Diego Maury · Strategic Program Director</title>
   <meta name="description" content="Strategic Program Director. Diseño y opero sistemas que convierten estrategia en ejecución real: programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM.">
-  <meta property="og:title" content="Diego Maury — Strategic Program Director">
+  <meta property="og:title" content="Diego Maury · Strategic Program Director">
   <meta property="og:description" content="Diseño y opero sistemas que convierten estrategia en ejecución real.">
   <meta property="og:url" content="https://diegomaury.mx/">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://diegomaury.mx/exported_cards/card-01.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Diego Maury — Strategic Program Director">
+  <meta name="twitter:title" content="Diego Maury · Strategic Program Director">
   <meta name="twitter:description" content="Diseño y opero sistemas que convierten estrategia en ejecución real.">
   <meta name="twitter:image" content="https://diegomaury.mx/exported_cards/card-01.png">
   <link rel="canonical" href="https://diegomaury.mx/">
@@ -224,15 +224,20 @@
 
     /* ── METRICS ── */
     .metrics {
-      display: grid; grid-template-columns: repeat(3, 1fr);
+      display: grid; grid-template-columns: repeat(5, 1fr);
       border-top: 1px solid var(--border);
     }
+    @media (max-width: 960px) { .metrics { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 720px) { .metrics { grid-template-columns: 1fr; } }
     .metric {
       padding: 28px 28px 28px 0;
       border-right: 1px solid var(--border);
     }
     .metric:last-child { border-right: none; }
+    @media (max-width: 960px) {
+      .metric:nth-child(3n) { border-right: none; }
+      .metric:nth-child(n+4) { border-top: 1px solid var(--border); padding-top: 22px; }
+    }
     @media (max-width: 720px) {
       .metric { border-right: none; padding-right: 0; }
       .metric:not(:first-child) { border-top: 1px solid var(--border); padding-top: 22px; }
@@ -596,6 +601,17 @@
     }
     .svc-cta:hover { border-color: var(--ember); background: rgba(255,92,57,0.08); transform: translateY(-1px); }
 
+    /* ── SVC ARGUMENT (fraccional vs full-time) ── */
+    .svc-argument {
+      margin-top: 32px;
+      padding: 28px 30px;
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 13px;
+    }
+    .svc-argument-q { font-size: 1rem; font-weight: 700; color: var(--t1); margin-bottom: 14px; }
+    .svc-argument p { font-size: 13.5px; color: var(--t2); line-height: 1.7; margin-bottom: 12px; max-width: 68ch; }
+    .svc-argument p:last-child { margin-bottom: 0; }
+
     /* ── AI-NATIVE (fusionado en S5) ── */
     .ainative-chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .ainative-chip {
@@ -713,7 +729,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="#patron" class="nav__link">Cómo trabajo</a>
       <a href="#servicios" class="nav__link">Servicios</a>
     </div>
-    <a href="https://calendly.com/diegomaurymx/diagnostico" class="nav-cta" target="_blank" rel="noopener">Agendar diagnostico</a>
+    <a href="https://calendly.com/diegomaurymx/diagnostico" class="nav-cta" target="_blank" rel="noopener">Agendar diagnóstico</a>
     <button class="nav__burger" id="navBurger" aria-label="Menu" aria-expanded="false">
       <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
         <path d="M1 1h20M1 8h20M1 15h20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -727,10 +743,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="section-inner">
     <div class="hero-label" data-reveal>Strategic Program Director</div>
     <h1 class="hero-h1" data-reveal style="--delay:.08s">
-      Tomo operaciones ambiguas y las dejo funcionando como <span class="accent">sistemas medibles</span>.
+      Transformo ambición en <span class="accent">sistemas que funcionan</span>.
     </h1>
     <p class="hero-sub" data-reveal style="--delay:.14s">
-      ¿CRM en caos, leads que se enfrían en días, programas que dependen de una sola persona? Diseño y opero la infraestructura que cierra la brecha entre la estrategia C-level y la ejecución en la trinchera. Y la construyo para que sobreviva a mi salida.
+      Cuando una organización sabe a dónde quiere llegar pero no cómo convertir esa intención en una operación sostenible, ahí entro yo. Descubro el camino y construyo el sistema que lo hace realidad.
     </p>
     <div class="hero-ctas" data-reveal style="--delay:.2s">
       <a href="https://calendly.com/diegomaurymx/diagnostico" class="btn-primary" target="_blank" rel="noopener">
@@ -742,19 +758,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="metrics" data-reveal style="--delay:.26s">
       <div class="metric">
-        <div class="metric-n" data-count="9905" data-suffix="">9,905</div>
-        <div class="metric-l">Emprendedores movilizados</div>
-        <div class="metric-s">4 ediciones nacionales</div>
-      </div>
-      <div class="metric">
         <div class="metric-n">10+</div>
         <div class="metric-l">Años de trayectoria</div>
         <div class="metric-s">7+ en innovación y ecosistemas</div>
       </div>
       <div class="metric">
-        <div class="metric-n">+1,291%</div>
-        <div class="metric-l">RODI modelado</div>
-        <div class="metric-s">Cost-avoidance, 2025-2026</div>
+        <div class="metric-n" data-count="3231" data-suffix="">3,231</div>
+        <div class="metric-l">Proyectos evaluados</div>
+        <div class="metric-s">900+ por edición, agregado 4 ediciones</div>
+      </div>
+      <div class="metric">
+        <div class="metric-n">+600%</div>
+        <div class="metric-l">Crecimiento regional</div>
+        <div class="metric-s">Sureste, HEINEKEN Green Challenge 2019-2021</div>
+      </div>
+      <div class="metric">
+        <div class="metric-n" data-count="9905" data-suffix="">9,905</div>
+        <div class="metric-l">Emprendedores movilizados</div>
+        <div class="metric-s">Agregado, 4 ediciones INCmty</div>
+      </div>
+      <div class="metric">
+        <div class="metric-n">+500%</div>
+        <div class="metric-l">Leads al CRM</div>
+        <div class="metric-s">FlipHouse, de 5 a 30 por semana</div>
       </div>
     </div>
     <div class="trust" data-reveal style="--delay:.32s">
@@ -791,8 +817,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <p class="about-tagline">Diseño y opero sistemas que convierten estrategia en ejecución real. Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM.</p>
       <div class="about-roles">
-        <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Emprendedor</strong> · HackSureste, el hackathon más grande del sureste de México</div></div>
-        <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Coordinador</strong> · HEINEKEN Green Challenge nacional, 9,905 emprendedores</div></div>
+        <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Emprendedor</strong> · HackSureste, ecosistema regional de innovación construido desde cero</div></div>
+        <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>National Program Director, Innovation & Entrepreneurship</strong> · HEINEKEN Green Challenge, operador regional del sureste</div></div>
         <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Habilitador</strong> · SOFI, agente de IA en producción aprobado por Meta</div></div>
       </div>
     </div>
@@ -839,8 +865,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section" id="tesis">
   <div class="section-inner">
     <div class="section-label" data-reveal>El problema que resuelvo</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">No soy un consultor que entrega un deck. Soy el traductor entre dos idiomas.</h2>
-    <p class="section-sub" data-reveal style="--delay:.12s">La innovación corporativa muere en la brecha entre el lenguaje financiero y el operativo. Mi trabajo es construir la tubería por donde fluye, no opinar sobre ella.</p>
+    <h2 class="section-title" data-reveal style="--delay:.06s">No entrego un deck. Soy el traductor entre dos idiomas: el del board y el de la trinchera.</h2>
+    <p class="section-sub" data-reveal style="--delay:.12s">La innovación corporativa muere en la brecha entre el lenguaje financiero y el operativo. Traduzco entre ambos hasta que el sistema opera solo. Misma disciplina detrás del +600% de crecimiento regional en el sureste (HEINEKEN Green Challenge, registros sureste vs. edición anterior, 2019-2021) y del payback modelado menor a un mes en FlipHouse (metodología disponible a solicitud).</p>
     <div class="translator" data-reveal style="--delay:.18s">
       <div class="tr-col tr-col--a">
         <div class="tr-tag">Idioma C-level</div>
@@ -1092,7 +1118,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
           <span class="ip-badge">5 años</span>
         </div>
-        <div class="ip-desc">Modelo operativo del hackathon más grande del sureste mexicano: convocatoria, selección y mentorías documentadas y transferibles.</div>
+        <div class="ip-desc">Modelo operativo de HackSureste, ecosistema regional de innovación construido desde cero: convocatoria, selección y mentorías documentadas y transferibles.</div>
         <div class="ip-stats">
           <div><div class="ip-stat-n">3,000+</div><div class="ip-stat-l">Participantes</div></div>
           <div><div class="ip-stat-n">30+</div><div class="ip-stat-l">Programas</div></div>
@@ -1187,6 +1213,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
     </div>
+    <div class="svc-argument" data-reveal style="--delay:.3s">
+      <div class="svc-argument-q">¿Por qué fraccional y no una contratación full-time?</div>
+      <p>Una búsqueda C-Suite tarda meses solo en reclutamiento. Después, esa persona todavía tiene que aprender tu operación. Diseño y opero programas desde hace 10+ años (7+ en innovación y ecosistemas). Entro sabiendo diagnosticar. En FlipHouse, el sistema opera con payback modelado menor a un mes, metodología disponible a solicitud.</p>
+      <p>Pero la razón real no es la velocidad. El entregable no es otra persona de la que dependa el sistema: es capacidad instalada que el equipo opera sin mí. Contratar full-time para diseñar un sistema es pagar salario permanente por un trabajo con fecha de cierre. Yo diseño, implemento, documento y hago handoff. Si después necesitas a alguien full-time para operar lo que construí, llega sabiendo exactamente qué hereda.</p>
+    </div>
     <p class="section-sub" data-reveal style="--delay:.32s"><strong>¿Estás contratando full time?</strong> Trabajo como director fraccional o por proyecto, y también considero roles full time de dirección de programas y operaciones donde el reto sea construir el sistema, no solo administrarlo. <a href="/cv/diego-maury-cv.pdf" download>Descargar CV</a> · <a href="https://www.linkedin.com/in/diegomaury" target="_blank" rel="noopener">LinkedIn</a></p>
   </div>
 </section>
@@ -1196,7 +1227,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="section-inner">
     <div class="cta-inner">
       <div class="cta-label-center" data-reveal>Siguiente paso</div>
-      <h2 class="cta-h" data-reveal style="--delay:.08s">Listo para convertir tu estrategia en un sistema que opera?</h2>
+      <h2 class="cta-h" data-reveal style="--delay:.08s">¿Listo para convertir tu estrategia en un sistema que opera?</h2>
       <p class="cta-sub" data-reveal style="--delay:.14s">Diagnóstico de 30 minutos: gratuito, confidencial y sin pitch. Una conversación para ver si lo que construyo es lo que necesitas.</p>
       <div class="cta-steps" data-reveal style="--delay:.2s">
         <div class="cta-step">
