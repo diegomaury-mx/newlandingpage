@@ -12,8 +12,8 @@ URL: `https://diegomaury.mx` — **LIVE desde 2026-05-13**
 
 ## Stack técnico
 
-- HTML5 + CSS3 + JavaScript vanilla (sin frameworks)
-- Sin build system; si se añade uno, usar Vite
+- HTML5 + CSS3 + JavaScript vanilla (sin frameworks) — **así es el sitio LIVE hoy**
+- Sin build system en producción. **Ojo:** hay una decisión de arquitectura registrada en `CHANGELOG.md` (v0.1.0, 2026-06-27) de migrar a **Astro** en sprints futuros — ver "Arquitectura futura — Sprint 0.5" más abajo. Mientras Sprint 1 no se apruebe e implemente, esta decisión NO afecta al sitio LIVE.
 - Despliegue: GitHub Pages sirviendo desde **`master` / raíz** (CNAME `diegomaury.mx`). Cada push a `master` redespliega automáticamente. No hay rama `gh-pages` ni worktree (consolidado el 2026-06-15).
 
 ## Estructura del repositorio
@@ -23,14 +23,19 @@ El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy sour
 ```
 /                               # ← raíz de master = sitio (deploy source)
 ├── index.html                  # Página principal v2 — LIVE
-├── robots.txt                  # SEO — LIVE
+├── index-canonico.html         # PREVIEW aislado — NO live, ver nota abajo
+├── robots.txt / sitemap.xml    # SEO — LIVE
 ├── CNAME                       # diegomaury.mx
+├── .nojekyll                   # deshabilita el pipeline Jekyll de GitHub Pages
 ├── llms.txt / llms-full.txt    # Contexto para LLMs — LIVE
+├── README.md                   # Resumen público del repo (stack, estructura, deploy)
+├── CHANGELOG.md                # Historial de decisiones de arquitectura y sprints
+├── GOVERNANCE.md               # Reglas de contribución y decisión del proyecto
 ├── assets/
 │   ├── css/styles.css          # Tokens DS v3 + todos los componentes
 │   ├── css/colors_and_type.css # Token file del DS
 │   ├── fonts/                  # Satoshi Variable + JetBrains Mono (local)
-│   ├── fonts-v2/               # Montserrat + Bitter + Space Mono (v2)
+│   ├── fonts-v2/                # Montserrat + Bitter + Space Mono (v2)
 │   ├── js/main.js              # Nav activa + scroll reveal (IntersectionObserver)
 │   └── img/                    # isotipodm.svg (bg-pattern), isotipo, logos, hexagon patterns
 ├── render_card.html            # Tarjeta social 1080×1080 para exportar (10 variantes)
@@ -46,11 +51,22 @@ El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy sour
 │   ├── portfolio.css
 │   └── portfolio.js
 ├── cv/
-│   └── diego-maury-cv.pdf      # CV 2026 — LIVE
+│   ├── diego-maury-cv.pdf      # CV 2026 — LIVE
+│   ├── diego-maury-pmo.html    # Variante CV enfocada en PMO (fuente HTML)
+│   ├── diego-maury-pmo.pdf     # PDF generado desde diego-maury-pmo.html
+│   └── gen-pdf.js              # Script que genera el PDF desde el HTML
 ├── backups/                    # index-v1-backup.html, index-v2.html (respaldos)
-├── src/services/pgPool.js      # Backend Phase 2 (chatbot RAG, pendiente)
-└── docs/superpowers/           # specs/ y plans/ de diseño
+├── docs/
+│   ├── superpowers/            # specs/ y plans/ de diseño (incluye plan de index-canonico.html)
+│   └── platform/                # conventions.md, seo-model.md — spec de la futura plataforma Astro (ver sección abajo)
+└── src/
+    ├── content/                 # Astro Content Collections — Sprint 0.5, SIN implementar aún
+    │   ├── config.ts             # Schemas Zod: cases, projects, playbooks, insights, services
+    │   └── cases|projects|playbooks|insights|services/README.md
+    └── services/pgPool.js       # Backend Phase 2 (chatbot RAG, pendiente)
 ```
+
+> **Carpetas locales fuera de git (ver `.gitignore`):** `_ds_import/` (bundle de handoff de Claude Design) y `.claude-design/lab/` (variantes de diseño exploradas, `variant-a..f.html`) existen en el filesystem local pero **no están versionadas ni se despliegan**. `.playwright-mcp/` y `.superpowers/` tampoco. No tratarlas como fuente de verdad del sitio LIVE.
 
 > **Analítica:** todas las páginas del sitio llevan Google Tag Manager (`GTM-NHT5827J`) y Microsoft Clarity (`x7ns7c22xi`) en el `<head>`.
 
@@ -71,6 +87,16 @@ git add -A && git commit -m "..." && git push origin master
 # Exportar tarjetas sociales (desde la raíz)
 node export_cards.js   # requiere puppeteer; genera exported_cards/card-01..10.png
 ```
+
+## index-canonico.html — PREVIEW aislado (no confundir con index.html LIVE)
+
+`index-canonico.html` es un archivo autocontenido (HTML+CSS+JS inline) en la raíz, creado según el plan `docs/superpowers/plans/2026-06-16-landing-canonica-bento.md` para probar un rediseño visual "Bento + Violeta" fiel a la maqueta canónica de Notion (SSOT: id `e5f9bb1b96224857a648b0212c3e9822`).
+
+- **No es LIVE:** lleva `noindex,nofollow` y analítica desactivada en el `<head>`.
+- **No está enlazado** desde ninguna página del sitio ni desde el sitemap.
+- **Aislamiento total:** no modifica `assets/css/styles.css` ni `assets/js/main.js`; solo reutiliza fuentes locales vía `@font-face` e `isotipodm.svg`.
+- Se sirve y compara localmente: `python -m http.server 8080` → `localhost:8080/index-canonico.html`.
+- Regla del plan: **no inventar datos** — métricas y hechos deben venir del SSOT en Notion; si el SSOT no cubre algo, se marca y se confirma con Diego.
 
 ## Design system — v3 "Violeta Protagonista"
 
@@ -162,6 +188,19 @@ Pendiente Phase 1:
 Pendiente Phase 2 (semana siguiente):
 - Railway backend + Supabase pgvector + Claude API → chatbot RAG
 - Widget chatbot en index.html
+
+## Arquitectura futura — Sprint 0.5 (Astro, en definición, SIN implementar)
+
+Fuente: `CHANGELOG.md` [v0.1.0] — 2026-06-27. Estas son decisiones de producto ya aprobadas y documentadas, pero **ningún código de Astro está activo todavía**. No confundir con el estado LIVE descrito arriba.
+
+- **Framework decidido:** Astro (Islands Architecture, output HTML estático, MDX, compatible con GitHub Pages, zero-JS por defecto).
+- **Content strategy:** Astro Content Collections — el contenido vivirá en `src/content/`, nunca dentro de los archivos de página. Los schemas Zod ya existen en `src/content/config.ts` (colecciones: `cases`, `projects`, `playbooks`, `insights`, `services`), cada una con su `README.md`.
+- **Deploy futuro:** GitHub Pages seguirá sirviendo desde `master`, pero GitHub Actions correrá `astro build` → `/dist` (pendiente, Sprint 1).
+- **Design System:** DS v2 (`_ds_import/`, no versionado) + DS v3 (`assets/css/`) se consolidarán en un único sistema de tokens canónico en Sprint 2.
+- **Documentación de convenciones ya escrita** (vinculante desde Sprint 1, sin efecto hoy): `docs/platform/conventions.md` (naming, estructura de carpetas Astro, convención MDX/frontmatter, convención de assets) y `docs/platform/seo-model.md` (metadata, Open Graph, JSON-LD, sitemap vía `@astrojs/sitemap`).
+- **Roles del proceso:** Diego Maury (Product Owner), ChatGPT (Product Strategist & UX Director), Silvia/Notion (Product Manager), Claude Code (Lead Software Engineer).
+- **Roadmap (según CHANGELOG):** Sprint 0 (Product Foundation, pendiente de PRD) → Sprint 0.5 (Domain & Content Architecture, **en progreso** — deliverables ya completados: CHANGELOG.md, schemas, docs de convenciones y SEO) → Sprint 1 (Astro Setup, bloqueado hasta aprobar Sprint 0) → Sprint 2 (Design System) → Sprint 3 (Home) → Sprint 4 (Páginas internas) → Sprint 5 (Optimización, incluye implementación real del modelo SEO).
+- **Regla operativa:** cualquier trabajo de implementación Astro requiere que Sprint 0 (PRD, IA, sitemap definitivo, wireframes) esté aprobado por Diego primero. No adelantar Sprint 1 sin esa aprobación.
 
 ### Nota de diseño: nav scrollToSection
 La función de scroll se llama `scrollToSection` (no `scrollTo` — conflicto con `window.scrollTo`).
