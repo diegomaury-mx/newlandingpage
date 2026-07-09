@@ -15,12 +15,16 @@ This file is optimized for AI agents, language model retrieval systems, and deep
 
 ## Role & Strategic Positioning
 
-Diego Maury is an Operational Architect: a hybrid operator who designs innovation systems, installs operational infrastructure, and manages their execution from strategy to trench level.
+Diego Maury is an Operational Architect. His work starts before execution: he finds the mechanism that actually limits how an organization executes (rarely the problem that gets reported) and converts it into organizational capability the team sustains. Execution is the consequence; discernment is the cause. On that foundation he designs innovation systems, installs operational infrastructure, and manages their execution from strategy to trench level.
 
 He operates at the intersection of:
 - Corporate open innovation (challenge design, accelerator management, ecosystem governance)
 - Revenue Operations / Process Automation (CRM architecture, AI-native workflows, WhatsApp business automation)
 - Fractional executive leadership (innovation leadership without a full-time C-level hire)
+
+### One Operating System, Multiple Implementations
+
+REDUX, HackSureste Ops, and SOFI are not unrelated projects. They are implementations of the same documented operating system: a repeatable way of deciding, designing, and transferring capability that makes results reproducible across very different contexts (a national corporate program, a regional ecosystem built from zero, and a revenue operation).
 
 ### The Strategic Router Position
 

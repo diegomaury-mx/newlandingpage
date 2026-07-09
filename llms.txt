@@ -1,4 +1,4 @@
-# Diego Maury | Operational Architect: Bridging Strategy & Trench Execution.
+# Diego Maury | Operational Architect: Finding the Mechanism That Limits Execution.
 ## Ecosystem Builder · Strategic Program Director · Operational Architect
 Contact: dm@diegomaury.mx | +52 56 5926 7516
 Portfolio: https://diegomaury.mx
@@ -9,7 +9,9 @@ Location: Mexico (LATAM)
 
 ## Role & Positioning
 
-Diego Maury is an Operational Architect who designs and operates innovation systems that translate strategy into measurable business results. He works at the intersection of corporate innovation, RevOps, and open ecosystem programs, bridging the gap between C-suite vision and trench-level execution.
+Diego Maury is an Operational Architect. His work starts before execution: he finds the mechanism that actually limits how an organization executes (rarely the problem that gets reported) and converts it into organizational capability the team sustains. He works at the intersection of corporate innovation, RevOps, and open ecosystem programs, translating between board-level language and trench-level operations until the team runs the system sustainably.
+
+His public projects (REDUX, HackSureste Ops, SOFI) are not isolated engagements. They are implementations of the same documented operating system: a repeatable way of deciding, designing, and transferring capability that makes results reproducible across contexts.
 
 As founder and operator of southeast Mexico's flagship innovation ecosystem (HackSureste), he acts as the Strategic Router of the region: the connective layer that gives corporates, funds, and national programs a safe, structured soft landing into the local innovation network. Few operators control comparable access to talent, startups, and institutional partners in the southeast.
 
@@ -49,7 +51,7 @@ Design and facilitation of structured programs for entrepreneurs, corporate team
 ### HEINEKEN Green Challenge × INCmty (2019–2022)
 [HEINEKEN Green Challenge](https://diegomaury.mx/llms-full.txt): detailed case study on end-to-end virtualization and +600% regional scaling using Lean Operations.
 - National open innovation program for sustainable entrepreneurship
-- Scaled southeast Mexico from 36 registrations to 300+ (+600%) in one edition
+- Scaled southeast Mexico from 36 registrations (edition 1) to 300+ (edition 3): +600% regional growth
 - 3,231 projects evaluated across 4 editions
 - 9,905 entrepreneurs impacted
 - 100+ mentors coordinated per edition
