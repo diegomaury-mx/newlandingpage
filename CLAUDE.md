@@ -165,6 +165,8 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
   - JS inline: scroll reveal (`data-reveal`/`is-visible`), contadores animados, nav activa, burger mobile
   - GTM-NHT5827J + Clarity x7ns7c22xi preservados
   - **Invariante DS:** el index.html usa tokens DS v2 inline; los casos y portfolio usan DS v3 de `assets/css/styles.css`
+  - **Copy en voz de Diego (2026-07-10):** todo el copy narrativo del index está reescrito en primera persona + tuteo siguiendo el Writing DNA (Notion `7b7c6991078b407f9ae1031796cb7f0d`, fuente canónica de voz; corrige a "Estilo y voz"). Filo = postura + contraste "No es X. Es Y", NO sarcasmo. Sin em dash en contenido. Spec: `docs/superpowers/specs/2026-07-10-copy-voz-diego-index-design.md`.
+  - **Etiquetas de métricas alineadas al SSOT en index:** 9,905 = "Participantes inscritos", agregado de programas INCmty (HGC incluido), estimado (NO cifra de HGC; retirado de la tarjeta HEINEKEN). +600% = ed. 1 a ed. 3 (2019-2021). HackSureste 3,000+ = estimado, no acumulable con INCmty, sin "5 ediciones". **PENDIENTE:** aplicar el mismo relabel del 9,905 en `llms.txt` y `llms-full.txt` (aún dicen la versión vieja).
   - `backups/index-v2.html` — respaldo del diseño anterior "Deep Tech & Friction"
 - `llms.txt` — live en raíz, visible en `diegomaury.mx/llms.txt`
 - GTM-NHT5827J — instalado en `<head>` y `<body>` de index.html
