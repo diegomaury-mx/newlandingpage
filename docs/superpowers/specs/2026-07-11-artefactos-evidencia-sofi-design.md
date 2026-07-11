@@ -13,7 +13,11 @@ Sin artefacto, SOFI no pasa el gate de publicación, y es el caso más fuerte de
 
 ## Restricción que define el diseño
 
-**Ningún artefacto que se construya aquí cierra las tres afirmaciones de negocio.** El speed-to-lead menor a 5 minutos, el +500% de leads procesados y el RODI de +1,291% viven en el CRM de FlipHouse y el CRM está bajo NDA. Se quedan en ✖ y se declaran como tales.
+**Ningún artefacto que se construya aquí cierra las tres afirmaciones de negocio.** El speed-to-lead menor a 5 minutos y el paso de 5 a 30 leads por semana (+500%) se midieron en el CRM de FlipHouse, y ese dashboard está bajo NDA.
+
+El RODI de +1,291% es un caso distinto, y conviene no confundirlo (corregido el 2026-07-11 contra la ficha de Notion): **no está bloqueado por NDA, es un modelo propio.** Cost-avoidance modelado, no ahorro realizado, sin auditoría externa; los ingresos sí son confidenciales y la metodología está disponible a solicitud. Presentarlo como "bajo NDA" lo haría sonar más sólido de lo que es.
+
+Los tres se quedan en ✖, cada uno con su razón exacta.
 
 Lo que sí se cierra, y de forma contundente, es la cuarta fila: **"SOFI en producción"**. El sistema existe, lo construyó Diego, corrió en producción y se comporta como el caso afirma. Y se añaden métricas nuevas y publicables que hoy no están en la ficha (latencia real, cobertura de tests, volumen de commits, estados del FSM).
 
@@ -27,7 +31,7 @@ Todos se derivan del sistema real. Ninguno se ilustra.
 |---|---|---|
 | Diagrama de arquitectura | El repo de SOFI | Cada caja mapea a un archivo o servicio real: `webhookController`, `fsm.service`, S1 en Make, Railway, Postgres, Redis, OpenRouter, HubSpot. SVG inline, sin librerías. |
 | Diagrama del FSM | `src/services/fsm.service.js` | Los 12 estados y sus transiciones válidas se **extraen del código con un script**. Si el código cambia, el diagrama se regenera. No se dibuja a mano. |
-| Simulador de conversación | Postgres de producción | Conversación real exportada, sanitizada, versionada como JSON en el repo del sitio. La página reproduce ese JSON. |
+| Simulador de conversación | Postgres de producción + replay contra el sistema real | Conversación real exportada y sanitizada. El panel de estado sale de replayar esos mensajes contra el código real, no de la base: ver la corrección de abajo. |
 | Ficha técnica | Repo + Postgres | Commits y tests desde `git` y el runner. Latencia real calculada de los timestamps de los mensajes. |
 | Video de presentación | `/brag` sobre el repo de SOFI | **Pieza de presentación, no de evidencia.** Ver la regla de abajo. |
 
@@ -67,7 +71,7 @@ Estructura, en orden:
 
    La sección desarrolla los tres candados de `resolveNextState`: umbral de confianza (si el modelo va por debajo, el FSM no se mueve), tabla de transiciones (`TRANSITION_TABLE[estado][intent]`, y si la combinación no existe se queda donde está) y validación contra el grafo (`STATE_MAP` rechaza y loguea las transiciones inválidas; los estados terminales son absorbentes). La consecuencia es lo que hay que decir en voz alta: **el peor caso de una alucinación del modelo es que el lead no avance, nunca que aterrice en un estado imposible.**
 7. **Ficha técnica.** Los números publicables, cada uno con su método de cálculo al lado.
-8. **Lo que no puedo probar.** Las tres afirmaciones bajo NDA, con su ✖ y su razón.
+8. **Lo que no puedo probar.** Las tres afirmaciones de negocio, con su ✖ y su razón exacta: NDA para las dos del CRM, modelo propio sin auditoría para el RODI.
 
 La sección 8 es la que hace creíbles a las otras siete. Cualquiera publica lo que le conviene; la señal de que el resto no está inflado es que se enseña la parte que no se puede sostener.
 
@@ -75,7 +79,11 @@ La sección 8 es la que hace creíbles a las otras siete. Cualquiera publica lo 
 
 Cuatro pasos y un candado.
 
-1. **Extracción.** Un script consulta la Postgres de producción y saca una conversación completa: mensajes, timestamps y transiciones de estado. Se elige una sesión que llegue a `COMPLETED`, porque demuestra el recorrido entero.
+1. **Extracción.** Un script consulta la Postgres de producción y saca una conversación completa: mensajes y timestamps. Se elige una sesión que llegue a `COMPLETED`, porque demuestra el recorrido entero.
+
+   **Corrección del 2026-07-11, verificada contra el esquema:** la base **no guarda transiciones de estado**. Tiene siete tablas y ninguna es un log del FSM; `messages` guarda texto y timestamps, y `conversations` solo el estado final. El estado por turno vivía en la sesión de Redis, que es efímera y ya expiró.
+
+   Por eso el panel del simulador sale de un **replay contra el código real**: los mensajes ya sanitizados se vuelven a meter por el `/webhook` de SOFI con el banco de pruebas que ya existe (`tools/demo-harness`, firma HMAC válida y mock de la Graph API), y el estado se lee de la sesión después de cada turno. El panel es la salida del FSM ejecutándose, no una reconstrucción a mano. La página lo declara así: los mensajes son de producción, los estados son del replay.
 2. **Sanitización.** Un script sustituye teléfono, nombre, colonia, código postal, valor de la propiedad y cualquier dato de la casa. Reemplazos consistentes, no borrados: el hilo debe seguir leyéndose como una conversación humana. Los timestamps **relativos** se conservan porque son la prueba de la latencia; la fecha absoluta se redondea al mes.
 3. **Revisión de Diego.** El JSON resultante se lee completo antes de que exista la página. Si algo incomoda, no se publica.
 4. **Publicación.** El JSON aprobado se versiona en el repo del sitio. La página solo lee ese JSON.
