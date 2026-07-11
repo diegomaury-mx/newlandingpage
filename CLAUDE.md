@@ -204,6 +204,17 @@ Fuente: `CHANGELOG.md` [v0.1.0] — 2026-06-27. Estas son decisiones de producto
 - **Roadmap (según CHANGELOG):** Sprint 0 (Product Foundation, pendiente de PRD) → Sprint 0.5 (Domain & Content Architecture, **en progreso** — deliverables ya completados: CHANGELOG.md, schemas, docs de convenciones y SEO) → Sprint 1 (Astro Setup, bloqueado hasta aprobar Sprint 0) → Sprint 2 (Design System) → Sprint 3 (Home) → Sprint 4 (Páginas internas) → Sprint 5 (Optimización, incluye implementación real del modelo SEO).
 - **Regla operativa:** cualquier trabajo de implementación Astro requiere que Sprint 0 (PRD, IA, sitemap definitivo, wireframes) esté aprobado por Diego primero. No adelantar Sprint 1 sin esa aprobación.
 
+## CMS Notion del portafolio — Fases A0+A1 CERRADAS (2026-07-11)
+
+Documentación completa: `docs/platform/cms-notion.md`. Resumen:
+
+- **A0:** no existe pipeline Notion → sitio. Las propiedades `TD:*` eran residuo de un intento viejo (vacías en las 27 fichas) y se borraron. El sitio LIVE sigue siendo HTML editado a mano.
+- **A1:** la base Notion `🗂️ SSOT - Portafolio Proyectos` (data source `88257bc9-e575-45e8-90df-f851f96e92f2`, 27 fichas) es ahora el CMS: 10 propiedades nuevas (`Estado publicación`, `Publicable`, `Capa`, `Canales`, `Capacidades`, `Métrica ancla`, `Organización`, `Tipo`, `Evidencia`, `Caso maestro`), 5 propiedades legacy deprecadas con prefijo `[DEPRECADO]` (se borran tras la fase B1) y 5 vistas.
+- **Clasificación:** 3 Insignia / 12 Soporte / 12 Archivo. Todas en `Draft` y `Publicable = No`.
+- **Regla operativa:** nada pasa a `Estado publicación = Publicado` desde este proyecto. Publicar es decisión de Diego, y exige `Evidencia` + `Métrica ancla` verificadas. No inventar cifras.
+- **Gotcha:** la propiedad `Objetivo con métrica y timeframe ` lleva un espacio al final de su nombre real.
+- El mapeo Notion → Zod (`src/content/config.ts`) es **diseño TO-BE del Sprint 1**. Hoy no hay sincronización.
+
 ### Nota de diseño: nav scrollToSection
 La función de scroll se llama `scrollToSection` (no `scrollTo` — conflicto con `window.scrollTo`).
 
