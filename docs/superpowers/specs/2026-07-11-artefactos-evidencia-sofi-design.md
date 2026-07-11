@@ -45,6 +45,7 @@ El video **no bloquea la implementación**. La página se construye con un hueco
 - 390 tests
 - FSM de 12 estados: `GREETING`, `INTENTION`, `URGENCY`, `CP`, `COLONIA`, `PROPERTY_TYPE`, `ESCRITURAS`, `VALUE`, `COMPLETED`, `HUMAN_TRANSFER`, `DISQUALIFIED`, `OFF_TOPIC`
 - 5 escenarios de Make en producción (S1, S3, S4, S5, S6; S8 inactivo)
+- Contrato de salida del modelo (`ai.service.js`, validado con Zod): `reply`, `intent` (enum cerrado de 8 valores), `confidence` (0 a 1) y `extracted_data`. **No devuelve un estado.**
 - Stack: Node 24, Express, PostgreSQL, Redis, OpenRouter, HubSpot, WhatsApp Cloud API, Make, Railway
 
 Estas cifras se recalculan al implementar, no se copian de aquí.
@@ -60,7 +61,11 @@ Estructura, en orden:
 3. **Cambio de registro.** Una línea que parte la página: hasta aquí te lo conté, de aquí en adelante te lo demuestro.
 4. **Simulador.** Dos columnas. Izquierda: el hilo de WhatsApp avanzando mensaje a mensaje. Derecha, sincronizado: estado del FSM, transición disparada, modelo invocado, propiedad escrita en HubSpot. Controles de reproducir, pausar y paso a paso. Declarado arriba sin letra chica: reproducción de una conversación real de producción, sanitizada, con fecha, duración y liga al procedimiento de sanitización.
 5. **Arquitectura.** El recorrido del lead. Cada caja nombra su archivo o su servicio.
-6. **FSM.** Los 12 estados generados desde el código. Argumento: la calificación no la improvisa un modelo, la gobierna una máquina de estados; el modelo solo clasifica la intención.
+6. **FSM.** Los 12 estados generados desde el código. El argumento técnico del caso, verificado contra `fsm.service.js` y `ai.service.js`:
+
+   > El modelo no decide el estado. Clasifica la intención y extrae datos; una tabla de transiciones decide, valida contra el grafo y rechaza lo imposible. Si el modelo duda, el lead no avanza.
+
+   La sección desarrolla los tres candados de `resolveNextState`: umbral de confianza (si el modelo va por debajo, el FSM no se mueve), tabla de transiciones (`TRANSITION_TABLE[estado][intent]`, y si la combinación no existe se queda donde está) y validación contra el grafo (`STATE_MAP` rechaza y loguea las transiciones inválidas; los estados terminales son absorbentes). La consecuencia es lo que hay que decir en voz alta: **el peor caso de una alucinación del modelo es que el lead no avance, nunca que aterrice en un estado imposible.**
 7. **Ficha técnica.** Los números publicables, cada uno con su método de cálculo al lado.
 8. **Lo que no puedo probar.** Las tres afirmaciones bajo NDA, con su ✖ y su razón.
 
