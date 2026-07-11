@@ -78,6 +78,7 @@
   .nav__back { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t2); text-decoration: none; }
   .nav__back:hover { color: var(--t1); }
   .nav__badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3); border: 1px solid var(--border); padding: 5px 10px; border-radius: 5px; }
+  .nav__brand span, .nav__back, .nav__badge { white-space: nowrap; }
 
   /* ── HERO ── */
   .hero { padding: 88px 0 64px; }
@@ -373,6 +374,12 @@
     .evidence__row { grid-template-columns: 1fr; gap: 8px; padding: 20px; }
     .status { display: flex; align-items: baseline; gap: 8px; }
     .status__grade { display: inline; margin-top: 0; }
+  }
+  /* La barra no cabe con las tres piezas: el badge es etiqueta, no navegación */
+  @media (max-width: 560px) {
+    .nav__badge { display: none; }
+    .nav__right { gap: 10px; }
+    .evidence__thumb img { height: 120px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
