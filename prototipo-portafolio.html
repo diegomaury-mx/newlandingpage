@@ -192,12 +192,14 @@
 
   /* Caso sin imagen: el hueco es el mensaje */
   .media-void {
-    display: flex; align-items: center; justify-content: center; text-align: center;
+    display: flex; flex-direction: column; gap: 6px;
+    align-items: center; justify-content: center; text-align: center;
     background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(139,124,158,0.05) 8px 9px);
     border-bottom: 1px solid var(--border);
     font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--t3); padding: 16px;
   }
+  .media-void__hint { color: var(--ember); opacity: 0.55; font-size: 8px; }
   .card--small .media-void { height: 132px; margin: -26px -24px 18px; border-radius: 12px 12px 0 0; }
   .card--featured .media-void { min-height: 260px; border-bottom: none; border-right: 1px solid var(--border); }
 
@@ -447,11 +449,11 @@ const CASES = {
     evidenceRows: [
       { claim: 'Cifras de impacto del programa: 3,975 emprendedores, 562 universidades, +214% de crecimiento.', grade: 'inst', artifact: 'Informe Anual 2020 del Tecnológico de Monterrey, p.181', thumb: 'assets/img/evidencia/tec2020-p181-hgc.jpg', thumbCaption: 'Informe Anual 2020 del Tec · p.181' },
       { claim: 'Cifras de la edición de agricultura sustentable: 2,400 emprendedores, 304 universidades.', grade: 'inst', artifact: 'Informe Anual 2021 del Tecnológico de Monterrey, p.416', thumb: 'assets/img/evidencia/tec2021-p416-hgc-redux.jpg', thumbCaption: 'Informe Anual 2021 del Tec · p.416' },
-      { claim: 'Mi participación en el programa en 2019.', grade: 'inst', artifact: '<a href="https://www.lajornadamaya.mx/yucatan/120006/heineken-reunira-emprendedores-para-resolver-problemas-ambientales" target="_blank" rel="noopener">La Jornada Maya, 06/08/2019</a>. Me nombra y me cita, pero como “embajador de INCmty en el sureste”, no como director nacional' },
-      { claim: 'Línea base del sureste: 35 propuestas de la región el año previo a 2019.', grade: 'inst', artifact: 'La Jornada Maya, 06/08/2019' },
-      { claim: 'Dirección de operaciones del programa.', grade: 'inst', artifact: '<a href="https://2023.talent-land.mx/speakers/diego-maury/" target="_blank" rel="noopener">Talent Land 2023</a> me acredita como former Director of Operations. Acredita el cargo, no el periodo 2019–2022' },
-      { claim: 'Estrategia de entrada regional: lanzamientos en el sureste, noreste y noroeste.', grade: 'own', artifact: '<a href="https://www.youtube.com/playlist?list=PLRfrcGpYAGhM" target="_blank" rel="noopener">Playlist HGC</a>: 30 videos con los lanzamientos regionales por zona' },
-      { claim: 'Virtualización del proceso de aplicación.', grade: 'own', artifact: 'Playlist HGC: guías de registro 2020 y 2021, guía de Discord del Bootcamp 2021, aftermovies de los bootcamps virtuales' },
+      { claim: 'Mi participación en el programa en 2019.', grade: 'inst', artifact: '<a href="https://www.lajornadamaya.mx/yucatan/120006/heineken-reunira-emprendedores-para-resolver-problemas-ambientales" target="_blank" rel="noopener">La Jornada Maya, 06/08/2019</a>. Me nombra y me cita, pero como “embajador de INCmty en el sureste”, no como director nacional', thumb: 'assets/img/evidencia/lajornadamaya-hgc-2019.jpg', thumbCaption: 'La Jornada Maya · 06/08/2019' },
+      { claim: 'Línea base del sureste: 35 propuestas de la región el año previo a 2019.', grade: 'inst', artifact: 'La Jornada Maya, 06/08/2019', thumb: 'assets/img/evidencia/lajornadamaya-hgc-2019.jpg', thumbCaption: 'La Jornada Maya · 06/08/2019' },
+      { claim: 'Dirección de operaciones del programa.', grade: 'inst', artifact: '<a href="https://2023.talent-land.mx/speakers/diego-maury/" target="_blank" rel="noopener">Talent Land 2023</a> me acredita como former Director of Operations. Acredita el cargo, no el periodo 2019–2022', thumb: 'assets/img/evidencia/talentland-2023-speaker.jpg', thumbCaption: 'Talent Land 2023 · página de speaker' },
+      { claim: 'Estrategia de entrada regional: lanzamientos en el sureste, noreste y noroeste.', grade: 'own', artifact: '<a href="https://www.youtube.com/playlist?list=PLRfrcGpYAGhM" target="_blank" rel="noopener">Playlist HGC</a>: 30 videos con los lanzamientos regionales por zona', thumb: 'assets/img/evidencia/playlist-hgc.jpg', thumbCaption: 'Playlist HGC · 30 videos' },
+      { claim: 'Virtualización del proceso de aplicación.', grade: 'own', artifact: 'Playlist HGC: guías de registro 2020 y 2021, guía de Discord del Bootcamp 2021, aftermovies de los bootcamps virtuales', thumb: 'assets/img/evidencia/playlist-hgc.jpg', thumbCaption: 'Playlist HGC · 30 videos' },
       { claim: '+600% de crecimiento en la participación del sureste (2019–2021).', grade: 'none', artifact: 'Estimado operativo propio. La línea base está documentada; la cifra final no' },
       { claim: 'Más de 100 mentores vinculados por edición.', grade: 'none', artifact: 'Sin artefacto externo' }
     ],
@@ -500,8 +502,8 @@ const CASES = {
     evidenceRows: [
       { claim: '400+ universitarios, 111 ideas, 4 regiones, y la calificación de “el más grande de Latinoamérica” en su categoría.', grade: 'inst', artifact: 'Informe Anual 2020 del Tecnológico de Monterrey, p.176 y p.181', thumb: 'assets/img/evidencia/tec2020-p176-redux.jpg', thumbCaption: 'Informe Anual 2020 del Tec · p.176' },
       { claim: 'REDUX Agro como prelanzamiento de la edición 2021 del HEINEKEN Green Challenge.', grade: 'inst', artifact: 'Informe Anual 2021 del Tecnológico de Monterrey, p.416', thumb: 'assets/img/evidencia/tec2021-p416-hgc-redux.jpg', thumbCaption: 'Informe Anual 2021 del Tec · p.416' },
-      { claim: 'Diseñé la metodología del programa: 8 actividades más capacitaciones especializadas.', grade: 'own', artifact: '<a href="https://www.youtube.com/playlist?list=PLZElD_uaQTck" target="_blank" rel="noopener">Playlist “ARTEFACTOS REDUX”</a>: 34 videos con el currículum completo, las memorias 2020–2021 y la guía de registro' },
-      { claim: 'REDUX impulsado por HEINEKEN México e INCmty.', grade: 'own', artifact: 'Playlist “ARTEFACTOS REDUX”' },
+      { claim: 'Diseñé la metodología del programa: 8 actividades más capacitaciones especializadas.', grade: 'own', artifact: '<a href="https://www.youtube.com/playlist?list=PLZElD_uaQTck" target="_blank" rel="noopener">Playlist “ARTEFACTOS REDUX”</a>: 34 videos con el currículum completo, las memorias 2020–2021 y la guía de registro. Las actividades 3 a 8 (Mapa de Empatía, Canvas, Modelo de Negocios, Modelo Financiero, Pitch Deck) están publicadas en video', thumb: 'assets/img/evidencia/playlist-redux.jpg', thumbCaption: 'Playlist ARTEFACTOS REDUX · 34 videos' },
+      { claim: 'REDUX impulsado por HEINEKEN México e INCmty.', grade: 'own', artifact: 'Playlist “ARTEFACTOS REDUX”', thumb: 'assets/img/evidencia/playlist-redux.jpg', thumbCaption: 'Playlist ARTEFACTOS REDUX · 34 videos' },
       { claim: 'Metodología incluida en el directorio de programas del Tec.', grade: 'none', artifact: 'Sin artefacto. Pendiente: enlace o captura del directorio' }
     ],
     autopsia: 'Publiqué el currículum completo y nunca lo firmé como producto. Hoy la metodología circula, la usan, y no hay forma de rastrear el uso ni de que la autoría vuelva a mí: regalé el activo sin quedarme la marca. La lección no es “no publiques en abierto”. Es que abrir el contenido y capitalizar la autoría no son incompatibles, y yo hice lo primero sin hacer lo segundo. Transferible: cuando el programa es la metodología, el activo no es el evento, es el currículum.',
@@ -546,8 +548,8 @@ const CASES = {
       '<strong>6 conferencias y talleres</strong> en el programa derivado WIRE (marzo-abril de 2020, con RushFrame).'
     ],
     evidenceRows: [
-      { claim: 'Fundé y dirijo HackSureste.', grade: 'inst', artifact: '<a href="https://2023.talent-land.mx/speakers/diego-maury/" target="_blank" rel="noopener">Talent Land 2023</a> me acredita como Founder of HackSureste en su página oficial de speakers. No documenta la fecha de fundación' },
-      { claim: 'La edición 2019 se realizó.', grade: 'own', artifact: '<a href="https://www.youtube.com/playlist?list=PL-n3YGt_YvOP_0zdKimHFgZ1I-uAVcWAp" target="_blank" rel="noopener">Playlist HackSureste / RushFrame</a>: recap en video de HackSureste 2019' },
+      { claim: 'Fundé y dirijo HackSureste.', grade: 'inst', artifact: '<a href="https://2023.talent-land.mx/speakers/diego-maury/" target="_blank" rel="noopener">Talent Land 2023</a> me acredita como Founder of HackSureste en su página oficial de speakers. No documenta la fecha de fundación', thumb: 'assets/img/evidencia/talentland-2023-speaker.jpg', thumbCaption: 'Talent Land 2023 · página de speaker' },
+      { claim: 'La edición 2019 se realizó.', grade: 'own', artifact: '<a href="https://www.youtube.com/playlist?list=PL-n3YGt_YvOP_0zdKimHFgZ1I-uAVcWAp" target="_blank" rel="noopener">Playlist HackSureste / RushFrame</a>: recap en video de HackSureste 2019', thumb: 'assets/img/evidencia/playlist-hacksureste.jpg', thumbCaption: 'Playlist HackSureste / RushFrame · 22 videos' },
       { claim: '3,000+ participantes acumulados.', grade: 'none', artifact: 'Estimado propio, sin registro publicable' },
       { claim: 'Participantes de 6 estados.', grade: 'none', artifact: 'Sin artefacto enlazado' },
       { claim: 'Sedes en Mérida y Ciudad del Carmen.', grade: 'none', artifact: 'Sin artefacto enlazado' }
@@ -560,6 +562,7 @@ const CASES = {
     slug: 'sofi', org: 'FlipHouse', year: 'Oct 2025 – Jun 2026', tipo: 'Sistema RevOps/AI',
     banner: null, logo: null,
     voidLabel: 'Sin imagen publicable · sistema bajo NDA',
+    voidHint: 'Slot para el diagrama de arquitectura',
     resultTitle: 'Convertí captación dispersa en una operación comercial medible, y la puse a correr sola',
     metric: 'Speed-to-lead: de 1 a 3 días a menos de 5 minutos. Medido en el CRM.',
     capacities: ['RevOps y automatización', 'Sistemas con AI', 'Gobernanza y procesos', 'Dirección de programas'],
@@ -660,7 +663,8 @@ function totals() {
 
 function mediaHTML(c, height) {
   if (!c.banner) {
-    return `<div class="media-void">${esc(c.voidLabel || 'Sin imagen publicable')}</div>`;
+    const hint = c.voidHint ? `<span class="media-void__hint">${esc(c.voidHint)}</span>` : '';
+    return `<div class="media-void"><span>${esc(c.voidLabel || 'Sin imagen publicable')}</span>${hint}</div>`;
   }
   return `
     <div class="card__media">
