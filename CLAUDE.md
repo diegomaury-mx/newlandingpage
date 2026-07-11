@@ -204,14 +204,16 @@ Fuente: `CHANGELOG.md` [v0.1.0] — 2026-06-27. Estas son decisiones de producto
 - **Roadmap (según CHANGELOG):** Sprint 0 (Product Foundation, pendiente de PRD) → Sprint 0.5 (Domain & Content Architecture, **en progreso** — deliverables ya completados: CHANGELOG.md, schemas, docs de convenciones y SEO) → Sprint 1 (Astro Setup, bloqueado hasta aprobar Sprint 0) → Sprint 2 (Design System) → Sprint 3 (Home) → Sprint 4 (Páginas internas) → Sprint 5 (Optimización, incluye implementación real del modelo SEO).
 - **Regla operativa:** cualquier trabajo de implementación Astro requiere que Sprint 0 (PRD, IA, sitemap definitivo, wireframes) esté aprobado por Diego primero. No adelantar Sprint 1 sin esa aprobación.
 
-## CMS Notion del portafolio — Fases A0+A1 CERRADAS (2026-07-11)
+## CMS Notion del portafolio — Fases A0+A1+B1 CERRADAS (2026-07-11)
 
 Documentación completa: `docs/platform/cms-notion.md`. Resumen:
 
 - **A0:** no existe pipeline Notion → sitio. Las propiedades `TD:*` eran residuo de un intento viejo (vacías en las 27 fichas) y se borraron. El sitio LIVE sigue siendo HTML editado a mano.
-- **A1:** la base Notion `🗂️ SSOT - Portafolio Proyectos` (data source `88257bc9-e575-45e8-90df-f851f96e92f2`, 27 fichas) es ahora el CMS: 10 propiedades nuevas (`Estado publicación`, `Publicable`, `Capa`, `Canales`, `Capacidades`, `Métrica ancla`, `Organización`, `Tipo`, `Evidencia`, `Caso maestro`), 5 propiedades legacy deprecadas con prefijo `[DEPRECADO]` (se borran tras la fase B1) y 5 vistas.
-- **Clasificación:** 3 Insignia / 12 Soporte / 12 Archivo. Todas en `Draft` y `Publicable = No`.
-- **Regla operativa:** nada pasa a `Estado publicación = Publicado` desde este proyecto. Publicar es decisión de Diego, y exige `Evidencia` + `Métrica ancla` verificadas. No inventar cifras.
+- **A1:** la base Notion `🗂️ SSOT - Portafolio Proyectos` (data source `88257bc9-e575-45e8-90df-f851f96e92f2`, 27 fichas) es ahora el CMS: 10 propiedades nuevas (`Estado publicación`, `Publicable`, `Capa`, `Canales`, `Capacidades`, `Métrica ancla`, `Organización`, `Tipo`, `Evidencia`, `Caso maestro`), 5 propiedades legacy deprecadas con prefijo `[DEPRECADO]` y 5 vistas.
+- **B1:** los 15 casos publicables están escritos con la plantilla v2 en el cuerpo de su ficha, con bloque de evidencia ✔/✖ por afirmación. **Clasificación: 4 Insignia (SOFI, HEINEKEN Green Challenge, HackSureste, REDUX) / 11 Soporte / 12 Archivo.** Todas en `Draft` y `Publicable = No`.
+- **A2 (front end):** el prototipo lo construye Diego en Claude Design. Brief de handoff en Notion `39a0fe3c51c581ba821ff977fb5946a4`.
+- **Regla operativa:** nada pasa a `Estado publicación = Publicado` desde este proyecto. Publicar es decisión de Diego, y exige `Evidencia` + `Métrica ancla` verificadas. **No inventar cifras:** toda afirmación cuantitativa lleva artefacto o un ✖ explícito.
+- **Cifras muertas, no resucitar:** el 9,905 NO es de HEINEKEN y no aparece en ninguna fuente documental. Las bolsas de premio de $80,000 (B-Challenge) y $120,000 (INC Prototype) no tienen respaldo. REDUX no son "200+ capacitados" sino 400+ solo en 2020 (Informe Anual 2020 del Tec).
 - **Gotcha:** la propiedad `Objetivo con métrica y timeframe ` lleva un espacio al final de su nombre real.
 - El mapeo Notion → Zod (`src/content/config.ts`) es **diseño TO-BE del Sprint 1**. Hoy no hay sincronización.
 
