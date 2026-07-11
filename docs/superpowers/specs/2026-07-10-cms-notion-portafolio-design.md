@@ -61,6 +61,8 @@
 
 ## Mapeo Notion → Zod (va como tabla en el doc de taxonomía)
 
+> **Diseño TO-BE (Sprint 1 Astro, sin implementar).** Define cómo el CMS alimentará las Content Collections cuando Astro se active. Hoy no existe ningún sync; no leer como estado actual.
+
 | Propiedad Notion | Campo Zod (`cases`) | Nota |
 |---|---|---|
 | `title` | `title` | — |
