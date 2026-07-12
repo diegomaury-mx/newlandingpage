@@ -257,6 +257,8 @@ Fuente: página Notion `Instrucciones para Claude Code — Portafolio D (Notion 
 
 Las lecciones aprendidas se registran **doble**: en `~/.claude/memory/lessons-learned.md` (local, para Claude) y en el Changelog de Notion (canónico, para Diego). La entrada de Notion usa `Razón` = la creencia incorrecta y `Impacto` = la corrección y su fuente.
 
+**Granularidad: un commit registrable = una entrada = una tarea.** No agrupar varios commits en una sola entrada, por pequeños que sean, ni "aprovechar" una entrada existente porque el cambio es parecido o del mismo día. Si el commit cae en la tabla de arriba, tiene su propia entrada y su propia tarea. Los commits que no caen en la tabla (refactors internos, experimentos, WIP) no generan nada.
+
 ### Base 📝 Changelog — Portafolio D
 
 - Database: `b998e8e4664a45ae89f0f349876cec4b` · data source: `collection://652b68c7-9cf5-441c-957c-f18b055db8b8`
