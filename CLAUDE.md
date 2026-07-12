@@ -220,6 +220,18 @@ Documentación completa: `docs/platform/cms-notion.md`. Resumen:
 ### Nota de diseño: nav scrollToSection
 La función de scroll se llama `scrollToSection` (no `scrollTo` — conflicto con `window.scrollTo`).
 
+## Caso SOFI — `cases/sofi.html` (rama `feat/caso-sofi`, NO live, 2026-07-12)
+
+Página de caso construida sobre el plan `docs/superpowers/plans/2026-07-11-artefactos-evidencia-sofi.md` y su spec. **No está en el sitio LIVE:** lleva `noindex, nofollow`, no se enlaza desde ninguna página y no entra al sitemap. Publicarla es decisión de Diego.
+
+- **Los data files son generados, no se editan a mano.** `assets/data/sofi/sofi-fsm.js`, `sofi-conversation.js` y `sofi-metrics.js` se producen con `tools/portfolio-export/` **en el repo de SOFI** (`Fliphouse-whatsapp-agent`, rama `feat/portfolio-export`), no en este repo. Cada uno asigna a `window.SOFI_*` y se carga con `<script src>`: por eso la página abre igual con `file://` que en Pages, sin `fetch` ni CORS. Para regenerar: `node tools/portfolio-export/build-fsm.js <ruta-del-sitio>`, `capture-run.js` (necesita Docker + `OPENROUTER_API_KEY` viva) y `build-metrics.js`.
+- **El FSM no se dibuja.** Los 12 estados, los 3 terminales y el umbral 0.75 se extraen de `src/services/fsm.service.js` con un script. Si el código de SOFI cambia, se regenera el data file; no se toca el HTML.
+- **La conversación del simulador es una corrida real contra el sistema** (webhook con firma HMAC válida, modelo real, FSM real), con lead ficticio. **No hay ningún dato de FlipHouse en el repo, y no debe haberlo.** No se extrae nada de la Postgres de producción: se descartó por innecesario, no solo por riesgoso.
+- **Métrica de tests: 392, no la suite completa.** El conteo debe excluir `tests/portfolio-export/` (son tests del tooling de este portafolio, no del sistema SOFI). Con `npx jest` a secas saldrían 420 e inflaría la cobertura.
+- **La sección "Lo que no puedo probar" es estructural, no decorativa.** Las tres métricas de negocio siguen en ✖. El RODI de +1,291% **no está bajo NDA**: es un modelo propio (cost-avoidance modelado, sin auditoría externa). Presentarlo como bloqueado por NDA lo haría sonar más sólido de lo que es.
+- El video de `/brag` es **pieza de presentación, no evidencia**. El hueco existe en el hero y solo se renderiza si el archivo aparece.
+- Pendiente/candidato: el dashboard `app.html` de SOFI es un artefacto publicable que la spec dejó fuera a propósito (tiene un bug conocido de mensajes duplicados).
+
 ## Registro en Notion — Portafolio D (SSOT de cambios del sitio)
 
 Fuente: página Notion `Instrucciones para Claude Code — Portafolio D (Notion MCP)` (`8b47026a4a8243ba90431c0424338d14`). Schemas verificados contra Notion el 2026-07-12.
@@ -258,15 +270,20 @@ Las lecciones aprendidas se registran **doble**: en `~/.claude/memory/lessons-le
 
 ### Seguimiento en Tareas y Misiones
 
-Cada entrada del Changelog queda vinculada a una tarea en **Tareas y Misiones** (`3190fe3c51c58002a2f5da54caac485a` · `collection://3190fe3c-51c5-8074-a302-000b97e8a410`).
+**TODA ENTRADA DE CHANGELOG AMERITA CREAR UNA TAREA, pero no toda tarea creada amerita un Changelog.** La relación es unidireccional:
 
-- Si la tarea ya existe, solo vincularla vía la propiedad `Tareas y Misiones` del changelog.
-- Si no existe, crearla con:
-  - **Nombre de tarea**: `Documentar cambio: <título del cambio>`
-  - **Estado**: `Por empezar`
-  - **Prioridad**: `Media` por defecto
-  - **Proyectos, Ideas y Locuras de Diego**: vincular a la página `Portafolio D` (`2db0fe3c51c5805dabc7d220b38ce405`)
-  - **Resumen**: qué falta documentar o verificar del cambio
+- Changelog → tarea: **siempre**. No hay entrada sin su tarea propia en **Tareas y Misiones** (`3190fe3c51c58002a2f5da54caac485a` · `collection://3190fe3c-51c5-8074-a302-000b97e8a410`). Sin excepciones, aunque el cambio ya esté hecho y aunque exista una tarea parecida.
+- Tarea → changelog: **solo si el trabajo cae en la tabla de arriba**. Una tarea de exploración, de borrador o de decisión pendiente vive sola, sin entrada en el changelog. No inflar el changelog con trabajo que no se publicó.
+
+Crear la tarea con:
+
+- **Nombre de tarea**: `Documentar cambio: <título del cambio>`
+- **Estado**: `Por empezar`, o el que refleje la realidad (ver abajo)
+- **Prioridad**: `Media` por defecto
+- **Proyectos, Ideas y Locuras de Diego**: vincular a la página `Portafolio D` (`2db0fe3c51c5805dabc7d220b38ce405`)
+- **Resumen**: qué falta documentar o verificar del cambio
+
+Luego vincularla desde la propiedad `Tareas y Misiones` de la entrada del changelog. Si además existe una tarea previa relacionada, se vincula también, pero eso no sustituye a la tarea propia de la entrada.
 
 **Cerrar la tarea es parte del trabajo, no un extra.** El `Estado` refleja la realidad, no la intención:
 
