@@ -19,14 +19,16 @@ He offers fractional engagement models for organizations that need senior innova
 
 ---
 
-## Metrics (audit-ready)
+## Metrics
 
-- 9,905 entrepreneurs impacted across national programs
-- +600% regional participation growth (HEINEKEN Green Challenge, southeast Mexico)
-- 3,231 projects evaluated across 4 editions
-- 3,000+ ecosystem participants and 30+ programs (HackSureste)
-- 200+ entrepreneurs trained on a proprietary methodology (REDUX, in Tec de Monterrey's registry)
-- SOFI (FlipHouse): 89.5% automatic coverage over 191 leads, 74.9% response rate without advisor intervention, 173 leads contacted in ~1.5 hours in a single campaign, speed-to-lead under 5 minutes, RODI +1,291% modeled (payback under 1 month, 2025-2026)
+Every figure below carries its evidence status. `[published]` = a third party published it and the source is named. `[own]` = Diego's own operational records or estimates, with no external artifact. Nothing here is presented as audited.
+
+- 400+ university students, 111 ideas, 4 regions trained on a proprietary methodology in the 2020 edition alone (REDUX, in Tec de Monterrey's registry) `[published: Tec de Monterrey Annual Report 2020, p.176]`
+- +600% regional participation growth, edition 1 to edition 3, 2019–2021 (HEINEKEN Green Challenge, southeast Mexico). Baseline: 35 regional submissions the year before 2019 `[published: La Jornada Maya, 2019-08-06]`. The end figure is an operational estimate `[own]`
+- 9,905 participants enrolled, aggregate across INCmty programs including HGC `[own, estimate]`
+- 3,231 projects evaluated across 4 editions, 900+ per edition `[own]`
+- 3,000+ ecosystem participants and 30+ programs (HackSureste). Estimate, not additive with the other figures on this page `[own]`
+- SOFI (FlipHouse): 89.5% automatic coverage over 191 leads, 74.9% response rate without advisor intervention, 173 leads contacted in ~1.5 hours in a single campaign, speed-to-lead from 1–3 days to under 5 minutes `[own: measured in the CRM]`, RODI +1,291% `[own: modeled, payback under 1 month, 2025-2026]`. The system runs under NDA and has no publishable artifact yet
 
 ---
 
@@ -51,37 +53,40 @@ Design and facilitation of structured programs for entrepreneurs, corporate team
 ### HEINEKEN Green Challenge × INCmty (2019–2022)
 [HEINEKEN Green Challenge](https://diegomaury.mx/llms-full.txt): detailed case study on end-to-end virtualization and +600% regional scaling using Lean Operations.
 - National open innovation program for sustainable entrepreneurship
-- Scaled southeast Mexico from 36 registrations (edition 1) to 300+ (edition 3): +600% regional growth
-- 3,231 projects evaluated across 4 editions
-- 9,905 entrepreneurs impacted
-- 100+ mentors coordinated per edition
-- Virtualized a 6-month national program during COVID with above-benchmark completion rates
+- Scaled the southeast from a documented baseline of 35 regional submissions the year before 2019 `[published: La Jornada Maya, 2019-08-06]` to +600% regional growth by edition 3, 2019–2021. The end figure is an operational estimate `[own]`
+- 3,231 projects evaluated across 4 editions, 900+ per edition `[own]`
+- 100+ mentors coordinated per edition `[own]`
+- Virtualized a 6-month national program during COVID with above-benchmark completion rates `[own]`
 
 ### SOFI · FlipHouse (2025–present)
 [SOFI · FlipHouse](https://diegomaury.mx/llms-full.txt): RevOps + AI automation architecture that compressed speed-to-lead from days to minutes.
 - PropTech (Adelanto de Venta, La Laguna): deployed SOFI, an AI agent for lead qualification and operations via WhatsApp, orchestrating 3 models (reasoning, voice, transcription) over HubSpot, Make, VAPI and Twilio
 - Stack: Make + Railway + WhatsApp Cloud API + OpenRouter/Claude + HubSpot as SSOT
-- 89.5% automatic coverage over 191 leads | 74.9% response rate without advisor intervention
-- 173 leads contacted in ~1.5 hours in a single campaign
-- +500% leads to CRM | Speed-to-lead: 1–3 days → <5 minutes
-- RODI (Return on Digital Investment): +1,291% modeled, payback under 1 month (2025-2026)
+- 89.5% automatic coverage over 191 leads | 74.9% response rate without advisor intervention `[own: measured in the CRM]`
+- 173 leads contacted in ~1.5 hours in a single campaign `[own: measured in the CRM]`
+- +500% leads to CRM | Speed-to-lead: 1–3 days → <5 minutes `[own: measured in the CRM]`
+- RODI (Return on Digital Investment): +1,291% `[own: modeled, payback under 1 month, 2025-2026]`
 - Meta-approved technology provider (WhatsApp Flows, LFPDPPP compliance)
+- The system runs under NDA. There is no publishable artifact yet, and these figures rest on the CRM and on Diego's word, not on a third party
 
 ### HackSureste Ecosystem (2018–2023)
 [HackSureste](https://diegomaury.mx/llms-full.txt): building a regional innovation ecosystem from zero, including the southeast's largest hackathon.
 - Southeast Mexico's flagship innovation and hackathon ecosystem
-- 3,000+ participants, 100+ startups mentored, 30+ programs developed
+- 3,000+ participants, 100+ startups mentored, 30+ programs developed. Estimate, not additive with the other figures on this page `[own]`
 - Designed modular architecture (WIRE framework, ideaLab)
 - Full digital migration 2020–2022
 
 ### REDUX Bootcamp (2019–2022)
 - Sustainable entrepreneurship methodology designed and operated
-- 200+ entrepreneurs trained
+- 400+ university students, 111 ideas, 4 regions in the 2020 edition alone. The Tec documented it as the largest of its kind in Latin America `[published: Tec de Monterrey Annual Report 2020, p.176]`
 - Included in Tec de Monterrey's official program registry
+- Curriculum published as video: playlist "ARTEFACTOS REDUX", 34 videos `[own]`
 
 ### INCmty Challenges (Tec de Monterrey)
 - Multiple open innovation challenges: BTEM, Brain Mexico, Demo Day, INC Prototype
-- $120,000+ MXN in prizes (INC Prototype edition)
+- INC B-Challenge: 504 applicants in 2021, against 383 in 2020 `[published: Tec de Monterrey Annual Reports 2021 p.415 and 2020 p.180]`
+- INC Prototype: 197 applicants in 2021, against 156 in 2020 `[published: Tec de Monterrey Annual Report 2021, p.415]`
+- INCmty Accelerator: 205 applicant startups in 2021, against 152 in 2020 `[published: Tec de Monterrey Annual Report 2021, p.415]`
 - TRL-based evaluation framework implemented
 
 ### CAVA Soft MVP (2025)
@@ -97,7 +102,7 @@ Design and facilitation of structured programs for entrepreneurs, corporate team
 High-volume editions threatened to collapse the project-review process: too many submissions, inconsistent criteria, and reviewer fatigue degrading evaluation quality.
 - Problem: manual review could not scale past a few hundred projects without quality loss
 - Response: designed an escalated evaluation protocol (binary go/no-go pre-filter on 3 criteria → weighted rubric by thematic vertical → regional selection)
-- Result: sustained evaluation quality across 900+ projects per edition, with a defensible, auditable trail
+- Result: sustained evaluation quality across 900+ projects per edition, with a defensible, auditable trail `[own]`
 - Transferable lesson: process design, not more reviewers, is the lever that protects quality at scale
 
 ---

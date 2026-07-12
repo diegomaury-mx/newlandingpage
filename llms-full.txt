@@ -39,20 +39,26 @@ Few operators in the region control comparable access across all three layers si
 
 ---
 
-## Audit-Ready Metrics (internally documented, from operational records)
+## Metrics, with their evidence
 
-| Metric | Figure | Source |
-|--------|--------|--------|
-| Entrepreneurs impacted | 9,905 | HEINEKEN Green Challenge (4 editions) |
-| Regional growth, southeast Mexico | +600% | HGC registrations, edition 3 vs. edition 1 |
-| Projects evaluated | 3,231 | HGC 4 editions aggregate |
-| Mentors coordinated per edition | 100+ | HGC operational records |
-| Ecosystem participants | 3,000+ | HackSureste 2018–2023 |
-| Programs developed | 30+ | HackSureste portfolio |
-| Entrepreneurs trained (REDUX) | 200+ | REDUX bootcamp records |
-| Speed-to-lead improvement (SOFI) | 1–3 days → <5 min | FlipHouse deployment, 2025 |
-| CRM leads increase (SOFI) | +500% | FlipHouse HubSpot data |
-| REDUX prize pool (INC Prototype) | $120,000+ MXN | INCmty official records |
+Two grades, and the difference matters. **Published** means a named third party put the figure in print and it can be checked. **Own** means it comes from Diego's operational records, his CRM, or his estimate, with no external artifact behind it. Nothing on this page has been audited. Any figure without a named source is an own figure, and is labeled as such rather than dressed up as one.
+
+| Metric | Figure | Evidence |
+|--------|--------|----------|
+| Students trained, REDUX 2020 edition | 400+ students, 111 ideas, 4 regions | **Published** — Tec de Monterrey Annual Report 2020, p.176 |
+| INC B-Challenge applicants | 504 in 2021, 383 in 2020 | **Published** — Tec Annual Reports 2021 p.415, 2020 p.180 |
+| INC Prototype applicants | 197 in 2021, 156 in 2020 | **Published** — Tec Annual Report 2021, p.415 |
+| INCmty Accelerator applicant startups | 205 in 2021, 152 in 2020 | **Published** — Tec Annual Report 2021, p.415 |
+| Southeast baseline before HGC | 35 regional submissions | **Published** — La Jornada Maya, 2019-08-06 |
+| Regional growth, southeast Mexico | +600%, edition 1 to edition 3 (2019–2021) | **Own** — baseline is published, the end figure is an operational estimate |
+| Participants enrolled, INCmty programs aggregate (HGC included) | 9,905 | **Own** — estimate |
+| Projects evaluated | 3,231 across 4 editions, 900+ per edition | **Own** |
+| Mentors coordinated per edition | 100+ | **Own** |
+| Ecosystem participants (HackSureste) | 3,000+ | **Own** — estimate, not additive with the other figures in this table |
+| Programs developed (HackSureste) | 30+ | **Own** |
+| Speed-to-lead improvement (SOFI) | 1–3 days → <5 min | **Own** — measured in the CRM. System under NDA, no publishable artifact |
+| CRM leads increase (SOFI) | +500% | **Own** — measured in the CRM |
+| RODI (SOFI) | +1,291% | **Own** — modeled, not observed |
 
 ---
 
@@ -79,8 +85,8 @@ By the second edition, the program faced a structural constraint: how do you sca
 
 **Results**
 
-- Southeast Mexico: 36 registrations (edition 1) → 300+ registrations (edition 3) = **+600% regional growth**
-- Aggregate impact: **9,905 entrepreneurs, 3,231 projects evaluated, 4 editions**
+- Southeast Mexico: from a documented baseline of 35 regional submissions the year before 2019 (La Jornada Maya, 2019-08-06) to **+600% regional growth** by edition 3 (2019–2021). The baseline is published; the end figure is an operational estimate and is the one piece of this case still missing an artifact
+- Aggregate: **3,231 projects evaluated across 4 editions**, and 9,905 participants enrolled across INCmty programs with HGC included (own estimate, not a HEINEKEN figure)
 - Completion rates above benchmark despite full virtualization
 - REDUX registered in Tec de Monterrey's official directory
 - Program continued independently after Diego's direct operational involvement ended
@@ -88,8 +94,8 @@ By the second edition, the program faced a structural constraint: how do you sca
 **RODI: Institutional / Strategic**
 Budget under NDA. RODI calculation framed across 3 axes (institutional budget was not monetized directly):
 
-- **Operational scale**: Team 6→30 members (5x), 100+ mentors/edition, 3,231 projects evaluated, 9,905 entrepreneurs
-- **Measurable growth**: +600% regional registrations (36→300+), 4 consecutive editions, above-benchmark completion
+- **Operational scale**: Team 6→30 members (5x), 100+ mentors/edition, 3,231 projects evaluated, 9,905 participants enrolled across the INCmty programs (own estimate)
+- **Measurable growth**: +600% regional registrations from a documented baseline of 35, 4 consecutive editions, above-benchmark completion
 - **Institutional continuity**: REDUX in Tec de Monterrey's registry, HEINEKEN program sustained for 4 editions, HackSureste recognized as the southeast's operational anchor
 
 ---
@@ -155,9 +161,9 @@ Southeast Mexico had no structured innovation ecosystem. National programs had n
 4. **National program bridge**: Positioned HackSureste as the southeast's gateway for national programs - HGC was the first major integration; it created the template for future partnerships.
 
 **Results**
-- 3,000+ ecosystem participants
-- 100+ startups mentored
-- 30+ programs developed
+- 3,000+ ecosystem participants (own estimate, not additive with the INCmty program figures elsewhere on this page)
+- 100+ startups mentored (own)
+- 30+ programs developed (own)
 - Recognized as the southeast's flagship innovation and entrepreneurship ecosystem
 - National programs (HEINEKEN, INCmty) integrated HackSureste as their regional operational node
 
@@ -174,19 +180,21 @@ Existing entrepreneurship programs in the region taught frameworks without build
 - Delivered the program across multiple cohorts in partnership with INCmty and HackSureste
 
 **Results**
-- 200+ entrepreneurs trained
+- 400+ university students, 111 ideas, 4 regions in the 2020 edition alone. The Tec documented it as the largest program of its kind in Latin America (published: Tec de Monterrey Annual Report 2020, p.176)
 - REDUX registered in Tec de Monterrey's official program directory (institutional validation)
+- Curriculum published as video: the "ARTEFACTOS REDUX" playlist, 34 videos covering activities 3 through 8 and the 2020–2021 program records
 - Methodology became the foundational training layer for HGC southeast participants
 
 ---
 
 ### Case 5: INCmty Challenges (Tec de Monterrey, 2019–2022)
 
-Multiple open innovation challenges designed and operated in partnership with INCmty:
-- **BTEM** (Blockchain Tec de Monterrey): blockchain-focused challenge
-- **Brain Mexico**: national innovation challenge
-- **Demo Day**: startup showcase and pitch event
-- **INC Prototype**: physical prototyping challenge, $120,000+ MXN prize pool
+Multiple open innovation challenges designed and operated in partnership with INCmty. Figures below are published in the Tec de Monterrey Annual Reports:
+- **BTEM** (Beca Talento Emprendedor): 516 candidates in 2020, 33 of them awarded the scholarship (Annual Report 2020, p.174). Diego ran the coaching workshop, not the selection
+- **INC B-Challenge**: 504 applicants in 2021, against 383 in 2020 (Annual Reports 2021 p.415, 2020 p.180)
+- **INC Prototype**: physical prototyping challenge. 197 applicants in 2021, against 156 in 2020 (Annual Report 2021, p.415)
+- **INCmty Accelerator**: 205 applicant startups in 2021, against 152 in 2020. The 2021 winner raised a 1 million dollar seed round (Annual Report 2021, p.415)
+- **Brain Mexico**: 23 teams in the BrainCamp, 6 projects taken into specialized acceleration support (2020)
 
 Contribution: challenge design, evaluation framework (TRL-based), participant recruitment, jury coordination, and event operations.
 
