@@ -64,7 +64,7 @@ Toda cifra publicada declara su grado de evidencia (documentada o estimada). **L
 
 - Sitio v3 "Ember on Ink" (Variante F canónica) — LIVE desde 2026-06-22
 - Casos de estudio y portfolio por eras — LIVE
-- Caso SOFI (`cases/sofi.html`) — publicado con `noindex`, sin enlaces entrantes y fuera del sitemap. Enlazarlo desde el sitio es una decisión pendiente.
+- Caso SOFI (`cases/sofi.html`) — LIVE y público desde 2026-07-12: indexable, enlazado desde el index y en el sitemap
 - Cifras del index y de los `llms.txt` alineadas a la evidencia verificada (2026-07-12)
 - Sprint 0.5 (arquitectura de contenido, Astro) — en preparación, ver `CHANGELOG.md`
 

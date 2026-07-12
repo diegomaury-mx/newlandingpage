@@ -224,7 +224,7 @@ La función de scroll se llama `scrollToSection` (no `scrollTo` — conflicto co
 
 ## Caso SOFI — `cases/sofi.html` (rama `feat/caso-sofi`, NO live, 2026-07-12)
 
-Página de caso construida sobre el plan `docs/superpowers/plans/2026-07-11-artefactos-evidencia-sofi.md` y su spec. **No está en el sitio LIVE:** lleva `noindex, nofollow`, no se enlaza desde ninguna página y no entra al sitemap. Publicarla es decisión de Diego.
+Página de caso construida sobre el plan `docs/superpowers/plans/2026-07-11-artefactos-evidencia-sofi.md` y su spec. **LIVE y pública desde 2026-07-12:** `index, follow`, enlazada desde el work-item de FlipHouse en el index (`.work-case-link`) y dada de alta en el sitemap. Fue noindex y sin enlaces hasta que Diego aprobó publicarla.
 
 - **Los data files son generados, no se editan a mano.** `assets/data/sofi/sofi-fsm.js`, `sofi-conversation.js` y `sofi-metrics.js` se producen con `tools/portfolio-export/` **en el repo de SOFI** (`Fliphouse-whatsapp-agent`, rama `feat/portfolio-export`), no en este repo. Cada uno asigna a `window.SOFI_*` y se carga con `<script src>`: por eso la página abre igual con `file://` que en Pages, sin `fetch` ni CORS. Para regenerar: `node tools/portfolio-export/build-fsm.js <ruta-del-sitio>`, `capture-run.js` (necesita Docker + `OPENROUTER_API_KEY` viva) y `build-metrics.js`.
 - **El FSM no se dibuja.** Los 12 estados, los 3 terminales y el umbral 0.75 se extraen de `src/services/fsm.service.js` con un script. Si el código de SOFI cambia, se regenera el data file; no se toca el HTML.
