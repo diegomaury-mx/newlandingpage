@@ -8,3 +8,4 @@ node_modules/
 .claude-design/
 _ds_import/
 *.zip
+.agents/
