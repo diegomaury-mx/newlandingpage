@@ -387,6 +387,24 @@ git commit -m "feat(sofi): data file del FSM generado desde el codigo"
 
 ---
 
+## Corrección del 2026-07-12: de dónde sale el trace
+
+Este plan asumía que las líneas `[FSM]` daban un trace por cada turno entrante. **Es falso**, verificado contra el código. Ninguna de las dos fuentes de log cubre sola todos los turnos:
+
+- `resolveNextState` (`fsm.service.js`) **no loguea nada** cuando el intent no mueve el estado (`desired === currentState`, línea 123) ni cuando la conversación ya está en un estado terminal (línea 105).
+- La línea de `webhookController.js:587`, que sí trae `stateBefore → stateAfter (intent conf=N)` completo, **se salta** en los ocho return tempranos del controlador, que son justo los del camino feliz: `INTENTION → URGENCY`, `PROPERTY_TYPE → ESCRITURAS`, `CP → COLONIA` y el cierre `VALUE → COMPLETED`.
+- La línea de transición inválida sale por `console.warn`, o sea stderr. El harness ya redirige `2>&1`, así que queda capturada.
+
+Las dos fuentes **se complementan**: los turnos que mueven el estado siempre dejan línea `[FSM]`; los que no lo mueven y llegan a la 587 dejan línea `[SOFI]`.
+
+**Lo que no cambia:** los return tempranos **no evitan al FSM**. Todos comparan contra `nextState`, que ya decidió `resolveNextState` río arriba, y el estado ya se persistió. Solo cambian el texto de la respuesta, no la decisión. El argumento técnico del caso queda intacto: el FSM decide cada transición.
+
+**La solución:** el trace se arma **turno por turno**. `capture-run.js` manda un mensaje, espera la respuesta y lee solo el pedazo de log que ese turno escribió. Con la rebanada aislada, atribuir la decisión es trivial y la invariante `inboundCount === traces.length` de `buildConversation` se cumple por construcción.
+
+`buildConversation` **no cambia**. Se añade `traceFromTurnLog(turnLog)` a `trace.js`: manda el `[FSM]` para la decisión de estado, y la línea `[SOFI]` solo rellena `intent` y `confidence` cuando el FSM no los logueó (que es lo que pasa en un turno de baja confianza). Si un turno no dejó ninguna decisión, truena: no se publica un trace inventado.
+
+---
+
 ## Task 4: Parsear el log del FSM y armar la conversación
 
 La parte pura y testeable. Formato real de las líneas que escribe `resolveNextState`:
