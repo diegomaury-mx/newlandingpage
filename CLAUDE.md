@@ -238,7 +238,7 @@ Fuente: página Notion `Instrucciones para Claude Code — Portafolio D (Notion 
 | Cambio publicado en producción (copy, datos, diseño, estructura, SEO/llms, infraestructura) | Sí |
 | Corrección de datos o evidencia (cifras, métricas, claims) | Sí, indicando el respaldo documental usado |
 | Cambio de documentación del proyecto | Sí, con Componente `Documentación` |
-| **Lección aprendida** (creencia técnica de Claude corregida por Diego o por evidencia) | Sí, con Componente `Documentación`, Sección `General` |
+| **Lección aprendida** (creencia técnica de Claude corregida por Diego o por evidencia) | Sí, con Componente `Lecciones Aprendidas`, Sección `General` |
 | Trabajo menor sin publicar (borradores, experimentos locales) | No; se refleja en su tarea de Tareas y Misiones |
 
 Las lecciones aprendidas se registran **doble**: en `~/.claude/memory/lessons-learned.md` (local, para Claude) y en el Changelog de Notion (canónico, para Diego). La entrada de Notion usa `Razón` = la creencia incorrecta y `Impacto` = la corrección y su fuente.
@@ -249,7 +249,7 @@ Las lecciones aprendidas se registran **doble**: en `~/.claude/memory/lessons-le
 - Propiedades (nombres reales):
   - **Cambio** (title) — título corto tipo commit, ej. `Fix: cifras del hero alineadas a evidencia`
   - **Fecha** (date) — fecha de publicación, `YYYY-MM-DD`
-  - **Componente** (select, una): `Copy` · `Datos y evidencia` · `Diseño` · `Estructura` · `SEO / llms` · `Infraestructura` · `Documentación`
+  - **Componente** (select, una): `Copy` · `Datos y evidencia` · `Diseño` · `Estructura` · `SEO / llms` · `Infraestructura` · `Documentación` · `Lecciones Aprendidas`
   - **Sección** (multi-select, una o varias): `Hero` · `Casos` · `Servicios` · `About` · `Testimonios` · `Editorial` · `Contacto` · `llms.txt` · `General`
   - **Razón** (text) — por qué se hizo, 1-2 líneas
   - **Impacto** (text) — efecto en el sitio o el posicionamiento, 1-2 líneas
@@ -268,6 +268,13 @@ Cada entrada del Changelog queda vinculada a una tarea en **Tareas y Misiones** 
   - **Proyectos, Ideas y Locuras de Diego**: vincular a la página `Portafolio D` (`2db0fe3c51c5805dabc7d220b38ce405`)
   - **Resumen**: qué falta documentar o verificar del cambio
 
+**Cerrar la tarea es parte del trabajo, no un extra.** El `Estado` refleja la realidad, no la intención:
+
+- Si el trabajo de la tarea quedó terminado en la misma sesión → `Estado = Terminada`. No dejar tareas en `Por empezar` cuando ya están hechas.
+- Si quedó a medias → `En proceso`, con el `Resumen` diciendo qué falta.
+- Si depende de una decisión de Diego o de un tercero → `Bloqueada`, diciendo de qué depende.
+- Estados válidos: `Por empezar` · `En proceso` · `Bloqueada` · `Terminada` · `Archivada`.
+
 ### Documentación del proyecto
 
 - Vive en la base **📁 Product Requirements Document - Portfolio** (tab "Documentación" del hub, `3190fe3c51c580f4a46bf9786c3b79f9` · `collection://3190fe3c-51c5-8005-aefb-000b5d0eff53`). Nunca como páginas sueltas de nivel superior ni como subpáginas de tareas.
@@ -281,7 +288,7 @@ Cada vez que se aprende algo nuevo que no es derivable del código ni del histor
 
 - **Memoria del proyecto** — `~/.claude/projects/C--Users-DiegoLocal-Documents-Claude-Projects-Claude-Code-newlandingpage/memory/`: un archivo por hecho, con frontmatter (`name`, `description`, `metadata.type` = `user` | `feedback` | `project` | `reference`), más una línea de índice en `MEMORY.md` (`- [Título](archivo.md) — gancho`). Antes de crear, revisar si ya existe un archivo que cubra el hecho y actualizarlo en vez de duplicar. Si un aprendizaje resulta falso, borrar el archivo.
 - **Invariante del proyecto** (comportamiento del sistema, restricción técnica, convención) → va al `CLAUDE.md` de este repo, no a memoria.
-- **Creencia técnica corregida** (Claude asumió algo, Diego o la evidencia lo desmintió) → entrada en `~/.claude/memory/lessons-learned.md` con el formato del protocolo de cierre (creencia incorrecta / corrección / fuente / contexto) **y** entrada en el Changelog de Notion con Componente `Documentación` y Sección `General`.
+- **Creencia técnica corregida** (Claude asumió algo, Diego o la evidencia lo desmintió) → entrada en `~/.claude/memory/lessons-learned.md` con el formato del protocolo de cierre (creencia incorrecta / corrección / fuente / contexto) **y** entrada en el Changelog de Notion con Componente `Lecciones Aprendidas` y Sección `General`.
 - **Cifras y claims** — todo aprendizaje sobre datos del portafolio se valida contra los SSOT antes de guardarse. Las cifras muertas listadas arriba (9,905 como HEINEKEN, bolsas de $80,000 y $120,000, "200+ capacitados" de REDUX) no se resucitan en memoria ni en el sitio.
 
 ### Al cerrar sesión (`/close-session`)
@@ -292,7 +299,8 @@ El paso 5 del protocolo (`~/.claude/commands/close-session.md`) es "Notion — I
 2. **CLAUDE.md** → agregar los invariantes nuevos descubiertos en la sesión.
 3. **Memoria del proyecto** → crear o actualizar los archivos en `memory/` + su línea en `MEMORY.md`.
 4. **Notion** → crear entrada en el **Changelog — Portafolio D** (con las propiedades exactas de arriba) y crear o vincular su tarea en **Tareas y Misiones**, para cada uno de estos casos de la sesión: cambio publicado en producción, corrección de datos/evidencia, cambio de documentación, **o lección aprendida del paso 1**. Si no hubo ninguno, omitir y decirlo en el resumen.
-5. **Resumen al usuario** → qué se registró en cada uno de los cuatro destinos.
+5. **Estado de las tareas** → actualizar el `Estado` de toda tarea que se haya trabajado en la sesión. Terminada es `Terminada`, no `Por empezar`.
+6. **Resumen al usuario** → qué se registró en cada uno de los destinos.
 
 Buscar en Notion por **título exacto**, workspace **Notion de Diego**.
 
