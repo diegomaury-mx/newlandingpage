@@ -283,7 +283,13 @@ Crear la tarea con:
 - **Proyectos, Ideas y Locuras de Diego**: vincular a la página `Portafolio D` (`2db0fe3c51c5805dabc7d220b38ce405`)
 - **Resumen**: qué falta documentar o verificar del cambio
 
-Luego vincularla desde la propiedad `Tareas y Misiones` de la entrada del changelog. Si además existe una tarea previa relacionada, se vincula también, pero eso no sustituye a la tarea propia de la entrada.
+Luego vincularla desde la propiedad `Tareas y Misiones` de la entrada del changelog.
+
+**Cardinalidad: una entrada puede tener varias tareas, pero una tarea no puede tener varios changelogs.**
+
+- Una entrada del changelog puede vincular **varias** tareas relacionadas, además de la suya propia.
+- Una tarea pertenece a **una sola** entrada del changelog. Antes de vincular una tarea preexistente, verificar que su propiedad `Changelog — Portafolio D` esté vacía. **Si ya tiene una entrada, no reutilizarla:** dejarla donde está y crear la tarea nueva de esta entrada.
+- Regla práctica: la tarea propia siempre es nueva. Las tareas preexistentes solo se enganchan si están huérfanas de changelog.
 
 **Cerrar la tarea es parte del trabajo, no un extra.** El `Estado` refleja la realidad, no la intención:
 
