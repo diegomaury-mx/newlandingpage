@@ -30,7 +30,9 @@ Propiedades deprecadas (renombradas con prefijo `[DEPRECADO]`, se borran despué
 
 ## Clasificación actual
 
-4 Insignia (SOFI, HEINEKEN Green Challenge, HackSureste, REDUX), 11 Soporte y 12 Archivo. Las 27 fichas están en `Estado publicación = Draft` y `Publicable = No`.
+4 Insignia (SOFI, HEINEKEN Green Challenge, HackSureste, REDUX), 11 Soporte y 12 Archivo. Las 27 fichas están en `Estado publicación = Draft`.
+
+**Inconsistencia conocida, sin corregir:** `BTEM Training 2023` es capa Archivo, no tiene métrica ancla ni evidencia, y aun así está en `Publicable = Sí`. Las otras 26 están en `No`. Es un dato suelto que ensucia la vista "Deuda de verificación". Pendiente de que Diego confirme si se baja a `No`.
 
 **Regla operativa:** nada pasa a `Publicado` desde este proyecto. Publicar es decisión de Diego en Convergencia, y exige `Evidencia` + `Métrica ancla` verificadas.
 
@@ -46,18 +48,9 @@ Propiedades deprecadas (renombradas con prefijo `[DEPRECADO]`, se borran despué
 
 Ninguna vista muestra las propiedades `[DEPRECADO] *`.
 
-## Runbook: crear el template de la base (manual, ~5 min)
+## Template de la base (hecho)
 
-La API de Notion no permite crear templates de base de datos, así que este paso lo hace Diego a mano una sola vez:
-
-1. Abrir la base `🗂️ SSOT - Portafolio Proyectos`.
-2. En el botón azul `Nuevo`, desplegar el menú y elegir `Nueva plantilla`.
-3. Nombrar la plantilla **`Caso maestro (Plantilla v2)`**.
-4. Copiar la estructura de secciones desde la página Notion `Plantilla v2 — Especificación de caso maestro` (`b50c60baaf7443da90bc09d31cf9d4c4`) al cuerpo de la plantilla.
-5. Dejar preseteados en la plantilla: `Estado publicación = Draft`, `Publicable = No`, `Capa = Insignia`.
-6. Guardar.
-
-A partir de ahí, cada caso maestro nuevo se crea desde esa plantilla y nace con el contrato de contenido completo.
+El template **`Caso maestro (Plantilla v2)`** ya existe en la base (verificado en el schema el 2026-07-12). Cada caso maestro nuevo se crea desde ahí y nace con el contrato de contenido completo. La API de Notion no permite crear templates, así que lo hizo Diego a mano.
 
 ## Fase B1 — Consolidación de contenido (cerrada 2026-07-11)
 
@@ -86,10 +79,12 @@ REDUX se promovió de Soporte a Insignia: es el caso con mejor evidencia del por
 
 ### Pendientes de Diego (bloquean el gate de Convergencia)
 
-- **SOFI** no tiene un solo artefacto (dashboards bajo NDA). Un diagrama de arquitectura lo resuelve.
-- **El +600% del sureste** tiene línea base documentada (35 propuestas antes de 2019) pero falta la cifra final.
-- **FreeLand** no tiene una sola métrica de impacto.
+Solo las fichas **Insignia** necesitan métrica ancla y evidencia verificadas. Una ficha de **Soporte** puede vivir sin métrica ancla: FreeLand declara "Sin cifras registradas" en la suya y eso es correcto, porque el problema sería fingir que la tiene, no admitir que no.
+
+- **El +600% del sureste** tiene línea base documentada (35 propuestas antes de 2019, La Jornada Maya) pero falta la cifra final.
 - **REDUX**: falta la captura del directorio de metodologías del Tec.
+
+**SOFI no está en esta lista.** No tiene artefacto (los dashboards están bajo NDA), pero el plan `docs/superpowers/plans/2026-07-11-artefactos-evidencia-sofi.md` existe justamente para generarlo desde el sistema real. Es trabajo en curso, no un insumo que Diego deba entregar.
 
 ## Fase A2 — Diseño front end (en manos de Diego)
 
