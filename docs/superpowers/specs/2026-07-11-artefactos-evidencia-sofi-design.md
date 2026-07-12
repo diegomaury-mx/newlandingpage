@@ -31,7 +31,7 @@ Todos se derivan del sistema real. Ninguno se ilustra.
 |---|---|---|
 | Diagrama de arquitectura | El repo de SOFI | Cada caja mapea a un archivo o servicio real: `webhookController`, `fsm.service`, S1 en Make, Railway, Postgres, Redis, OpenRouter, HubSpot. SVG inline, sin librerías. |
 | Diagrama del FSM | `src/services/fsm.service.js` | Los 12 estados y sus transiciones válidas se **extraen del código con un script**. Si el código cambia, el diagrama se regenera. No se dibuja a mano. |
-| Simulador de conversación | Postgres de producción + replay contra el sistema real | Conversación real exportada y sanitizada. El panel de estado sale de replayar esos mensajes contra el código real, no de la base: ver la corrección de abajo. |
+| Simulador de conversación | Corrida contra el sistema real | Una conversación completa contra el SOFI real en el banco de pruebas: firma HMAC válida, webhook real, modelo real, FSM real. El lead es ficticio. **No usa datos de producción.** Ver la corrección de abajo. |
 | Ficha técnica | Repo + Postgres | Commits y tests desde `git` y el runner. Latencia real calculada de los timestamps de los mensajes. |
 | Video de presentación | `/brag` sobre el repo de SOFI | **Pieza de presentación, no de evidencia.** Ver la regla de abajo. |
 
@@ -75,39 +75,38 @@ Estructura, en orden:
 
 La sección 8 es la que hace creíbles a las otras siete. Cualquiera publica lo que le conviene; la señal de que el resto no está inflado es que se enseña la parte que no se puede sostener.
 
-## Pipeline de la conversación
+## De dónde sale la conversación — corregido el 2026-07-11
 
-Cuatro pasos y un candado.
+El plan original extraía una conversación de la Postgres de producción, la sanitizaba y la pasaba por un gate. **Nada de eso hace falta, y además no era viable.**
 
-1. **Extracción.** Un script consulta la Postgres de producción y saca una conversación completa: mensajes y timestamps. Se elige una sesión que llegue a `COMPLETED`, porque demuestra el recorrido entero.
+**No era viable:** la base no guarda transiciones de estado. Tiene siete tablas y ninguna es un log del FSM. `messages` guarda texto y timestamps; `conversations`, solo el estado final. El estado por turno vivía en la sesión de Redis, que es efímera y ya expiró. El panel del simulador no se podía derivar de la base.
 
-   **Corrección del 2026-07-11, verificada contra el esquema:** la base **no guarda transiciones de estado**. Tiene siete tablas y ninguna es un log del FSM; `messages` guarda texto y timestamps, y `conversations` solo el estado final. El estado por turno vivía en la sesión de Redis, que es efímera y ya expiró.
+**No hace falta:** el banco de pruebas `tools/demo-harness` ya existe, y no es una simulación del sistema, **es el sistema**. Firma el payload con HMAC igual que Meta y lo mete por el `/webhook` real; el modelo es el real y el FSM es el real. Diego corrió una conversación completa contra él, haciéndola él de lead, y llega hasta `COMPLETED`.
 
-   Por eso el panel del simulador sale de un **replay contra el código real**: los mensajes ya sanitizados se vuelven a meter por el `/webhook` de SOFI con el banco de pruebas que ya existe (`tools/demo-harness`, firma HMAC válida y mock de la Graph API), y el estado se lee de la sesión después de cada turno. El panel es la salida del FSM ejecutándose, no una reconstrucción a mano. La página lo declara así: los mensajes son de producción, los estados son del replay.
-2. **Sanitización.** Un script sustituye teléfono, nombre, colonia, código postal, valor de la propiedad y cualquier dato de la casa. Reemplazos consistentes, no borrados: el hilo debe seguir leyéndose como una conversación humana. Los timestamps **relativos** se conservan porque son la prueba de la latencia; la fecha absoluta se redondea al mes.
-3. **Revisión de Diego.** El JSON resultante se lee completo antes de que exista la página. Si algo incomoda, no se publica.
-4. **Publicación.** El JSON aprobado se versiona en el repo del sitio. La página solo lee ese JSON.
+Entonces el simulador se construye con una corrida del harness. Consecuencias:
 
-**Candado:** el JSON crudo, sin sanitizar, **nunca se escribe en el repo del portafolio**. Vive fuera de git y se borra. Entra a `.gitignore` en el primer commit. El script de extracción nunca corre desde el sitio y **las credenciales de la Postgres no tocan este repo**.
+- Se cae el pipeline entero: sin extracción de producción, sin sanitización, sin gate de PII, sin `.gitignore` defensivo.
+- Se cae el riesgo de NDA y se cae el aviso a FlipHouse. **No se publica ningún dato de FlipHouse.**
+- El argumento técnico no se debilita: que el FSM decide y el modelo no se ve igual de bien con un lead inventado.
+
+**Lo que la página tiene que decir, y sin adornos:** esto demuestra que el sistema existe y funciona. **No** demuestra que atendió a un cliente real. Esa afirmación se sostiene con los commits, los tests y la palabra de Diego, no con el simulador. Si la página insinúa lo contrario, pierde exactamente la credibilidad que la sección "Lo que no puedo probar" está diseñada para ganar. Por eso esa sección lleva un cuarto punto: el simulador prueba la máquina, no el cliente.
 
 ## Fuera de alcance, a propósito
 
 - **No se toca `index.html` ni el sitio LIVE.** La página existe, no se enlaza, no entra al sitemap hasta que Diego lo decida.
 - **No se publica la ficha de Notion.** Sigue en `Draft` / `Publicable = No`. Cambiar `Estado publicación` o apuntar `Evidencia` a la URL es decisión de Diego, después de aprobar la página.
-- **No se inventa ninguna cifra.** Las tres métricas bajo NDA se quedan en ✖.
+- **No se inventa ninguna cifra.** Las tres métricas de negocio se quedan en ✖.
+- **No se publica ninguna conversación de producción.** Descartado por innecesario, no solo por riesgoso.
 - **No se abre el repo de SOFI.** Un repo público sanitizado sería la prueba definitiva, pero es un proyecto propio. Queda anotado como opción futura.
 - **No se levanta un sandbox vivo de SOFI.** Descartado: costo, mantenimiento y superficie de abuso, sin ganancia de evidencia frente al simulador.
-
-## Riesgo aceptado
-
-Aun sanitizada, la página publica la estructura de una conversación comercial real de un cliente. Es defendible: no queda dato identificable y el sistema es de Diego. Pero si la relación con FlipHouse es delicada, lo prudente es avisarles antes de publicar. No es un bloqueo técnico. Es una decisión de Diego, y se toma antes del paso 4 del pipeline.
+- **No entra el dashboard (`app.html`).** Es un artefacto publicable que esta spec no contempla, y hoy tiene un bug conocido de mensajes duplicados. Candidato para una segunda vuelta.
 
 ## Criterio de éxito
 
 - La página `cases/sofi.html` abre sin build y sin red externa, y se ve coherente con los demás casos.
-- El simulador reproduce una conversación real sanitizada con el estado del FSM sincronizado, y declara su naturaleza sin letra chica.
+- El simulador reproduce una conversación completa capturada contra el sistema real, con el estado del FSM sincronizado, y declara su naturaleza sin letra chica: sistema real, lead ficticio.
 - Los diagramas de arquitectura y FSM se generan desde el código, no a mano.
 - La ficha técnica solo contiene números recalculados en el momento de implementar, cada uno con su método.
-- La sección "Lo que no puedo probar" lista las tres afirmaciones bajo NDA en ✖.
-- Ningún dato de FlipHouse identificable queda en el repo, ni en el historial de git.
+- La sección "Lo que no puedo probar" lista las tres afirmaciones de negocio en ✖ con su razón exacta, más el límite del propio simulador: prueba la máquina, no el cliente.
+- Ningún dato de FlipHouse entra al repo. Ninguno, porque ya no se extrae ninguno.
 - El sitio LIVE queda intacto.
