@@ -321,7 +321,7 @@ El paso 5 del protocolo (`~/.claude/commands/close-session.md`) es "Notion — I
 1. **Lecciones aprendidas** → `~/.claude/memory/lessons-learned.md` si hubo una creencia técnica corregida.
 2. **CLAUDE.md** → agregar los invariantes nuevos descubiertos en la sesión.
 3. **Memoria del proyecto** → crear o actualizar los archivos en `memory/` + su línea en `MEMORY.md`.
-4. **Notion** → crear entrada en el **Changelog — Portafolio D** (con las propiedades exactas de arriba) y crear o vincular su tarea en **Tareas y Misiones**, para cada uno de estos casos de la sesión: cambio publicado en producción, corrección de datos/evidencia, cambio de documentación, **o lección aprendida del paso 1**. Si no hubo ninguno, omitir y decirlo en el resumen.
+4. **Notion** → para cada uno de estos casos de la sesión (cambio publicado en producción, corrección de datos/evidencia, cambio de documentación, **o lección aprendida del paso 1**): crear su **tarea propia nueva** en Tareas y Misiones, crear la entrada en el **Changelog — Portafolio D** con las propiedades exactas de arriba, y vincularlas. Nunca reciclar una tarea existente como la tarea de la entrada. Si no hubo ninguno de esos casos, omitir y decirlo en el resumen.
 5. **Estado de las tareas** → actualizar el `Estado` de toda tarea que se haya trabajado en la sesión. Terminada es `Terminada`, no `Por empezar`.
 6. **Resumen al usuario** → qué se registró en cada uno de los destinos.
 
