@@ -45,7 +45,7 @@ El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy sour
 │   ├── heineken.html           # Caso +600% — LIVE
 │   ├── innovation-systems.html # 3 subcasos FlipHouse/HackSureste/CAVA — LIVE
 │   ├── redux-incmty.html       # REDUX + INCmty Challenges — LIVE
-│   └── fliphouse.html          # FlipHouse RevOps & AI — LIVE
+│   └── fliphouse.html          # Página de transición → SOFI, noindex (ex-caso legacy, retirado 2026-07-12)
 ├── portfolio/                  # Galería por eras — LIVE
 │   ├── index.html
 │   ├── portfolio.css
@@ -221,6 +221,21 @@ Documentación completa: `docs/platform/cms-notion.md`. Resumen:
 
 ### Nota de diseño: nav scrollToSection
 La función de scroll se llama `scrollToSection` (no `scrollTo` — conflicto con `window.scrollTo`).
+
+## Auditoría integral del portafolio — remediación en curso (iniciada 2026-07-12)
+
+Corpus fuente: `C:\Users\DiegoLocal\Downloads\auditoria\` (5 partes de auditoría + Evidence Register + matriz de remediación REM-001–020, no versionado en este repo). Rol de Claude: Strategic Evidence & Portfolio Remediation Partner — evalúa cada REM con criterio propio, no las ejecuta "tal como fueron redactadas". Autorización explícita de Diego requerida por cambio, uno a la vez.
+
+**Regla operativa aprendida en esta sesión:** que dos superficies coincidan (p. ej. `index.html` y `llms-full.txt`) NO prueba que un claim sea correcto — ambas pueden compartir la misma estimación propia sin reconstruir. El estándar por claim público es: entidad, programa/edición, población, unidad, fuente o grado de evidencia. Si no se cumple, el claim se **retira sin nota que reconozca la inconsistencia** (una nota tipo "cifra agregada, desglose no reconstruido" expone el problema sin resolverlo — no se publica).
+
+**Estado por REM (2026-07-12):**
+- **REM-003 (HEINEKEN/INCmty):** hecho. `cases/heineken.html` — retirados 9,905, 900+/3,231 y #1 nacional (sin fuente reconciliable); +600% revisado con unidad/periodo/baseline/grado explícitos; nueva sección "Mecanismos de intervención" separa mecanismo de resultado.
+- **REM-004 (FlipHouse → SOFI):** hecho. `cases/fliphouse.html` retirado como case study vigente → stub `noindex,follow` hacia SOFI. Limpieza en cascada: `sitemap.xml`, `portfolio/index.html` (bloque ERA 04 completo + ítem de índice lateral), footer de `cases/heineken.html`.
+- **REM-005 (REDUX/INCmty/HackSureste):** **cerrado sin cambios por decisión explícita de Diego** ("déjalos"). `cases/redux-incmty.html` conserva 3,000+ (atribuido a INCmty aunque `llms-full.txt` lo asigna a HackSureste), &gt;$4M, 12 convocatorias, 200+/1,000+ sin reconciliar. **No volver a cuestionar esta decisión ni la separación de las tres entidades — ya está establecida.**
+- **REM-007 (absolutos no demostrados):** hecho. `index.html` (2), `cases/sofi.html` (1), `cases/innovation-systems.html` (2) — "funciona sin mí" → "diseñado para que el equipo lo opere"; alucinación FSM ya no implica content-safety; "en producción" y "cualquier vertical" retirados sin artefacto.
+- **Pendientes:** REM-001/002/006 (infraestructura semántica y role chronology), REM-008/009/013 (Bloque C, resto), REM-010/011/012 (Bloque D, seniority — gate por evidencia real, no por trabajo), REM-014–020 (enforcement técnico).
+
+**Estado de git al cierre de esta sesión: cambios sin commitear.** `cases/fliphouse.html`, `cases/heineken.html`, `cases/innovation-systems.html`, `cases/sofi.html`, `index.html`, `portfolio/index.html`, `sitemap.xml`, `CLAUDE.md` tienen ediciones en working tree. No se ha hecho `git commit` ni push — nada de esto está desplegado todavía.
 
 ## Caso SOFI — `cases/sofi.html` (rama `feat/caso-sofi`, NO live, 2026-07-12)
 
