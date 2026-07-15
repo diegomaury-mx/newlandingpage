@@ -36,6 +36,30 @@ function findDataMetrics(html) {
   return out;
 }
 
+function escaparRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function lineaDe(texto, index) {
+  return texto.slice(0, index).split('\n').length;
+}
+
+function buscarRetiradas(contenido, fileRel, metrics) {
+  const errors = [];
+  for (const met of metrics.filter((x) => x.estado === 'Retirada')) {
+    const patron = new RegExp(met.patronProhibido || escaparRegex(met.valor), 'gi');
+    let m;
+    while ((m = patron.exec(contenido)) !== null) {
+      errors.push(`${fileRel}: cifra retirada "${met.slug}" presente ("${m[0]}", linea ${lineaDe(contenido, m.index)})`);
+    }
+  }
+  return errors;
+}
+
+function verifyText(texto, fileRel, metrics) {
+  return { errors: buscarRetiradas(texto, fileRel, metrics), warnings: [] };
+}
+
 // Simplificacion piloto (ajuste 19 del spec): superficie a nivel archivo.
 function superficiesDe(fileRel) {
   const rel = fileRel.replace(/\\/g, '/');
@@ -79,7 +103,8 @@ function verifyHtml(html, fileRel, metrics) {
       }
     }
   }
+  errors.push(...buscarRetiradas(html, fileRel, metrics));
   return { errors, warnings };
 }
 
-module.exports = { loadMetrics, findDataMetrics, superficiesDe, verifyHtml };
+module.exports = { loadMetrics, findDataMetrics, superficiesDe, verifyHtml, verifyText };

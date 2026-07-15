@@ -82,3 +82,20 @@ test('verifyHtml acepta el calificador dentro de la ventana', () => {
   const r = verifyHtml(html, 'index.html', metrics);
   assert.deepStrictEqual(r.errors, []);
 });
+
+const { verifyText } = require('./verify-metrics.js');
+
+test('verifyHtml acusa cifras Retiradas presentes en el HTML', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const html = '<p>logramos 99 unicornios en un mes</p>';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.ok(r.errors.some((e) => /retirada/i.test(e) && /demo-retirada/.test(e)));
+});
+
+test('verifyText acusa cifras Retiradas en archivos de texto plano', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const txt = 'linea uno\nimpactamos 99 unicornios\nlinea tres';
+  const r = verifyText(txt, 'llms.txt', metrics);
+  assert.strictEqual(r.errors.length, 1);
+  assert.match(r.errors[0], /linea 2/i);
+});
