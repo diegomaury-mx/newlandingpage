@@ -67,6 +67,17 @@ function verifyHtml(html, fileRel, metrics) {
     if (!met.superficies.some((s) => permitidas.includes(s))) {
       errors.push(`${fileRel}: "${el.slug}" no permite esta superficie (permitidas: ${met.superficies.join(', ') || 'ninguna'})`);
     }
+    const claves = met.calificadorClaves || [];
+    if (claves.length) {
+      const ventana = html
+        .slice(Math.max(0, el.index - 400), el.index + 400)
+        .toLowerCase();
+      for (const clave of claves) {
+        if (!ventana.includes(clave.toLowerCase())) {
+          errors.push(`${fileRel}: "${el.slug}" aparece sin su calificador obligatorio ("${clave}") a menos de 400 caracteres`);
+        }
+      }
+    }
   }
   return { errors, warnings };
 }

@@ -67,3 +67,18 @@ test('verifyHtml falla si la superficie no esta permitida', () => {
   const r = verifyHtml(html, 'cases/demo.html', metrics);
   assert.ok(r.errors.some((e) => /superficie/i.test(e)));
 });
+
+test('verifyHtml falla si falta el calificador cerca del valor', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  // demo-vigente exige la clave "estimado" en +-400 caracteres
+  const html = '<span data-metric="demo-vigente">+42%</span> de crecimiento sin contexto alguno';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.ok(r.errors.some((e) => /calificador/i.test(e)));
+});
+
+test('verifyHtml acepta el calificador dentro de la ventana', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const html = '<div><span data-metric="demo-vigente">+42%</span><small>estimado, 2026</small></div>';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.deepStrictEqual(r.errors, []);
+});
