@@ -104,7 +104,64 @@ function verifyHtml(html, fileRel, metrics) {
     }
   }
   errors.push(...buscarRetiradas(html, fileRel, metrics));
+  const sinMarcadas = html.replace(/<(\w+)[^>]*\bdata-metric="[^"]+"[^>]*>[^<]*<\/\1>/g, ' ');
+  const soloTexto = sinMarcadas.replace(/<[^>]+>/g, ' ');
+  const numRe = /(\+?\$?\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\+?\d+(?:\.\d+)?%)/g;
+  let num;
+  while ((num = numRe.exec(soloTexto)) !== null) {
+    const soloDigitos = num[1].replace(/\D/g, '');
+    if (/^(19|20)\d{2}$/.test(soloDigitos)) continue; // anios
+    warnings.push(`${fileRel}: posible metrica sin data-metric: "${num[1]}"`);
+  }
   return { errors, warnings };
 }
 
-module.exports = { loadMetrics, findDataMetrics, superficiesDe, verifyHtml, verifyText };
+function run(argv) {
+  const flagIdx = argv.indexOf('--metrics');
+  const metricsPath = flagIdx !== -1
+    ? path.resolve(argv[flagIdx + 1])
+    : path.join(__dirname, '..', 'assets', 'data', 'metrics.json');
+  const raiz = path.join(__dirname, '..');
+
+  let data;
+  try {
+    data = loadMetrics(metricsPath);
+  } catch (e) {
+    console.error(`[verify-metrics] ERROR: ${e.message}`);
+    return 2;
+  }
+
+  const htmlFiles = ['index.html'];
+  const casesDir = path.join(raiz, 'cases');
+  if (fs.existsSync(casesDir)) {
+    for (const f of fs.readdirSync(casesDir).filter((x) => x.endsWith('.html'))) {
+      htmlFiles.push(`cases/${f}`);
+    }
+  }
+  const textFiles = ['llms.txt', 'llms-full.txt'].filter((f) => fs.existsSync(path.join(raiz, f)));
+
+  const errors = [];
+  const warnings = [];
+  for (const rel of htmlFiles) {
+    const abs = path.join(raiz, rel);
+    if (!fs.existsSync(abs)) continue;
+    const r = verifyHtml(fs.readFileSync(abs, 'utf8'), rel, data.metrics);
+    errors.push(...r.errors);
+    warnings.push(...r.warnings);
+  }
+  for (const rel of textFiles) {
+    const r = verifyText(fs.readFileSync(path.join(raiz, rel), 'utf8'), rel, data.metrics);
+    errors.push(...r.errors);
+  }
+
+  for (const w of warnings) console.warn(`[verify-metrics] WARN: ${w}`);
+  for (const e of errors) console.error(`[verify-metrics] ERROR: ${e}`);
+  console.log(`[verify-metrics] ${errors.length} errores, ${warnings.length} advertencias (espejo del ${data.generatedAt})`);
+  return errors.length ? 1 : 0;
+}
+
+if (require.main === module) {
+  process.exit(run(process.argv.slice(2)));
+}
+
+module.exports = { loadMetrics, findDataMetrics, superficiesDe, verifyHtml, verifyText, run };

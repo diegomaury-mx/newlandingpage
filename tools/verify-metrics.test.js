@@ -99,3 +99,23 @@ test('verifyText acusa cifras Retiradas en archivos de texto plano', () => {
   assert.strictEqual(r.errors.length, 1);
   assert.match(r.errors[0], /linea 2/i);
 });
+
+const { execFileSync } = require('node:child_process');
+
+test('verifyHtml emite warning por numeros con pinta de metrica sin data-metric', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const html = '<p>crecimos 87% este periodo y en 2026 seguimos</p>';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.deepStrictEqual(r.errors, []);
+  assert.ok(r.warnings.some((w) => /87%/.test(w)));
+  assert.ok(!r.warnings.some((w) => /2026/.test(w)), 'los anios no son metricas');
+});
+
+test('CLI: exit 2 si el espejo no existe', () => {
+  try {
+    execFileSync('node', ['tools/verify-metrics.js', '--metrics', 'tools/fixtures/no-existe.json'], { encoding: 'utf8' });
+    assert.fail('debio salir con codigo distinto de 0');
+  } catch (err) {
+    assert.strictEqual(err.status, 2);
+  }
+});
