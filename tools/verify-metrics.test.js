@@ -52,3 +52,18 @@ test('verifyHtml falla con slug inexistente en el espejo', () => {
   assert.strictEqual(r.errors.length, 1);
   assert.match(r.errors[0], /fantasma/);
 });
+
+test('verifyHtml falla si la metrica esta Retirada o En revision', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const html = '<span data-metric="demo-en-revision">77</span>';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.ok(r.errors.some((e) => /En revisi/u.test(e)));
+});
+
+test('verifyHtml falla si la superficie no esta permitida', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  // demo-vigente permite Hero y Sitio web, pero NO Caso de estudio
+  const html = '<span data-metric="demo-vigente">+42%</span> estimado, 2026';
+  const r = verifyHtml(html, 'cases/demo.html', metrics);
+  assert.ok(r.errors.some((e) => /superficie/i.test(e)));
+});

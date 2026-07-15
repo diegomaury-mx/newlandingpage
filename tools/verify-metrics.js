@@ -36,6 +36,14 @@ function findDataMetrics(html) {
   return out;
 }
 
+// Simplificacion piloto (ajuste 19 del spec): superficie a nivel archivo.
+function superficiesDe(fileRel) {
+  const rel = fileRel.replace(/\\/g, '/');
+  if (rel === 'index.html') return ['Hero', 'Sitio web'];
+  if (rel.startsWith('cases/')) return ['Caso de estudio'];
+  return ['Sitio web'];
+}
+
 function verifyHtml(html, fileRel, metrics) {
   const errors = [];
   const warnings = [];
@@ -49,8 +57,18 @@ function verifyHtml(html, fileRel, metrics) {
     if (el.texto !== met.valor) {
       errors.push(`${fileRel}: "${el.slug}" publica "${el.texto}" pero el SSOT dice "${met.valor}"`);
     }
+    if (met.estado !== 'Vigente' && met.estado !== 'Condicionada') {
+      errors.push(`${fileRel}: "${el.slug}" tiene estado "${met.estado}", no publicable`);
+    }
+    if (met.publicabilidad !== 'Pública') {
+      errors.push(`${fileRel}: "${el.slug}" tiene publicabilidad "${met.publicabilidad}", no publicable`);
+    }
+    const permitidas = superficiesDe(fileRel);
+    if (!met.superficies.some((s) => permitidas.includes(s))) {
+      errors.push(`${fileRel}: "${el.slug}" no permite esta superficie (permitidas: ${met.superficies.join(', ') || 'ninguna'})`);
+    }
   }
   return { errors, warnings };
 }
 
-module.exports = { loadMetrics, findDataMetrics, verifyHtml };
+module.exports = { loadMetrics, findDataMetrics, superficiesDe, verifyHtml };
