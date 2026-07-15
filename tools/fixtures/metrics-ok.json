@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-07-15",
+  "source": "fixture",
+  "metrics": [
+    {
+      "slug": "demo-vigente",
+      "nombre": "Demo vigente",
+      "valor": "+42%",
+      "calificador": "estimado, 2026",
+      "calificadorClaves": ["estimado"],
+      "claim": "Crecimiento de +42% (estimado, 2026).",
+      "entidad": "Transversal",
+      "timeframe": "2026",
+      "grado": "own",
+      "estado": "Vigente",
+      "publicabilidad": "Pública",
+      "superficies": ["Hero", "Sitio web"],
+      "riesgo": "Bajo",
+      "notaUso": "",
+      "patronProhibido": null
+    },
+    {
+      "slug": "demo-retirada",
+      "nombre": "Demo retirada",
+      "valor": "99 unicornios",
+      "calificador": "",
+      "calificadorClaves": [],
+      "claim": "",
+      "entidad": "Transversal",
+      "timeframe": "",
+      "grado": "own",
+      "estado": "Retirada",
+      "publicabilidad": "No publicable",
+      "superficies": [],
+      "riesgo": "Alto",
+      "notaUso": "",
+      "patronProhibido": null
+    },
+    {
+      "slug": "demo-en-revision",
+      "nombre": "Demo en revisión",
+      "valor": "77",
+      "calificador": "",
+      "calificadorClaves": [],
+      "claim": "",
+      "entidad": "Transversal",
+      "timeframe": "",
+      "grado": "own",
+      "estado": "En revisión",
+      "publicabilidad": "No publicable",
+      "superficies": [],
+      "riesgo": "Medio",
+      "notaUso": "",
+      "patronProhibido": null
+    }
+  ]
+}
