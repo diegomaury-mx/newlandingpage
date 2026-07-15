@@ -238,9 +238,9 @@ Corpus fuente: `C:\Users\DiegoLocal\Downloads\auditoria\` (5 partes de auditorí
 - **REM-008 (contrato de evidencia por caso):** aprobado como **principio adaptado**, no el schema rígido de 10 bloques de SOFI. Regla mínima por tipo de claim (cuantitativo observado / estimación propia / modelo económico / cualitativo / post-handoff) — se aplica como criterio de validación en cambios futuros de cada caso, sin ejecución independiente. `redux-incmty.html` y `cases/fliphouse.html` quedan excluidos (congelado / ya no es caso vigente).
 - **Pendientes:** REM-001/002/006 (infraestructura semántica y role chronology), REM-010/011/012 (Bloque D, seniority — gate por evidencia real, no por trabajo), REM-014–020 (enforcement técnico). Fuera de REM: `llms-full.txt` "flagship" (DIFF-002, diferido por Diego); revisión del asset `card-01.png`.
 
-**Estado de git al cierre de esta sesión: cambios sin commitear.** `cases/fliphouse.html`, `cases/heineken.html`, `cases/innovation-systems.html`, `cases/sofi.html`, `index.html`, `portfolio/index.html`, `sitemap.xml`, `CLAUDE.md` tienen ediciones en working tree. No se ha hecho `git commit` ni push — nada de esto está desplegado todavía.
+**Estado de git: remediación commiteada y desplegada.** Los commits `7f0b8d6` (REM-003/004/007) y `9d142fb` (REM-009) están en `master` y pushados a `origin/master` — el sitio LIVE ya publica la remediación. Registro en Notion: REM-003/004/007 con entradas del 2026-07-12; REM-009 con entrada del 2026-07-13 (creada el 2026-07-15).
 
-## Caso SOFI — `cases/sofi.html` (rama `feat/caso-sofi`, NO live, 2026-07-12)
+## Caso SOFI — `cases/sofi.html` (LIVE desde 2026-07-12, mergeado a `master`)
 
 Página de caso construida sobre el plan `docs/superpowers/plans/2026-07-11-artefactos-evidencia-sofi.md` y su spec. **LIVE y pública desde 2026-07-12:** `index, follow`, enlazada desde el work-item de FlipHouse en el index (`.work-case-link`) y dada de alta en el sitemap. Fue noindex y sin enlaces hasta que Diego aprobó publicarla.
 

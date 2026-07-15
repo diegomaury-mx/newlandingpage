@@ -27,7 +27,7 @@ Sitio estático desplegado en **[diegomaury.mx](https://diegomaury.mx)** · LIVE
 │   ├── js/sofi-case.js         # Simulador y panel del FSM del caso SOFI
 │   ├── data/sofi/              # Data files del caso SOFI — generados, no editar a mano
 │   └── img/                    # Isotipo, logos, patrones
-├── cases/                      # Casos de estudio (Heineken, Innovation Systems, REDUX, FlipHouse, SOFI)
+├── cases/                      # Casos de estudio (Heineken, Innovation Systems, REDUX, SOFI; fliphouse.html es stub de transición a SOFI)
 ├── portfolio/                  # Galería por eras
 ├── cv/                         # CV en PDF
 ├── backups/                    # Respaldos de versiones anteriores del index
