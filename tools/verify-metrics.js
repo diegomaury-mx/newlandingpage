@@ -26,4 +26,31 @@ function loadMetrics(metricsPath) {
   return parsed;
 }
 
-module.exports = { loadMetrics };
+function findDataMetrics(html) {
+  const out = [];
+  const re = /<(\w+)[^>]*\bdata-metric="([^"]+)"[^>]*>([^<]*)<\/\1>/g;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    out.push({ slug: m[2], texto: m[3].trim(), index: m.index });
+  }
+  return out;
+}
+
+function verifyHtml(html, fileRel, metrics) {
+  const errors = [];
+  const warnings = [];
+  const porSlug = new Map(metrics.map((x) => [x.slug, x]));
+  for (const el of findDataMetrics(html)) {
+    const met = porSlug.get(el.slug);
+    if (!met) {
+      errors.push(`${fileRel}: data-metric "${el.slug}" no existe en metrics.json`);
+      continue;
+    }
+    if (el.texto !== met.valor) {
+      errors.push(`${fileRel}: "${el.slug}" publica "${el.texto}" pero el SSOT dice "${met.valor}"`);
+    }
+  }
+  return { errors, warnings };
+}
+
+module.exports = { loadMetrics, findDataMetrics, verifyHtml };
