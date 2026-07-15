@@ -1,6 +1,7 @@
 node_modules/
 *.tmp
 .DS_Store
+desktop.ini
 
 # Artefactos de tooling local (no son parte del sitio)
 .playwright-mcp/
