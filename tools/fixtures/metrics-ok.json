@@ -20,6 +20,23 @@
       "patronProhibido": null
     },
     {
+      "slug": "demo-condicionada",
+      "nombre": "Demo condicionada",
+      "valor": "1,500",
+      "calificador": "estimado, 2026",
+      "calificadorClaves": ["estimado"],
+      "claim": "1,500 unidades (estimado, 2026).",
+      "entidad": "Transversal",
+      "timeframe": "2026",
+      "grado": "own",
+      "estado": "Condicionada",
+      "publicabilidad": "Pública",
+      "superficies": ["Hero", "Sitio web"],
+      "riesgo": "Alto",
+      "notaUso": "Solo con etiqueta de estimado.",
+      "patronProhibido": null
+    },
+    {
       "slug": "demo-retirada",
       "nombre": "Demo retirada",
       "valor": "99 unicornios",

@@ -84,6 +84,9 @@ function verifyHtml(html, fileRel, metrics) {
     if (met.estado !== 'Vigente' && met.estado !== 'Condicionada') {
       errors.push(`${fileRel}: "${el.slug}" tiene estado "${met.estado}", no publicable`);
     }
+    if (met.estado === 'Condicionada' && met.notaUso) {
+      warnings.push(`${fileRel}: "${el.slug}" es Condicionada — verificar su nota de uso: ${met.notaUso}`);
+    }
     if (met.publicabilidad !== 'Pública') {
       errors.push(`${fileRel}: "${el.slug}" tiene publicabilidad "${met.publicabilidad}", no publicable`);
     }

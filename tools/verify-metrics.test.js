@@ -7,7 +7,7 @@ const FIX = (f) => path.join(__dirname, 'fixtures', f);
 
 test('loadMetrics carga un espejo valido', () => {
   const data = loadMetrics(FIX('metrics-ok.json'));
-  assert.strictEqual(data.metrics.length, 3);
+  assert.strictEqual(data.metrics.length, 4);
   assert.strictEqual(data.metrics[0].slug, 'demo-vigente');
 });
 
@@ -118,6 +118,14 @@ test('CLI: exit 2 si el espejo no existe', () => {
   } catch (err) {
     assert.strictEqual(err.status, 2);
   }
+});
+
+test('verifyHtml emite recordatorio de nota de uso para metricas Condicionadas', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const html = '<span data-metric="demo-condicionada">1,500</span> unidades estimado, 2026';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.deepStrictEqual(r.errors, []);
+  assert.ok(r.warnings.some((w) => /Condicionada/.test(w) && /Solo con etiqueta/.test(w)));
 });
 
 test('verifyHtml no acusa huerfanas dentro de style o script', () => {
