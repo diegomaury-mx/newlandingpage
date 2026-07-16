@@ -104,7 +104,11 @@ function verifyHtml(html, fileRel, metrics) {
     }
   }
   errors.push(...buscarRetiradas(html, fileRel, metrics));
-  const sinMarcadas = html.replace(/<(\w+)[^>]*\bdata-metric="[^"]+"[^>]*>[^<]*<\/\1>/g, ' ');
+  // Huerfanas: se excluyen <style> y <script> (valores CSS/JS no son metricas).
+  const sinEstilos = html
+    .replace(/<style\b[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script\b[\s\S]*?<\/script>/gi, ' ');
+  const sinMarcadas = sinEstilos.replace(/<(\w+)[^>]*\bdata-metric="[^"]+"[^>]*>[^<]*<\/\1>/g, ' ');
   const soloTexto = sinMarcadas.replace(/<[^>]+>/g, ' ');
   const numRe = /(\+?\$?\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\+?\d+(?:\.\d+)?%)/g;
   let num;
@@ -116,18 +120,28 @@ function verifyHtml(html, fileRel, metrics) {
   return { errors, warnings };
 }
 
-function run(argv) {
+function run(argv, raizOverride) {
   const flagIdx = argv.indexOf('--metrics');
+  if (flagIdx !== -1 && !argv[flagIdx + 1]) {
+    console.error('[verify-metrics] ERROR: --metrics requiere una ruta, ej. --metrics assets/data/metrics.json');
+    return 2;
+  }
   const metricsPath = flagIdx !== -1
     ? path.resolve(argv[flagIdx + 1])
     : path.join(__dirname, '..', 'assets', 'data', 'metrics.json');
-  const raiz = path.join(__dirname, '..');
+  const raiz = raizOverride || path.join(__dirname, '..');
 
   let data;
   try {
     data = loadMetrics(metricsPath);
   } catch (e) {
     console.error(`[verify-metrics] ERROR: ${e.message}`);
+    return 2;
+  }
+
+  const indexAbs = path.join(raiz, 'index.html');
+  if (!fs.existsSync(indexAbs)) {
+    console.error(`[verify-metrics] ERROR: no existe ${indexAbs}; nada se verifica en silencio.`);
     return 2;
   }
 
@@ -142,16 +156,19 @@ function run(argv) {
 
   const errors = [];
   const warnings = [];
-  for (const rel of htmlFiles) {
-    const abs = path.join(raiz, rel);
-    if (!fs.existsSync(abs)) continue;
-    const r = verifyHtml(fs.readFileSync(abs, 'utf8'), rel, data.metrics);
-    errors.push(...r.errors);
-    warnings.push(...r.warnings);
-  }
-  for (const rel of textFiles) {
-    const r = verifyText(fs.readFileSync(path.join(raiz, rel), 'utf8'), rel, data.metrics);
-    errors.push(...r.errors);
+  try {
+    for (const rel of htmlFiles) {
+      const r = verifyHtml(fs.readFileSync(path.join(raiz, rel), 'utf8'), rel, data.metrics);
+      errors.push(...r.errors);
+      warnings.push(...r.warnings);
+    }
+    for (const rel of textFiles) {
+      const r = verifyText(fs.readFileSync(path.join(raiz, rel), 'utf8'), rel, data.metrics);
+      errors.push(...r.errors);
+    }
+  } catch (e) {
+    console.error(`[verify-metrics] ERROR: archivo ilegible: ${e.message}`);
+    return 2;
   }
 
   for (const w of warnings) console.warn(`[verify-metrics] WARN: ${w}`);

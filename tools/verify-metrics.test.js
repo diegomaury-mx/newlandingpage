@@ -119,3 +119,37 @@ test('CLI: exit 2 si el espejo no existe', () => {
     assert.strictEqual(err.status, 2);
   }
 });
+
+test('verifyHtml no acusa huerfanas dentro de style o script', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const html = '<style>.x { color: rgba(255,255,255,.5); }</style><script>var y = "1,234";</script><p>crecimos 87% este periodo</p>';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.ok(r.warnings.some((w) => /87%/.test(w)));
+  assert.strictEqual(r.warnings.length, 1, 'solo el 87% del body debe generar warning');
+});
+
+test('verifyHtml acusa error si data-metric apunta a una metrica Retirada', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const html = '<span data-metric="demo-retirada">99 unicornios</span>';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.ok(r.errors.some((e) => /estado "Retirada"/.test(e)));
+  assert.ok(r.errors.some((e) => /publicabilidad/.test(e)));
+  assert.ok(r.errors.some((e) => /superficie/i.test(e)));
+});
+
+const { run } = require('./verify-metrics.js');
+
+test('run devuelve 2 si index.html no existe en la raiz', () => {
+  // tools/fixtures como raiz: tiene el espejo pero no index.html
+  const code = run(['--metrics', FIX('metrics-ok.json')], path.join(__dirname, 'fixtures'));
+  assert.strictEqual(code, 2);
+});
+
+test('CLI: exit 2 si --metrics viene sin ruta', () => {
+  try {
+    execFileSync('node', ['tools/verify-metrics.js', '--metrics'], { encoding: 'utf8' });
+    assert.fail('debio salir con codigo distinto de 0');
+  } catch (err) {
+    assert.strictEqual(err.status, 2);
+  }
+});
