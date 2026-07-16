@@ -349,6 +349,22 @@ El paso 5 del protocolo (`~/.claude/commands/close-session.md`) es "Notion — I
 
 Buscar en Notion por **título exacto**, workspace **Notion de Diego**.
 
+## SSOT de Métricas — SOP de publicación (desde 2026-07-16)
+
+Spec: `docs/superpowers/specs/2026-07-15-ssot-metricas-design.md`. Base maestra: **📊 Métricas oficiales — Portafolio D** en Notion (data source `collection://213ea2d0-bffc-41b9-9877-92132551461c`, bajo el hub Portafolio D). Espejo: `assets/data/metrics.json` (generado desde la base, no editar a mano sin sincronizar con Notion).
+
+Toda publicación que toque métricas o copy con métricas sigue este orden, sin excepciones:
+
+1. Sincronizar Notion → `assets/data/metrics.json`
+2. Resolver placeholders `{{metrica:slug}}` si se ejecuta una maqueta
+3. `node tools/verify-metrics.js`
+4. Corregir discrepancias hasta exit 0
+5. Commit
+6. Push
+7. Entrada en el Changelog — Portafolio D
+
+Reglas: una métrica nueva se da de alta primero en la base Notion (nunca directo en el JSON); las cifras muertas viven en la base como `Retirada` y el verificador las acusa; los borradores pueden llevar cifras literales, lo publicable no. Cobertura piloto (2026-07-16): 10 métricas seed y solo `index.html` marcado con `data-metric`; `cases/*.html` y `llms*.txt` se cubren en la sesión 2 (los `llms` ya se escanean contra la lista negra). Tests del verificador: `node --test tools/verify-metrics.test.js`.
+
 ## Idioma de respuestas
 
 Responder siempre en español.
