@@ -365,6 +365,10 @@ Toda publicación que toque métricas o copy con métricas sigue este orden, sin
 
 Reglas: una métrica nueva se da de alta primero en la base Notion (nunca directo en el JSON); las cifras muertas viven en la base como `Retirada` y el verificador las acusa; los borradores pueden llevar cifras literales, lo publicable no. Cobertura piloto (2026-07-16): 10 métricas seed y solo `index.html` marcado con `data-metric`; `cases/*.html` y `llms*.txt` se cubren en la sesión 2 (los `llms` ya se escanean contra la lista negra). Tests del verificador: `node --test tools/verify-metrics.test.js`.
 
+**`calificadorClaves` debe usar la raíz de la palabra, no la forma flexionada.** El chequeo de calificador es un substring (`ventana.includes(clave)`), no coincidencia de palabra completa. `"estimado"` como clave no matchea `"estimada"` (concordancia de género con el sustantivo, ej. "cifra final estimada") y el verificador bloquea con un error de calificador faltante aunque el calificador esté presente. Usar la raíz sin terminación (`"estimad"`) para que cubra ambos géneros y el plural.
+
+**`heineken-proyectos-evaluados` (3,231) — confirmada como dato real por decisión explícita de Diego (2026-07-17), no como hallazgo pendiente.** Estado `Vigente`/`Pública` en el SSOT, marcada con `data-metric` en `index.html` (métrica del hero + mención en Selected Work). REM-003 la retiró solo de `cases/heineken.html` por fuente no reconciliable; esa página no se toca. No volver a marcarla como hallazgo ni a cuestionar la decisión.
+
 ## Idioma de respuestas
 
 Responder siempre en español.
