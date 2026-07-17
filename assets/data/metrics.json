@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-15",
+  "generatedAt": "2026-07-17",
   "source": "collection://213ea2d0-bffc-41b9-9877-92132551461c",
   "metrics": [
     {
@@ -153,6 +153,23 @@
       "superficies": ["Hero", "Caso de estudio", "Sitio web", "llms.txt"],
       "riesgo": "Medio",
       "notaUso": "No acumular con cifras de INCmty. Sin mencionar '5 ediciones'.",
+      "patronProhibido": null
+    },
+    {
+      "slug": "sofi-leads-campana",
+      "nombre": "SOFI leads contactados por campaña",
+      "valor": "173",
+      "calificador": "leads contactados en ~1.5 horas, campaña única, medido en el CRM",
+      "calificadorClaves": ["campaña"],
+      "claim": "173 leads contactados en ~1.5 horas en una sola campaña (medido en el CRM, 2025-2026).",
+      "entidad": "SOFI / FlipHouse",
+      "timeframe": "2025-2026",
+      "grado": "own",
+      "estado": "Vigente",
+      "publicabilidad": "Pública",
+      "superficies": ["Caso de estudio", "Sitio web", "llms.txt"],
+      "riesgo": "Bajo",
+      "notaUso": "No confundir con el volumen semanal de leads al CRM (fliphouse-leads-crm, +500%); esta cifra es el resultado de una campaña puntual, no un ritmo sostenido.",
       "patronProhibido": null
     },
     {
