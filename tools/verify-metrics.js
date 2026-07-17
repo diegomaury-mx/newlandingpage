@@ -56,8 +56,43 @@ function buscarRetiradas(contenido, fileRel, metrics) {
   return errors;
 }
 
+const NUM_RE = /(\+?\$?\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\+?\d+(?:\.\d+)?%)/g;
+
+function esAnio(numStr) {
+  const soloDigitos = numStr.replace(/\D/g, '');
+  return /^(19|20)\d{2}$/.test(soloDigitos);
+}
+
+// Normaliza para comparar cifras entre metrics.json (ej. "3,000+") y texto libre (ej. "3,000").
+function normalizarCifra(s) {
+  return s.replace(/[,+$%\s]/g, '');
+}
+
+// A diferencia de verifyHtml (que exige data-metric explicito por ocurrencia), en texto plano
+// no hay forma de marcar una cifra. El proxy de cobertura es: su valor ya existe en metrics.json
+// como metrica Vigente/Condicionada. Lo que no matchea ninguna cifra conocida es huerfana.
+function huerfanasEnTexto(texto, fileRel, metrics) {
+  const conocidas = new Set(
+    metrics
+      .filter((m) => m.estado === 'Vigente' || m.estado === 'Condicionada')
+      .map((m) => normalizarCifra(m.valor))
+  );
+  const warnings = [];
+  let num;
+  NUM_RE.lastIndex = 0;
+  while ((num = NUM_RE.exec(texto)) !== null) {
+    if (esAnio(num[1])) continue;
+    if (conocidas.has(normalizarCifra(num[1]))) continue;
+    warnings.push(`${fileRel}: posible cifra sin match en metrics.json: "${num[1]}"`);
+  }
+  return warnings;
+}
+
 function verifyText(texto, fileRel, metrics) {
-  return { errors: buscarRetiradas(texto, fileRel, metrics), warnings: [] };
+  return {
+    errors: buscarRetiradas(texto, fileRel, metrics),
+    warnings: huerfanasEnTexto(texto, fileRel, metrics),
+  };
 }
 
 // Simplificacion piloto (ajuste 19 del spec): superficie a nivel archivo.
@@ -113,11 +148,10 @@ function verifyHtml(html, fileRel, metrics) {
     .replace(/<script\b[\s\S]*?<\/script>/gi, ' ');
   const sinMarcadas = sinEstilos.replace(/<(\w+)[^>]*\bdata-metric="[^"]+"[^>]*>[^<]*<\/\1>/g, ' ');
   const soloTexto = sinMarcadas.replace(/<[^>]+>/g, ' ');
-  const numRe = /(\+?\$?\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\+?\d+(?:\.\d+)?%)/g;
   let num;
-  while ((num = numRe.exec(soloTexto)) !== null) {
-    const soloDigitos = num[1].replace(/\D/g, '');
-    if (/^(19|20)\d{2}$/.test(soloDigitos)) continue; // anios
+  NUM_RE.lastIndex = 0;
+  while ((num = NUM_RE.exec(soloTexto)) !== null) {
+    if (esAnio(num[1])) continue;
     warnings.push(`${fileRel}: posible metrica sin data-metric: "${num[1]}"`);
   }
   return { errors, warnings };
@@ -168,6 +202,7 @@ function run(argv, raizOverride) {
     for (const rel of textFiles) {
       const r = verifyText(fs.readFileSync(path.join(raiz, rel), 'utf8'), rel, data.metrics);
       errors.push(...r.errors);
+      warnings.push(...r.warnings);
     }
   } catch (e) {
     console.error(`[verify-metrics] ERROR: archivo ilegible: ${e.message}`);

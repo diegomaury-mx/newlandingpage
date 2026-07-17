@@ -100,6 +100,29 @@ test('verifyText acusa cifras Retiradas en archivos de texto plano', () => {
   assert.match(r.errors[0], /linea 2/i);
 });
 
+test('verifyText no advierte cuando la cifra coincide con una metrica Vigente conocida', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const txt = 'crecimos +42% este periodo, estimado 2026';
+  const r = verifyText(txt, 'llms.txt', metrics);
+  assert.deepStrictEqual(r.warnings, []);
+});
+
+test('verifyText normaliza el signo + al comparar contra metrics.json', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  // metrics.json declara "1,500" (demo-condicionada); el texto trae la misma cifra sin adornos.
+  const txt = 'distribuimos 1,500 unidades, estimado 2026';
+  const r = verifyText(txt, 'llms.txt', metrics);
+  assert.deepStrictEqual(r.warnings, []);
+});
+
+test('verifyText advierte por cifras sin match en metrics.json', () => {
+  const { metrics } = loadMetrics(FIX('metrics-ok.json'));
+  const txt = 'reportamos 3,750 nuevos usuarios en 2026';
+  const r = verifyText(txt, 'llms.txt', metrics);
+  assert.ok(r.warnings.some((w) => /3,750/.test(w)));
+  assert.ok(!r.warnings.some((w) => /2026/.test(w)), 'los anios no son metricas');
+});
+
 const { execFileSync } = require('node:child_process');
 
 test('verifyHtml emite warning por numeros con pinta de metrica sin data-metric', () => {
