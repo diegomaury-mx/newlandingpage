@@ -26,11 +26,11 @@
   <meta property="og:title" content="HEINEKEN Green Challenge — Diego Maury">
   <meta property="og:description" content="+600% participación regional. Coordinador General de un programa nacional de innovación abierta con HEINEKEN e INCmty Tec de Monterrey.">
   <meta property="og:url" content="https://diegomaury.mx/cases/heineken.html">
-  <meta property="og:image" content="https://diegomaury.mx/exported_cards/card-01.png">
+  <meta property="og:image" content="https://diegomaury.mx/assets/img/cases/heineken-banner.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="HEINEKEN Green Challenge — Diego Maury">
   <meta name="twitter:description" content="+600% participación regional. Programa nacional de innovación abierta con HEINEKEN e INCmty Tec de Monterrey.">
-  <meta name="twitter:image" content="https://diegomaury.mx/exported_cards/card-01.png">
+  <meta name="twitter:image" content="https://diegomaury.mx/assets/img/cases/heineken-banner.jpg">
 
   <link rel="stylesheet" href="../assets/css/styles.css">
 
@@ -262,10 +262,82 @@
       border-top: 1px solid rgba(255,255,255,0.06);
       flex-wrap: wrap;
     }
+    .case-hero__media {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .case-hero__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: grayscale(1) brightness(0.5) contrast(1.05);
+      opacity: 0.28;
+    }
+    .case-hero__media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(46,21,71,0.25) 0%, rgba(46,21,71,0.95) 100%);
+    }
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .evidence-card {
+      display: block;
+      margin: 0;
+      border: 1px solid rgba(124,63,190,0.25);
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(15,10,26,0.95);
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    a.evidence-card:hover {
+      border-color: var(--dm-ember);
+      transform: translateY(-2px);
+    }
+    .evidence-card img {
+      display: block;
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      object-position: top center;
+    }
+    .evidence-card figcaption { padding: 0.75rem 0.9rem; }
+    .evidence-card__src {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dm-spark);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .evidence-card__claim {
+      font-size: 0.8rem;
+      color: var(--dm-white-60);
+      line-height: 1.5;
+    }
+    .evidence-card__grade {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--dm-white-40);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: block;
+      margin-top: 0.4rem;
+    }
     @media (max-width: 767px) {
       .case-hero { padding: 6rem 0 3.5rem; }
       .case-hero__num { font-size: 30vw; top: 2rem; }
       .results-grid { grid-template-columns: 1fr 1fr; }
+      .evidence-card img { height: 120px; }
     }
   </style>
 </head>
@@ -295,6 +367,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </nav>
 
   <section class="case-hero">
+    <div class="case-hero__media" aria-hidden="true">
+      <img src="../assets/img/cases/heineken-banner.jpg" alt="" width="1152" height="864" fetchpriority="high">
+    </div>
     <div class="container" style="position:relative;">
       <span class="case-hero__num" aria-hidden="true">01</span>
       <a href="../#work" class="case-hero__back">← Volver a Work</a>
@@ -382,6 +457,55 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span class="result-card__label">Mentores</span>
             <span class="result-card__def">Coordinados por edición, según registro operativo propio.</span>
           </div>
+        </div>
+      </section>
+
+      <hr class="case-divider">
+
+      <section class="case-section" data-reveal>
+        <p class="case-section__label">Evidencia</p>
+        <p>Cada artefacto declara su grado: <strong style="color:var(--dm-bone)">fuente publicada</strong> (un tercero lo publica) o <strong style="color:var(--dm-bone)">registro propio</strong> (documentación mía: prueba que ocurrió, no valida cifras).</p>
+        <div class="evidence-grid">
+          <figure class="evidence-card">
+            <img src="../assets/img/evidencia/tec2020-p181-hgc.jpg" alt="Página del Informe Anual 2020 del Tec de Monterrey con las cifras del HEINEKEN Green Challenge" width="1044" height="1180" loading="lazy">
+            <figcaption>
+              <span class="evidence-card__src">Informe Anual 2020 del Tec · p.181</span>
+              <span class="evidence-card__claim">Cifras de impacto de la edición de economía circular, publicadas por el Tec de Monterrey.</span>
+              <span class="evidence-card__grade">Fuente publicada</span>
+            </figcaption>
+          </figure>
+          <figure class="evidence-card">
+            <img src="../assets/img/evidencia/tec2021-p416-hgc-redux.jpg" alt="Página del Informe Anual 2021 del Tec de Monterrey sobre el HEINEKEN Green Challenge y REDUX" width="1044" height="1361" loading="lazy">
+            <figcaption>
+              <span class="evidence-card__src">Informe Anual 2021 del Tec · p.416</span>
+              <span class="evidence-card__claim">Cifras de la edición de agricultura sustentable, publicadas por el Tec de Monterrey.</span>
+              <span class="evidence-card__grade">Fuente publicada</span>
+            </figcaption>
+          </figure>
+          <a class="evidence-card" href="https://www.lajornadamaya.mx/yucatan/120006/heineken-reunira-emprendedores-para-resolver-problemas-ambientales" target="_blank" rel="noopener">
+            <img src="../assets/img/evidencia/lajornadamaya-hgc-2019.jpg" alt="Nota de La Jornada Maya de agosto de 2019 sobre el HEINEKEN Green Challenge en el sureste" width="1200" height="900" loading="lazy">
+            <figcaption>
+              <span class="evidence-card__src">La Jornada Maya · 06/08/2019</span>
+              <span class="evidence-card__claim">Cobertura de prensa del programa en el sureste, con la línea base regional documentada.</span>
+              <span class="evidence-card__grade">Fuente publicada</span>
+            </figcaption>
+          </a>
+          <a class="evidence-card" href="https://2023.talent-land.mx/speakers/diego-maury/" target="_blank" rel="noopener">
+            <img src="../assets/img/evidencia/talentland-2023-speaker.jpg" alt="Página de speaker de Diego Maury en Talent Land 2023" width="1200" height="900" loading="lazy">
+            <figcaption>
+              <span class="evidence-card__src">Talent Land 2023 · Speakers</span>
+              <span class="evidence-card__claim">Me acredita como former Director of Operations del programa. Documenta el cargo, no el periodo.</span>
+              <span class="evidence-card__grade">Fuente publicada</span>
+            </figcaption>
+          </a>
+          <figure class="evidence-card">
+            <img src="../assets/img/evidencia/playlist-hgc.jpg" alt="Playlist de videos del HEINEKEN Green Challenge con lanzamientos regionales" width="1200" height="828" loading="lazy">
+            <figcaption>
+              <span class="evidence-card__src">Playlist HGC · Video</span>
+              <span class="evidence-card__claim">Lanzamientos regionales por zona y guías del proceso virtual, documentados en video.</span>
+              <span class="evidence-card__grade">Registro propio</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 

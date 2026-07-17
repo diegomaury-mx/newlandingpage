@@ -76,6 +76,35 @@
     .case-divider { height: 3px; background: var(--dm-tricolor); border: none; margin: 3rem 0; border-radius: 2px; }
     .case-nav-footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; }
     @media (max-width: 767px) { .case-hero { padding: 6rem 0 3.5rem; } .case-hero__num { font-size: 30vw; top: 2rem; } .results-grid { grid-template-columns: 1fr 1fr; } }
+
+    /* ---------- Refinamiento visual (solo CSS decorativo) ---------- */
+    /* Patrón de isotipo también en el cuerpo del ensayo, más tenue que el hero */
+    .case-body { position: relative; overflow: hidden; }
+    .case-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('../assets/img/isotipodm.svg');
+      background-size: 300px;
+      background-repeat: repeat;
+      opacity: 0.02;
+      pointer-events: none;
+    }
+    .case-content { position: relative; }
+
+    /* Jerarquía tipográfica: los títulos de sección respiran un poco más */
+    .case-section__title { letter-spacing: -0.01em; margin-bottom: 1.25rem; }
+    .case-section { margin-bottom: 4.5rem; }
+
+    /* Estados hover discretos en las tarjetas de subcaso */
+    .subcase { transition: border-color 0.25s ease; }
+    .subcase:hover { border-color: rgba(124,63,190,0.45); }
+    .subcase:hover .subcase__header { background: rgba(124,63,190,0.12); }
+    .subcase__header { transition: background-color 0.25s ease; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .subcase, .subcase__header { transition: none; }
+    }
   </style>
 </head>
 <body>

@@ -68,6 +68,22 @@
       color: var(--dm-ember);
       margin-bottom: 1.25rem;
     }
+    /* Meta del hero: logo del cliente + periodo, discreto */
+    .case-hero__meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .case-hero__meta .case-hero__tag { margin-bottom: 0; }
+    .case-hero__logo {
+      width: 34px;
+      height: 34px;
+      display: block;
+      border-radius: 8px;
+      border: 1px solid rgba(245,245,247,0.16);
+      background: rgba(245,245,247,0.06);
+    }
     .case-hero__title {
       font-family: var(--font-display);
       font-size: clamp(2.8rem, 8vw, 5.5rem);
@@ -437,6 +453,42 @@
       line-height: 1.6;
     }
 
+    /* ---------- Refinamiento visual (solo CSS) ---------- */
+    /* El .bg-pattern global trae pointer-events:none (fue diseñado como overlay
+       aparte); aquí va directo en la sección, así que se restaura la interacción. */
+    .sofi-section.bg-pattern { pointer-events: auto; }
+
+    /* Separador sutil entre secciones contiguas sobre Ink */
+    .sofi-section + .sofi-section { border-top: 1px solid rgba(245,245,247,0.06); }
+
+    /* Cambio de registro: mismo patrón de isotipo, aún más tenue */
+    .sofi-switch { position: relative; overflow: hidden; }
+    .sofi-switch::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('../assets/img/isotipodm.svg');
+      background-size: 140px;
+      background-repeat: repeat;
+      opacity: 0.02;
+      pointer-events: none;
+    }
+    .sofi-switch .container { position: relative; }
+
+    /* Estados hover discretos (mismo lenguaje que los botones existentes) */
+    .sofi-state { transition: border-color 0.2s ease, background-color 0.2s ease; }
+    .sofi-state:hover { border-color: rgba(124,63,190,0.55); background: rgba(124,63,190,0.07); }
+    .sofi-state--terminal:hover { border-color: var(--dm-ember); background: rgba(255,92,57,0.06); }
+
+    .sofi-lock { transition: border-top-color 0.2s ease; }
+    .sofi-lock:hover { border-top-color: var(--dm-ember); }
+
+    .sofi-sim__pane { transition: border-color 0.2s ease; }
+    .sofi-sim__pane:hover { border-color: rgba(245,245,247,0.18); }
+
+    .sofi-ficha__row { transition: background-color 0.2s ease; }
+    .sofi-ficha__row:hover { background: rgba(245,245,247,0.025); }
+
     /* ---------- Responsive ---------- */
     @media (max-width: 860px) {
       .sofi-sim { grid-template-columns: 1fr; }
@@ -453,6 +505,10 @@
     @media (prefers-reduced-motion: reduce) {
       .sofi-msg { transition: none; opacity: 1; transform: none; }
       .sofi-conf__fill { transition: none; }
+      .sofi-state,
+      .sofi-lock,
+      .sofi-sim__pane,
+      .sofi-ficha__row { transition: none; }
     }
   </style>
 </head>
@@ -487,7 +543,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <section class="case-hero" id="hero" aria-labelledby="sofi-title">
     <div class="container" style="position:relative;">
       <a href="../#work" class="case-hero__back">← Volver a Work</a>
-      <p class="case-hero__tag">FlipHouse · Oct 2025 - Jun 2026</p>
+      <div class="case-hero__meta">
+        <img src="../assets/img/logos/fliphouse-square.png" alt="Logo de FlipHouse"
+             class="case-hero__logo" width="34" height="34" loading="lazy">
+        <p class="case-hero__tag">FlipHouse · Oct 2025 - Jun 2026</p>
+      </div>
       <h1 class="case-hero__title" id="sofi-title">SOFI</h1>
       <p class="case-hero__sub">
         Un agente de WhatsApp que califica leads inmobiliarios sin intervención humana.
