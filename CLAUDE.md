@@ -24,6 +24,7 @@ El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy sour
 /                               # ← raíz de master = sitio (deploy source)
 ├── index.html                  # Página principal v2 — LIVE
 ├── index-canonico.html         # PREVIEW aislado — NO live, ver nota abajo
+├── prototipo-portafolio.html   # PREVIEW Fase A2 (Claude Design) — noindex, sin analítica, no enlazado; fuente del patrón de galería de evidencia
 ├── robots.txt / sitemap.xml    # SEO — LIVE
 ├── CNAME                       # diegomaury.mx
 ├── .nojekyll                   # deshabilita el pipeline Jekyll de GitHub Pages
@@ -371,6 +372,18 @@ Reglas: una métrica nueva se da de alta primero en la base Notion (nunca direct
 **`calificadorClaves` debe usar la raíz de la palabra, no la forma flexionada.** El chequeo de calificador es un substring (`ventana.includes(clave)`), no coincidencia de palabra completa. `"estimado"` como clave no matchea `"estimada"` (concordancia de género con el sustantivo, ej. "cifra final estimada") y el verificador bloquea con un error de calificador faltante aunque el calificador esté presente. Usar la raíz sin terminación (`"estimad"`) para que cubra ambos géneros y el plural.
 
 **`heineken-proyectos-evaluados` (3,231) — confirmada como dato real por decisión explícita de Diego (2026-07-17), no como hallazgo pendiente.** Estado `Vigente`/`Pública` en el SSOT, marcada con `data-metric` en `index.html` (métrica del hero + mención en Selected Work). REM-003 la retiró solo de `cases/heineken.html` por fuente no reconciliable; esa página no se toca. No volver a marcarla como hallazgo ni a cuestionar la decisión.
+
+## Multimedia y evidencia visual (desde 2026-07-17, commit `6017a60`)
+
+- Los assets viven en `assets/img/cases/` (banners+logos de HGC/REDUX/HackSureste), `assets/img/evidencia/` (11 capturas: informes del Tec, La Jornada Maya, playlists, Talent Land) y `assets/img/logos/`.
+- **Integrado en LIVE:** galería "Evidencia" en `cases/heineken.html` (5 artefactos con grado declarado: fuente publicada / registro propio) + banner en su hero; banners fotográficos en Selected Work del `index.html` (HEINEKEN y HackSureste; FlipHouse conserva logo, no tiene banner publicable); banner+logo por era y galería de artefactos en `portfolio/` (BTEM y Talent Land excluidos por regla de coincidencia de entidad; nada de FlipHouse por REM-004); logo FlipHouse y hover states en `cases/sofi.html`; solo CSS decorativo en `innovation-systems.html` (REM-009).
+- **Regla de las tarjetas de evidencia: cero cifras nuevas en captions/alt.** Las cifras de los artefactos (3,975, 562, 2,400...) NO están en el SSOT de métricas; describir el artefacto sin números. Darlas de alta en Notion primero si algún día se quieren en texto.
+- Gotcha de DS: `.bg-pattern` de styles.css trae `pointer-events: none`; si una sección lo usa directo (como en sofi.html), hay que devolverle `pointer-events: auto`.
+- `cases/heineken.html` ya no usa `card-01.png` como og:image (usa su banner). `index.html`, `portfolio/index.html` y `redux-incmty.html` todavía lo referencian — pendiente con tarea propia.
+
+## Maqueta Sitio v2 — parcialmente ejecutada (verificado 2026-07-17)
+
+La página Notion "🧱 Maqueta Sitio v2 · Copy final" (`2e0bbf20-7ead-49e8-812c-34032cfda454`) es la spec de copy TO-BE con checklist de ejecución. **Estado real del sitio contra su checklist:** ya ejecutado: "10+ años (7+ en innovación)" propagado, nav sin etiquetas internas, bloque "¿Estás contratando full time?" (índex ~línea 1233). Pendiente: H1 del hero ("Transformo ambición..." vs. el actual "Tomo operaciones ambiguas..."), regla de exactamente 3 métricas ancla en el hero (hoy hay 5), autopsias con titular-lección (aún dicen "Autopsia"), mover "El patrón" después de la evidencia, SOFI en Sistemas propios. Sus checkboxes NO se sincronizan solos: verificar contra el HTML antes de afirmar estado. El as-built completo vive en la página Notion "Sitemap as-built — diegomaury.mx (2026-07-17)" (base Documentación del hub).
 
 ## Idioma de respuestas
 
