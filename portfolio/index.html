@@ -45,11 +45,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   :root {
     --bg:     #0A0612;
     --bg-2:   #1A1128;
-    --border: #2A1F3D;
+    --border: #6A291B;
     --t1:     #FAF8FC;
-    --t2:     #9A8CB0;
-    --t3:     #8B7C9E;
-    --t-body: #DDDBE0;
+    --t2:     #DDDBE0;
+    --t3:     #A8A6AC;
     --ember:  #FF5C39;
     --sans:   'Plus Jakarta Sans', system-ui, sans-serif;
     --mono:   'DM Mono', ui-monospace, monospace;
@@ -98,7 +97,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .nav__inner { height: 60px; display: flex; align-items: center; justify-content: space-between; }
   .nav__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--t1); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
-  .nav__mark { width: 22px; height: 22px; background: var(--ember); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
+  .nav__mark { width: 22px; height: 22px; display: block; }
   .nav__right { display: flex; align-items: center; gap: 16px; }
   .nav__back { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t2); text-decoration: none; }
   .nav__back:hover { color: var(--t1); }
@@ -221,7 +220,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .media-void {
     display: flex; flex-direction: column; gap: 6px;
     align-items: center; justify-content: center; text-align: center;
-    background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(139,124,158,0.05) 8px 9px);
+    background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(168,166,172,0.05) 8px 9px);
     border-bottom: 1px solid var(--border);
     font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--t3); padding: 16px;
@@ -289,7 +288,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
   }
   .archive__cell { background: var(--bg); padding: 16px 18px; }
-  .archive__cell strong { display: block; font-size: 12.5px; font-weight: 600; color: var(--t-body); }
+  .archive__cell strong { display: block; font-size: 12.5px; font-weight: 600; color: var(--t2); }
   .archive__cell span { font-family: var(--mono); font-size: 9px; color: var(--t3); letter-spacing: 0.04em; display: block; margin-top: 5px; }
   [hidden] { display: none !important; }
 
@@ -320,7 +319,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .resp__head--era { color: var(--t1); }
   .resp__head--no  { color: var(--t3); }
   .resp__item { display: flex; gap: 10px; font-size: 13px; line-height: 1.55; margin-bottom: 12px; }
-  .resp__item--era { color: var(--t-body); }
+  .resp__item--era { color: var(--t2); }
   .resp__item--no  { color: var(--t2); }
   .resp__item i { font-style: normal; flex-shrink: 0; }
   .resp__item--era i { color: var(--t1); }
@@ -330,12 +329,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .system__item {
     display: flex; gap: 14px; padding-bottom: 14px; margin-top: 14px;
     border-bottom: 1px solid var(--border);
-    font-size: 13.5px; color: var(--t-body); line-height: 1.6;
+    font-size: 13.5px; color: var(--t2); line-height: 1.6;
   }
   .system__item i { font-family: var(--mono); font-size: 11px; color: var(--t3); flex-shrink: 0; width: 16px; font-style: normal; }
 
   .tradeoffs { padding: 56px 0; }
-  .prose { font-size: 14.5px; color: var(--t-body); line-height: 1.75; max-width: 70ch; margin-top: 16px; }
+  .prose { font-size: 14.5px; color: var(--t2); line-height: 1.75; max-width: 70ch; margin-top: 16px; }
 
   .results { padding: 56px 0; }
   .results__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 18px; }
@@ -357,7 +356,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     text-transform: uppercase; color: var(--t3);
   }
   .evidence__row { padding: 16px 20px; border-top: 1px solid var(--border); align-items: start; }
-  .evidence__claim { font-size: 13px; color: var(--t-body); line-height: 1.5; }
+  .evidence__claim { font-size: 13px; color: var(--t2); line-height: 1.5; }
   .evidence__artifact { font-size: 12px; color: var(--t2); line-height: 1.5; }
   .evidence__artifact a { text-decoration: none; border-bottom: 1px solid rgba(255,92,57,0.4); }
   .evidence__artifact a:hover { color: var(--t1); border-bottom-color: var(--t1); }
@@ -430,7 +429,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <nav class="nav">
   <div class="wrap nav__inner">
     <a class="nav__brand" href="#/" data-home>
-      <span class="nav__mark" aria-hidden="true"></span>
+      <img src="../assets/img/isotipo-ember.svg" width="22" height="22" alt="" class="nav__mark">
       <span>Diego Maury</span>
     </a>
     <div class="nav__right">

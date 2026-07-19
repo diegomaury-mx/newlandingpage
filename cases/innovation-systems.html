@@ -31,6 +31,9 @@
   <meta name="twitter:title" content="Patrón operativo: de la fricción al sistema · Diego Maury">
   <meta name="twitter:description" content="Tres contextos, un patrón de intervención: diagnosticar fricción, diseñar el sistema y preparar capacidad operativa.">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css">
 
   <style>
@@ -50,13 +53,13 @@
     .case-content { max-width: 740px; margin: 0 auto; padding: 0 2rem; }
     .case-section { margin-bottom: 4rem; }
     .case-section__label { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dm-amethyst); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
-    .case-section__label::after { content: ''; flex: 1; height: 1px; background: rgba(124,63,190,0.25); }
+    .case-section__label::after { content: ''; flex: 1; height: 1px; background: rgba(106,41,27,0.25); }
     .case-section__title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--dm-bone); margin-bottom: 1rem; line-height: 1.3; }
     .case-section p { color: var(--dm-white-60); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
-    .subcase { border: 1px solid rgba(124,63,190,0.2); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-    .subcase__header { background: rgba(124,63,190,0.08); padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .subcase { border: 1px solid rgba(106,41,27,0.2); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+    .subcase__header { background: rgba(106,41,27,0.08); padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .subcase__name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--dm-bone); }
-    .subcase__tag { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dm-ember); background: rgba(255,92,57,0.1); padding: 0.3rem 0.75rem; border-radius: 999px; }
+    .subcase__tag { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dm-ember); background: rgba(255,92,57,0.06); padding: 0.3rem 0.75rem; border-radius: 999px; }
     .subcase__body { padding: 1.5rem; }
     .subcase__body p { color: var(--dm-white-60); font-size: 0.95rem; line-height: 1.75; margin-bottom: 0.75rem; }
     .subcase__list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
@@ -66,7 +69,7 @@
     .subcase__metric { display: flex; flex-direction: column; gap: 0.15rem; }
     .subcase__metric-num { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--dm-spark); line-height: 1; }
     .subcase__metric-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--dm-white-40); text-transform: uppercase; letter-spacing: 0.05em; }
-    .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: rgba(124,63,190,0.15); border: 1px solid rgba(124,63,190,0.15); border-radius: 12px; overflow: hidden; margin-top: 1.5rem; }
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: rgba(106,41,27,0.15); border: 1px solid rgba(106,41,27,0.15); border-radius: 12px; overflow: hidden; margin-top: 1.5rem; }
     .result-card { background: rgba(15,10,26,0.95); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem; }
     .result-card__num { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--dm-spark); line-height: 1; }
     .result-card__label { font-family: var(--font-mono); font-size: 0.68rem; color: var(--dm-white-40); text-transform: uppercase; letter-spacing: 0.06em; }
@@ -74,7 +77,8 @@
     .case-learnings { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
     .case-learnings li { color: var(--dm-white-60); font-size: 1rem; line-height: 1.7; padding-left: 1.5rem; position: relative; }
     .case-learnings li::before { content: '→'; position: absolute; left: 0; color: var(--dm-amethyst); font-family: var(--font-mono); }
-    .case-divider { height: 3px; background: var(--dm-tricolor); border: none; margin: 3rem 0; border-radius: 2px; }
+    .case-divider { height: 1px; background: var(--border); border: none; margin: 3rem 0; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; border-radius: 2px; }
     .case-nav-footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; }
     @media (max-width: 767px) { .case-hero { padding: 6rem 0 3.5rem; } .case-hero__num { font-size: 30vw; top: 2rem; } .results-grid { grid-template-columns: 1fr 1fr; } }
 
@@ -99,8 +103,8 @@
 
     /* Estados hover discretos en las tarjetas de subcaso */
     .subcase { transition: border-color 0.25s ease; }
-    .subcase:hover { border-color: rgba(124,63,190,0.45); }
-    .subcase:hover .subcase__header { background: rgba(124,63,190,0.12); }
+    .subcase:hover { border-color: rgba(106,41,27,0.45); }
+    .subcase:hover .subcase__header { background: rgba(106,41,27,0.12); }
     .subcase__header { transition: background-color 0.25s ease; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -117,7 +121,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <nav class="nav" id="nav">
     <div class="container nav__inner">
       <a href="../" class="nav__brand">
-        <img src="../assets/img/isotipodm.svg" alt="Isotipo DM" class="nav__logo">
+        <img src="../assets/img/isotipo-ember.svg" alt="Diego Maury isotipo" class="nav__logo">
         <span class="nav__name">Diego Maury</span>
       </a>
       <ul class="nav__links">

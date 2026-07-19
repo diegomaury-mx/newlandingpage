@@ -88,38 +88,42 @@ git add -A && git commit -m "..." && git push origin master
 - Se sirve y compara localmente: `python -m http.server 8080` → `localhost:8080/index-canonico.html`.
 - Regla del plan: **no inventar datos** — métricas y hechos deben venir del SSOT en Notion; si el SSOT no cubre algo, se marca y se confirma con Diego.
 
-## Design system — v3 "Violeta Protagonista"
+## Design system unificado — V2 "Ember on Ink" (desde 2026-07-19)
 
-Tokens implementados en `assets/css/styles.css` (`:root`) y `assets/css/colors_and_type.css`. El folder externo del Design System fue eliminado el 2026-06-15; se migrará a otra herramienta (por definir).
+**Regla irrompible del proyecto:** todo el sitio comparte un solo design system. No debe haber páginas en sistemas distintos. Fuente de verdad: proyecto Claude Design **"Diego Maury Design System V 2"** (`019dd0ff-c961-76e9-9815-68e47ca79ab8`, accesible vía `DesignSync`), archivo `v2-tokens.css`. Antes del 2026-07-19 el sitio corría dos sistemas (`index.html` en DS v2, casos+portfolio en DS v3 "Violeta Protagonista") — consolidado en una sola migración, ver `~/.claude/plans` de esa sesión y el Changelog — Portafolio D.
 
-### Paleta de color (tokens CSS en `:root`)
+### Paleta de color (tokens CSS)
 
 | Token | Hex | Uso |
 |-------|-----|-----|
-| `--dm-amethyst` | `#7C3FBE` | CTA primario, isotipo, identidad |
-| `--dm-amethyst-600` | `#5E2A95` | Hover, depth |
-| `--dm-catalyst` | `#4B2672` | Gradientes, bg bloques |
-| `--dm-catalyst-700` | `#2E1547` | Hero bg, Contacto, Footer |
-| `--dm-catalyst-900` | `#120D1A` | Hero backdrop, fondos oscuros |
-| `--dm-ember` | `#FF5C39` | Highlights, tagline, accent border (NO CTA primario) |
-| `--dm-spark` | `#E6B800` | Solo en KPIs y métricas de impacto |
-| `--dm-quantum` | `#246BFD` | Links funcionales, status |
-| `--dm-ink` | `#0F0A1A` | Secciones interiores, body bg |
-| `--dm-bone` | `#F5F5F7` | Texto sobre oscuro |
+| `--bg` | `#0A0612` | Fondo principal (Deep Ink) |
+| `--bg-2` | `#1A1128` | Superficie: cards, paneles, hover |
+| `--border` | `#6A291B` | Bordes y separadores |
+| `--t1` | `#FAF8FC` | Texto primario |
+| `--t2` | `#DDDBE0` | Texto secundario |
+| `--t3` | `#A8A6AC` | Texto terciario |
+| `--ember` | `#FF5C39` | Acento único — exactamente una vez por pieza, en el elemento más importante |
+| `--ember-cta` | `#BF452B` | Ember oscurecido — única forma válida de usar ember como fondo sólido con texto blanco (el `--ember` puro da 3.07:1, falla AA; `--ember-cta` da ~4.9:1) |
 
-Gradiente tricolor (firma): `--dm-tricolor` = Amethyst → Catalyst → Ember
+**Reglas duras (no negociables):**
+1. Un solo acento: ember, una vez por pieza en el elemento más importante. Precedente ya aceptado: el logo del nav (siempre visible, es marca no acento de contenido) y los section-labels/eyebrows de cada sección no cuentan como violación — es el mismo patrón que index.html ya tenía LIVE antes de la migración.
+2. Sin gradientes, drop-shadows, blur ni glow decorativos. Excepción documentada: overlays de imagen (`linear-gradient` de `--bg` a alpha variable para legibilidad de texto sobre foto) y `backdrop-filter: blur()` en nav sticky — funcionales, no decorativos, aprobados por Diego 2026-07-02.
+3. Nunca `--dm-*`, nunca `colors_and_type.css`. `assets/css/styles.css` mantiene aliases `--dm-*` apuntando a los tokens V2 solo como compatibilidad temporal — no crear usos `--dm-*` nuevos.
+4. `:focus-visible` en todo elemento interactivo: `outline: 2px solid var(--ember); outline-offset: 2px;`
+5. Isotipo: `assets/img/isotipo-ember.svg` (hexágono `--t1` + facetas `--ember`) en todo nav/footer de todas las páginas — no usar `isotipodm.svg` ni dibujar el hexágono en CSS puro para el logo de marca.
 
 ### Tipografía
 
 | Familia | Carga | Uso |
 |---------|-------|-----|
-| Satoshi Variable | Local `assets/fonts/` | Headlines, sección títulos, números |
-| Inter | Google Fonts | Body, descripciones |
-| JetBrains Mono | Google Fonts (upright) + Local italic | Labels, tags, métricas, nav links |
+| Plus Jakarta Sans | Google Fonts | Headlines, UI, body |
+| DM Mono | Google Fonts | Cifras, fechas, labels, tags — siempre uppercase, nunca párrafos largos |
 
-### Isotipo bg-pattern
+`assets/fonts-v2/` (Montserrat/Bitter/Space Mono) queda como archivo local sin referenciar — no se borró, pero ningún token activo apunta ahí. No reintroducir esas familias.
 
-El SVG `isotipodm.svg` se usa como fondo decorativo en todas las secciones via `.bg-pattern::before` con `background-image` CSS. Opacidad 0.022 en Ink, 0.03 en Catalyst. No modificar este patrón — es parte de la identidad visual.
+### Isotipo bg-pattern (sin cambio)
+
+El SVG `isotipodm.svg` se usa como fondo decorativo (textura repetida) en todas las secciones via `.bg-pattern::before`/`background-image` CSS, opacidad 0.02–0.03. Esto es un uso distinto al del logo de marca (ver regla 5 arriba) y no se tocó en la migración — no modificar este patrón.
 
 ## Secciones (orden en index.html)
 
@@ -154,7 +158,7 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
   - Secciones S1-S9: Hero, Tesis/Traductor, Patrón Spine, Selected Work (H1/H2/H3 S-T-A-R), IP Propia, Evidencia Forense, Servicios, AI-Native, CTA Final
   - JS inline: scroll reveal (`data-reveal`/`is-visible`), contadores animados, nav activa, burger mobile
   - GTM-NHT5827J + Clarity x7ns7c22xi preservados
-  - **Invariante DS:** el index.html usa tokens DS v2 inline; los casos y portfolio usan DS v3 de `assets/css/styles.css`
+  - **Invariante DS (reemplazado 2026-07-19, ver sección "Design system unificado" abajo):** todo el sitio usa un solo sistema, V2 "Ember on Ink". Ya no hay split DS v2/DS v3.
   - **Copy en voz de Diego (2026-07-10):** todo el copy narrativo del index está reescrito en primera persona + tuteo siguiendo el Writing DNA (Notion `7b7c6991078b407f9ae1031796cb7f0d`, fuente canónica de voz; corrige a "Estilo y voz"). Filo = postura + contraste "No es X. Es Y", NO sarcasmo. Sin em dash en contenido. Spec: `docs/superpowers/specs/2026-07-10-copy-voz-diego-index-design.md`.
   - **Etiquetas de métricas alineadas al SSOT en index:** 9,905 = "Participantes inscritos", agregado de programas INCmty (HGC incluido), estimado (NO cifra de HGC; retirado de la tarjeta HEINEKEN). +600% = ed. 1 a ed. 3 (2019-2021). HackSureste 3,000+ = estimado, no acumulable con INCmty, sin "5 ediciones".
   - **Los tres archivos publicables están alineados con la evidencia (2026-07-12, commit `005641d`, rama `feat/caso-sofi`).** `index.html`, `llms.txt` y `llms-full.txt` declaran ahora el grado de evidencia de cada cifra. Los dos `llms` abren con la leyenda de dos grados: **published** (tercero nombrado) y **own** (registros, CRM o estimación propia). Desaparecieron los encabezados "audit-ready": ninguna cifra está auditada. **OJO: el deploy sale de `master`. Mientras esto no se mergee, el sitio LIVE sigue publicando las cifras viejas.**
@@ -189,7 +193,7 @@ Fuente: `CHANGELOG.md` [v0.1.0] — 2026-06-27. Estas son decisiones de producto
 - **Framework decidido:** Astro (Islands Architecture, output HTML estático, MDX, compatible con GitHub Pages, zero-JS por defecto).
 - **Content strategy:** Astro Content Collections — el contenido vivirá en `src/content/`, nunca dentro de los archivos de página. Los schemas Zod ya existen en `src/content/config.ts` (colecciones: `cases`, `projects`, `playbooks`, `insights`, `services`), cada una con su `README.md`.
 - **Deploy futuro:** GitHub Pages seguirá sirviendo desde `master`, pero GitHub Actions correrá `astro build` → `/dist` (pendiente, Sprint 1).
-- **Design System:** DS v2 (`_ds_import/`, no versionado) + DS v3 (`assets/css/`) se consolidarán en un único sistema de tokens canónico en Sprint 2.
+- **Design System:** consolidado antes de lo planeado — la unificación DS v2/DS v3 prevista para Sprint 2 se ejecutó el 2026-07-19 (ver "Design system unificado" arriba). El Sprint 2 futuro hereda un solo sistema de tokens ya vigente, no parte de cero.
 - **Documentación de convenciones ya escrita** (vinculante desde Sprint 1, sin efecto hoy): `docs/platform/conventions.md` (naming, estructura de carpetas Astro, convención MDX/frontmatter, convención de assets) y `docs/platform/seo-model.md` (metadata, Open Graph, JSON-LD, sitemap vía `@astrojs/sitemap`).
 - **Roles del proceso:** Diego Maury (Product Owner), ChatGPT (Product Strategist & UX Director), Silvia/Notion (Product Manager), Claude Code (Lead Software Engineer).
 - **Roadmap (según CHANGELOG):** Sprint 0 (Product Foundation, pendiente de PRD) → Sprint 0.5 (Domain & Content Architecture, **en progreso** — deliverables ya completados: CHANGELOG.md, schemas, docs de convenciones y SEO) → Sprint 1 (Astro Setup, bloqueado hasta aprobar Sprint 0) → Sprint 2 (Design System) → Sprint 3 (Home) → Sprint 4 (Páginas internas) → Sprint 5 (Optimización, incluye implementación real del modelo SEO).

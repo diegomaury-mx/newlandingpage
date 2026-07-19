@@ -38,45 +38,53 @@
 }
 
 /* ═══════════════════════════════════════
-   TOKENS — Design System v4 · "Deep Tech & Friction"
-   Re-skin de los nombres --dm-* heredados a la paleta v4
-   (Morado Maury · Ember · Quantum · Spark · Catalyst 900).
-   Fuente canónica: _ds/.../dm-brand.css
+   TOKENS — Design System V2 "Ember on Ink"
+   Fuente única para todo el sitio. Fuente canónica: proyecto Claude Design
+   "Diego Maury Design System V 2" (019dd0ff-c961-76e9-9815-68e47ca79ab8),
+   archivo v2-tokens.css. Migrado desde DS v3/v4 "Violeta Protagonista"
+   el 2026-07-19 — ver CLAUDE.md.
 ═══════════════════════════════════════ */
 :root {
-  /* Brand colors — mapeados a v4 */
-  --dm-amethyst:      #4b2a87;   /* Morado Maury — identidad */
-  --dm-amethyst-600:  #3a2170;   /* purple-deep — hover/depth */
-  --dm-catalyst:      #3a2170;   /* purple-700 — bloques medios */
-  --dm-catalyst-700:  #2a1854;   /* Catalyst 900 — superficies */
-  --dm-catalyst-900:  #1d1238;   /* surface-recessed — fondo hundido */
-  --dm-ember:         #f0592a;   /* Ember v4 */
-  --dm-ember-soft:    rgba(240, 89, 42, 0.14);
-  --dm-spark:         #f0b429;   /* Spark sobre oscuro (on-dark) */
-  --dm-quantum:       #7aa6ff;   /* Quantum sobre oscuro (on-dark) */
-  --dm-ink:           #1d1238;   /* fondo base oscuro v4 */
-  --dm-bone:          #f3f0ec;   /* texto sobre oscuro */
-  --dm-grey:          rgba(255, 255, 255, 0.55);   /* terciario sobre oscuro (sin gris plano) */
+  /* ── V2 — fuente de verdad ── */
+  --bg:     #0A0612;
+  --bg-2:   #1A1128;
+  --border: #6A291B;
+  --t1:     #FAF8FC;
+  --t2:     #DDDBE0;
+  --t3:     #A8A6AC;
+  --ember:  #FF5C39;
+  --ember-cta: #BF452B; /* ember oscurecido: cumple AA 4.5:1 con texto blanco en botones sólidos */
 
-  /* Alphas */
-  --dm-white-90:  rgba(255, 255, 255, 0.90);
-  --dm-white-80:  rgba(255, 255, 255, 0.80);
-  --dm-white-60:  rgba(255, 255, 255, 0.60);
-  --dm-white-40:  rgba(255, 255, 255, 0.40);
-  --dm-white-20:  rgba(255, 255, 255, 0.20);
-  --dm-white-10:  rgba(255, 255, 255, 0.10);
-  --dm-white-06:  rgba(255, 255, 255, 0.06);
-  --dm-white-04:  rgba(255, 255, 255, 0.04);
+  /* Brand colors — aliases --dm-* (compat temporal, retirar al final de la migración) */
+  --dm-amethyst:      var(--t2);     /* eyebrows/texto de acento → t2 */
+  --dm-amethyst-600:  var(--border); /* bordes/fondos de acento → border */
+  --dm-catalyst:      var(--bg-2);
+  --dm-catalyst-700:  var(--bg-2);
+  --dm-catalyst-900:  var(--bg);
+  --dm-ember:         var(--ember);
+  --dm-ember-soft:    rgba(255, 92, 57, 0.14);
+  --dm-spark:         var(--t1);     /* cifras grandes no protagonistas → t1; ver regla "ember una vez" */
+  --dm-quantum:       var(--t3);
+  --dm-ink:           var(--bg);
+  --dm-bone:          var(--t1);
+  --dm-grey:          var(--t3);
 
-  /* Gradients — firma tricolor v4 */
-  --dm-tricolor:      linear-gradient(90deg, #4b2a87 0%, #6a3a9e 50%, #f0592a 100%);
-  --dm-amethyst-grad: linear-gradient(135deg, #4b2a87 0%, #3a2170 100%);
+  /* Alphas — retirar cuando los usos migren a --t2/--t3/--border directos */
+  --dm-white-90:  var(--t1);
+  --dm-white-80:  var(--t2);
+  --dm-white-70:  var(--t2);   /* huérfano en sofi.html, fuente de verdad ahora */
+  --dm-white-60:  var(--t2);
+  --dm-white-40:  var(--t3);
+  --dm-white-20:  var(--border);
+  --dm-white-10:  var(--border);
+  --dm-white-06:  var(--border);
+  --dm-white-04:  var(--border);
 
-  /* Fonts — v4 */
-  --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-body:    'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-serif:   'Bitter', Georgia, 'Times New Roman', serif;
-  --font-mono:    'Space Mono', ui-monospace, 'Menlo', monospace;
+  /* Fonts — V2 */
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body:    'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif:   'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'DM Mono', ui-monospace, 'Menlo', monospace;
 
   /* Layout */
   --nav-bg:      rgba(18, 13, 26, 0.88);
@@ -157,7 +165,7 @@ body::after {
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--dm-amethyst);
+  color: var(--dm-ember);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -168,7 +176,7 @@ body::after {
   display: inline-block;
   width: 1.5rem;
   height: 1px;
-  background: var(--dm-amethyst);
+  background: var(--dm-ember);
   flex-shrink: 0;
 }
 .section-title {
@@ -237,13 +245,12 @@ section { position: relative; }
 .btn:hover  { transform: translateY(-2px); }
 .btn:active { transform: translateY(0); }
 
-/* Primario — amethyst gradient */
+/* Primario — ember sólido, AA con texto blanco */
 .btn--primary {
-  background: var(--dm-amethyst-grad);
-  color: var(--dm-bone);
-  box-shadow: 0 4px 14px rgba(124, 63, 190, 0.35);
+  background: var(--ember-cta);
+  color: #fff;
 }
-.btn--primary:hover { box-shadow: 0 6px 20px rgba(124, 63, 190, 0.50); }
+.btn--primary:hover { opacity: 0.88; }
 
 /* Secundario — ember outline */
 .btn--secondary {
@@ -807,7 +814,7 @@ section { position: relative; }
    FOOTER
 ═══════════════════════════════════════ */
 .footer { background: var(--dm-catalyst-700); border-top: 1px solid var(--dm-white-10); }
-.footer__tricolor { height: 3px; background: var(--dm-tricolor); }
+.footer__tricolor { height: 1px; background: var(--border); }
 .footer__inner {
   display: flex;
   align-items: center;

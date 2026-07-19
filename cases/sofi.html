@@ -25,16 +25,18 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://diegomaury.mx/cases/sofi.html">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css">
 
   <style>
     /* ---------- Otros casos ---------- */
     .case-divider {
-      height: 3px;
-      background: var(--dm-tricolor);
+      height: 1px;
+      background: var(--border);
       border: none;
       margin: 3rem 0;
-      border-radius: 2px;
     }
     .case-nav-footer {
       display: flex;
@@ -217,7 +219,7 @@
     .sofi-msg.is-shown { opacity: 1; transform: none; }
     .sofi-msg--in {
       align-self: flex-end;
-      background: var(--dm-amethyst);
+      background: var(--ember-cta);
       color: #fff;
       border-bottom-right-radius: 3px;
     }
@@ -315,13 +317,14 @@
       transition: background 0.18s, border-color 0.18s, color 0.18s;
     }
     .sofi-btn:hover { background: rgba(245,245,247,0.08); border-color: var(--dm-bone); }
-    .sofi-btn:focus-visible { outline: 2px solid var(--dm-amethyst); outline-offset: 2px; }
+    .sofi-btn:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+    a:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; border-radius: 2px; }
     .sofi-btn--primary {
-      background: var(--dm-amethyst);
-      border-color: var(--dm-amethyst);
+      background: var(--ember-cta);
+      border-color: var(--ember-cta);
       color: #fff;
     }
-    .sofi-btn--primary:hover { background: var(--dm-amethyst-600); border-color: var(--dm-amethyst-600); }
+    .sofi-btn--primary:hover { opacity: 0.88; }
     .sofi-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
 
     /* Procedencia: sin letra chica */
@@ -494,7 +497,7 @@
 
     /* Estados hover discretos (mismo lenguaje que los botones existentes) */
     .sofi-state { transition: border-color 0.2s ease, background-color 0.2s ease; }
-    .sofi-state:hover { border-color: rgba(124,63,190,0.55); background: rgba(124,63,190,0.07); }
+    .sofi-state:hover { border-color: rgba(106,41,27,0.55); background: rgba(106,41,27,0.07); }
     .sofi-state--terminal:hover { border-color: var(--dm-ember); background: rgba(255,92,57,0.06); }
 
     .sofi-lock { transition: border-top-color 0.2s ease; }
@@ -538,7 +541,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <nav class="nav" id="nav">
     <div class="container nav__inner">
       <a href="../" class="nav__brand">
-        <img src="../assets/img/isotipodm.svg" alt="Isotipo DM" class="nav__logo">
+        <img src="../assets/img/isotipo-ember.svg" alt="Diego Maury isotipo" class="nav__logo">
         <span class="nav__name">Diego Maury</span>
       </a>
       <ul class="nav__links">
@@ -682,14 +685,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <svg viewBox="0 0 980 380" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L8,3 z" fill="#7C3FBE"/>
+              <path d="M0,0 L0,6 L8,3 z" fill="var(--ember)"/>
             </marker>
             <style>
               .bx { fill: rgba(245,245,247,0.04); stroke: rgba(245,245,247,0.20); rx: 8; }
-              .bx-hi { fill: rgba(124,63,190,0.14); stroke: #7C3FBE; }
+              .bx-hi { fill: rgba(255,92,57,0.14); stroke: var(--ember); }
               .t  { font-family: 'JetBrains Mono', monospace; font-size: 12px; fill: #F5F5F7; }
               .s  { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; fill: rgba(245,245,247,0.45); }
-              .ln { stroke: #7C3FBE; stroke-width: 1.5; fill: none; marker-end: url(#ar); }
+              .ln { stroke: var(--ember); stroke-width: 1.5; fill: none; marker-end: url(#ar); }
               .lb { font-family: 'JetBrains Mono', monospace; font-size: 9px; fill: rgba(245,245,247,0.5); }
             </style>
           </defs>
