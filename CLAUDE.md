@@ -394,7 +394,7 @@ A petición explícita de Diego ("quiero que todo sea una red"), la navegación 
 - El footer del portfolio lleva Agendar, CV y la frase de marca; su title/og es "Portafolio · Diego Maury" (sin em dash).
 - `portfolio/portfolio.css` y `portfolio.js` ya no existen: se movieron a `backups/portfolio-v1-eras.{css,js}` (la SPA del portfolio es autocontenida y nunca los referenció).
 - **Falso positivo conocido: el "doble h1" del portfolio.** Los dos `<h1>` del fuente están en templates JS que se reemplazan vía `app.innerHTML`; el DOM solo tiene uno a la vez. No "corregirlo".
-- **89.5% de SOFI: NO publicable.** No existe en HTML, JS ni SSOT de métricas; Diego decidió que no se agrega hasta tener fuente verificable (alta en SSOT Notion → metrics.json → data-metric). No agregarlo directo a la web.
+- **89.5% de SOFI: publicado (2026-07-19).** El slug `sofi-cobertura-automatica` ya estaba `Vigente`/`Pública` en `assets/data/metrics.json` desde el 2026-07-17 y ya vivía en `index.html` (hero, Selected Work, IP Propia). Lo único que faltaba era `cases/sofi.html` — corregido: se agregó como párrafo en la sección "Ficha técnica" (89.5% de cobertura automática sobre 191 leads, 2025-2026, medición propia). `node tools/verify-metrics.js` da 0 errores.
 - Pospuesto a fases futuras: refactor de estilos inline (index 38, redux 14, innovation 9) y auditoría de navegador (contraste WCAG, focus, LCP, console errors).
 
 ## Idioma de respuestas
