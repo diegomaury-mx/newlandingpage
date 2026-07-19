@@ -3,6 +3,10 @@ node_modules/
 .DS_Store
 desktop.ini
 
+# Astro (scaffold de migracion Diego CMS)
+dist/
+.astro/
+
 # Artefactos de tooling local (no son parte del sitio)
 .playwright-mcp/
 .superpowers/

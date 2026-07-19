@@ -1,0 +1,19 @@
+{
+  "name": "diegomaury-mx",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Portafolio profesional de Diego Maury. Migracion a Astro (subproyecto Diego CMS). Durante la migracion el sitio LIVE se sigue sirviendo del HTML estatico en la raiz; este proyecto Astro construye a dist/ y NO se despliega todavia.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync": "astro sync"
+  },
+  "dependencies": {
+    "astro": "^4.16.0"
+  },
+  "devDependencies": {
+    "puppeteer": "^25.3.0"
+  }
+}
