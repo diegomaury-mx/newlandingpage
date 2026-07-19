@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-NHT5827J');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "x7ns7c22xi");
+  </script>
+  <!-- End Microsoft Clarity -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOFI — Diego Maury</title>
+  <link rel="icon" type="image/png" href="../assets/img/isotipo-gradient.png">
+  <meta name="description" content="Un agente de WhatsApp que califica leads: máquina de estados, contrato cerrado con el modelo, y una conversación completa contra el sistema real.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://diegomaury.mx/portfolio/sofi.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+
+  <style>
+    /* ---------- Otros casos ---------- */
+    .case-divider {
+      height: 1px;
+      background: var(--border);
+      border: none;
+      margin: 3rem 0;
+    }
+    .case-nav-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 0 3rem;
+      flex-wrap: wrap;
+    }
+    /* ---------- Hero ---------- */
+    .case-hero {
+      background: var(--dm-catalyst-700);
+      padding: 8rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .case-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('../assets/img/isotipodm.svg');
+      background-size: 320px;
+      background-repeat: repeat;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+    .case-hero__back {
+      display: flex;          /* block-level: se queda en su propia línea */
+      width: fit-content;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--dm-white-40);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      transition: color 0.2s;
+    }
+    .case-hero__back:hover { color: var(--dm-bone); }
+    .case-hero__tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dm-ember);
+      margin-bottom: 1.25rem;
+    }
+    /* Meta del hero: logo del cliente + periodo, discreto */
+    .case-hero__meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .case-hero__meta .case-hero__tag { margin-bottom: 0; }
+    .case-hero__logo {
+      width: 34px;
+      height: 34px;
+      display: block;
+      border-radius: 8px;
+      border: 1px solid rgba(245,245,247,0.16);
+      background: rgba(245,245,247,0.06);
+    }
+    .case-hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: 800;
+      color: var(--dm-bone);
+      line-height: 1;
+      margin-bottom: 1.25rem;
+    }
+    .case-hero__sub {
+      font-size: 1.05rem;
+      color: var(--dm-white-70, rgba(245,245,247,0.7));
+      max-width: 46ch;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Hueco del video de /brag. Pieza de presentación, no evidencia. */
+    .sofi-video { margin: 2rem 0 0; max-width: 720px; }
+    .sofi-video video {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(245,245,247,0.14);
+      display: block;
+    }
+    .sofi-video figcaption {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      line-height: 1.6;
+      color: var(--dm-white-40);
+      margin-top: 0.75rem;
+    }
+
+    /* ---------- Secciones ---------- */
+    .sofi-section {
+      background: var(--dm-ink);
+      padding: 6rem 0;
+      position: relative;
+    }
+    .sofi-prose {
+      max-width: 68ch;
+      color: var(--dm-white-70, rgba(245,245,247,0.72));
+      line-height: 1.75;
+    }
+    .sofi-prose p { margin-bottom: 1.25rem; }
+    .sofi-prose strong { color: var(--dm-bone); }
+
+    /* ---------- Cambio de registro ---------- */
+    .sofi-switch {
+      background: var(--dm-ink);
+      padding: 4rem 0;
+      border-top: 1px solid rgba(245,245,247,0.08);
+      border-bottom: 1px solid rgba(245,245,247,0.08);
+    }
+    .sofi-switch__line {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--dm-bone);
+      max-width: 24ch;
+    }
+    .sofi-switch__line em {
+      font-style: normal;
+      color: var(--dm-ember);
+    }
+
+    /* ---------- Simulador ---------- */
+    .sofi-sim {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      align-items: start;
+    }
+    .sofi-sim__pane {
+      background: rgba(245,245,247,0.03);
+      border: 1px solid rgba(245,245,247,0.10);
+      border-radius: 12px;
+      padding: 1.25rem;
+      min-height: 460px;
+      display: flex;
+      flex-direction: column;
+    }
+    .sofi-sim__pane-title {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dm-white-40);
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* Hilo de WhatsApp */
+    .sofi-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      overflow-y: auto;
+      max-height: 420px;
+      padding-right: 0.4rem;
+    }
+    .sofi-msg {
+      max-width: 82%;
+      padding: 0.6rem 0.85rem;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+    .sofi-msg.is-shown { opacity: 1; transform: none; }
+    .sofi-msg--in {
+      align-self: flex-end;
+      background: var(--ember-cta);
+      color: #fff;
+      border-bottom-right-radius: 3px;
+    }
+    .sofi-msg--out {
+      align-self: flex-start;
+      background: rgba(245,245,247,0.09);
+      color: var(--dm-bone);
+      border-bottom-left-radius: 3px;
+    }
+
+    /* Panel del FSM */
+    .sofi-trace { display: flex; flex-direction: column; gap: 1rem; }
+    .sofi-trace__empty {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--dm-white-40);
+      line-height: 1.7;
+    }
+    .sofi-trace__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(245,245,247,0.08);
+    }
+    .sofi-trace__k {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dm-white-40);
+      flex-shrink: 0;
+    }
+    .sofi-trace__v {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--dm-bone);
+      text-align: right;
+    }
+    .sofi-trace__v--state { color: var(--dm-spark); font-weight: 700; }
+    .sofi-trace__v--moved { color: var(--dm-ember); font-weight: 700; }
+
+    /* Barra de confianza: el candado que se ve */
+    .sofi-conf { margin-top: 0.25rem; }
+    .sofi-conf__bar {
+      position: relative;
+      height: 6px;
+      background: rgba(245,245,247,0.10);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .sofi-conf__fill {
+      height: 100%;
+      background: var(--dm-spark);
+      border-radius: 3px;
+      width: 0;
+      transition: width 0.35s ease;
+    }
+    .sofi-conf__fill.is-low { background: var(--dm-ember); }
+    .sofi-conf__thresh {
+      position: absolute;
+      top: -3px;
+      bottom: -3px;
+      width: 2px;
+      background: var(--dm-bone);
+      opacity: 0.75;
+    }
+    .sofi-conf__legend {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      color: var(--dm-white-40);
+      margin-top: 0.45rem;
+      line-height: 1.5;
+    }
+
+    /* Controles */
+    .sofi-controls {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .sofi-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.1rem;
+      border-radius: 6px;
+      border: 1px solid rgba(245,245,247,0.20);
+      background: transparent;
+      color: var(--dm-bone);
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+    }
+    .sofi-btn:hover { background: rgba(245,245,247,0.08); border-color: var(--dm-bone); }
+    .sofi-btn:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+    a:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; border-radius: 2px; }
+    .sofi-btn--primary {
+      background: var(--ember-cta);
+      border-color: var(--ember-cta);
+      color: #fff;
+    }
+    .sofi-btn--primary:hover { opacity: 0.88; }
+    .sofi-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+    /* Procedencia: sin letra chica */
+    .sofi-proven {
+      border-left: 3px solid var(--dm-ember);
+      padding: 0.9rem 0 0.9rem 1.1rem;
+      margin: 1.5rem 0 0;
+      max-width: 72ch;
+    }
+    .sofi-proven p {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: var(--dm-white-70, rgba(245,245,247,0.72));
+      margin: 0;
+    }
+    .sofi-proven strong { color: var(--dm-bone); }
+
+    /* ---------- Arquitectura ---------- */
+    .sofi-arch { margin-top: 2rem; overflow-x: auto; }
+    .sofi-arch svg { min-width: 720px; width: 100%; height: auto; display: block; }
+
+    /* ---------- FSM ---------- */
+    .sofi-fsm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+    .sofi-state {
+      border: 1px solid rgba(245,245,247,0.12);
+      border-radius: 8px;
+      padding: 0.85rem;
+      background: rgba(245,245,247,0.03);
+    }
+    .sofi-state__name {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--dm-bone);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .sofi-state--terminal { border-color: var(--dm-ember); }
+    .sofi-state__badge {
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dm-ember);
+      border: 1px solid var(--dm-ember);
+      border-radius: 3px;
+      padding: 0.1rem 0.3rem;
+    }
+    .sofi-state__to {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      line-height: 1.6;
+      color: var(--dm-white-40);
+      word-break: break-word;
+    }
+    .sofi-locks { margin-top: 2.5rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .sofi-lock {
+      border-top: 2px solid var(--dm-amethyst);
+      padding-top: 0.9rem;
+    }
+    .sofi-lock h3 {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dm-bone);
+      margin-bottom: 0.5rem;
+    }
+    .sofi-lock p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--dm-white-70, rgba(245,245,247,0.72));
+    }
+    .sofi-lock code {
+      font-family: var(--font-mono);
+      font-size: 0.82em;
+      color: var(--dm-quantum);
+    }
+    .sofi-punch {
+      margin-top: 2.5rem;
+      font-family: var(--font-display);
+      font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--dm-bone);
+      max-width: 40ch;
+      border-left: 3px solid var(--dm-ember);
+      padding-left: 1.25rem;
+    }
+
+    /* ---------- Ficha técnica ---------- */
+    .sofi-ficha { margin-top: 2rem; }
+    .sofi-ficha__row {
+      display: grid;
+      grid-template-columns: 220px 120px 1fr;
+      gap: 1.5rem;
+      align-items: baseline;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid rgba(245,245,247,0.08);
+    }
+    .sofi-ficha__row dt {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--dm-white-40);
+    }
+    .sofi-ficha__value {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--dm-spark);
+      line-height: 1;
+    }
+    .sofi-ficha__method {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--dm-white-70, rgba(245,245,247,0.62));
+      margin: 0;
+    }
+
+    /* ---------- Límites ---------- */
+    .sofi-limites { list-style: none; margin: 2rem 0; padding: 0; max-width: 72ch; }
+    .sofi-limites li {
+      display: grid;
+      grid-template-columns: 1.75rem 1fr;
+      gap: 0.5rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid rgba(245,245,247,0.08);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--dm-white-70, rgba(245,245,247,0.68));
+    }
+    .sofi-limites strong { display: block; color: var(--dm-bone); margin-bottom: 0.2rem; }
+    .sofi-x {
+      color: var(--dm-ember);
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* ---------- Refinamiento visual (solo CSS) ---------- */
+    /* El .bg-pattern global trae pointer-events:none (fue diseñado como overlay
+       aparte); aquí va directo en la sección, así que se restaura la interacción. */
+    .sofi-section.bg-pattern { pointer-events: auto; }
+
+    /* Separador sutil entre secciones contiguas sobre Ink */
+    .sofi-section + .sofi-section { border-top: 1px solid rgba(245,245,247,0.06); }
+
+    /* Cambio de registro: mismo patrón de isotipo, aún más tenue */
+    .sofi-switch { position: relative; overflow: hidden; }
+    .sofi-switch::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('../assets/img/isotipodm.svg');
+      background-size: 140px;
+      background-repeat: repeat;
+      opacity: 0.02;
+      pointer-events: none;
+    }
+    .sofi-switch .container { position: relative; }
+
+    /* Estados hover discretos (mismo lenguaje que los botones existentes) */
+    .sofi-state { transition: border-color 0.2s ease, background-color 0.2s ease; }
+    .sofi-state:hover { border-color: rgba(106,41,27,0.55); background: rgba(106,41,27,0.07); }
+    .sofi-state--terminal:hover { border-color: var(--dm-ember); background: rgba(255,92,57,0.06); }
+
+    .sofi-lock { transition: border-top-color 0.2s ease; }
+    .sofi-lock:hover { border-top-color: var(--dm-ember); }
+
+    .sofi-sim__pane { transition: border-color 0.2s ease; }
+    .sofi-sim__pane:hover { border-color: rgba(245,245,247,0.18); }
+
+    .sofi-ficha__row { transition: background-color 0.2s ease; }
+    .sofi-ficha__row:hover { background: rgba(245,245,247,0.025); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 860px) {
+      .sofi-sim { grid-template-columns: 1fr; }
+      .sofi-sim__pane { min-height: 0; }
+      .sofi-thread { max-height: 340px; }
+      .sofi-ficha__row { grid-template-columns: 1fr; gap: 0.4rem; }
+      .sofi-ficha__value { font-size: 1.6rem; }
+    }
+    @media (max-width: 600px) {
+      .case-hero { padding: 6rem 0 3.5rem; }
+      .sofi-section { padding: 4rem 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sofi-msg { transition: none; opacity: 1; transform: none; }
+      .sofi-conf__fill { transition: none; }
+      .sofi-state,
+      .sofi-lock,
+      .sofi-sim__pane,
+      .sofi-ficha__row { transition: none; }
+    }
+  </style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NHT5827J"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  <nav class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="../" class="nav__brand">
+        <img src="../assets/img/isotipo-ember.svg" alt="Diego Maury isotipo" class="nav__logo">
+        <span class="nav__name">Diego Maury</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="../#trabajo"   class="nav__link">Work</a></li>
+        <li><a href="../#servicios" class="nav__link">Servicios</a></li>
+        <li><a href="../#about"     class="nav__link">About</a></li>
+        <li><a href="../#contacto"  class="nav__link">Contacto</a></li>
+      </ul>
+      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" target="_blank" rel="noopener" class="btn btn--primary nav__cta">Agendar</a>
+      <button class="nav__burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+<main>
+
+  <!-- ============ Hero ============ -->
+  <section class="case-hero" id="hero" aria-labelledby="sofi-title">
+    <div class="container" style="position:relative;">
+      <a href="../#trabajo" class="case-hero__back">← Volver a Work</a>
+      <div class="case-hero__meta">
+        <img src="../assets/img/logos/fliphouse-square.png" alt="Logo de FlipHouse"
+             class="case-hero__logo" width="34" height="34" loading="lazy">
+        <p class="case-hero__tag">FlipHouse · Oct 2025 - Jun 2026</p>
+      </div>
+      <h1 class="case-hero__title" id="sofi-title">SOFI</h1>
+      <p class="case-hero__sub">
+        Un agente de WhatsApp que califica leads inmobiliarios sin intervención humana.
+        Lo construí yo. Aquí abajo lo puedes ver decidir, mensaje por mensaje.
+      </p>
+
+      <!-- Hueco del video de /brag. Si el archivo no existe, el JS lo deja oculto. -->
+      <figure class="sofi-video" id="sofi-video" hidden>
+        <video src="../assets/video/sofi-brag.mp4" controls playsinline preload="none"></video>
+        <figcaption>
+          Pieza de presentación, generada a partir del código. No es una grabación del
+          sistema corriendo, y por eso no cuenta como evidencia.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ El caso, en corto ============ -->
+  <section class="sofi-section bg-pattern" id="caso" aria-labelledby="caso-h">
+    <div class="container">
+      <p class="section-label">El caso</p>
+      <h2 class="section-title" id="caso-h">El lead llegaba y nadie lo tocaba en tres días</h2>
+      <div class="sofi-prose">
+        <p>
+          FlipHouse captaba leads por varios frentes, Meta Lead Ads entre ellos, sin un
+          sistema que los recibiera. Entré como director de operaciones fraccional, no como
+          consultor de un entregable: el encargo era que la operación comercial funcionara,
+          no que existiera un documento que dijera cómo debería funcionar.
+        </p>
+        <p>
+          El problema no era falta de leads. Era que el lead llegaba y nadie lo tocaba en
+          uno a tres días. Para cuando alguien respondía, el prospecto ya estaba en otra
+          conversación. No había captura estructurada, ni enrutamiento, ni criterio de
+          calificación. Cada área tenía su versión de los hechos.
+        </p>
+        <p>
+          Eso no se arregla contratando a alguien que conteste más rápido. Se arregla
+          construyendo el sistema. Construí SOFI: un agente con IA que califica al lead de
+          punta a punta sin intervención humana, sobre HubSpot como fuente única de verdad,
+          con la captura y el enrutamiento rediseñados de Meta Lead Ads a HubSpot vía Make.
+        </p>
+        <p>
+          <strong>El trade-off.</strong> SOFI nació como agente de voz. La voz demuestra
+          mejor, pero el prospecto de FlipHouse no contesta llamadas de números
+          desconocidos: contesta WhatsApp. Migré el canal principal aunque implicara rehacer
+          toda la capa de conversación, porque el objetivo era contactar al lead, no lucir
+          la tecnología.
+        </p>
+        <p>
+          Lo haría distinto: construí en voz antes de validar el canal con prospectos
+          reales. La lección no es que la voz sea peor que WhatsApp. Es que el canal es una
+          hipótesis del negocio, no una decisión de arquitectura, y se valida antes de
+          construir encima.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Cambio de registro ============ -->
+  <section class="sofi-switch" id="switch">
+    <div class="container">
+      <p class="sofi-switch__line">
+        Hasta aquí te lo conté. <em>De aquí en adelante te lo demuestro.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ Simulador ============ -->
+  <section class="sofi-section bg-pattern" id="simulador" aria-labelledby="sim-h">
+    <div class="container">
+      <p class="section-label">Simulador</p>
+      <h2 class="section-title" id="sim-h">Míralo decidir, mensaje por mensaje</h2>
+
+      <div class="sofi-proven">
+        <p>
+          <strong>Qué estás viendo.</strong> Una conversación completa capturada contra el
+          sistema real: el mensaje entra por el mismo webhook, con firma HMAC válida, lo
+          clasifica el mismo modelo y lo mueve la misma máquina de estados. Lo único
+          ficticio es el lead: <strong>lo hice yo</strong>. No hay ningún dato de FlipHouse
+          en esta página. Esto demuestra que la máquina funciona, no que atendió a un
+          cliente real.
+        </p>
+      </div>
+
+      <div class="sofi-sim">
+        <div class="sofi-sim__pane">
+          <p class="sofi-sim__pane-title">WhatsApp</p>
+          <div class="sofi-thread" id="sofi-thread" role="log" aria-live="polite" aria-label="Hilo de la conversación"></div>
+        </div>
+        <div class="sofi-sim__pane">
+          <p class="sofi-sim__pane-title">Qué pasó por dentro</p>
+          <div class="sofi-trace" id="sofi-trace" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="sofi-controls">
+        <button class="sofi-btn sofi-btn--primary" id="sofi-play">Reproducir</button>
+        <button class="sofi-btn" id="sofi-step">Paso a paso</button>
+        <button class="sofi-btn" id="sofi-reset">Reiniciar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Arquitectura ============ -->
+  <section class="sofi-section bg-pattern" id="arquitectura" aria-labelledby="arq-h">
+    <div class="container">
+      <p class="section-label">Arquitectura</p>
+      <h2 class="section-title" id="arq-h">El recorrido del lead</h2>
+      <p class="sofi-prose">
+        Cada caja es un archivo o un servicio real, no una metáfora. El nombre que ves es
+        el nombre que tiene en el repo.
+      </p>
+
+      <div class="sofi-arch" role="img" aria-label="Diagrama de arquitectura: el mensaje de WhatsApp entra por el webhook, se valida la firma HMAC, el modelo clasifica la intención vía OpenRouter, la máquina de estados decide la transición, el estado se persiste en Redis y Postgres, y al completarse la entrevista Make escribe el lead en HubSpot. Todo corre en Railway.">
+        <svg viewBox="0 0 980 380" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="var(--ember)"/>
+            </marker>
+            <style>
+              .bx { fill: rgba(245,245,247,0.04); stroke: rgba(245,245,247,0.20); rx: 8; }
+              .bx-hi { fill: rgba(255,92,57,0.14); stroke: var(--ember); }
+              .t  { font-family: 'JetBrains Mono', monospace; font-size: 12px; fill: #F5F5F7; }
+              .s  { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; fill: rgba(245,245,247,0.45); }
+              .ln { stroke: var(--ember); stroke-width: 1.5; fill: none; marker-end: url(#ar); }
+              .lb { font-family: 'JetBrains Mono', monospace; font-size: 9px; fill: rgba(245,245,247,0.5); }
+            </style>
+          </defs>
+
+          <!-- Railway envelope -->
+          <rect x="188" y="14" width="600" height="252" rx="10" fill="none"
+                stroke="rgba(245,245,247,0.14)" stroke-dasharray="4 4"/>
+          <text class="s" x="198" y="32">Railway</text>
+
+          <!-- WhatsApp -->
+          <rect class="bx" x="14" y="96" width="150" height="58"/>
+          <text class="t" x="30" y="120">WhatsApp</text>
+          <text class="s" x="30" y="136">Cloud API</text>
+
+          <!-- webhook -->
+          <rect class="bx bx-hi" x="212" y="96" width="164" height="58"/>
+          <text class="t" x="228" y="120">webhookController</text>
+          <text class="s" x="228" y="136">firma HMAC-SHA256</text>
+
+          <!-- ai.service -->
+          <rect class="bx" x="424" y="44" width="164" height="58"/>
+          <text class="t" x="440" y="68">ai.service</text>
+          <text class="s" x="440" y="84">Zod: intent + confidence</text>
+
+          <!-- fsm.service -->
+          <rect class="bx bx-hi" x="424" y="152" width="164" height="58"/>
+          <text class="t" x="440" y="176">fsm.service</text>
+          <text class="s" x="440" y="192">12 estados. Decide.</text>
+
+          <!-- memoria -->
+          <rect class="bx" x="636" y="152" width="136" height="58"/>
+          <text class="t" x="652" y="176">Redis + Postgres</text>
+          <text class="s" x="652" y="192">sesión y mensajes</text>
+
+          <!-- OpenRouter -->
+          <rect class="bx" x="636" y="44" width="136" height="58"/>
+          <text class="t" x="652" y="68">OpenRouter</text>
+          <text class="s" x="652" y="84">el modelo</text>
+
+          <!-- Make -->
+          <rect class="bx" x="424" y="296" width="164" height="58"/>
+          <text class="t" x="440" y="320">Make</text>
+          <text class="s" x="440" y="336">5 escenarios</text>
+
+          <!-- HubSpot -->
+          <rect class="bx" x="660" y="296" width="150" height="58"/>
+          <text class="t" x="676" y="320">HubSpot</text>
+          <text class="s" x="676" y="336">fuente de verdad</text>
+
+          <!-- Flechas -->
+          <path class="ln" d="M164,125 L206,125"/>
+          <path class="ln" d="M376,118 L400,118 L400,73 L418,73"/>
+          <text class="lb" x="384" y="64">texto</text>
+
+          <path class="ln" d="M588,73 L630,73"/>
+          <path class="ln" d="M506,102 L506,146"/>
+          <text class="lb" x="512" y="128">intent + conf</text>
+
+          <path class="ln" d="M588,181 L630,181"/>
+          <path class="ln" d="M424,181 L400,181 L400,132 L376,132"/>
+          <text class="lb" x="336" y="172">reply</text>
+
+          <path class="ln" d="M506,210 L506,290"/>
+          <text class="lb" x="512" y="256">COMPLETED</text>
+
+          <path class="ln" d="M588,325 L654,325"/>
+
+          <!-- retorno a WhatsApp -->
+          <path class="ln" d="M212,140 L89,140 L89,154" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FSM ============ -->
+  <section class="sofi-section bg-pattern" id="fsm" aria-labelledby="fsm-h">
+    <div class="container">
+      <p class="section-label">Máquina de estados</p>
+      <h2 class="section-title" id="fsm-h">El modelo no decide el estado</h2>
+      <p class="sofi-prose">
+        Clasifica la intención y extrae datos. Nada más. Una tabla de transiciones decide,
+        valida contra el grafo y rechaza lo imposible. Estos estados no los dibujé: se
+        extraen de <code>src/services/fsm.service.js</code> con un script. Si el código
+        cambia, este diagrama cambia.
+      </p>
+
+      <div class="sofi-fsm-grid" id="sofi-fsm-grid"></div>
+
+      <div class="sofi-locks">
+        <div class="sofi-lock">
+          <h3>1. Umbral de confianza</h3>
+          <p>
+            Si el modelo reporta menos de <code id="sofi-thresh">0.75</code>, el FSM no se
+            mueve. El lead se queda donde está y se le vuelve a preguntar.
+          </p>
+        </div>
+        <div class="sofi-lock">
+          <h3>2. Tabla de transiciones</h3>
+          <p>
+            <code>TRANSITION_TABLE[estado][intent]</code>. Si esa combinación no existe, no
+            hay transición. El modelo no puede proponer un destino: solo puede nombrar una
+            intención de una lista cerrada.
+          </p>
+        </div>
+        <div class="sofi-lock">
+          <h3>3. Validación contra el grafo</h3>
+          <p>
+            <code>STATE_MAP</code> rechaza y loguea cualquier transición que el grafo no
+            permita. Los estados terminales son absorbentes: de ahí no se sale.
+          </p>
+        </div>
+      </div>
+
+      <p class="sofi-punch">
+        Si el modelo genera una respuesta incorrecta, el lead puede no avanzar.
+        La máquina de estados controla las transiciones y evita que el flujo avance a un estado que no le corresponde.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ Ficha técnica ============ -->
+  <section class="sofi-section bg-pattern" id="ficha" aria-labelledby="ficha-h">
+    <div class="container">
+      <p class="section-label">Ficha técnica</p>
+      <h2 class="section-title" id="ficha-h">Los números, y de dónde salen</h2>
+      <p class="sofi-prose">
+        <strong>Cobertura automática: <span data-metric="sofi-cobertura-automatica">89.5%</span></strong>
+        de 191 leads procesados de punta a punta sin intervención humana (2025-2026, medición propia).
+      </p>
+      <dl class="sofi-ficha" id="sofi-ficha"></dl>
+    </div>
+  </section>
+
+  <!-- ============ Lo que no puedo probar ============ -->
+  <section class="sofi-section bg-pattern" id="limites" aria-labelledby="lim-h">
+    <div class="container">
+      <p class="section-label">Límites</p>
+      <h2 class="section-title" id="lim-h">Lo que no puedo probar</h2>
+      <p class="sofi-prose">
+        Estas tres cifras las sostengo, y aun así nada de lo de arriba las demuestra. Dos
+        viven en el CRM de FlipHouse, y el CRM no es mío. La tercera es un modelo que hice
+        yo. Prefiero enseñarte el hueco a que lo encuentres tú.
+      </p>
+      <ul class="sofi-limites">
+        <li>
+          <span class="sofi-x" aria-hidden="true">✖</span>
+          <span>
+            <strong>Speed-to-lead: de 1 a 3 días a menos de 5 minutos.</strong>
+            Medido en el CRM. El dashboard de HubSpot está bajo NDA.
+          </span>
+        </li>
+        <li>
+          <span class="sofi-x" aria-hidden="true">✖</span>
+          <span>
+            <strong>De 5 a 30 leads al CRM por semana (<span data-metric="fliphouse-leads-crm">+500%</span>).</strong>
+            Medido en el CRM. El dashboard de HubSpot está bajo NDA.
+          </span>
+        </li>
+        <li>
+          <span class="sofi-x" aria-hidden="true">✖</span>
+          <span>
+            <strong>RODI modelado de <span data-metric="rodi-sofi">+1,291%</span>, payback menor a un mes.</strong>
+            Esta no es cuestión de NDA: es un modelo propio. Cost-avoidance modelado, no
+            ahorro realizado, y sin auditoría externa. Los ingresos sí están bajo NDA. La
+            metodología está disponible a solicitud.
+          </span>
+        </li>
+      </ul>
+      <p class="sofi-prose">
+        Y una más, que es la que suele darse por sentada: el simulador demuestra que el
+        sistema funciona, no que atendió a un cliente real. Las conversaciones de
+        producción son de FlipHouse. Lo que puedes verificar tú mismo aquí es la máquina.
+      </p>
+    </div>
+  </section>
+
+  <div class="container">
+    <hr class="case-divider">
+    <div class="case-nav-footer">
+      <a href="../#trabajo" class="btn btn--outline">← Volver a Work</a>
+      <a href="heineken.html" class="btn btn--outline">HEINEKEN Green Challenge →</a>
+      <a href="innovation-systems.html" class="btn btn--outline">Innovation Systems →</a>
+      <a href="redux-incmty.html" class="btn btn--outline">REDUX + INCmty →</a>
+      <a href="../portfolio/" class="btn btn--outline">Portafolio completo →</a>
+    </div>
+  </div>
+
+</main>
+
+  <footer class="footer">
+    <div class="footer__tricolor"></div>
+    <div class="container footer__inner">
+      <p class="footer__tagline mono">Hagamos que las cosas pasen.</p>
+      <p class="footer__copy">© 2026 Diego Maury</p>
+    </div>
+  </footer>
+
+  <script src="../assets/data/sofi/sofi-fsm.js"></script>
+  <script src="../assets/data/sofi/sofi-conversation.js"></script>
+  <script src="../assets/data/sofi/sofi-metrics.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/sofi-case.js"></script>
+</body>
+</html>

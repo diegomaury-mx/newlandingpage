@@ -39,15 +39,18 @@ El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy sour
 │   ├── fonts-v2/                # Montserrat + Bitter + Space Mono (v2)
 │   ├── js/main.js              # Nav activa + scroll reveal (IntersectionObserver)
 │   └── img/                    # isotipodm.svg (bg-pattern), isotipo, logos, hexagon patterns
-├── cases/
-│   ├── heineken.html           # Caso +600% — LIVE
-│   ├── innovation-systems.html # 3 subcasos FlipHouse/HackSureste/CAVA — LIVE
-│   ├── redux-incmty.html       # REDUX + INCmty Challenges — LIVE
-│   └── fliphouse.html          # Página de transición → SOFI, noindex (ex-caso legacy, retirado 2026-07-12)
-├── portfolio/                  # Galería por eras — LIVE
-│   ├── index.html
-│   ├── portfolio.css
-│   └── portfolio.js
+├── cases/                       # Solo stubs de redirect (noindex,follow) desde 2026-07-19 — ver nota abajo
+│   ├── heineken.html            # Redirect -> ../portfolio/heineken.html
+│   ├── sofi.html                # Redirect -> ../portfolio/sofi.html
+│   ├── redux-incmty.html        # Redirect -> ../portfolio/redux-incmty.html
+│   ├── innovation-systems.html  # Redirect -> ../portfolio/innovation-systems.html
+│   └── fliphouse.html           # Página de transición → SOFI, noindex (ex-caso legacy, retirado 2026-07-12) — NO se movió
+├── portfolio/                   # Galería por eras (SPA) + los 4 casos como .html estáticos — LIVE
+│   ├── index.html                # SPA hash-routed
+│   ├── heineken.html             # Caso +600% — LIVE (movido desde cases/ el 2026-07-19)
+│   ├── sofi.html                 # LIVE (movido desde cases/ el 2026-07-19)
+│   ├── redux-incmty.html         # REDUX + INCmty Challenges — LIVE (movido desde cases/ el 2026-07-19)
+│   └── innovation-systems.html   # 3 subcasos FlipHouse/HackSureste/CAVA — LIVE (movido desde cases/ el 2026-07-19)
 ├── cv/
 │   └── diego-maury-cv.pdf      # CV 2026 — LIVE
 ├── backups/                    # index-v1-backup.html, index-v2.html (respaldos)
@@ -165,7 +168,7 @@ Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
   - `backups/index-v2.html` — respaldo del diseño anterior "Deep Tech & Friction"
 - `llms.txt` — live en raíz, visible en `diegomaury.mx/llms.txt`
 - GTM-NHT5827J — instalado en `<head>` y `<body>` de index.html
-- `cases/heineken.html`, `cases/innovation-systems.html`, `cases/redux-incmty.html` — LIVE (navegación desde v1; no enlazados desde v2 aún)
+- `portfolio/heineken.html`, `portfolio/innovation-systems.html`, `portfolio/redux-incmty.html` — LIVE (navegación desde v1; no enlazados desde v2 aún)
 - `portfolio/index.html` — galería por eras — LIVE
 - `cv/diego-maury-cv.pdf` — CV 2026
 - Dominio `diegomaury.mx` con HTTPS activo
@@ -223,18 +226,18 @@ Corpus fuente: `C:\Users\DiegoLocal\Downloads\auditoria\` (5 partes de auditorí
 **Regla operativa aprendida en esta sesión:** que dos superficies coincidan (p. ej. `index.html` y `llms-full.txt`) NO prueba que un claim sea correcto — ambas pueden compartir la misma estimación propia sin reconstruir. El estándar por claim público es: entidad, programa/edición, población, unidad, fuente o grado de evidencia. Si no se cumple, el claim se **retira sin nota que reconozca la inconsistencia** (una nota tipo "cifra agregada, desglose no reconstruido" expone el problema sin resolverlo — no se publica).
 
 **Estado por REM (2026-07-12):**
-- **REM-003 (HEINEKEN/INCmty):** hecho. `cases/heineken.html` — retirados 9,905, 900+/3,231 y #1 nacional (sin fuente reconciliable); +600% revisado con unidad/periodo/baseline/grado explícitos; nueva sección "Mecanismos de intervención" separa mecanismo de resultado.
-- **REM-004 (FlipHouse → SOFI):** hecho. `cases/fliphouse.html` retirado como case study vigente → stub `noindex,follow` hacia SOFI. Limpieza en cascada: `sitemap.xml`, `portfolio/index.html` (bloque ERA 04 completo + ítem de índice lateral), footer de `cases/heineken.html`.
-- **REM-005 (REDUX/INCmty/HackSureste):** **cerrado sin cambios por decisión explícita de Diego** ("déjalos"). `cases/redux-incmty.html` conserva 3,000+ (atribuido a INCmty aunque `llms-full.txt` lo asigna a HackSureste), &gt;$4M, 12 convocatorias, 200+/1,000+ sin reconciliar. **No volver a cuestionar esta decisión ni la separación de las tres entidades — ya está establecida.**
-- **REM-007 (absolutos no demostrados):** hecho. `index.html` (2), `cases/sofi.html` (1), `cases/innovation-systems.html` (2) — "funciona sin mí" → "diseñado para que el equipo lo opere"; alucinación FSM ya no implica content-safety; "en producción" y "cualquier vertical" retirados sin artefacto.
-- **REM-013 (reencuadrar RODI +1,291%): cerrado 2026-07-17.** Ya cumplido en `cases/sofi.html` desde su build original (modelado, cost-avoidance no ahorro realizado, sin auditoría externa, metodología a solicitud). Diego autorizó agregar el calificador en `index.html`: la mención en Selected Work (línea ~900) ahora lleva `data-metric="rodi-sofi"` y el texto "modelado (cost avoidance)" junto al valor. `node tools/verify-metrics.js` confirma 0 advertencias para `rodi-sofi` en `index.html`.
-- **REM-009 (retirar/reconvertir "Innovation Systems Builder"):** hecho, 2026-07-13. `cases/innovation-systems.html` reescrito de agregador de métricas de 3 entidades no relacionadas a ensayo de patrón transversal. Retirados: KPI grid del hero, las 3 tarjetas de métricas por subcaso, la sección "Resultados consolidados", la mención de VAPI/voice AI (podía leerse como arquitectura vigente), el enlace de footer a `redux-incmty.html` (era navegación preexistente pero seguía dirigiendo tráfico a un caso congelado) y `card-01.png` en og:image/twitter:image (posible tarjeta social con cifras retiradas, pendiente de revisión aparte). Único enlace de evidencia canónica en la página: SOFI, desde el subcaso FlipHouse. Anchor `../#trabajo` (no `#work`, legacy).
+- **REM-003 (HEINEKEN/INCmty):** hecho. `portfolio/heineken.html` — retirados 9,905, 900+/3,231 y #1 nacional (sin fuente reconciliable); +600% revisado con unidad/periodo/baseline/grado explícitos; nueva sección "Mecanismos de intervención" separa mecanismo de resultado.
+- **REM-004 (FlipHouse → SOFI):** hecho. `cases/fliphouse.html` retirado como case study vigente → stub `noindex,follow` hacia SOFI. Limpieza en cascada: `sitemap.xml`, `portfolio/index.html` (bloque ERA 04 completo + ítem de índice lateral), footer de `portfolio/heineken.html`.
+- **REM-005 (REDUX/INCmty/HackSureste):** **cerrado sin cambios por decisión explícita de Diego** ("déjalos"). `portfolio/redux-incmty.html` conserva 3,000+ (atribuido a INCmty aunque `llms-full.txt` lo asigna a HackSureste), &gt;$4M, 12 convocatorias, 200+/1,000+ sin reconciliar. **No volver a cuestionar esta decisión ni la separación de las tres entidades — ya está establecida.**
+- **REM-007 (absolutos no demostrados):** hecho. `index.html` (2), `portfolio/sofi.html` (1), `portfolio/innovation-systems.html` (2) — "funciona sin mí" → "diseñado para que el equipo lo opere"; alucinación FSM ya no implica content-safety; "en producción" y "cualquier vertical" retirados sin artefacto.
+- **REM-013 (reencuadrar RODI +1,291%): cerrado 2026-07-17.** Ya cumplido en `portfolio/sofi.html` desde su build original (modelado, cost-avoidance no ahorro realizado, sin auditoría externa, metodología a solicitud). Diego autorizó agregar el calificador en `index.html`: la mención en Selected Work (línea ~900) ahora lleva `data-metric="rodi-sofi"` y el texto "modelado (cost avoidance)" junto al valor. `node tools/verify-metrics.js` confirma 0 advertencias para `rodi-sofi` en `index.html`.
+- **REM-009 (retirar/reconvertir "Innovation Systems Builder"):** hecho, 2026-07-13. `portfolio/innovation-systems.html` reescrito de agregador de métricas de 3 entidades no relacionadas a ensayo de patrón transversal. Retirados: KPI grid del hero, las 3 tarjetas de métricas por subcaso, la sección "Resultados consolidados", la mención de VAPI/voice AI (podía leerse como arquitectura vigente), el enlace de footer a `redux-incmty.html` (era navegación preexistente pero seguía dirigiendo tráfico a un caso congelado) y `card-01.png` en og:image/twitter:image (posible tarjeta social con cifras retiradas, pendiente de revisión aparte). Único enlace de evidencia canónica en la página: SOFI, desde el subcaso FlipHouse. Anchor `../#trabajo` (no `#work`, legacy).
 - **REM-008 (contrato de evidencia por caso):** aprobado como **principio adaptado**, no el schema rígido de 10 bloques de SOFI. Regla mínima por tipo de claim (cuantitativo observado / estimación propia / modelo económico / cualitativo / post-handoff) — se aplica como criterio de validación en cambios futuros de cada caso, sin ejecución independiente. `redux-incmty.html` y `cases/fliphouse.html` quedan excluidos (congelado / ya no es caso vigente).
 - **Pendientes:** REM-001/002/006 (infraestructura semántica y role chronology), REM-010/011/012 (Bloque D, seniority — gate por evidencia real, no por trabajo), REM-014–020 (enforcement técnico). Fuera de REM: `llms-full.txt` "flagship" (DIFF-002, diferido por Diego); revisión del asset `card-01.png`.
 
 **Estado de git: remediación commiteada y desplegada.** Los commits `7f0b8d6` (REM-003/004/007) y `9d142fb` (REM-009) están en `master` y pushados a `origin/master` — el sitio LIVE ya publica la remediación. Registro en Notion: REM-003/004/007 con entradas del 2026-07-12; REM-009 con entrada del 2026-07-13 (creada el 2026-07-15).
 
-## Caso SOFI — `cases/sofi.html` (LIVE desde 2026-07-12, mergeado a `master`)
+## Caso SOFI — `portfolio/sofi.html` (LIVE desde 2026-07-12, mergeado a `master`)
 
 Página de caso construida sobre el plan `docs/superpowers/plans/2026-07-11-artefactos-evidencia-sofi.md` y su spec. **LIVE y pública desde 2026-07-12:** `index, follow`, enlazada desde el work-item de FlipHouse en el index (`.work-case-link`) y dada de alta en el sitemap. Fue noindex y sin enlaces hasta que Diego aprobó publicarla.
 
@@ -358,21 +361,21 @@ Toda publicación que toque métricas o copy con métricas sigue este orden, sin
 6. Push
 7. Entrada en el Changelog — Portafolio D
 
-Reglas: una métrica nueva se da de alta primero en la base Notion (nunca directo en el JSON); las cifras muertas viven en la base como `Retirada` y el verificador las acusa; los borradores pueden llevar cifras literales, lo publicable no. **Sesión 2 cerrada (2026-07-17):** 11 métricas en la base (10 seed + `sofi-leads-campana`); `index.html`, `cases/heineken.html` y `cases/sofi.html` marcados con `data-metric` (`cases/redux-incmty.html` e `innovation-systems.html` quedan sin marcar a propósito, ver más abajo); `llms.txt`/`llms-full.txt` ya no solo escanean la lista negra de Retiradas — `verifyText` valida match completo contra `metrics.json` vía `huerfanasEnTexto`. La Maqueta Sitio v2 en Notion (`2e0bbf20-7ead-49e8-812c-34032cfda454`) ya usa placeholders `{{metrica:slug}}`. Tests del verificador: `node --test tools/verify-metrics.test.js` (23 tests).
+Reglas: una métrica nueva se da de alta primero en la base Notion (nunca directo en el JSON); las cifras muertas viven en la base como `Retirada` y el verificador las acusa; los borradores pueden llevar cifras literales, lo publicable no. **Sesión 2 cerrada (2026-07-17):** 11 métricas en la base (10 seed + `sofi-leads-campana`); `index.html`, `portfolio/heineken.html` y `portfolio/sofi.html` marcados con `data-metric` (`portfolio/redux-incmty.html` e `innovation-systems.html` quedan sin marcar a propósito, ver más abajo); `llms.txt`/`llms-full.txt` ya no solo escanean la lista negra de Retiradas — `verifyText` valida match completo contra `metrics.json` vía `huerfanasEnTexto`. La Maqueta Sitio v2 en Notion (`2e0bbf20-7ead-49e8-812c-34032cfda454`) ya usa placeholders `{{metrica:slug}}`. Tests del verificador: `node --test tools/verify-metrics.test.js` (23 tests).
 
-**`cases/redux-incmty.html` no se marca con `data-metric` — es intencional, no un pendiente.** La página está congelada por REM-005 (ver sección de auditoría abajo): sus cifras de "3,000+" atribuidas a INCmty no reconcilian con el slug `hacksureste-participantes` del SSOT (misma cifra, entidad distinta). Marcarla forzaría una atribución incorrecta. `cases/innovation-systems.html` tampoco se marca — sus "30%"/"100%" son datos operativos del cliente (crédito puente, calificación manual), no claims del SSOT de Diego.
+**`portfolio/redux-incmty.html` no se marca con `data-metric` — es intencional, no un pendiente.** La página está congelada por REM-005 (ver sección de auditoría abajo): sus cifras de "3,000+" atribuidas a INCmty no reconcilian con el slug `hacksureste-participantes` del SSOT (misma cifra, entidad distinta). Marcarla forzaría una atribución incorrecta. `portfolio/innovation-systems.html` tampoco se marca — sus "30%"/"100%" son datos operativos del cliente (crédito puente, calificación manual), no claims del SSOT de Diego.
 
 **`calificadorClaves` debe usar la raíz de la palabra, no la forma flexionada.** El chequeo de calificador es un substring (`ventana.includes(clave)`), no coincidencia de palabra completa. `"estimado"` como clave no matchea `"estimada"` (concordancia de género con el sustantivo, ej. "cifra final estimada") y el verificador bloquea con un error de calificador faltante aunque el calificador esté presente. Usar la raíz sin terminación (`"estimad"`) para que cubra ambos géneros y el plural.
 
-**`heineken-proyectos-evaluados` (3,231) — confirmada como dato real por decisión explícita de Diego (2026-07-17), no como hallazgo pendiente.** Estado `Vigente`/`Pública` en el SSOT, marcada con `data-metric` en `index.html` (métrica del hero + mención en Selected Work). REM-003 la retiró solo de `cases/heineken.html` por fuente no reconciliable; esa página no se toca. No volver a marcarla como hallazgo ni a cuestionar la decisión.
+**`heineken-proyectos-evaluados` (3,231) — confirmada como dato real por decisión explícita de Diego (2026-07-17), no como hallazgo pendiente.** Estado `Vigente`/`Pública` en el SSOT, marcada con `data-metric` en `index.html` (métrica del hero + mención en Selected Work). REM-003 la retiró solo de `portfolio/heineken.html` por fuente no reconciliable; esa página no se toca. No volver a marcarla como hallazgo ni a cuestionar la decisión.
 
 ## Multimedia y evidencia visual (desde 2026-07-17, commit `6017a60`)
 
 - Los assets viven en `assets/img/cases/` (banners+logos de HGC/REDUX/HackSureste), `assets/img/evidencia/` (11 capturas: informes del Tec, La Jornada Maya, playlists, Talent Land) y `assets/img/logos/`.
-- **Integrado en LIVE:** galería "Evidencia" en `cases/heineken.html` (5 artefactos con grado declarado: fuente publicada / registro propio) + banner en su hero; banners fotográficos en Selected Work del `index.html` (HEINEKEN y HackSureste; FlipHouse conserva logo, no tiene banner publicable); banner+logo por era y galería de artefactos en `portfolio/` (BTEM y Talent Land excluidos por regla de coincidencia de entidad; nada de FlipHouse por REM-004); logo FlipHouse y hover states en `cases/sofi.html`; solo CSS decorativo en `innovation-systems.html` (REM-009).
+- **Integrado en LIVE:** galería "Evidencia" en `portfolio/heineken.html` (5 artefactos con grado declarado: fuente publicada / registro propio) + banner en su hero; banners fotográficos en Selected Work del `index.html` (HEINEKEN y HackSureste; FlipHouse conserva logo, no tiene banner publicable); banner+logo por era y galería de artefactos en `portfolio/` (BTEM y Talent Land excluidos por regla de coincidencia de entidad; nada de FlipHouse por REM-004); logo FlipHouse y hover states en `portfolio/sofi.html`; solo CSS decorativo en `innovation-systems.html` (REM-009).
 - **Regla de las tarjetas de evidencia: cero cifras nuevas en captions/alt.** Las cifras de los artefactos (3,975, 562, 2,400...) NO están en el SSOT de métricas; describir el artefacto sin números. Darlas de alta en Notion primero si algún día se quieren en texto.
 - Gotcha de DS: `.bg-pattern` de styles.css trae `pointer-events: none`; si una sección lo usa directo (como en sofi.html), hay que devolverle `pointer-events: auto`.
-- `cases/heineken.html` ya no usa `card-01.png` como og:image (usa su banner). **Cerrado 2026-07-17:** `render_card.html`, `export_cards.js` y `exported_cards/` se eliminaron del repo por decisión de Diego; `index.html`, `backups/portfolio-v1-eras.html` y `redux-incmty.html` migraron su og:image/twitter:image/JSON-LD a `assets/img/diego-maury.png` (los dos primeros) y `assets/img/cases/redux-banner.jpg` (el segundo).
+- `portfolio/heineken.html` ya no usa `card-01.png` como og:image (usa su banner). **Cerrado 2026-07-17:** `render_card.html`, `export_cards.js` y `exported_cards/` se eliminaron del repo por decisión de Diego; `index.html`, `backups/portfolio-v1-eras.html` y `redux-incmty.html` migraron su og:image/twitter:image/JSON-LD a `assets/img/diego-maury.png` (los dos primeros) y `assets/img/cases/redux-banner.jpg` (el segundo).
 
 ## Maqueta Sitio v2 — ejecutada 2026-07-17. Congelamiento de 90 días ANULADO (mismo día)
 
@@ -398,7 +401,7 @@ A petición explícita de Diego ("quiero que todo sea una red"), la navegación 
 - El footer del portfolio lleva Agendar, CV y la frase de marca; su title/og es "Portafolio · Diego Maury" (sin em dash).
 - `portfolio/portfolio.css` y `portfolio.js` ya no existen: se movieron a `backups/portfolio-v1-eras.{css,js}` (la SPA del portfolio es autocontenida y nunca los referenció).
 - **Falso positivo conocido: el "doble h1" del portfolio.** Los dos `<h1>` del fuente están en templates JS que se reemplazan vía `app.innerHTML`; el DOM solo tiene uno a la vez. No "corregirlo".
-- **89.5% de SOFI: publicado (2026-07-19).** El slug `sofi-cobertura-automatica` ya estaba `Vigente`/`Pública` en `assets/data/metrics.json` desde el 2026-07-17 y ya vivía en `index.html` (hero, Selected Work, IP Propia). Lo único que faltaba era `cases/sofi.html` — corregido: se agregó como párrafo en la sección "Ficha técnica" (89.5% de cobertura automática sobre 191 leads, 2025-2026, medición propia). `node tools/verify-metrics.js` da 0 errores.
+- **89.5% de SOFI: publicado (2026-07-19).** El slug `sofi-cobertura-automatica` ya estaba `Vigente`/`Pública` en `assets/data/metrics.json` desde el 2026-07-17 y ya vivía en `index.html` (hero, Selected Work, IP Propia). Lo único que faltaba era `portfolio/sofi.html` — corregido: se agregó como párrafo en la sección "Ficha técnica" (89.5% de cobertura automática sobre 191 leads, 2025-2026, medición propia). `node tools/verify-metrics.js` da 0 errores.
 - Pospuesto a fases futuras: refactor de estilos inline (index 38, redux 14, innovation 9) y auditoría de navegador (contraste WCAG, focus, LCP, console errors).
 
 ## Idioma de respuestas

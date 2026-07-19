@@ -99,7 +99,8 @@ function verifyText(texto, fileRel, metrics) {
 function superficiesDe(fileRel) {
   const rel = fileRel.replace(/\\/g, '/');
   if (rel === 'index.html') return ['Hero', 'Sitio web'];
-  if (rel.startsWith('cases/')) return ['Caso de estudio'];
+  if (rel === 'portfolio/index.html') return ['Sitio web'];
+  if (rel.startsWith('cases/') || rel.startsWith('portfolio/')) return ['Caso de estudio'];
   return ['Sitio web'];
 }
 
@@ -183,10 +184,12 @@ function run(argv, raizOverride) {
   }
 
   const htmlFiles = ['index.html'];
-  const casesDir = path.join(raiz, 'cases');
-  if (fs.existsSync(casesDir)) {
-    for (const f of fs.readdirSync(casesDir).filter((x) => x.endsWith('.html'))) {
-      htmlFiles.push(`cases/${f}`);
+  for (const dir of ['cases', 'portfolio']) {
+    const dirAbs = path.join(raiz, dir);
+    if (fs.existsSync(dirAbs)) {
+      for (const f of fs.readdirSync(dirAbs).filter((x) => x.endsWith('.html'))) {
+        htmlFiles.push(`${dir}/${f}`);
+      }
     }
   }
   const textFiles = ['llms.txt', 'llms-full.txt'].filter((f) => fs.existsSync(path.join(raiz, f)));

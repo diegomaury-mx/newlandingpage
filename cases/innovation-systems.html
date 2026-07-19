@@ -2,257 +2,26 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NHT5827J');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Microsoft Clarity -->
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "x7ns7c22xi");
-  </script>
-  <!-- End Microsoft Clarity -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Patrón operativo: de la fricción al sistema · Diego Maury</title>
-  <link rel="icon" type="image/png" href="../assets/img/isotipo-gradient.png">
-  <meta name="description" content="Cómo diagnostiqué fricción operativa y diseñé mecanismos de operación en tres contextos: fintech, ecosistema de innovación y producto digital. SOFI documenta el caso con mayor detalle y límites de evidencia explícitos.">
-  <link rel="canonical" href="https://diegomaury.mx/cases/innovation-systems.html">
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="Patrón operativo: de la fricción al sistema · Diego Maury">
-  <meta property="og:description" content="Tres contextos, un patrón de intervención: diagnosticar fricción, diseñar el sistema y preparar capacidad operativa.">
-  <meta property="og:url" content="https://diegomaury.mx/cases/innovation-systems.html">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Patrón operativo: de la fricción al sistema · Diego Maury">
-  <meta name="twitter:description" content="Tres contextos, un patrón de intervención: diagnosticar fricción, diseñar el sistema y preparar capacidad operativa.">
-
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://diegomaury.mx/portfolio/innovation-systems.html">
+  <meta http-equiv="refresh" content="0; url=../portfolio/innovation-systems.html">
+  <script>location.replace('../portfolio/innovation-systems.html');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css">
-
   <style>
-    .case-hero { background: var(--dm-catalyst-700); padding: 8rem 0 5rem; position: relative; overflow: hidden; }
-    .case-hero::before { content: ''; position: absolute; inset: 0; background-image: url('../assets/img/isotipodm.svg'); background-size: 320px; background-repeat: repeat; opacity: 0.03; pointer-events: none; }
-    .case-hero__back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--dm-white-40); font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3rem; transition: color 0.2s; }
-    .case-hero__back:hover { color: var(--dm-bone); }
-    .case-hero__num { font-family: var(--font-display); font-size: clamp(6rem, 18vw, 14rem); font-weight: 900; line-height: 0.85; color: var(--dm-spark); opacity: 0.18; position: absolute; top: 4rem; right: -1rem; user-select: none; pointer-events: none; }
-    .case-hero__tag { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dm-ember); margin-bottom: 1.25rem; }
-    .case-hero__title { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800; color: var(--dm-bone); line-height: 1.1; max-width: 640px; margin-bottom: 1rem; }
-    .case-hero__sub { font-family: var(--font-mono); font-size: 0.85rem; color: var(--dm-white-40); margin-bottom: 2.5rem; }
-    .case-hero__kpis { display: flex; gap: 2.5rem; flex-wrap: wrap; }
-    .case-hero__kpi { display: inline-flex; flex-direction: column; gap: 0.25rem; border-left: 3px solid var(--dm-amethyst); padding-left: 1.25rem; }
-    .case-hero__kpi-num { font-family: var(--font-display); font-size: 2.4rem; font-weight: 800; color: var(--dm-spark); line-height: 1; }
-    .case-hero__kpi-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--dm-white-40); letter-spacing: 0.06em; text-transform: uppercase; }
-    .case-body { background: var(--dm-ink); padding: 5rem 0 8rem; }
-    .case-content { max-width: 740px; margin: 0 auto; padding: 0 2rem; }
-    .case-section { margin-bottom: 4rem; }
-    .case-section__label { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dm-amethyst); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
-    .case-section__label::after { content: ''; flex: 1; height: 1px; background: rgba(106,41,27,0.25); }
-    .case-section__title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--dm-bone); margin-bottom: 1rem; line-height: 1.3; }
-    .case-section p { color: var(--dm-white-60); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
-    .subcase { border: 1px solid rgba(106,41,27,0.2); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-    .subcase__header { background: rgba(106,41,27,0.08); padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    .subcase__name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--dm-bone); }
-    .subcase__tag { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dm-ember); background: rgba(255,92,57,0.06); padding: 0.3rem 0.75rem; border-radius: 999px; }
-    .subcase__body { padding: 1.5rem; }
-    .subcase__body p { color: var(--dm-white-60); font-size: 0.95rem; line-height: 1.75; margin-bottom: 0.75rem; }
-    .subcase__list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
-    .subcase__list li { color: var(--dm-white-60); font-size: 0.92rem; line-height: 1.65; padding-left: 1.25rem; position: relative; }
-    .subcase__list li::before { content: '→'; position: absolute; left: 0; color: var(--dm-amethyst); font-family: var(--font-mono); font-size: 0.8rem; }
-    .subcase__metrics { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
-    .subcase__metric { display: flex; flex-direction: column; gap: 0.15rem; }
-    .subcase__metric-num { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--dm-spark); line-height: 1; }
-    .subcase__metric-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--dm-white-40); text-transform: uppercase; letter-spacing: 0.05em; }
-    .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: rgba(106,41,27,0.15); border: 1px solid rgba(106,41,27,0.15); border-radius: 12px; overflow: hidden; margin-top: 1.5rem; }
-    .result-card { background: rgba(15,10,26,0.95); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem; }
-    .result-card__num { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--dm-spark); line-height: 1; }
-    .result-card__label { font-family: var(--font-mono); font-size: 0.68rem; color: var(--dm-white-40); text-transform: uppercase; letter-spacing: 0.06em; }
-    .result-card__def { font-size: 0.82rem; color: var(--dm-white-40); line-height: 1.5; margin-top: 0.25rem; }
-    .case-learnings { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-    .case-learnings li { color: var(--dm-white-60); font-size: 1rem; line-height: 1.7; padding-left: 1.5rem; position: relative; }
-    .case-learnings li::before { content: '→'; position: absolute; left: 0; color: var(--dm-amethyst); font-family: var(--font-mono); }
-    .case-divider { height: 1px; background: var(--border); border: none; margin: 3rem 0; }
-    a:focus-visible, button:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; border-radius: 2px; }
-    .case-nav-footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; }
-    @media (max-width: 767px) { .case-hero { padding: 6rem 0 3.5rem; } .case-hero__num { font-size: 30vw; top: 2rem; } .results-grid { grid-template-columns: 1fr 1fr; } }
-
-    /* ---------- Refinamiento visual (solo CSS decorativo) ---------- */
-    /* Patrón de isotipo también en el cuerpo del ensayo, más tenue que el hero */
-    .case-body { position: relative; overflow: hidden; }
-    .case-body::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('../assets/img/isotipodm.svg');
-      background-size: 300px;
-      background-repeat: repeat;
-      opacity: 0.02;
-      pointer-events: none;
-    }
-    .case-content { position: relative; }
-
-    /* Jerarquía tipográfica: los títulos de sección respiran un poco más */
-    .case-section__title { letter-spacing: -0.01em; margin-bottom: 1.25rem; }
-    .case-section { margin-bottom: 4.5rem; }
-
-    /* Estados hover discretos en las tarjetas de subcaso */
-    .subcase { transition: border-color 0.25s ease; }
-    .subcase:hover { border-color: rgba(106,41,27,0.45); }
-    .subcase:hover .subcase__header { background: rgba(106,41,27,0.12); }
-    .subcase__header { transition: background-color 0.25s ease; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .subcase, .subcase__header { transition: none; }
-    }
+    .transition-wrap { max-width: 640px; margin: 0 auto; padding: 8rem 2rem; text-align: center; }
+    .transition-wrap p { color: var(--t2); font-size: 1rem; line-height: 1.8; margin-bottom: 1.5rem; }
   </style>
 </head>
-<body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NHT5827J"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-  <nav class="nav" id="nav">
-    <div class="container nav__inner">
-      <a href="../" class="nav__brand">
-        <img src="../assets/img/isotipo-ember.svg" alt="Diego Maury isotipo" class="nav__logo">
-        <span class="nav__name">Diego Maury</span>
-      </a>
-      <ul class="nav__links">
-        <li><a href="../#trabajo"   class="nav__link">Work</a></li>
-        <li><a href="../#servicios" class="nav__link">Servicios</a></li>
-        <li><a href="../#about"     class="nav__link">About</a></li>
-        <li><a href="../#contacto"  class="nav__link">Contacto</a></li>
-      </ul>
-      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" target="_blank" rel="noopener" class="btn btn--primary nav__cta">Agendar</a>
-      <button class="nav__burger" aria-label="Abrir menú" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <section class="case-hero">
-    <div class="container" style="position:relative;">
-      <span class="case-hero__num" aria-hidden="true">02</span>
-      <a href="../#trabajo" class="case-hero__back">← Volver a Work</a>
-      <p class="case-hero__tag">RevOps · Automatización · Sistemas · 2018–Presente</p>
-      <h1 class="case-hero__title">Patrón operativo: de la fricción al sistema</h1>
-      <p class="case-hero__sub">Tres contextos, un mismo patrón de intervención: diagnosticar fricción, diseñar el sistema, dejar capacidad instalada.</p>
-    </div>
-  </section>
-
-  <div class="case-body">
-    <div class="case-content">
-
-      <section class="case-section" data-reveal>
-        <p class="case-section__label">Contexto</p>
-        <h2 class="case-section__title">Un patrón repetible a lo largo de 7 años.</h2>
-        <p>Diagnosticar fricción operativa, rediseñar el sistema, implementar la infraestructura técnica y dejar capacidades instaladas. Tres contextos distintos, mismo tipo de intervención.</p>
-        <p><strong style="color:var(--dm-bone)">Problema transversal:</strong> Al escalar, procesos manuales y decisiones ambiguas generan errores, pérdida de control y dependencia de personas clave.</p>
-      </section>
-
-      <hr class="case-divider">
-
-      <section class="case-section" data-reveal>
-        <p class="case-section__label">Subcaso A — FlipHouse</p>
-        <div class="subcase">
-          <div class="subcase__header">
-            <span class="subcase__name">RevOps &amp; AI Automation</span>
-            <span class="subcase__tag">2025–Presente</span>
-          </div>
-          <div class="subcase__body">
-            <p><strong style="color:var(--dm-bone)">Contexto:</strong> Fintech/proptech. Liquidez rápida a propietarios (crédito puente hasta 30% del valor en 10–15 días). Sin CRM, sin sistema de captura, calificación 100% manual.</p>
-            <p><strong style="color:var(--dm-bone)">Qué diseñé:</strong></p>
-            <ul class="subcase__list">
-              <li>Arquitectura CRM canónica en HubSpot: 4 capas (Journey → Lifecycle → Pipeline → Status)</li>
-              <li>2 pipelines separados: Crédito + Venta y Venta Directa</li>
-              <li>Integración Meta Lead Ads → Make → HubSpot (captura automática)</li>
-              <li>Automatización de captura, calificación y transferencia al CRM</li>
-              <li>Dashboard de revenue, forecast y visibilidad de pipeline</li>
-            </ul>
-            <p><a href="sofi.html" class="btn btn--outline">Ver evidencia completa y límites → SOFI</a></p>
-          </div>
-        </div>
-      </section>
-
-      <section class="case-section" data-reveal>
-        <p class="case-section__label">Subcaso B — HackSureste</p>
-        <div class="subcase">
-          <div class="subcase__header">
-            <span class="subcase__name">Ecosistema de Innovación</span>
-            <span class="subcase__tag">2018–2023</span>
-          </div>
-          <div class="subcase__body">
-            <p><strong style="color:var(--dm-bone)">Contexto:</strong> Inexistencia de plataformas para talento tecnológico y emprendedor en el sureste de México. Fundé la plataforma desde cero.</p>
-            <p><strong style="color:var(--dm-bone)">Qué diseñé:</strong></p>
-            <ul class="subcase__list">
-              <li>Arquitectura modular: hackathons, WIRE (contenido online), ideaLab (validación), Talent &amp; Challenges (verticales IA/Fintech)</li>
-              <li>Migración completa a modelo digital (2020–2022) sin perder control operativo</li>
-              <li>Red de alianzas: gobierno estatal, universidades, sector privado, INCmty</li>
-              <li>Sistemas de registro y confirmación automatizados</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="case-section" data-reveal>
-        <p class="case-section__label">Subcaso C — CAVA Soft</p>
-        <div class="subcase">
-          <div class="subcase__header">
-            <span class="subcase__name">Producto Digital MVP</span>
-            <span class="subcase__tag">2025</span>
-          </div>
-          <div class="subcase__body">
-            <p><strong style="color:var(--dm-bone)">Contexto:</strong> Restaurantes y bares sin sistema digital para gestión de inventario de vinos. Procesos manuales con alta probabilidad de error.</p>
-            <p><strong style="color:var(--dm-bone)">Qué diseñé:</strong></p>
-            <ul class="subcase__list">
-              <li>MVP funcional con Apphive (no-code) + Firebase</li>
-              <li>Autenticación, inventario en tiempo real, trazabilidad con evidencia fotográfica</li>
-              <li>Dashboard de usuario: estadísticas, estado de cava, control de botellas</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <hr class="case-divider">
-
-      <section class="case-section" data-reveal>
-        <p class="case-section__label">Aprendizajes</p>
-        <ul class="case-learnings">
-          <li>La automatización comercial requiere diseño operacional, no solo herramientas.</li>
-          <li>IA sin governance genera fricción — el sistema importa tanto como la tecnología.</li>
-          <li>Las comunidades escalan mediante propósito compartido + consistencia operativa.</li>
-          <li>El patrón fricción → sistema → escala se repite en contextos muy distintos entre sí.</li>
-        </ul>
-      </section>
-
-      <hr class="case-divider">
-
-      <div class="case-nav-footer">
-        <a href="heineken.html" class="btn btn--outline">← HEINEKEN Green Challenge</a>
-        <a href="sofi.html" class="btn btn--outline">SOFI →</a>
-        <a href="redux-incmty.html" class="btn btn--outline">REDUX + INCmty →</a>
-        <a href="../portfolio/" class="btn btn--outline">Portafolio completo →</a>
-        <a href="../#trabajo" class="btn btn--outline">Volver a Work →</a>
-      </div>
-
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="footer__tricolor"></div>
-    <div class="container footer__inner">
-      <p class="footer__tagline mono">Hagamos que las cosas pasen.</p>
-      <p class="footer__copy">© 2026 Diego Maury</p>
-    </div>
-  </footer>
-
-  <script src="../assets/js/main.js"></script>
+<body style="background:var(--bg);">
+  <main class="transition-wrap">
+    <h1 style="color:var(--t1); font-family:var(--font-display); margin-bottom:1.5rem;">Esta página se movió</h1>
+    <p>Este caso ahora vive en <code>/portfolio/innovation-systems.html</code>.</p>
+    <a href="../portfolio/innovation-systems.html" class="btn btn--primary">Ir al caso →</a>
+  </main>
 </body>
 </html>
