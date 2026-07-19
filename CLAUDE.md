@@ -13,7 +13,7 @@ URL: `https://diegomaury.mx` — **LIVE desde 2026-05-13**
 ## Stack técnico
 
 - HTML5 + CSS3 + JavaScript vanilla (sin frameworks) — **así es el sitio LIVE hoy**
-- Sin build system en producción. **Ojo:** hay una decisión de arquitectura registrada en `CHANGELOG.md` (v0.1.0, 2026-06-27) de migrar a **Astro** en sprints futuros — ver "Arquitectura futura — Sprint 0.5" más abajo. Mientras Sprint 1 no se apruebe e implemente, esta decisión NO afecta al sitio LIVE.
+- Sin build system **en producción**. **Ojo:** desde el 2026-07-19 el repo tiene un scaffold de **Astro** montado en la raíz (migración en curso vía la cadena "Diego CMS"), pero **no está desplegado**: construye a `dist/` y el sitio LIVE se sigue sirviendo del HTML de la raíz. Ver "Arquitectura futura — Astro" más abajo. El scaffold NO afecta al sitio LIVE.
 - Despliegue: GitHub Pages sirviendo desde **`master` / raíz** (CNAME `diegomaury.mx`). Cada push a `master` redespliega automáticamente. No hay rama `gh-pages` ni worktree (consolidado el 2026-06-15).
 
 ## Estructura del repositorio
@@ -57,11 +57,18 @@ El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy sour
 ├── docs/
 │   ├── superpowers/            # specs/ y plans/ de diseño (incluye plan de index-canonico.html)
 │   └── platform/                # conventions.md, seo-model.md — spec de la futura plataforma Astro (ver sección abajo)
-└── src/
-    ├── content/                 # Astro Content Collections — Sprint 0.5, SIN implementar aún
-    │   ├── config.ts             # Schemas Zod: cases, projects, playbooks, insights, services
-    │   └── cases|projects|playbooks|insights|services/README.md
-    └── services/pgPool.js       # Backend Phase 2 (chatbot RAG, pendiente)
+├── src/                         # Scaffold Astro montado 2026-07-19 (NO desplegado, ver sección Astro)
+│   ├── pages/index.astro        # Placeholder de scaffold — NO es el Home real
+│   ├── layouts|components|styles|utils/  # estructura vacía (.gitkeep) según conventions.md
+│   ├── env.d.ts                 # tipos Astro (generado)
+│   ├── content/                 # Astro Content Collections
+│   │   ├── config.ts             # Schemas Zod: cases, projects, playbooks, insights, services
+│   │   └── cases|projects|playbooks|insights|services/_README.md  # (prefijo _ = Astro los ignora)
+│   └── services/pgPool.js       # Backend Phase 2 (chatbot RAG, pendiente)
+├── public/                      # estáticos de Astro; public/cms-media/ = logos movidos desde src/content/img
+├── astro.config.mjs             # site diegomaury.mx, output static, NO desplegado aún
+├── package.json                 # astro ^4.16 + puppeteer devDep (recreado 2026-07-19)
+└── tsconfig.json                # strict
 ```
 
 > **Carpetas locales fuera de git (ver `.gitignore`):** `_ds_import/` (bundle de handoff de Claude Design) y `.claude-design/lab/` (variantes de diseño exploradas, `variant-a..f.html`) existen en el filesystem local pero **no están versionadas ni se despliegan**. `.playwright-mcp/` y `.superpowers/` tampoco. No tratarlas como fuente de verdad del sitio LIVE.
@@ -189,18 +196,20 @@ Pendiente Phase 2 (semana siguiente):
 - Railway backend + Supabase pgvector + Claude API → chatbot RAG
 - Widget chatbot en index.html
 
-## Arquitectura futura — Sprint 0.5 (Astro, en definición, SIN implementar)
+## Arquitectura futura — Astro (scaffold montado 2026-07-19, NO desplegado)
 
-Fuente: `CHANGELOG.md` [v0.1.0] — 2026-06-27. Estas son decisiones de producto ya aprobadas y documentadas, pero **ningún código de Astro está activo todavía**. No confundir con el estado LIVE descrito arriba.
+> **Estado actual (2026-07-19, commit `d6465f0`):** el scaffold de Astro **ya está montado en la raíz del repo** (subproyecto Diego CMS). `astro build` corre OK. **Pero el sitio LIVE sigue siendo el HTML estático de la raíz** — Astro construye a `dist/` y NO se despliega: GitHub Actions se conecta en una tarea posterior de la cadena Diego CMS. El HTML LIVE (`index.html`, `portfolio/`, `cases/`, `assets/`, `cv/`) queda intacto como referencia de paridad hasta el cutover. No confundir el scaffold con el sitio en producción. La migración se ejecuta tarea por tarea vía la cadena "Diego CMS" en Notion (Tareas y Misiones), no de golpe.
+
+Fuente original de la decisión: `CHANGELOG.md` [v0.1.0] — 2026-06-27.
 
 - **Framework decidido:** Astro (Islands Architecture, output HTML estático, MDX, compatible con GitHub Pages, zero-JS por defecto).
-- **Content strategy:** Astro Content Collections — el contenido vivirá en `src/content/`, nunca dentro de los archivos de página. Los schemas Zod ya existen en `src/content/config.ts` (colecciones: `cases`, `projects`, `playbooks`, `insights`, `services`), cada una con su `README.md`.
-- **Deploy futuro:** GitHub Pages seguirá sirviendo desde `master`, pero GitHub Actions correrá `astro build` → `/dist` (pendiente, Sprint 1).
+- **Content strategy:** Astro Content Collections — el contenido vivirá en `src/content/`, nunca dentro de los archivos de página. Los schemas Zod ya existen en `src/content/config.ts` (colecciones: `cases`, `projects`, `playbooks`, `insights`, `services`). **Nota (2026-07-19):** el schema `cases` de `config.ts` es aspiracional y NO coincide con las propiedades reales de la base Notion — el mapeo correcto (y de las 3 fuentes CMS) está en `docs/platform/notion-astro-contract.md`. Los docs de cada colección se renombraron `README.md → _README.md` para que Astro los ignore (el prefijo `_` excluye del build de contenido). El scaffold usa **Astro v4.16** a propósito, para honrar `config.ts` (`Requires: astro@^4.0.0`) sin tocarlo; migrar a v5 + actualizar `config.ts` es alcance de la tarea "CMS: validar contenido con Zod".
+- **Deploy futuro:** GitHub Pages seguirá sirviendo desde `master`, pero GitHub Actions correrá `astro build` → `/dist` (pendiente, tarea "CMS: configurar GitHub Actions y deploy automático"). El workflow de CI debe usar `npm ci --omit=dev` para no instalar puppeteer/Chromium (es devDependency solo para QA local).
 - **Design System:** consolidado antes de lo planeado — la unificación DS v2/DS v3 prevista para Sprint 2 se ejecutó el 2026-07-19 (ver "Design system unificado" arriba). El Sprint 2 futuro hereda un solo sistema de tokens ya vigente, no parte de cero.
 - **Documentación de convenciones ya escrita** (vinculante desde Sprint 1, sin efecto hoy): `docs/platform/conventions.md` (naming, estructura de carpetas Astro, convención MDX/frontmatter, convención de assets) y `docs/platform/seo-model.md` (metadata, Open Graph, JSON-LD, sitemap vía `@astrojs/sitemap`).
 - **Roles del proceso:** Diego Maury (Product Owner), ChatGPT (Product Strategist & UX Director), Silvia/Notion (Product Manager), Claude Code (Lead Software Engineer).
 - **Roadmap (según CHANGELOG):** Sprint 0 (Product Foundation, pendiente de PRD) → Sprint 0.5 (Domain & Content Architecture, **en progreso** — deliverables ya completados: CHANGELOG.md, schemas, docs de convenciones y SEO) → Sprint 1 (Astro Setup, bloqueado hasta aprobar Sprint 0) → Sprint 2 (Design System) → Sprint 3 (Home) → Sprint 4 (Páginas internas) → Sprint 5 (Optimización, incluye implementación real del modelo SEO).
-- **Regla operativa:** cualquier trabajo de implementación Astro requiere que Sprint 0 (PRD, IA, sitemap definitivo, wireframes) esté aprobado por Diego primero. No adelantar Sprint 1 sin esa aprobación.
+- **Regla operativa (actualizada 2026-07-19):** el gate original decía que ningún trabajo Astro empezaba sin aprobar Sprint 0. Diego lo **anuló explícitamente** al crear y dirigir la cadena de tareas "Diego CMS" en Notion, que ejecuta la migración a Astro paso a paso (confirmado vía AskUserQuestion el 2026-07-19: "montar Astro en la raíz ahora"). La migración avanza por esa cadena de tareas, una a la vez, no por el roadmap de sprints. El scaffold ya está montado (ver bloque de estado arriba).
 
 ## CMS Notion del portafolio — Fases A0+A1+B1 CERRADAS (2026-07-11)
 
@@ -383,7 +392,7 @@ La página Notion "🧱 Maqueta Sitio v2 · Copy final" (`2e0bbf20-7ead-49e8-812
 
 **El congelamiento de 90 días declarado al cerrar la maqueta NO está vigente.** Diego lo anuló el mismo 2026-07-17: la premisa del congelamiento era un cierre bien ejecutado, y Diego calificó la ejecución como mala ("lo hiciste pésimo"). No bloquear cambios de copy/estructura del index citando este congelamiento. Cambios al index se rigen por las reglas normales del proyecto (verificar contra SSOT, no inventar cifras, confirmar decisiones de diseño con Diego cuando aplique), no por una ventana de tiempo fija.
 
-**Gotcha de tooling:** puppeteer está instalado en `node_modules/` del repo (git-ignorado; `package.json` fue borrado a propósito por decisión de Diego — no recrearlo sin preguntar). Los scripts que hagan `require('puppeteer')` deben correr desde la raíz del repo: si el script vive en el scratchpad, `require()` no resuelve `node_modules` (busca desde el directorio del script, no el cwd) y falla con MODULE_NOT_FOUND aunque el paquete exista.
+**Gotcha de tooling:** puppeteer está instalado en `node_modules/` del repo (git-ignorado). **Actualización 2026-07-19:** ya existe un `package.json` (recreado para el scaffold de Astro, autorizado por Diego — el aviso anterior de "no recrearlo sin preguntar" quedó obsoleto). puppeteer es ahora una `devDependency` en ese `package.json` para que sobreviva a `npm install` (antes lo podaba por ser extraneous). No uses `npm ci` en local sin `--omit=dev` si quieres conservar puppeteer sin re-descargar Chromium. Los scripts que hagan `require('puppeteer')` deben correr desde la raíz del repo: si el script vive en el scratchpad, `require()` no resuelve `node_modules` (busca desde el directorio del script, no el cwd) y falla con MODULE_NOT_FOUND aunque el paquete exista.
 
 ## Red de interconexión total — LIVE desde 2026-07-18 (commit `e5237cf`)
 
@@ -402,7 +411,15 @@ A petición explícita de Diego ("quiero que todo sea una red"), la navegación 
 - `portfolio/portfolio.css` y `portfolio.js` ya no existen: se movieron a `backups/portfolio-v1-eras.{css,js}` (la SPA del portfolio es autocontenida y nunca los referenció).
 - **Falso positivo conocido: el "doble h1" del portfolio.** Los dos `<h1>` del fuente están en templates JS que se reemplazan vía `app.innerHTML`; el DOM solo tiene uno a la vez. No "corregirlo".
 - **89.5% de SOFI: publicado (2026-07-19).** El slug `sofi-cobertura-automatica` ya estaba `Vigente`/`Pública` en `assets/data/metrics.json` desde el 2026-07-17 y ya vivía en `index.html` (hero, Selected Work, IP Propia). Lo único que faltaba era `portfolio/sofi.html` — corregido: se agregó como párrafo en la sección "Ficha técnica" (89.5% de cobertura automática sobre 191 leads, 2025-2026, medición propia). `node tools/verify-metrics.js` da 0 errores.
-- Pospuesto a fases futuras: refactor de estilos inline (index 38, redux 14, innovation 9) y auditoría de navegador (contraste WCAG, focus, LCP, console errors).
+- Pospuesto a fases futuras: refactor de estilos inline (index 38, redux 14, innovation 9).
+
+## Auditoría de navegador fase 2 — ejecutada 2026-07-19 (commits `eeb0076`…`3d41b98`, LIVE)
+
+- **WCAG, focus, console errors: hecho.** 0 errores de consola en las 7 páginas del sitio. 0 fallas de contraste WCAG tras corregir 7 bugs reales: links sin clase en `index.html` (azul default del navegador), `.section-label` casi invisible en `cases/sofi.html` (ver lección 2026-07-19 en `lessons-learned.md`), CTA primario (`--ember` puro da 3.07:1 con texto blanco, falla AA), chip de fecha en redux/innovation (4.30:1). **LCP:** medido informalmente vía `PerformanceObserver` en `index.html` (~768ms) — no se corrió Lighthouse formal, queda pendiente si se quiere el número exacto.
+- **Design system unificado a V2 "Ember on Ink"** en las 9 páginas del sitio (antes: `index.html` en DS v2, casos+portfolio en DS v3). Ver sección "Design system unificado" arriba para las reglas y tokens. Dos bugs reales destapados en el proceso: `.btn--primary` (botón "Agendar" del nav) y `.footer__tricolor` usaban `var(--dm-amethyst-grad)`/`var(--dm-tricolor)`, variables que ya no existían tras retirar `colors_and_type.css` — renderizaban transparentes/rotos en producción, invisibles a simple vista porque el color de fondo del body es casi igual.
+- **Rename `cases/*.html` → `portfolio/*.html`** (los 4 casos), decisión de Diego. Patrón de redirect usado, **reutilizable para futuros renames**: GitHub Pages no soporta 301 server-side (hosting estático, sin `_redirects`/`.htaccess`). El equivalente más fuerte disponible es `<meta name="robots" content="noindex,follow">` + `<link rel="canonical" href="URL_NUEVA">` + `<meta http-equiv="refresh" content="0; url=URL_NUEVA">` + `<script>location.replace('URL_NUEVA')</script>` en la ruta vieja. Los 4 archivos `cases/*.html` son ahora stubs de este tipo.
+- **`tools/verify-metrics.js` ahora escanea `portfolio/*.html` además de `cases/*.html`**, excluyendo explícitamente `portfolio/index.html` de `'Caso de estudio'` (es la SPA, no un caso). Esto destapó un hallazgo real preexistente en `portfolio/index.html`: el `data-metric="fliphouse-leads-crm"` en `evidenceRows` nunca se había verificado (el archivo no se escaneaba antes de hoy) y le faltaba el calificador "al CRM" — corregido.
+- **CHANGELOG.md corregido:** Sprint 0 tenía estado genérico "Pending" que no representaba el gate real de 8 entregables (PRD, IA, Sitemap definitivo, Navigation, User Journeys, Wireframes, Design Principles, Domain Model approval). El PRD se aprobó el 2026-07-20 (Notion, responsable Silvia) pero Sprint 1 sigue bloqueado hasta que los 8 estén aprobados por Diego — verificado contra el backlog real de Notion (`collection://2e64d20d-8cb2-43b4-9cb8-b83efdae288c`): las 8 filas ya existían, no hizo falta crear ninguna.
 
 ## Idioma de respuestas
 
