@@ -95,3 +95,5 @@ Tesis de diseño: el estado de evidencia viaja pegado a cada cifra, y el home pu
 ## Mapeo a Astro (diseño TO-BE, sin implementar)
 
 El mapeo Notion → Zod (`src/content/config.ts`) está documentado en el spec. Es diseño para el Sprint 1 de Astro; **hoy no existe sincronización de ningún tipo**. Regla derivada clave: `draft = NOT (Estado publicación = Publicado AND Publicable = Sí)`.
+
+**Contrato completo (2026-07-19):** el mapeo de arriba solo cubre `cases`. El contrato de datos que incluye las 3 fuentes confirmadas de Diego CMS (`SSOT - Portafolio Proyectos`, `Copy Oficial · diegomaury.mx (SSOT)`, `Métricas oficiales — Portafolio D`) — con tipos, defaults, regla de publicación y tratamiento de evidencia por fuente — vive en `docs/platform/notion-astro-contract.md`. Ese documento también corrige el schema `cases` propuesto originalmente en `src/content/config.ts` (los campos `context`/`challenge`/`objectives[]` no existen como tales en la base real).
