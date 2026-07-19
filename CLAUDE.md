@@ -378,6 +378,14 @@ La página Notion "🧱 Maqueta Sitio v2 · Copy final" (`2e0bbf20-7ead-49e8-812
 
 **Gotcha de tooling:** puppeteer está instalado en `node_modules/` del repo (git-ignorado; `package.json` fue borrado a propósito por decisión de Diego — no recrearlo sin preguntar). Los scripts que hagan `require('puppeteer')` deben correr desde la raíz del repo: si el script vive en el scratchpad, `require()` no resuelve `node_modules` (busca desde el directorio del script, no el cwd) y falla con MODULE_NOT_FOUND aunque el paquete exista.
 
+## Red de interconexión total — LIVE desde 2026-07-18 (commit `e5237cf`)
+
+A petición explícita de Diego ("quiero que todo sea una red"), la navegación entre páginas dejó de ser una cadena/hub-and-spoke parcial y ahora es un grafo completo: los 4 casos (`heineken.html`, `redux-incmty.html`, `innovation-systems.html`, `sofi.html`) se enlazan entre sí vía `case-nav-footer` (antes SOFI no tenía footer de navegación y era un callejón sin salida); `portfolio/index.html` (SPA hash-routed) agrega un CTA real "Ver caso completo" en cada vista de detalle vía la constante `CASE_PAGES` (mapea slug → ruta relativa `../cases/*.html`); `index.html` enlaza a HEINEKEN, REDUX+INCmty y al portfolio completo desde el footer.
+
+**Bug de producción corregido en el mismo commit:** el anchor `../#work` usado en navs y hero-back de las 4 páginas de caso apuntaba a un id que nunca existió en `index.html` (el id real de la sección Selected Work es `id="trabajo"`, no `id="work"`). Verificado con `grep -rn '#work' cases/` devolviendo cero resultados tras el fix.
+
+**`.case-nav-footer`/`.case-divider` se definen localmente por página**, no en `assets/css/styles.css` compartido — cada caso (incluido `sofi.html`, que no las tenía) trae su propio bloque `<style>` con estas clases. Si se agrega un nuevo caso, hay que replicar ese CSS local, no asumir que viene del DS compartido.
+
 ## Idioma de respuestas
 
 Responder siempre en español.
