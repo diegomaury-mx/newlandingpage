@@ -1,338 +1,1021 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NHT5827J');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Microsoft Clarity -->
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "x7ns7c22xi");
-  </script>
-  <!-- End Microsoft Clarity -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio — Diego Maury</title>
-  <meta name="description" content="Todos los proyectos de Diego Maury: programas de innovación, sistemas digitales y aceleración en LATAM.">
-  <link rel="canonical" href="https://diegomaury.mx/portfolio/">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Portfolio — Diego Maury">
-  <meta property="og:description" content="Todos los proyectos de Diego Maury: programas de innovación, sistemas digitales y aceleración en LATAM.">
-  <meta property="og:url" content="https://diegomaury.mx/portfolio/">
-  <meta property="og:image" content="https://diegomaury.mx/exported_cards/card-01.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Portfolio — Diego Maury">
-  <meta name="twitter:description" content="Todos los proyectos de Diego Maury: programas de innovación, sistemas digitales y aceleración en LATAM.">
-  <meta name="twitter:image" content="https://diegomaury.mx/exported_cards/card-01.png">
+<meta charset="utf-8">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NHT5827J');</script>
+<!-- End Google Tag Manager -->
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "x7ns7c22xi");
+</script>
+<!-- End Microsoft Clarity -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portafolio — Diego Maury</title>
+<meta name="description" content="Portafolio de Diego Maury: 4 casos insignia con su estado de evidencia declarado en cada afirmación, 11 proyectos de soporte y archivo completo.">
+<link rel="canonical" href="https://diegomaury.mx/portfolio/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Portafolio — Diego Maury">
+<meta property="og:description" content="4 casos insignia con su estado de evidencia declarado en cada afirmación, 11 proyectos de soporte y archivo completo.">
+<meta property="og:url" content="https://diegomaury.mx/portfolio/">
+<meta property="og:image" content="https://diegomaury.mx/assets/img/cases/heineken-banner.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Portafolio — Diego Maury">
+<meta name="twitter:description" content="4 casos insignia con su estado de evidencia declarado en cada afirmación, 11 proyectos de soporte y archivo completo.">
+<meta name="twitter:image" content="https://diegomaury.mx/assets/img/cases/heineken-banner.jpg">
+<!--
+  Portafolio con patrón de evidencia (Fase A2, LIVE).
+  - Diseño portado de prototipo-portafolio.html (Claude Design "Portafolio Prototipo").
+  - Datos: base Notion "SSOT - Portafolio Proyectos". Ninguna cifra ni artefacto se inventa aquí.
+  - Autocontenido: no usa assets/css/styles.css ni assets/js/main.js.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #0A0612;
+    --bg-2:   #1A1128;
+    --border: #2A1F3D;
+    --t1:     #FAF8FC;
+    --t2:     #9A8CB0;
+    --t3:     #8B7C9E;
+    --t-body: #DDDBE0;
+    --ember:  #FF5C39;
+    --sans:   'Plus Jakarta Sans', system-ui, sans-serif;
+    --mono:   'DM Mono', ui-monospace, monospace;
+    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+    --wrap:   1160px;
+    --wrap-narrow: 900px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--t1);
+    font-family: var(--sans); line-height: 1.5; min-height: 100vh;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: var(--ember); }
+  ::selection { background: var(--ember); color: var(--bg); }
+  :focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 4px; }
 
-  <link rel="stylesheet" href="../assets/css/styles.css">
-  <link rel="stylesheet" href="portfolio.css">
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 32px; }
+  .wrap-narrow { max-width: var(--wrap-narrow); margin: 0 auto; padding: 0 32px; }
+  .band { border-bottom: 1px solid var(--border); }
+  .band--raised { background: var(--bg-2); }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before { content: ""; width: 18px; height: 1px; background: var(--ember); }
+  .eyebrow--plain { color: var(--t3); letter-spacing: 0.16em; font-size: 9px; }
+  .eyebrow--plain::before { display: none; }
+  .label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ember);
+  }
+  .meta {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--t3);
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,6,18,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav__inner { height: 60px; display: flex; align-items: center; justify-content: space-between; }
+  .nav__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--t1); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+  .nav__mark { width: 22px; height: 22px; background: var(--ember); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
+  .nav__right { display: flex; align-items: center; gap: 16px; }
+  .nav__back { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t2); text-decoration: none; }
+  .nav__back:hover { color: var(--t1); }
+  .nav__badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3); border: 1px solid var(--border); padding: 5px 10px; border-radius: 5px; text-decoration: none; transition: border-color 200ms var(--ease), color 200ms var(--ease); }
+  a.nav__badge:hover, a.nav__badge:focus-visible { border-color: var(--ember); color: var(--t1); }
+  .nav__brand span, .nav__back, .nav__badge { white-space: nowrap; }
+
+  /* ── HERO ── */
+  .hero { padding: 88px 0 64px; }
+  .hero h1 {
+    font-size: clamp(1.9rem, 4vw, 3.2rem); font-weight: 300;
+    letter-spacing: -0.02em; line-height: 1.18; max-width: 22ch;
+    margin-top: 26px;
+  }
+  .hero p { margin-top: 24px; font-size: 15px; color: var(--t2); max-width: 58ch; line-height: 1.7; }
+
+  /* ── CONTADOR DE EVIDENCIA (firma) ── */
+  .counter { padding: 64px 0; }
+  .counter__grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; margin-top: 20px;
+  }
+  .counter__cell { background: var(--bg); padding: 28px 26px; }
+  .counter__num {
+    font-size: clamp(2rem, 3.4vw, 3rem); letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums; color: var(--t1);
+  }
+  .counter__num--total { font-weight: 800; }
+  .counter__num--ok    { font-weight: 700; }
+  .counter__num--no    { font-weight: 400; color: var(--t3); }
+  .counter__cap { font-size: 13px; color: var(--t2); margin-top: 6px; }
+  .counter__note { margin-top: 18px; font-size: 12.5px; color: var(--t3); max-width: 60ch; line-height: 1.6; }
+
+  /* ── BARRA DE PRUEBA ── */
+  .trust { padding: 40px 0; }
+  .trust__row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+  .trust__chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--t2);
+    border: 1px solid var(--border); border-radius: 7px; padding: 11px 18px;
+    background: rgba(250,248,252,0.02);
+  }
+
+  /* ── GALERIA INSIGNIA ── */
+  .gallery { padding: 72px 0; }
+  .gallery h2 {
+    font-size: clamp(1.4rem, 2.4vw, 2rem); font-weight: 800;
+    letter-spacing: -0.025em; margin: 14px 0 44px; max-width: 44ch;
+  }
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: var(--bg-2); transition: border-color 200ms var(--ease);
+  }
+  .card:hover, .card:focus-visible { border-color: var(--ember); }
+  .card--featured { margin-bottom: 20px; }
+  .card--featured .card__split { display: grid; grid-template-columns: 1.3fr 1fr; }
+  .card__body { padding: 40px; border-right: 1px solid var(--border); }
+  .card__side { padding: 40px; }
+  .card__title {
+    font-size: clamp(1.3rem, 2vw, 1.7rem); font-weight: 700; line-height: 1.25;
+    letter-spacing: -0.015em; color: var(--t1); margin: 18px 0;
+  }
+  .card__caps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+  .cap {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--t3); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px;
+  }
+  .card__scale { font-size: 12.5px; color: var(--t3); }
+  .card__metric { font-size: 15px; color: var(--t1); line-height: 1.5; margin: 10px 0 16px; }
+  .tally {
+    display: flex; align-items: baseline; gap: 14px;
+    padding-top: 16px; border-top: 1px solid var(--border);
+    font-family: var(--mono);
+  }
+  .tally__ok { font-size: 15px; font-weight: 600; color: var(--t1); }
+  .tally__no { font-size: 15px; color: var(--t3); }
+  .tally__cta { margin-left: auto; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ember); }
+
+  .gallery__rest { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .card--small { display: flex; flex-direction: column; padding: 26px 24px; border-radius: 12px; }
+  .card--small .card__title { font-size: 15px; margin: 14px 0; flex: 1; }
+  .card--small .card__metric { font-size: 12.5px; color: var(--t2); margin: 0 0 16px; }
+  .card--small .tally { padding-top: 14px; }
+  .card--small .tally__ok { font-size: 13px; }
+  .card--small .tally__no { font-size: 13px; }
+
+  /* ── MEDIA DE CASO ── */
+  .card__media {
+    position: relative; overflow: hidden; background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .card__media img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(1) contrast(1.05) brightness(0.62);
+    transition: filter 320ms var(--ease), transform 320ms var(--ease);
+  }
+  .card:hover .card__media img, .card:focus-visible .card__media img {
+    filter: grayscale(0.35) contrast(1) brightness(0.8);
+    transform: scale(1.02);
+  }
+  .card__media::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,6,18,0.1) 0%, rgba(10,6,18,0.72) 100%);
+    pointer-events: none;
+  }
+  .card--featured .card__media { height: 100%; min-height: 260px; border-bottom: none; border-right: 1px solid var(--border); }
+  .card--small .card__media { height: 132px; margin: -26px -24px 18px; border-radius: 12px 12px 0 0; }
+  .card__media img.card__logo {
+    position: absolute; left: 20px; bottom: 16px; z-index: 2;
+    width: 44px; height: 44px; border-radius: 8px; object-fit: contain;
+    background: rgba(10,6,18,0.82); border: 1px solid var(--border); padding: 4px;
+    filter: none; transform: none;
+  }
+  .card:hover .card__media img.card__logo,
+  .card:focus-visible .card__media img.card__logo { filter: none; transform: none; }
+  .card--featured .card__split { grid-template-columns: 0.85fr 1.1fr 0.9fr; }
+
+  /* Caso sin imagen: el hueco es el mensaje */
+  .media-void {
+    display: flex; flex-direction: column; gap: 6px;
+    align-items: center; justify-content: center; text-align: center;
+    background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(139,124,158,0.05) 8px 9px);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--t3); padding: 16px;
+  }
+  .media-void__hint { color: var(--ember); opacity: 0.55; font-size: 8px; }
+  .card--small .media-void { height: 132px; margin: -26px -24px 18px; border-radius: 12px 12px 0 0; }
+  .card--featured .media-void { min-height: 260px; border-bottom: none; border-right: 1px solid var(--border); }
+
+  /* Hero del caso */
+  .case-hero { position: relative; height: clamp(200px, 28vw, 320px); overflow: hidden; border-bottom: 1px solid var(--border); }
+  .case-hero img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.5) contrast(1.05); }
+  .case-hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,6,18,0.35) 0%, rgba(10,6,18,0.95) 100%);
+  }
+  .case-hero img.case-hero__logo {
+    position: absolute; z-index: 2; left: 50%; transform: translateX(-50%); bottom: 22px;
+    width: 60px; height: 60px; object-fit: contain; border-radius: 10px;
+    background: rgba(10,6,18,0.85); border: 1px solid var(--border); padding: 6px;
+    filter: none;
+  }
+
+  /* ── EVIDENCIA: miniatura del artefacto ── */
+  .evidence__thumb {
+    display: block; margin-top: 10px; border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden; background: var(--bg-2);
+    transition: border-color 200ms var(--ease);
+  }
+  .evidence__thumb:hover { border-color: var(--ember); }
+  .evidence__thumb img {
+    display: block; width: 100%; height: 92px; object-fit: cover; object-position: top center;
+    filter: contrast(1.02);
+  }
+  .evidence__thumb figcaption {
+    font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--t3); padding: 6px 8px; border-top: 1px solid var(--border);
+  }
+
+  /* ── SOPORTE ── */
+  .support { padding: 64px 0; }
+  .support h2 { font-size: 1.2rem; font-weight: 700; margin: 8px 0 28px; letter-spacing: -0.01em; }
+  .support__list { border-top: 1px solid var(--border); }
+  .support__row {
+    display: grid; grid-template-columns: 1.4fr 2fr 1.2fr; gap: 20px;
+    padding: 16px 4px; border-bottom: 1px solid var(--border); align-items: baseline;
+  }
+  .support__title { font-size: 13.5px; font-weight: 600; color: var(--t1); }
+  .support__result { font-size: 12.5px; color: var(--t2); line-height: 1.5; }
+  .support__ev { font-family: var(--mono); font-size: 10.5px; color: var(--t3); text-align: right; line-height: 1.5; }
+
+  /* ── ARCHIVO ── */
+  .archive { padding: 56px 0 100px; }
+  .archive__toggle {
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    background: none; border: 1px solid var(--border); border-radius: 8px; padding: 14px 20px;
+    color: var(--t1); font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: border-color 200ms var(--ease);
+  }
+  .archive__toggle:hover { border-color: var(--ember); }
+  .archive__glyph { color: var(--t3); }
+  .archive__note { margin-top: 12px; font-size: 12px; color: var(--t3); max-width: 60ch; }
+  .archive__grid {
+    margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .archive__cell { background: var(--bg); padding: 16px 18px; }
+  .archive__cell strong { display: block; font-size: 12.5px; font-weight: 600; color: var(--t-body); }
+  .archive__cell span { font-family: var(--mono); font-size: 9px; color: var(--t3); letter-spacing: 0.04em; display: block; margin-top: 5px; }
+  [hidden] { display: none !important; }
+
+  /* ── CASO ── */
+  .case-head { padding: 72px 0 48px; }
+  .case-head h1 {
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem); font-weight: 300;
+    letter-spacing: -0.02em; line-height: 1.2; margin: 16px 0 20px;
+  }
+  .case-head__tally { display: flex; align-items: baseline; gap: 16px; font-family: var(--mono); flex-wrap: wrap; }
+  .case-head__tally .tally__ok, .case-head__tally .tally__no { font-size: 17px; }
+
+  .case-two { padding: 56px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .case-two p { font-size: 14px; color: var(--t2); line-height: 1.7; margin-top: 12px; }
+
+  .resp { padding: 56px 0; }
+  .resp h2 { font-size: 1.3rem; font-weight: 700; margin: 8px 0 32px; }
+  .resp__grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .resp__col { background: var(--bg); padding: 28px 26px; }
+  .resp__head {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .resp__head--era { color: var(--t1); }
+  .resp__head--no  { color: var(--t3); }
+  .resp__item { display: flex; gap: 10px; font-size: 13px; line-height: 1.55; margin-bottom: 12px; }
+  .resp__item--era { color: var(--t-body); }
+  .resp__item--no  { color: var(--t2); }
+  .resp__item i { font-style: normal; flex-shrink: 0; }
+  .resp__item--era i { color: var(--t1); }
+  .resp__item--no i  { color: var(--t3); }
+
+  .system { padding: 56px 0; }
+  .system__item {
+    display: flex; gap: 14px; padding-bottom: 14px; margin-top: 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px; color: var(--t-body); line-height: 1.6;
+  }
+  .system__item i { font-family: var(--mono); font-size: 11px; color: var(--t3); flex-shrink: 0; width: 16px; font-style: normal; }
+
+  .tradeoffs { padding: 56px 0; }
+  .prose { font-size: 14.5px; color: var(--t-body); line-height: 1.75; max-width: 70ch; margin-top: 16px; }
+
+  .results { padding: 56px 0; }
+  .results__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 18px; }
+  .results__cell {
+    border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px;
+    font-size: 13px; color: var(--t2); line-height: 1.55;
+  }
+  .results__cell strong { color: var(--t1); font-weight: 600; }
+
+  /* ── EVIDENCIA (clímax) ── */
+  .evidence { padding: 72px 0; }
+  .evidence h2 { font-size: 1.4rem; font-weight: 700; margin: 14px 0 8px; letter-spacing: -0.015em; }
+  .evidence__sub { font-size: 13px; color: var(--t3); margin-bottom: 32px; }
+  .evidence__table { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .evidence__head, .evidence__row { display: grid; grid-template-columns: 2fr 0.9fr 1.6fr; gap: 12px; }
+  .evidence__head {
+    background: var(--bg-2); padding: 12px 20px;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--t3);
+  }
+  .evidence__row { padding: 16px 20px; border-top: 1px solid var(--border); align-items: start; }
+  .evidence__claim { font-size: 13px; color: var(--t-body); line-height: 1.5; }
+  .evidence__artifact { font-size: 12px; color: var(--t2); line-height: 1.5; }
+  .evidence__artifact a { text-decoration: none; border-bottom: 1px solid rgba(255,92,57,0.4); }
+  .evidence__artifact a:hover { color: var(--t1); border-bottom-color: var(--t1); }
+  .status { font-family: var(--mono); font-size: 13px; line-height: 1.4; }
+  .status__glyph { font-weight: 600; }
+  .status__grade { display: block; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+  .status--inst .status__glyph { color: var(--t1); }
+  .status--inst .status__grade { color: var(--t3); }
+  .status--own  .status__glyph { color: var(--t2); }
+  .status--own  .status__grade { color: var(--t3); }
+  .status--none .status__glyph { color: var(--t3); }
+  .status--none .status__grade { color: var(--t3); }
+
+  .legend {
+    margin-top: 20px; font-size: 12px; color: var(--t3); line-height: 1.7;
+    border-left: 1px solid var(--border); padding-left: 16px; max-width: 68ch;
+  }
+  .legend b { color: var(--t2); font-weight: 500; }
+
+  .autopsy { padding: 56px 0; }
+  .case-archive { padding: 48px 0 96px; }
+  .case-archive__row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .case-archive__chip { font-size: 12px; color: var(--t2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; }
+
+  /* ── FOOTER ── */
+  .foot { padding: 32px 0 40px; }
+  .foot__inner { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .foot a { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t2); text-decoration: none; }
+  .foot a:hover { color: var(--t1); }
+  .foot span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; color: var(--t3); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .wrap, .wrap-narrow { padding: 0 20px; }
+    .counter__grid { grid-template-columns: 1fr; }
+    .card--featured .card__split { grid-template-columns: 1fr; }
+    .card__body { border-right: none; border-bottom: 1px solid var(--border); padding: 28px 24px; }
+    .card__side { padding: 28px 24px; }
+    .gallery__rest { grid-template-columns: 1fr; }
+    .support__row { grid-template-columns: 1fr; gap: 6px; }
+    .support__ev { text-align: left; }
+    .archive__grid { grid-template-columns: 1fr; }
+    .case-two { grid-template-columns: 1fr; gap: 32px; }
+    .resp__grid { grid-template-columns: 1fr; }
+    .results__grid { grid-template-columns: 1fr; }
+    .evidence__head { display: none; }
+    .evidence__row { grid-template-columns: 1fr; gap: 8px; padding: 20px; }
+    .status { display: flex; align-items: baseline; gap: 8px; }
+    .status__grade { display: inline; margin-top: 0; }
+  }
+  /* La barra no cabe con las tres piezas: el badge es etiqueta, no navegación */
+  @media (max-width: 560px) {
+    .nav__badge { display: none; }
+    .nav__right { gap: 10px; }
+    .evidence__thumb img { height: 120px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
 </head>
-<body class="pf-page">
+<body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NHT5827J"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <div class="container nav__inner">
-      <a href="/" class="nav__brand">
-        <img src="../assets/img/isotipodm.svg" alt="Isotipo DM" class="nav__logo">
-        <span class="nav__name">Diego Maury</span>
-      </a>
-      <ul class="nav__links">
-        <li><a href="/#work"      class="nav__link is-active">Work</a></li>
-        <li><a href="/#servicios" class="nav__link">Servicios</a></li>
-        <li><a href="/#about"     class="nav__link">About</a></li>
-        <li><a href="/#contacto"  class="nav__link">Contacto</a></li>
-      </ul>
-      <a href="https://calendly.com/diegomaurymx" target="_blank" rel="noopener" class="btn btn--primary nav__cta">Agendar</a>
-      <button class="nav__burger" aria-label="Abrir menú" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="#/" data-home>
+      <span class="nav__mark" aria-hidden="true"></span>
+      <span>Diego Maury</span>
+    </a>
+    <div class="nav__right">
+      <a class="nav__back" href="#/" data-home hidden id="navBack">&larr; Portafolio</a>
+      <a class="nav__badge" href="/">diegomaury.mx &rarr;</a>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- HEADER -->
-  <header class="pf-header">
-    <div class="container pf-header__inner">
-      <p class="pf-header__tag">ALL PROJECTS</p>
-      <h1 class="pf-header__title">Una trayectoria<br>de ejecución.</h1>
-      <p class="pf-header__sub">30+ programas. Cuatro eras. Resultados medibles.</p>
-    </div>
-  </header>
+<main id="app"></main>
 
-  <!-- TIMELINE -->
-  <section class="pf-timeline" aria-label="Proyectos por era">
-    <div class="container pf-timeline__inner">
+<footer class="band foot">
+  <div class="wrap foot__inner">
+    <a href="/">&larr; Volver a diegomaury.mx</a>
+    <span>Cada cifra de esta página declara su estado de evidencia.</span>
+  </div>
+</footer>
 
-      <!-- ÍNDICE LATERAL -->
-      <nav class="pf-index" aria-label="Eras de trabajo">
-        <div class="pf-index__line" aria-hidden="true"></div>
-        <ol class="pf-index__list">
-          <li class="pf-index__item is-active" data-era="era-01">
-            <button class="pf-index__btn" aria-current="true" data-target="era-01">
-              <span class="pf-index__dot" aria-hidden="true"></span>
-              <span class="pf-index__label">
-                <span class="pf-index__num">ERA 01</span>
-                <span class="pf-index__range">2019–2021</span>
-                <span class="pf-index__name">Ecosistemas corporativos</span>
-              </span>
-            </button>
-          </li>
-          <li class="pf-index__item" data-era="era-02">
-            <button class="pf-index__btn" aria-current="false" data-target="era-02">
-              <span class="pf-index__dot" aria-hidden="true"></span>
-              <span class="pf-index__label">
-                <span class="pf-index__num">ERA 02</span>
-                <span class="pf-index__range">2020–2022</span>
-                <span class="pf-index__name">Sistemas y operaciones</span>
-              </span>
-            </button>
-          </li>
-          <li class="pf-index__item" data-era="era-03">
-            <button class="pf-index__btn" aria-current="false" data-target="era-03">
-              <span class="pf-index__dot" aria-hidden="true"></span>
-              <span class="pf-index__label">
-                <span class="pf-index__num">ERA 03</span>
-                <span class="pf-index__range">2021–2023</span>
-                <span class="pf-index__name">Metodología y alcance nacional</span>
-              </span>
-            </button>
-          </li>
-        </ol>
-      </nav>
+<script>
+/* ────────────────────────────────────────────────────────────────
+   DATOS — fuente única de verdad: base Notion "SSOT - Portafolio
+   Proyectos". Ninguna cifra ni artefacto se inventa aquí.
+   Grados de evidencia:
+     inst → un tercero lo publica (Informe del Tec, prensa, Talent Land)
+     own  → documentación propia (playlists de Diego). Prueba que el
+            evento ocurrió, no que la cifra sea correcta.
+     none → sin artefacto. La fila se muestra igual, nunca se omite.
+   ──────────────────────────────────────────────────────────────── */
 
-      <!-- ERAS + CARDS -->
-      <div class="pf-eras">
+const CASES = {
+  heineken: {
+    slug: 'heineken', org: 'HEINEKEN/FEMSA', year: '2019–2022', tipo: 'Programa de innovación',
+    banner: '../assets/img/cases/heineken-banner.jpg', logo: '../assets/img/cases/heineken-logo.png',
+    alt: 'Equipo del HEINEKEN Green Challenge durante una edición del programa',
+    resultTitle: 'Escalé un programa nacional de sustentabilidad y multipliqué por 7 la participación del sureste',
+    metric: '+600% de crecimiento en la participación del sureste (2019–2021). Línea base documentada: 35 propuestas.',
+    capacities: ['Dirección de programas', 'Diseño de programas', 'Alianzas estratégicas', 'Escalamiento regional'],
+    scale: '4 ediciones · 6 meses de operación cada una · alcance nacional',
+    role: 'National Program Director, Innovation & Entrepreneurship.',
+    contexto: 'El HEINEKEN Green Challenge reúne, reconoce y fortalece proyectos sustentables en México. Cuando entré, el programa ya tenía tracción nacional y una bolsa de premios de 1,150,000 pesos, pero el sureste era territorio muerto: la región entera había mandado 35 propuestas el año anterior. Yo soy de ahí.',
+    problema: 'No era un problema de ejecución de eventos, sino de sistema: la captación dependía de esfuerzo manual edición tras edición y las regiones fuera del centro del país no tenían ruta de entrada. Treinta y cinco propuestas de todo el sureste no es falta de talento. Es falta de puerta. Encima, en 2020 el programa completo tuvo que volverse virtual sin perder la meta de registros.',
+    responsibilityEra: [
+      'La operación y ejecución del programa a nivel nacional, las 4 ediciones.',
+      'El diseño del proceso de innovación abierta y la virtualización del proceso de aplicación.',
+      'Las alianzas entre gobierno, sector privado, universidades y ecosistema emprendedor.',
+      'Vincular a los participantes con más de 100 mentores por edición.',
+      'La coordinación logística de los seis meses de cada edición.'
+    ],
+    responsibilityNotEra: [
+      'El presupuesto de marca ni la inversión publicitaria de HEINEKEN.',
+      'La selección final de los proyectos ganadores.',
+      'La estrategia de sustentabilidad corporativa de la empresa.'
+    ],
+    sistema: [
+      'Rediseñé el proceso de aplicación con metodología Lean y mapeo de la experiencia del usuario, y lo virtualicé durante la pandemia. Dejó de ser un trámite y pasó a ser un embudo medible.',
+      'Construí la red de mentores: más de 100 por edición, con criterios de asignación por etapa y vertical del proyecto.',
+      'Articulé alianzas con gobierno, universidades y sector privado para abrir rutas de entrada regionales, en vez de esperar que la convocatoria nacional llegara sola al sureste.',
+      'Diseñé REDUX como prelanzamiento del programa: un bootcamp que formaba la cultura innovadora antes de pedirle proyectos a la gente.'
+    ],
+    tradeoffs: 'Prioricé profundidad regional sobre volumen nacional bruto. Invertir en alianzas del sureste dio un crecimiento muy superior en esa región, pero significó no perseguir el máximo de registros absolutos que habría dado concentrarse en el centro del país. Fue la decisión correcta para la meta de impacto, no necesariamente para la meta de vanidad.',
+    resultsNote: 'Las cifras están documentadas por edición en los informes anuales del Tec. No son acumulables entre sí ni representan el total del programa.',
+    resultados: [
+      '<strong data-metric="heineken-crecimiento-regional">+600%</strong> de crecimiento en la participación del sureste (2019–2021). Línea base de 35 propuestas documentada en prensa; cifra final, estimado propio.',
+      '<strong>3,975 emprendedores</strong>, 1,325 proyectos captados y 562 universidades en la edición de economía circular. Cifras de una sola edición.',
+      '<strong>+214%</strong> de crecimiento promedio del impacto del programa, publicado por el Tec en su Informe Anual 2020.',
+      '<strong>2,400 emprendedores</strong>, 748 proyectos y 304 universidades en la edición de agricultura sustentable.'
+    ],
+    evidenceRows: [
+      { claim: 'Cifras de impacto del programa: 3,975 emprendedores, 562 universidades, +214% de crecimiento.', grade: 'inst', artifact: 'Informe Anual 2020 del Tecnológico de Monterrey, p.181', thumb: '../assets/img/evidencia/tec2020-p181-hgc.jpg', thumbCaption: 'Informe Anual 2020 del Tec · p.181' },
+      { claim: 'Cifras de la edición de agricultura sustentable: 2,400 emprendedores, 304 universidades.', grade: 'inst', artifact: 'Informe Anual 2021 del Tecnológico de Monterrey, p.416', thumb: '../assets/img/evidencia/tec2021-p416-hgc-redux.jpg', thumbCaption: 'Informe Anual 2021 del Tec · p.416' },
+      { claim: 'Mi participación en el programa en 2019.', grade: 'inst', artifact: '<a href="https://www.lajornadamaya.mx/yucatan/120006/heineken-reunira-emprendedores-para-resolver-problemas-ambientales" target="_blank" rel="noopener">La Jornada Maya, 06/08/2019</a>. Me nombra y me cita, pero como “embajador de INCmty en el sureste”, no como director nacional', thumb: '../assets/img/evidencia/lajornadamaya-hgc-2019.jpg', thumbCaption: 'La Jornada Maya · 06/08/2019' },
+      { claim: 'Línea base del sureste: 35 propuestas de la región el año previo a 2019.', grade: 'inst', artifact: 'La Jornada Maya, 06/08/2019', thumb: '../assets/img/evidencia/lajornadamaya-hgc-2019.jpg', thumbCaption: 'La Jornada Maya · 06/08/2019' },
+      { claim: 'Dirección de operaciones del programa.', grade: 'inst', artifact: '<a href="https://2023.talent-land.mx/speakers/diego-maury/" target="_blank" rel="noopener">Talent Land 2023</a> me acredita como former Director of Operations. Acredita el cargo, no el periodo 2019–2022', thumb: '../assets/img/evidencia/talentland-2023-speaker.jpg', thumbCaption: 'Talent Land 2023 · página de speaker' },
+      { claim: 'Estrategia de entrada regional: lanzamientos en el sureste, noreste y noroeste.', grade: 'own', artifact: 'Playlist HGC: 30 videos con los lanzamientos regionales por zona', thumb: '../assets/img/evidencia/playlist-hgc.jpg', thumbCaption: 'Playlist HGC · 30 videos' },
+      { claim: 'Virtualización del proceso de aplicación.', grade: 'own', artifact: 'Playlist HGC: guías de registro 2020 y 2021, guía de Discord del Bootcamp 2021, aftermovies de los bootcamps virtuales', thumb: '../assets/img/evidencia/playlist-hgc.jpg', thumbCaption: 'Playlist HGC · 30 videos' },
+      { claim: '+600% de crecimiento en la participación del sureste (2019–2021).', grade: 'none', artifact: 'Estimado operativo propio. La línea base está documentada; la cifra final no' },
+      { claim: 'Más de 100 mentores vinculados por edición.', grade: 'none', artifact: 'Sin artefacto externo' }
+    ],
+    autopsia: 'Nunca instrumenté la medición del programa desde el día uno. El +600% es un estimado reconstruido, no una cifra que salga de un dashboard, y hoy me cuesta probarlo: tuve que ir a buscar mi propia línea base a una nota de periódico de 2019. Un programa que dura cuatro años y no puede probar su propio impacto con datos de origen tiene un hueco de gobernanza, no de esfuerzo. Transferible: cualquier programa de innovación abierta debe definir sus tres métricas de origen antes de abrir la primera convocatoria, no después de la tercera.',
+    archiveChildren: ['HEINEKEN Green Challenge 2020', 'HEINEKEN Green Challenge 2021', 'HEINEKEN Green Challenge 2022']
+  },
 
-        <!-- ERA 01 -->
-        <div class="pf-era" id="era-01">
-          <div class="pf-era__heading">
-            <span class="pf-era__num">ERA 01</span>
-            <h2 class="pf-era__title">Ecosistemas corporativos</h2>
-            <p class="pf-era__tagline">"De convocatoria local a referente nacional."</p>
+  redux: {
+    slug: 'redux', org: 'Tec de Monterrey/INCmty', year: '2020–2022', tipo: 'Capacitación',
+    banner: '../assets/img/cases/redux-banner.jpg', logo: '../assets/img/cases/redux-logo.png',
+    alt: 'Sesión del bootcamp REDUX',
+    resultTitle: 'Diseñé el bootcamp de economía circular más grande de Latinoamérica, y publiqué su metodología completa',
+    metric: '400+ universitarios y 111 ideas en 4 regiones (edición 2020)',
+    capacities: ['Diseño de programas', 'Capacitación y facilitación', 'Desarrollo de ecosistemas', 'Escalamiento regional'],
+    scale: '5 ediciones (2020–2022) · 4 regiones · currículum publicado en 34 videos',
+    role: 'Creador, diseñador metodológico y coordinador general.',
+    contexto: 'El HEINEKEN Green Challenge abría convocatoria y esperaba proyectos sustentables. El problema es que un concurso no crea capacidad: la cosecha. Si la gente no sabe estructurar una idea de economía circular, la convocatoria recibe intención, no proyectos. REDUX nació de esa observación, como el prelanzamiento del HGC.',
+    problema: 'Convocar sin formar produce dos fracasos a la vez: proyectos mal armados que no sobreviven la primera evaluación, y gente que se autodescarta porque no sabe por dónde empezar. El embudo se rompe antes de existir. En 2020 el problema se volvió doble: había que formar a cientos de personas en economía circular sin poder juntarlas en una sala.',
+    responsibilityEra: [
+      'Concebir el programa y diseñar su metodología completa, desde cero.',
+      'Alinear el contenido a los Objetivos de Desarrollo Sostenible.',
+      'Adaptar la metodología al formato virtual durante la pandemia.',
+      'Coordinar la operación en las 4 regiones y las alianzas con gobierno, sector privado, universidades y ecosistema.',
+      'Establecer las reglas de participación y las condiciones de inclusión.'
+    ],
+    responsibilityNotEra: [
+      'La convocatoria del HEINEKEN Green Challenge en sí, que es el programa que REDUX alimentaba.',
+      'La selección de los proyectos ganadores del HGC.',
+      'La incubación posterior de los finalistas, que pasaba a Tec Lean.'
+    ],
+    sistema: [
+      'Diseñé una secuencia de 8 actividades que lleva a un equipo de cero a un pitch deck: Impact Gaps Canvas, generación divergente de ideas, buyer persona y mapa de empatía, propuesta de valor, Modelo Canvas, modelo de negocio, modelo financiero y pitch deck.',
+      'Estructuré el programa en 3 verticales: EcoDiseño, Digitalización de PYMES, y Medio ambiente y Actividades primarias.',
+      'Lo regionalicé en 4 zonas con finalistas propios, en vez de una final nacional única que habría concentrado todo en el centro del país.',
+      'Publiqué el currículum completo en 34 videos abiertos. La metodología no vive en un PDF interno: cualquiera puede correrla.',
+      'Lo versioné por tema según la edición del HGC que alimentaba: REDUX Agro y REDUX Energy.'
+    ],
+    tradeoffs: 'Publiqué la metodología completa en abierto en lugar de conservarla como activo propietario. Regalé la ventaja competitiva del contenido a cambio de alcance: cualquier universidad o gobierno podía correr las actividades sin pedirnos permiso. Fue la decisión correcta para el objetivo (formar capacidad en el país) y la equivocada para capitalizar el programa como producto.',
+    resultsNote: 'Las cifras corresponden a la edición 2020, no al acumulado de las cinco ediciones.',
+    resultados: [
+      '<strong>400+ universitarios</strong> formados en la edición 2020.',
+      '<strong>111 ideas</strong> innovadoras generadas.',
+      '<strong>4 regiones</strong>, con 12 finalistas que pasaron al programa de incubación Tec Lean Explora.',
+      '<strong>34 videos</strong> con el currículum completo, publicados en abierto.'
+    ],
+    evidenceRows: [
+      { claim: '400+ universitarios, 111 ideas, 4 regiones, y la calificación de “el más grande de Latinoamérica” en su categoría.', grade: 'inst', artifact: 'Informe Anual 2020 del Tecnológico de Monterrey, p.176 y p.181', thumb: '../assets/img/evidencia/tec2020-p176-redux.jpg', thumbCaption: 'Informe Anual 2020 del Tec · p.176' },
+      { claim: 'REDUX Agro como prelanzamiento de la edición 2021 del HEINEKEN Green Challenge.', grade: 'inst', artifact: 'Informe Anual 2021 del Tecnológico de Monterrey, p.416', thumb: '../assets/img/evidencia/tec2021-p416-hgc-redux.jpg', thumbCaption: 'Informe Anual 2021 del Tec · p.416' },
+      { claim: 'Diseñé la metodología del programa: 8 actividades más capacitaciones especializadas.', grade: 'own', artifact: 'Playlist “ARTEFACTOS REDUX”: 34 videos con el currículum completo, las memorias 2020–2021 y la guía de registro. Las actividades 3 a 8 (Mapa de Empatía, Canvas, Modelo de Negocios, Modelo Financiero, Pitch Deck) están publicadas en video', thumb: '../assets/img/evidencia/playlist-redux.jpg', thumbCaption: 'Playlist ARTEFACTOS REDUX · 34 videos' },
+      { claim: 'REDUX impulsado por HEINEKEN México e INCmty.', grade: 'own', artifact: 'Playlist “ARTEFACTOS REDUX”', thumb: '../assets/img/evidencia/playlist-redux.jpg', thumbCaption: 'Playlist ARTEFACTOS REDUX · 34 videos' },
+      { claim: 'Metodología incluida en el directorio de programas del Tec.', grade: 'none', artifact: 'Sin artefacto. Pendiente: enlace o captura del directorio' }
+    ],
+    autopsia: 'Publiqué el currículum completo y nunca lo firmé como producto. Hoy la metodología circula, la usan, y no hay forma de rastrear el uso ni de que la autoría vuelva a mí: regalé el activo sin quedarme la marca. La lección no es “no publiques en abierto”. Es que abrir el contenido y capitalizar la autoría no son incompatibles, y yo hice lo primero sin hacer lo segundo. Transferible: cuando el programa es la metodología, el activo no es el evento, es el currículum.',
+    archiveChildren: ['REDUX Agro', 'REDUX Energy']
+  },
+
+  hacksureste: {
+    slug: 'hacksureste', org: 'HackSureste', year: '2018–2020', tipo: 'Hackathon',
+    banner: '../assets/img/cases/hacksureste-banner.jpg', logo: '../assets/img/cases/hacksureste-logo.png',
+    alt: 'Participantes de una edición de HackSureste',
+    resultTitle: 'Fundé desde cero el hackathon de referencia del sureste mexicano',
+    metric: '3,000+ participantes acumulados (2018–2020). Estimado, no acumulable con otras métricas.',
+    capacities: ['Desarrollo de ecosistemas', 'Diseño de programas', 'Alianzas estratégicas', 'Dirección de programas'],
+    scale: 'Desde octubre de 2018 · Mérida y Ciudad del Carmen · participantes de 6 estados',
+    role: 'Founder & Innovation Program Director.',
+    contexto: 'En 2018 el sureste mexicano no aparecía en el mapa de la innovación del país. El talento existía, pero salía de la región para encontrar dónde ejercerlo. Fundé HackSureste sin marca patrocinadora detrás, sin presupuesto heredado y sin un formato previo que copiar.',
+    problema: 'El problema no era organizar un hackathon. Un hackathon se organiza una vez y se muere. Era que la región no tenía una institución de innovación que sobreviviera a su primera edición: sin alianzas, sin metodología repetible y sin comunidad, el segundo año no existe. Y en 2020 se sumó lo obvio: un evento presencial cuya razón de ser era juntar gente en una sala, en plena pandemia.',
+    responsibilityEra: [
+      'Fundar y dirigir el programa completo, desde la primera edición.',
+      'La gestión estratégica de los proyectos de innovación abierta.',
+      'Las alianzas con universidades, gobierno y sector privado de la región.',
+      'El diseño y la producción de las experiencias virtuales (2020–2022).',
+      'Ser maestro de ceremonias y facilitador de las ediciones.'
+    ],
+    responsibilityNotEra: [
+      'El desarrollo técnico de los proyectos de los participantes.',
+      'La inversión o financiamiento posterior de los equipos.',
+      'Las decisiones de los jurados.'
+    ],
+    sistema: [
+      'Diseñé un formato repetible en vez de un evento único: HackSureste se replicó en Mérida y Ciudad del Carmen con la misma metodología.',
+      'Construí la red de alianzas regionales que sostiene el programa entre ediciones, no solo durante el evento.',
+      'Extendí el programa a formatos derivados cuando la presencialidad dejó de ser posible: HackSureste WIRE (6 conferencias y talleres en línea, marzo-abril de 2020, con RushFrame) e ideaLab, enfocado en proyectos sostenibles.',
+      'Atraje participación de 6 estados, convirtiendo un evento local en uno regional.'
+    ],
+    tradeoffs: 'Mantuve HackSureste como iniciativa independiente en lugar de venderlo como activo de marca a un patrocinador único. Eso significó operar siempre con presupuesto ajustado, pero conservó la neutralidad que hizo posible sentar en la misma mesa a gobierno, universidades y sector privado. Un hackathon con dueño corporativo no consigue esa mesa.',
+    resultsNote: 'Es el caso Insignia con menos evidencia externa: 2 artefactos contra 3 afirmaciones sin fuente. Se publica con esa proporción real.',
+    resultados: [
+      '<strong><span data-metric="hacksureste-participantes">3,000+</span> participantes</strong> acumulados (2018–2020). Estimado, no acumulable con otras métricas del portafolio.',
+      '<strong>~250 participantes</strong> en la primera edición. Estimado.',
+      '<strong>6 estados</strong> representados entre los participantes.',
+      '<strong>6 conferencias y talleres</strong> en el programa derivado WIRE (marzo-abril de 2020, con RushFrame).'
+    ],
+    evidenceRows: [
+      { claim: 'Fundé y dirijo HackSureste.', grade: 'inst', artifact: '<a href="https://2023.talent-land.mx/speakers/diego-maury/" target="_blank" rel="noopener">Talent Land 2023</a> me acredita como Founder of HackSureste en su página oficial de speakers. No documenta la fecha de fundación', thumb: '../assets/img/evidencia/talentland-2023-speaker.jpg', thumbCaption: 'Talent Land 2023 · página de speaker' },
+      { claim: 'La edición 2019 se realizó.', grade: 'own', artifact: '<a href="https://www.youtube.com/playlist?list=PL-n3YGt_YvOP_0zdKimHFgZ1I-uAVcWAp" target="_blank" rel="noopener">Playlist HackSureste / RushFrame</a>: recap en video de HackSureste 2019', thumb: '../assets/img/evidencia/playlist-hacksureste.jpg', thumbCaption: 'Playlist HackSureste / RushFrame · 22 videos' },
+      { claim: '3,000+ participantes acumulados.', grade: 'none', artifact: 'Estimado propio, sin registro publicable' },
+      { claim: 'Participantes de 6 estados.', grade: 'none', artifact: 'Sin artefacto enlazado' },
+      { claim: 'Sedes en Mérida y Ciudad del Carmen.', grade: 'none', artifact: 'Sin artefacto enlazado' }
+    ],
+    autopsia: 'Nunca registré la base de participantes como activo. Tres mil personas pasaron por el programa y no conservé una comunidad con la que pudiera hablar al día siguiente: cada edición reconstruía su audiencia desde el marketing, no desde la relación. Un programa de ecosistema que no capitaliza su propia comunidad está subsidiando al ecosistema de alguien más. Transferible: la base de datos de participantes es el producto del programa, no un subproducto del registro.',
+    archiveChildren: ['HackSureste 2019', 'HackSureste Industria 4.0', 'HackSureste WIRE']
+  },
+
+  sofi: {
+    slug: 'sofi', org: 'FlipHouse', year: 'Oct 2025 – Jun 2026', tipo: 'Sistema RevOps/AI',
+    banner: null, logo: null,
+    voidLabel: 'Sin imagen publicable · sistema bajo NDA',
+    voidHint: 'Slot para el diagrama de arquitectura',
+    resultTitle: 'Convertí captación dispersa en una operación comercial medible, y la puse a correr sola',
+    metric: 'Speed-to-lead: de 1 a 3 días a menos de 5 minutos. Medido en el CRM.',
+    capacities: ['RevOps y automatización', 'Sistemas con AI', 'Gobernanza y procesos', 'Dirección de programas'],
+    scale: 'Dirección de operaciones fraccional · 3 modelos de IA orquestados',
+    role: 'Fractional Strategic Operations Director.',
+    contexto: 'FlipHouse captaba leads por varios frentes (Meta Lead Ads entre ellos) sin un sistema que los recibiera. Entré como director de operaciones fraccional, no como consultor de un entregable: el encargo era que la operación comercial funcionara, no que existiera un documento que dijera cómo debería funcionar.',
+    problema: 'El problema no era falta de leads. Era que el lead llegaba y nadie lo tocaba en uno a tres días. Para cuando alguien respondía, el prospecto ya estaba en otra conversación. No había captura estructurada, ni enrutamiento, ni criterio de calificación, ni una fuente única de verdad sobre el pipeline. Eso no se arregla contratando a alguien que conteste más rápido. Se arregla construyendo el sistema.',
+    responsibilityEra: [
+      'La arquitectura RevOps completa: captura, enrutamiento, calificación y gobernanza del pipeline.',
+      'Construir SOFI, el agente con IA que califica leads end to end.',
+      'El diseño y la gobernanza de HubSpot: propiedades, lead scoring, lifecycle.',
+      'El centro de control operativo como fuente única de verdad.',
+      'La narrativa de inversión y el pitch deck institucional para el levantamiento de capital.'
+    ],
+    responsibilityNotEra: [
+      'El cierre de las ventas ni la cuota comercial.',
+      'La decisión de inversión ni la relación con los inversionistas.',
+      'El producto inmobiliario en sí.'
+    ],
+    sistema: [
+      'Rediseñé la captura y el enrutamiento de leads, integrando Meta Lead Ads con HubSpot vía Make. El lead deja de morir en una bandeja.',
+      'Construí SOFI, un agente con IA que orquesta tres modelos (razonamiento, voz y transcripción) y califica al lead sin intervención humana.',
+      'Diseñé la gobernanza de HubSpot: propiedades, lead scoring y lifecycle. Sin eso, el CRM es un cementerio de contactos.',
+      'Levanté el centro de control operativo en Notion como fuente única de verdad: procesos, dashboards, minutas y reportes semanales.',
+      'Modelé la narrativa de inversión (TAM/SAM/SOM y flujo de fondos) sobre los datos que el propio sistema empezó a producir.'
+    ],
+    tradeoffs: '<b>Voice AI → WhatsApp.</b> SOFI nació como agente de voz. La voz demuestra mejor, pero el prospecto de FlipHouse no contesta llamadas de números desconocidos: contesta WhatsApp. Migré el canal principal a WhatsApp aunque implicara rehacer la capa de conversación, porque el objetivo era contactar al lead, no lucir la tecnología. La orquestación de modelos se conservó.',
+    resultsNote: 'Es el caso más reciente y más vendible del portafolio, y hoy el que menos puede probar: los dashboards que sostienen cada cifra están bajo NDA. Se publica con sus cuatro ✖ visibles.',
+    resultados: [
+      '<strong>Speed-to-lead</strong> de 1–3 días a <span data-metric="fliphouse-speed-to-lead">menos de 5 minutos</span>. Medido en el CRM (Oct 2025 – Jun 2026).',
+      '<strong>De 5 a 30 leads</strong> procesados por semana (<span data-metric="fliphouse-leads-crm">+500%</span>), tras rediseñar captura y enrutamiento.',
+      '<strong>RODI modelado de <span data-metric="rodi-sofi">+1,291%</span></strong> en escenario base, payback menor a 1 mes. Cost-avoidance modelado, no ahorro realizado.',
+      '<strong>3 modelos de IA</strong> orquestados: razonamiento, voz y transcripción.'
+    ],
+    evidenceRows: [
+      { claim: 'Speed-to-lead menor a 5 minutos.', grade: 'none', artifact: 'Sin artefacto publicable. Dashboard de HubSpot bajo NDA' },
+      { claim: 'De 5 a 30 leads procesados por semana (+500%).', grade: 'none', artifact: 'Sin artefacto publicable. Dashboard de HubSpot bajo NDA' },
+      { claim: 'RODI modelado de +1,291%.', grade: 'none', artifact: 'Modelo propio, no auditoría externa. Metodología disponible a solicitud' },
+      { claim: 'SOFI en producción.', grade: 'none', artifact: 'Sin artefacto que pruebe el estado de producción. El <a href="../cases/sofi.html">caso técnico completo</a> documenta la arquitectura, no ese claim' }
+    ],
+    autopsia: 'Construí SOFI en voz antes de validar el canal con los prospectos reales. Rehacer la capa de conversación costó tiempo que se pudo haber ahorrado con una prueba de canal de dos semanas. La lección no es “voz es peor que WhatsApp”: es que el canal es una hipótesis del negocio, no una decisión de arquitectura, y se valida antes de construir sobre él. Transferible: en cualquier sistema RevOps, la primera pregunta no es qué modelo usar, sino dónde contesta el cliente.',
+    archiveChildren: []
+  }
+};
+
+const ORDER = ['heineken', 'redux', 'hacksureste', 'sofi'];
+
+const CASE_PAGES = {
+  heineken: '../cases/heineken.html',
+  redux: '../cases/redux-incmty.html',
+  hacksureste: '../cases/innovation-systems.html',
+  sofi: '../cases/sofi.html'
+};
+
+const SOPORTE = [
+  { title: 'INCmty B-Challenge 2021', result: '504 postulantes al INC B-Challenge 2021, contra 383 en 2020.', evidence: 'Informe Anual 2021 del Tec, p.415' },
+  { title: 'INC Prototype 2021', result: '197 postulantes universitarios e investigadores en 2021, contra 156 en 2020.', evidence: 'Informes Anuales 2020 (p.180) y 2021 (p.415) del Tec' },
+  { title: 'INCmty Accelerator 2021', result: '205 startups postulantes en 2021, contra 152 en 2020. El ganador recibió una ronda semilla de 1 MDD.', evidence: 'Informes Anuales del Tec · la ronda es de la startup, no del programa' },
+  { title: 'INCmty DisruptAir Challenge 2022', result: 'Reto de innovación abierta con Daikin para LATAM, cerrado en 2021 y lanzado en 2022.', evidence: 'Informe Anual 2021 del Tec, p.416' },
+  { title: 'BTEM 2021', result: '516 candidatos a la Beca Talento Emprendedor en 2020, de los cuales 33 fueron becados.', evidence: 'Informe Anual 2020 del Tec, p.174 · mi rol fue el taller, no la selección' },
+  { title: 'BRAiN México', result: '23 equipos en el BrainCamp y 6 proyectos con acompañamiento en aceleración (2020).', evidence: 'Playlist propia documenta el evento, no el conteo' },
+  { title: 'G20 YEA Model', result: '400 jóvenes emprendedores de 20 universidades, mayo de 2015.', evidence: 'Sin artefacto' },
+  { title: 'HackSureste Ciudad del Carmen 2019', result: 'Tercera edición de HackSureste, ~250 participantes de 6 estados.', evidence: 'Sin artefacto · estimado' },
+  { title: 'ideaLab by HackSureste', result: 'Programa derivado de HackSureste enfocado en proyectos sostenibles (2020).', evidence: 'Sin artefacto · sin métrica registrada' },
+  { title: 'FreeLand', result: 'Convocatoria de emprendimiento producida en 2022. Sin cifras de impacto registradas.', evidence: 'Playlist propia · sin cifras' },
+  { title: 'Haz que pase · Substack', result: '49 publicaciones. La conversión a suscripción es baja en todos los canales salvo el propio Substack.', evidence: 'Sin artefacto externo · analítica interna' }
+];
+
+const ARCHIVE = [
+  { title: 'HEINEKEN Green Challenge 2020', parent: 'HEINEKEN Green Challenge' },
+  { title: 'HEINEKEN Green Challenge 2021', parent: 'HEINEKEN Green Challenge' },
+  { title: 'HEINEKEN Green Challenge 2022', parent: 'HEINEKEN Green Challenge' },
+  { title: 'HackSureste 2019', parent: 'HackSureste' },
+  { title: 'HackSureste Industria 4.0', parent: 'HackSureste' },
+  { title: 'HackSureste WIRE', parent: 'HackSureste' },
+  { title: 'REDUX Agro', parent: 'REDUX' },
+  { title: 'REDUX Energy', parent: 'REDUX' },
+  { title: 'BTEM 2022', parent: 'BTEM 2021' },
+  { title: 'BTEM Training 2023', parent: 'BTEM 2021' },
+  { title: 'StartUp Training', parent: 'BTEM 2021' },
+  { title: 'B-Challenge 2020 · INC Challenges', parent: 'INCmty B-Challenge 2021' }
+];
+
+const GRADES = {
+  inst: { glyph: '✔', label: 'Institucional' },
+  own:  { glyph: '✔', label: 'Propio' },
+  none: { glyph: '✖', label: 'Sin artefacto' }
+};
+
+/* ── Render helpers ── */
+const app = document.getElementById('app');
+const navBack = document.getElementById('navBack');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+const tally = c => {
+  const ok = c.evidenceRows.filter(r => r.grade !== 'none').length;
+  return { ok, no: c.evidenceRows.length - ok };
+};
+
+function totals() {
+  return ORDER.map(s => tally(CASES[s])).reduce(
+    (a, t) => ({ ok: a.ok + t.ok, no: a.no + t.no }), { ok: 0, no: 0 }
+  );
+}
+
+function mediaHTML(c, height) {
+  if (!c.banner) {
+    const hint = c.voidHint ? `<span class="media-void__hint">${esc(c.voidHint)}</span>` : '';
+    return `<div class="media-void"><span>${esc(c.voidLabel || 'Sin imagen publicable')}</span>${hint}</div>`;
+  }
+  return `
+    <div class="card__media">
+      <img src="${c.banner}" alt="${esc(c.alt || '')}" loading="lazy" width="1200" height="${height}">
+      <img class="card__logo" src="${c.logo}" alt="" aria-hidden="true" loading="lazy" width="40" height="40">
+    </div>`;
+}
+
+function cardHTML(c, featured) {
+  const t = tally(c);
+  const caps = c.capacities.map(x => `<span class="cap">${esc(x)}</span>`).join('');
+  if (featured) {
+    return `
+      <a class="card card--featured" href="#/caso/${c.slug}">
+        <div class="card__split">
+          ${mediaHTML(c, 600)}
+          <div class="card__body">
+            <span class="meta">${esc(c.org)} · ${esc(c.year)}</span>
+            <h3 class="card__title">${esc(c.resultTitle)}</h3>
+            <div class="card__caps">${caps}</div>
+            <div class="card__scale">${esc(c.scale)}</div>
           </div>
-          <div class="pf-era__cards">
-            <article class="pf-card" data-reveal>
-              <div class="pf-card__topbar" aria-hidden="true"></div>
-              <div class="pf-card__media">
-                <img src="../assets/img/cases/heineken-banner.jpg"
-                     alt="Banner del programa HEINEKEN Green Challenge"
-                     width="1152" height="864" loading="lazy" class="pf-card__banner">
-                <img src="../assets/img/cases/heineken-logo.png"
-                     alt="Logotipo del HEINEKEN Green Challenge"
-                     width="1080" height="1080" loading="lazy" class="pf-card__logo">
-              </div>
-              <div class="pf-card__inner">
-                <div class="pf-card__badges">
-                  <span class="pf-badge pf-badge--amethyst">ERA 01</span>
-                  <span class="pf-badge pf-badge--ember">Programa de Innovación</span>
-                </div>
-                <h3 class="pf-card__name">HEINEKEN Green Challenge</h3>
-                <p class="pf-card__desc">Diseño y operación del programa nacional de innovación en sustentabilidad de HEINEKEN México.</p>
-                <div class="pf-card__meta">
-                  <div class="pf-card__cambios">
-                    <span class="pf-card__cambios-num">4</span>
-                    <span class="pf-card__cambios-label">cambios aterrizados</span>
-                  </div>
-                  <span class="pf-card__years">2019–2022</span>
-                </div>
-                <a href="../cases/heineken.html" class="pf-card__cta"
-                   aria-label="Ver caso completo: HEINEKEN Green Challenge">
-                  Ver caso completo →
-                </a>
-              </div>
-            </article>
-
-            <div class="pf-evidence" data-reveal>
-              <p class="pf-evidence__label">Artefactos de esta era</p>
-              <div class="pf-evidence__grid">
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/tec2020-p181-hgc.jpg"
-                       alt="Página del Informe Anual 2020 del Tec de Monterrey con la reseña del HEINEKEN Green Challenge"
-                       width="1044" height="1180" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Informe Anual 2020 · Green Challenge</figcaption>
-                </figure>
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/tec2021-p416-hgc-redux.jpg"
-                       alt="Página del Informe Anual 2021 del Tec de Monterrey que menciona al HEINEKEN Green Challenge y a REDUX"
-                       width="1044" height="1361" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Informe Anual 2021 · HGC y REDUX</figcaption>
-                </figure>
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/lajornadamaya-hgc-2019.jpg"
-                       alt="Nota de prensa de La Jornada Maya sobre el HEINEKEN Green Challenge en el sureste"
-                       width="1200" height="900" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Prensa · La Jornada Maya</figcaption>
-                </figure>
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/playlist-hgc.jpg"
-                       alt="Captura de la playlist de videos del HEINEKEN Green Challenge"
-                       width="1200" height="828" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Playlist de video · Green Challenge</figcaption>
-                </figure>
-              </div>
+          <div class="card__side">
+            <span class="meta">Métrica ancla</span>
+            <div class="card__metric">${esc(c.metric)}</div>
+            <div class="tally">
+              <span class="tally__ok">✔ ${t.ok}</span>
+              <span class="tally__no">✖ ${t.no}</span>
+              <span class="tally__cta">Ver caso →</span>
             </div>
           </div>
         </div>
+      </a>`;
+  }
+  return `
+    <a class="card card--small" href="#/caso/${c.slug}">
+      ${mediaHTML(c, 264)}
+      <span class="meta">${esc(c.org)} · ${esc(c.year)}</span>
+      <h3 class="card__title">${esc(c.resultTitle)}</h3>
+      <div class="card__metric">${esc(c.metric)}</div>
+      <div class="tally">
+        <span class="tally__ok">✔ ${t.ok}</span>
+        <span class="tally__no">✖ ${t.no}</span>
+        <span class="tally__cta">→</span>
+      </div>
+    </a>`;
+}
 
-        <!-- ERA 02 -->
-        <div class="pf-era" id="era-02">
-          <div class="pf-era__heading">
-            <span class="pf-era__num">ERA 02</span>
-            <h2 class="pf-era__title">Sistemas y operaciones</h2>
-            <p class="pf-era__tagline">"Procesos que funcionan sin el operador."</p>
+function renderHome() {
+  const tt = totals();
+  const total = tt.ok + tt.no;
+  const trust = ['HEINEKEN', 'Tec de Monterrey', 'INCmty', 'FlipHouse', 'HackSureste']
+    .map(o => `<div class="trust__chip">${esc(o)}</div>`).join('');
+
+  app.innerHTML = `
+    <section class="band hero">
+      <div class="wrap">
+        <div class="eyebrow">Strategic Program Director</div>
+        <h1>Encuentro el mecanismo que frena la ejecución de operaciones complejas, y lo convierto en sistemas medibles que el equipo sostiene.</h1>
+        <p>Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM. Este portafolio no publica lo que no puede probar, y lo dice en cada cifra.</p>
+      </div>
+    </section>
+
+    <section class="band band--raised counter">
+      <div class="wrap">
+        <div class="eyebrow">Estado de evidencia · casos insignia</div>
+        <div class="counter__grid">
+          <div class="counter__cell">
+            <div class="counter__num counter__num--total">${total}</div>
+            <div class="counter__cap">afirmaciones publicadas</div>
           </div>
-          <div class="pf-era__cards">
-            <article class="pf-card" data-reveal>
-              <div class="pf-card__topbar" aria-hidden="true"></div>
-              <div class="pf-card__media">
-                <img src="../assets/img/cases/hacksureste-banner.jpg"
-                     alt="Banner del programa HackSureste"
-                     width="1640" height="856" loading="lazy" class="pf-card__banner">
-                <img src="../assets/img/cases/hacksureste-logo.png"
-                     alt="Logotipo de HackSureste"
-                     width="1080" height="1080" loading="lazy" class="pf-card__logo">
-              </div>
-              <div class="pf-card__inner">
-                <div class="pf-card__badges">
-                  <span class="pf-badge pf-badge--amethyst">ERA 02</span>
-                  <span class="pf-badge pf-badge--ember">Digital Ops</span>
-                </div>
-                <h3 class="pf-card__name">Innovation Systems</h3>
-                <p class="pf-card__desc">Construcción de sistemas de innovación para FlipHouse, HackSureste y CAVA Soft.</p>
-                <div class="pf-card__meta">
-                  <div class="pf-card__cambios">
-                    <span class="pf-card__cambios-num">4</span>
-                    <span class="pf-card__cambios-label">cambios aterrizados</span>
-                  </div>
-                  <span class="pf-card__years">2020–2022</span>
-                </div>
-                <a href="../cases/innovation-systems.html" class="pf-card__cta"
-                   aria-label="Ver caso completo: Innovation Systems">
-                  Ver caso completo →
-                </a>
-              </div>
-            </article>
-
-            <div class="pf-evidence" data-reveal>
-              <p class="pf-evidence__label">Artefactos de esta era</p>
-              <div class="pf-evidence__grid">
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/playlist-hacksureste.jpg"
-                       alt="Captura de la playlist de videos de HackSureste"
-                       width="1200" height="828" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Playlist de video · HackSureste</figcaption>
-                </figure>
-              </div>
-            </div>
+          <div class="counter__cell">
+            <div class="counter__num counter__num--ok">✔ ${tt.ok}</div>
+            <div class="counter__cap">con artefacto verificable</div>
+          </div>
+          <div class="counter__cell">
+            <div class="counter__num counter__num--no">✖ ${tt.no}</div>
+            <div class="counter__cap">sin artefacto, declarado y no escondido</div>
           </div>
         </div>
+        <p class="counter__note">Ninguna cifra de este portafolio aparece sin su estado de evidencia. Un ✖ no es un error: es la marca que lo distingue de uno que solo publica lo que le conviene.</p>
+      </div>
+    </section>
 
-        <!-- ERA 03 -->
-        <div class="pf-era" id="era-03">
-          <div class="pf-era__heading">
-            <span class="pf-era__num">ERA 03</span>
-            <h2 class="pf-era__title">Metodología y alcance nacional</h2>
-            <p class="pf-era__tagline">"Una metodología clara vale más que un mentor brillante."</p>
+    <section class="band trust">
+      <div class="wrap">
+        <div class="eyebrow eyebrow--plain">Organizaciones</div>
+        <div class="trust__row">${trust}</div>
+      </div>
+    </section>
+
+    <section class="band gallery">
+      <div class="wrap">
+        <div class="eyebrow">Casos insignia</div>
+        <h2>Cuatro casos. Cada uno con su cuenta real de qué se puede probar.</h2>
+        ${cardHTML(CASES.heineken, true)}
+        <div class="gallery__rest">
+          ${['redux', 'hacksureste', 'sofi'].map(s => cardHTML(CASES[s], false)).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="band support">
+      <div class="wrap">
+        <div class="eyebrow eyebrow--plain">Soporte · ${SOPORTE.length} proyectos</div>
+        <h2>Programas y convocatorias que completan el registro operativo.</h2>
+        <div class="support__list">
+          ${SOPORTE.map(s => `
+            <div class="support__row">
+              <div class="support__title">${esc(s.title)}</div>
+              <div class="support__result">${esc(s.result)}</div>
+              <div class="support__ev">${esc(s.evidence)}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="archive">
+      <div class="wrap">
+        <button class="archive__toggle" id="archiveToggle" aria-expanded="false" aria-controls="archiveGrid">
+          <span>Archivo · ${ARCHIVE.length} fichas</span>
+          <span class="archive__glyph" id="archiveGlyph">+</span>
+        </button>
+        <p class="archive__note">Existen. No se exhiben. Ediciones y variantes de los casos anteriores, conservadas para trazabilidad.</p>
+        <div class="archive__grid" id="archiveGrid" hidden>
+          ${ARCHIVE.map(a => `
+            <div class="archive__cell">
+              <strong>${esc(a.title)}</strong>
+              <span>${esc(a.parent)}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>`;
+
+  const btn = document.getElementById('archiveToggle');
+  const grid = document.getElementById('archiveGrid');
+  const glyph = document.getElementById('archiveGlyph');
+  btn.addEventListener('click', () => {
+    const open = grid.hasAttribute('hidden');
+    grid.toggleAttribute('hidden', !open);
+    btn.setAttribute('aria-expanded', String(open));
+    glyph.textContent = open ? '−' : '+';
+  });
+
+  navBack.hidden = true;
+}
+
+function renderCase(slug) {
+  const c = CASES[slug];
+  const t = tally(c);
+
+  const rows = c.evidenceRows.map(r => {
+    const g = GRADES[r.grade];
+    const thumb = r.thumb ? `
+        <a class="evidence__thumb" href="${r.thumb}" target="_blank" rel="noopener">
+          <img src="${r.thumb}" alt="Página del artefacto: ${esc(r.thumbCaption || '')}" loading="lazy" width="1044" height="92">
+          <figcaption>Ver artefacto · ${esc(r.thumbCaption || '')}</figcaption>
+        </a>` : '';
+    return `
+      <div class="evidence__row">
+        <div class="evidence__claim">${esc(r.claim)}</div>
+        <div class="status status--${r.grade}">
+          <span class="status__glyph">${g.glyph}</span>
+          <span class="status__grade">${g.label}</span>
+        </div>
+        <div class="evidence__artifact">${r.artifact}${thumb}</div>
+      </div>`;
+  }).join('');
+
+  const hero = c.banner ? `
+    <div class="case-hero">
+      <img src="${c.banner}" alt="${esc(c.alt || '')}" width="1600" height="320">
+      <img class="case-hero__logo" src="${c.logo}" alt="" aria-hidden="true" width="56" height="56">
+    </div>` : '';
+
+  app.innerHTML = `
+    ${hero}
+    <section class="band case-head">
+      <div class="wrap-narrow">
+        <div class="meta">${esc(c.org)} · ${esc(c.year)} · ${esc(c.tipo)}</div>
+        <h1>${esc(c.resultTitle)}</h1>
+        <div class="case-head__tally">
+          <span class="tally__ok">✔ ${t.ok}</span>
+          <span class="tally__no">✖ ${t.no}</span>
+          <span class="meta">afirmaciones en este caso</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap-narrow case-two">
+        <div>
+          <div class="label">Contexto</div>
+          <p>${esc(c.contexto)}</p>
+        </div>
+        <div>
+          <div class="label">Problema</div>
+          <p>${esc(c.problema)}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--raised resp">
+      <div class="wrap-narrow">
+        <div class="eyebrow">Mi responsabilidad</div>
+        <h2>${esc(c.role)}</h2>
+        <div class="resp__grid">
+          <div class="resp__col">
+            <div class="resp__head resp__head--era">Era responsable de</div>
+            ${c.responsibilityEra.map(i => `<div class="resp__item resp__item--era"><i>✔</i><span>${esc(i)}</span></div>`).join('')}
           </div>
-          <div class="pf-era__cards">
-            <article class="pf-card" data-reveal>
-              <div class="pf-card__topbar" aria-hidden="true"></div>
-              <div class="pf-card__media">
-                <img src="../assets/img/cases/redux-banner.jpg"
-                     alt="Banner del programa REDUX"
-                     width="933" height="563" loading="lazy" class="pf-card__banner">
-                <img src="../assets/img/cases/redux-logo.png"
-                     alt="Logotipo de REDUX"
-                     width="1080" height="1080" loading="lazy" class="pf-card__logo">
-              </div>
-              <div class="pf-card__inner">
-                <div class="pf-card__badges">
-                  <span class="pf-badge pf-badge--amethyst">ERA 03</span>
-                  <span class="pf-badge pf-badge--ember">Aceleración</span>
-                </div>
-                <h3 class="pf-card__name">REDUX + INCmty Challenges</h3>
-                <p class="pf-card__desc">Framework de aceleración de 8 semanas operado en los 32 estados de México.</p>
-                <div class="pf-card__meta">
-                  <div class="pf-card__cambios">
-                    <span class="pf-card__cambios-num">4</span>
-                    <span class="pf-card__cambios-label">cambios aterrizados</span>
-                  </div>
-                  <span class="pf-card__years">2021–2023</span>
-                </div>
-                <a href="../cases/redux-incmty.html" class="pf-card__cta"
-                   aria-label="Ver caso completo: REDUX + INCmty Challenges">
-                  Ver caso completo →
-                </a>
-              </div>
-            </article>
-
-            <div class="pf-evidence" data-reveal>
-              <p class="pf-evidence__label">Artefactos de esta era</p>
-              <div class="pf-evidence__grid">
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/tec2020-p176-redux.jpg"
-                       alt="Página del Informe Anual 2020 del Tec de Monterrey con la reseña de REDUX"
-                       width="1044" height="1180" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Informe Anual 2020 · REDUX</figcaption>
-                </figure>
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/tec2020-p180-incmty.jpg"
-                       alt="Página del Informe Anual 2020 del Tec de Monterrey con la reseña de INCmty"
-                       width="1044" height="1180" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Informe Anual 2020 · INCmty</figcaption>
-                </figure>
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/tec2021-p415-incmty.jpg"
-                       alt="Página del Informe Anual 2021 del Tec de Monterrey con la reseña de INCmty"
-                       width="1044" height="1361" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Informe Anual 2021 · INCmty</figcaption>
-                </figure>
-                <figure class="pf-evidence-card">
-                  <img src="../assets/img/evidencia/playlist-redux.jpg"
-                       alt="Captura de la playlist de videos de REDUX"
-                       width="1200" height="828" loading="lazy">
-                  <figcaption class="pf-evidence-card__caption">Playlist de video · REDUX</figcaption>
-                </figure>
-              </div>
-            </div>
+          <div class="resp__col">
+            <div class="resp__head resp__head--no">No era responsable de</div>
+            ${c.responsibilityNotEra.map(i => `<div class="resp__item resp__item--no"><i>✖</i><span>${esc(i)}</span></div>`).join('')}
           </div>
         </div>
+      </div>
+    </section>
 
-      </div><!-- /pf-eras -->
-    </div><!-- /container -->
-  </section>
+    <section class="band system">
+      <div class="wrap-narrow">
+        <div class="label">Sistema construido</div>
+        ${c.sistema.map(i => `<div class="system__item"><i>·</i><span>${esc(i)}</span></div>`).join('')}
+      </div>
+    </section>
 
-  <!-- CTA -->
-  <section class="pf-cta">
-    <div class="container pf-cta__inner">
-      <p class="pf-cta__question">¿Quieres ver cómo aplica esto a tu organización?</p>
-      <a href="https://calendly.com/diegomaurymx" target="_blank" rel="noopener" class="btn btn--primary">
-        Agendar diagnóstico →
-      </a>
-    </div>
-  </section>
+    <section class="band band--raised tradeoffs">
+      <div class="wrap-narrow">
+        <div class="label">Trade-offs</div>
+        <p class="prose">${c.tradeoffs}</p>
+      </div>
+    </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer__bar"></div>
-    <div class="container footer__inner">
-      <span class="footer__tagline">Hagamos que las cosas pasen</span>
-      <span class="footer__copy">© 2026 Diego Maury · CDMX</span>
-    </div>
-  </footer>
+    <section class="band results">
+      <div class="wrap-narrow">
+        <div class="label">Resultados</div>
+        <p class="counter__note" style="margin:10px 0 0">${esc(c.resultsNote)}</p>
+        <div class="results__grid">
+          ${c.resultados.map(r => `<div class="results__cell">${r}</div>`).join('')}
+        </div>
+      </div>
+    </section>
 
-  <script src="../assets/js/main.js"></script>
-  <script src="portfolio.js"></script>
+    <section class="band evidence">
+      <div class="wrap-narrow">
+        <div class="eyebrow">Evidencia</div>
+        <h2>Cada afirmación de este caso, con su artefacto o su ausencia.</h2>
+        <p class="evidence__sub">${t.ok} con artefacto · ${t.no} sin artefacto</p>
+        <div class="evidence__table">
+          <div class="evidence__head"><div>Afirmación</div><div>Estado</div><div>Artefacto</div></div>
+          ${rows}
+        </div>
+        <p class="legend">
+          <b>Institucional:</b> lo publica un tercero (Informe Anual del Tec, prensa, Talent Land).<br>
+          <b>Propio:</b> documentación mía. Prueba que el evento ocurrió y que produje el material, no que la cifra sea correcta.<br>
+          <b>Sin artefacto:</b> la afirmación se sostiene sola. La fila se muestra igual.
+        </p>
+      </div>
+    </section>
+
+    <section class="band autopsy">
+      <div class="wrap-narrow">
+        <div class="label">Lo que haría distinto</div>
+        <p class="prose">${esc(c.autopsia)}</p>
+        ${CASE_PAGES[slug] ? `<p class="prose"><a href="${CASE_PAGES[slug]}">Ver caso completo en diegomaury.mx →</a></p>` : ''}
+      </div>
+    </section>
+
+    ${c.archiveChildren.length ? `
+    <section class="case-archive">
+      <div class="wrap-narrow">
+        <div class="eyebrow eyebrow--plain">Archivo de este caso</div>
+        <div class="case-archive__row">
+          ${c.archiveChildren.map(a => `<span class="case-archive__chip">${esc(a)}</span>`).join('')}
+        </div>
+      </div>
+    </section>` : '<div style="padding:0 0 96px"></div>'}`;
+
+  navBack.hidden = false;
+}
+
+function route() {
+  const m = (window.location.hash || '').match(/^#\/caso\/([a-z]+)/);
+  if (m && CASES[m[1]]) renderCase(m[1]);
+  else renderHome();
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll('[data-home]').forEach(el => {
+  el.addEventListener('click', e => { e.preventDefault(); window.location.hash = '#/'; });
+});
+window.addEventListener('hashchange', route);
+route();
+</script>
+
 </body>
 </html>

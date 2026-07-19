@@ -39,9 +39,6 @@ El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy sour
 │   ├── fonts-v2/                # Montserrat + Bitter + Space Mono (v2)
 │   ├── js/main.js              # Nav activa + scroll reveal (IntersectionObserver)
 │   └── img/                    # isotipodm.svg (bg-pattern), isotipo, logos, hexagon patterns
-├── render_card.html            # Tarjeta social 1080×1080 para exportar (10 variantes)
-├── export_cards.js             # Script Puppeteer: `node export_cards.js` → exported_cards/
-├── exported_cards/             # PNGs generados card-01..10
 ├── cases/
 │   ├── heineken.html           # Caso +600% — LIVE
 │   ├── innovation-systems.html # 3 subcasos FlipHouse/HackSureste/CAVA — LIVE
@@ -52,10 +49,7 @@ El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy sour
 │   ├── portfolio.css
 │   └── portfolio.js
 ├── cv/
-│   ├── diego-maury-cv.pdf      # CV 2026 — LIVE
-│   ├── diego-maury-pmo.html    # Variante CV enfocada en PMO (fuente HTML)
-│   ├── diego-maury-pmo.pdf     # PDF generado desde diego-maury-pmo.html
-│   └── gen-pdf.js              # Script que genera el PDF desde el HTML
+│   └── diego-maury-cv.pdf      # CV 2026 — LIVE
 ├── backups/                    # index-v1-backup.html, index-v2.html (respaldos)
 ├── docs/
 │   ├── superpowers/            # specs/ y plans/ de diseño (incluye plan de index-canonico.html)
@@ -82,11 +76,6 @@ python -m http.server 8080
 ```bash
 # Despliegue: simplemente push a master. GitHub Pages reconstruye solo.
 git add -A && git commit -m "..." && git push origin master
-```
-
-```bash
-# Exportar tarjetas sociales (desde la raíz)
-node export_cards.js   # requiere puppeteer; genera exported_cards/card-01..10.png
 ```
 
 ## index-canonico.html — PREVIEW aislado (no confundir con index.html LIVE)
@@ -379,11 +368,15 @@ Reglas: una métrica nueva se da de alta primero en la base Notion (nunca direct
 - **Integrado en LIVE:** galería "Evidencia" en `cases/heineken.html` (5 artefactos con grado declarado: fuente publicada / registro propio) + banner en su hero; banners fotográficos en Selected Work del `index.html` (HEINEKEN y HackSureste; FlipHouse conserva logo, no tiene banner publicable); banner+logo por era y galería de artefactos en `portfolio/` (BTEM y Talent Land excluidos por regla de coincidencia de entidad; nada de FlipHouse por REM-004); logo FlipHouse y hover states en `cases/sofi.html`; solo CSS decorativo en `innovation-systems.html` (REM-009).
 - **Regla de las tarjetas de evidencia: cero cifras nuevas en captions/alt.** Las cifras de los artefactos (3,975, 562, 2,400...) NO están en el SSOT de métricas; describir el artefacto sin números. Darlas de alta en Notion primero si algún día se quieren en texto.
 - Gotcha de DS: `.bg-pattern` de styles.css trae `pointer-events: none`; si una sección lo usa directo (como en sofi.html), hay que devolverle `pointer-events: auto`.
-- `cases/heineken.html` ya no usa `card-01.png` como og:image (usa su banner). `index.html`, `portfolio/index.html` y `redux-incmty.html` todavía lo referencian — pendiente con tarea propia.
+- `cases/heineken.html` ya no usa `card-01.png` como og:image (usa su banner). **Cerrado 2026-07-17:** `render_card.html`, `export_cards.js` y `exported_cards/` se eliminaron del repo por decisión de Diego; `index.html`, `backups/portfolio-v1-eras.html` y `redux-incmty.html` migraron su og:image/twitter:image/JSON-LD a `assets/img/diego-maury.png` (los dos primeros) y `assets/img/cases/redux-banner.jpg` (el segundo).
 
-## Maqueta Sitio v2 — parcialmente ejecutada (verificado 2026-07-17)
+## Maqueta Sitio v2 — ejecutada 2026-07-17. Congelamiento de 90 días ANULADO (mismo día)
 
-La página Notion "🧱 Maqueta Sitio v2 · Copy final" (`2e0bbf20-7ead-49e8-812c-34032cfda454`) es la spec de copy TO-BE con checklist de ejecución. **Estado real del sitio contra su checklist:** ya ejecutado: "10+ años (7+ en innovación)" propagado, nav sin etiquetas internas, bloque "¿Estás contratando full time?" (índex ~línea 1233). Pendiente: H1 del hero ("Transformo ambición..." vs. el actual "Tomo operaciones ambiguas..."), regla de exactamente 3 métricas ancla en el hero (hoy hay 5), autopsias con titular-lección (aún dicen "Autopsia"), mover "El patrón" después de la evidencia, SOFI en Sistemas propios. Sus checkboxes NO se sincronizan solos: verificar contra el HTML antes de afirmar estado. El as-built completo vive en la página Notion "Sitemap as-built — diegomaury.mx (2026-07-17)" (base Documentación del hub).
+La página Notion "🧱 Maqueta Sitio v2 · Copy final" (`2e0bbf20-7ead-49e8-812c-34032cfda454`) se ejecutó en el sitio LIVE: commits `8df92fd` (H1 canónico "Transformo ambición en sistemas que funcionan", subheadline nuevo, hero con exactamente 3 métricas ancla — RODI +1,291% modelado / 10+ años / 9,905 —, autopsias como titular-lección "Lección 01/02/03" con clase `.lesson-t`) y `6fc87ce` (retiro del "~40% menos carga de evaluación" de Lección 03 por decisión de Diego: no estaba en el SSOT de métricas y decidió retirarlo en vez de darlo de alta — no resucitar). El titular de Lección 02 ("Sin referentes, la respuesta no se adivina. Se itera.") fue aprobado explícitamente por Diego el 2026-07-17. 3,231 / +600% / +500% siguen viviendo en Selected Work, ya no en el hero. QA visual verificado con puppeteer (hero 1440, sección evidencia, hero 375). Sus checkboxes en Notion ya están marcados; el as-built completo vive en la página Notion "Sitemap as-built — diegomaury.mx (2026-07-17)" (base Documentación del hub).
+
+**El congelamiento de 90 días declarado al cerrar la maqueta NO está vigente.** Diego lo anuló el mismo 2026-07-17: la premisa del congelamiento era un cierre bien ejecutado, y Diego calificó la ejecución como mala ("lo hiciste pésimo"). No bloquear cambios de copy/estructura del index citando este congelamiento. Cambios al index se rigen por las reglas normales del proyecto (verificar contra SSOT, no inventar cifras, confirmar decisiones de diseño con Diego cuando aplique), no por una ventana de tiempo fija.
+
+**Gotcha de tooling:** puppeteer está instalado en `node_modules/` del repo (git-ignorado; `package.json` fue borrado a propósito por decisión de Diego — no recrearlo sin preguntar). Los scripts que hagan `require('puppeteer')` deben correr desde la raíz del repo: si el script vive en el scratchpad, `require()` no resuelve `node_modules` (busca desde el directorio del script, no el cwd) y falla con MODULE_NOT_FOUND aunque el paquete exista.
 
 ## Idioma de respuestas
 
