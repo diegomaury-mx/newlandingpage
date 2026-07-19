@@ -386,6 +386,17 @@ A petición explícita de Diego ("quiero que todo sea una red"), la navegación 
 
 **`.case-nav-footer`/`.case-divider` se definen localmente por página**, no en `assets/css/styles.css` compartido — cada caso (incluido `sofi.html`, que no las tenía) trae su propio bloque `<style>` con estas clases. Si se agrega un nuevo caso, hay que replicar ese CSS local, no asumir que viene del DS compartido.
 
+## Auditoría de consistencia fase 1 — ejecutada 2026-07-19 (commit `0b4d525`, LIVE)
+
+- **CTA de agendar canónico: Notion Calendar** (`https://calendar.notion.so/meet/diegomaurymx/5aad3vun`) en todo el sitio, por decisión de Diego. Calendly fue retirado de los 4 casos; solo sobrevive en backups y docs como registro histórico. No reintroducir Calendly.
+- Existe `404.html` en la raíz (noindex, estilo Ink+Ember, enlaces a inicio y portafolio). Los 3 backups servidos (`index-v1-backup`, `index-v2`, `portfolio-v1-eras`) llevan `noindex,nofollow`.
+- Los 4 casos y `portfolio/index.html` llevan favicon (`isotipo-gradient.png`); los case-nav-footer de los 4 casos incluyen "Portafolio completo →" (`../portfolio/`) y todos retornan a `../#trabajo`.
+- El footer del portfolio lleva Agendar, CV y la frase de marca; su title/og es "Portafolio · Diego Maury" (sin em dash).
+- `portfolio/portfolio.css` y `portfolio.js` ya no existen: se movieron a `backups/portfolio-v1-eras.{css,js}` (la SPA del portfolio es autocontenida y nunca los referenció).
+- **Falso positivo conocido: el "doble h1" del portfolio.** Los dos `<h1>` del fuente están en templates JS que se reemplazan vía `app.innerHTML`; el DOM solo tiene uno a la vez. No "corregirlo".
+- **89.5% de SOFI: NO publicable.** No existe en HTML, JS ni SSOT de métricas; Diego decidió que no se agrega hasta tener fuente verificable (alta en SSOT Notion → metrics.json → data-metric). No agregarlo directo a la web.
+- Pospuesto a fases futuras: refactor de estilos inline (index 38, redux 14, innovation 9) y auditoría de navegador (contraste WCAG, focus, LCP, console errors).
+
 ## Idioma de respuestas
 
 Responder siempre en español.
