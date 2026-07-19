@@ -278,8 +278,11 @@ Fuente: página Notion `Instrucciones para Claude Code — Portafolio D (Notion 
 | Cambio de documentación del proyecto | Sí, con Componente `Documentación` |
 | **Lección aprendida** (creencia técnica de Claude corregida por Diego o por evidencia) | Sí, con Componente `Lecciones Aprendidas`, Sección `General` |
 | Trabajo menor sin publicar (borradores, experimentos locales) | No; se refleja en su tarea de Tareas y Misiones |
+| **Ajuste puramente dentro de Notion** (corregir un SSOT, resolver conflicto de copy entre páginas, actualizar una propiedad), sin tocar el repo | **No** |
 
-Las lecciones aprendidas se registran **doble**: en `~/.claude/memory/lessons-learned.md` (local, para Claude) y en el Changelog de Notion (canónico, para Diego). La entrada de Notion usa `Razón` = la creencia incorrecta y `Impacto` = la corrección y su fuente.
+**Umbral canónico (Diego, 2026-07-19, tiene precedencia sobre la tabla):** solo se crea entrada en el Changelog — Portafolio D si hubo un **cambio significativo en el código o la estructura del proyecto** (el repo/sitio). Un ajuste que vive 100% dentro de Notion cierra su tarea (Estado + Resumen) pero NO genera changelog, aunque sea una corrección de datos/evidencia. La tabla de arriba es la guía general (más laxa); este umbral la acota. Ante la duda, preguntar a Diego antes de crear la entrada. Ver `~/.claude/memory/lessons-learned.md` (2026-07-19) y la memoria `feedback-changelog-solo-cambios-significativos`.
+
+Las lecciones aprendidas se registran en `~/.claude/memory/lessons-learned.md` (local, para Claude). El registro en el Changelog de Notion con Componente `Lecciones Aprendidas` aplica solo cuando la lección acompaña a un cambio de código/estructura ya registrable; una lección de proceso suelta no genera changelog por sí sola (mismo umbral de arriba).
 
 **Granularidad: un commit registrable = una entrada = una tarea.** No agrupar varios commits en una sola entrada, por pequeños que sean, ni "aprovechar" una entrada existente porque el cambio es parecido o del mismo día. Si el commit cae en la tabla de arriba, tiene su propia entrada y su propia tarea. Los commits que no caen en la tabla (refactors internos, experimentos, WIP) no generan nada.
 
