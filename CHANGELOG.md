@@ -44,26 +44,28 @@ Idea
 
 | Sprint | Title | Owner | Status |
 |--------|-------|-------|--------|
-| Sprint 0 | Product Foundation | ChatGPT + Silvia + Diego | Pending |
+| Sprint 0 | Product Foundation | ChatGPT + Silvia + Diego | In Progress (PRD approved 2026-07-20; 7 of 8 deliverables remain) |
 | Sprint 0.5 | Domain & Content Architecture | Claude Code | In Progress |
 | Sprint 1 | Astro Setup + Design Tokens + Component Architecture | Claude Code | Blocked on Sprint 0 |
 | Sprint 2 | Design System | Claude Code | Blocked on Sprint 1 |
-| Sprint 3 | Home | Claude Code | Blocked on PRD approval |
+| Sprint 3 | Home | Claude Code | Blocked on Sprint 2 |
 | Sprint 4 | Internal Pages (7) | Claude Code | Blocked on Sprint 3 |
 | Sprint 5 | Optimization | Claude Code | Blocked on Sprint 4 |
 
 ### Sprint 0 — Required Deliverables (not Claude Code's responsibility)
 
-The following must be delivered and approved by Diego before Sprint 1 begins:
+**Estado:** In Progress. Sprint 1 remains blocked.
 
-- PRD
-- Information Architecture
-- Definitive Sitemap
-- Navigation structure
-- User Journeys
-- High-level Wireframes
-- Design Principles
-- Domain Model approval
+- [x] PRD — approved 2026-07-20.
+- [ ] Information Architecture
+- [ ] Definitive Sitemap
+- [ ] Navigation structure
+- [ ] User Journeys
+- [ ] High-level Wireframes
+- [ ] Design Principles
+- [ ] Domain Model approval
+
+**Sprint 1 start gate:** all eight deliverables must be delivered and approved by Diego. PRD approval alone does not unblock Sprint 1. The Notion backlog (PRD, Product Vision, Roadmap, Sitemap draft) does not by itself represent this full gate — Product Vision and Roadmap are useful artifacts, but they don't substitute for the seven remaining criteria.
 
 ### Sprint 0.5 — Completed Deliverables
 
