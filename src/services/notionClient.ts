@@ -32,18 +32,30 @@ export const NOTION_SOURCES = {
 } as const;
 
 /**
- * Lee el token de integracion de Notion del entorno del servidor.
- * Prefiere `import.meta.env` (Astro/Vite lo inyecta en codigo server-side desde
- * `.env`) y cae a `process.env` (scripts standalone via `node --env-file` o CI).
- * Falla fuerte si no existe: sin token no hay build de CMS posible.
+ * Lee el token del entorno sin lanzar. Prefiere `import.meta.env` (Astro/Vite lo
+ * inyecta en codigo server-side desde `.env`) y cae a `process.env` (scripts
+ * standalone via `node --env-file` o CI).
  */
-function getNotionToken(): string {
+function readNotionToken(): string | undefined {
   const fromViteEnv =
     typeof import.meta !== "undefined"
       ? (import.meta as { env?: Record<string, string | undefined> }).env
           ?.NOTION_TOKEN
       : undefined;
-  const token = process.env.NOTION_TOKEN ?? fromViteEnv;
+  return process.env.NOTION_TOKEN ?? fromViteEnv;
+}
+
+/** True si hay un NOTION_TOKEN disponible en el entorno (no valida que sea correcto). */
+export function hasNotionToken(): boolean {
+  return Boolean(readNotionToken());
+}
+
+/**
+ * Lee el token de integracion de Notion del entorno del servidor.
+ * Falla fuerte si no existe: sin token no hay lectura de CMS posible.
+ */
+function getNotionToken(): string {
+  const token = readNotionToken();
   if (!token) {
     throw new Error(
       "[notionClient] Falta NOTION_TOKEN. Define la variable de entorno antes del build " +
