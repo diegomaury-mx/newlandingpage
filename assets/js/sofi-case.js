@@ -72,7 +72,7 @@
       var dt = document.createElement('dt');
       dt.textContent = item.label;
 
-      var val = document.createElement('strong');
+      var val = document.createElement('dd');
       val.className = 'sofi-ficha__value';
       val.textContent = item.value;
 
