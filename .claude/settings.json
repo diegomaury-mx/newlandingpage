@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/lint-changed-file.cjs",
+            "description": "Lint del archivo .css/.html recien editado (stylelint / htmlhint). Solo el archivo tocado: el lint completo del repo tiene 1 hallazgo preexistente (no-descending-specificity en styles.css:593) sin relacion con la edicion en curso, y test:a11y completo tarda ~90s (fuera del presupuesto de un hook por-edicion)."
+          }
+        ]
+      }
+    ]
+  }
+}

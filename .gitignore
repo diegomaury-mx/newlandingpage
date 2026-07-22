@@ -24,3 +24,11 @@ _ds_import/
 
 # Config local de Claude Code: rutas de la maquina y tokens. Nunca se versiona.
 .claude/settings.local.json
+
+# QA visual (Playwright): screenshots regenerables, no se versionan
+qa-output/screenshots/
+
+# Playwright: artefactos de test run locales
+/test-results/
+/playwright-report/
+/blob-report/

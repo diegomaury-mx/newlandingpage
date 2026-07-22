@@ -28,6 +28,11 @@ Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: 
     # en CI usar npm ci --omit=dev (no instalar Chromium). Scripts con require('puppeteer')
     # se ejecutan desde la raíz del repo.
 
+    # QA visual y accesibilidad (ruta única, ver regla en sección 5 · Tooling)
+    npm run lint          # stylelint (assets/css) + htmlhint (9 páginas clave)
+    npm run test:a11y     # axe-core (@axe-core/playwright) contra las 9 páginas clave, WCAG A/AA
+    npm run verify:visual # screenshots desktop+mobile de las 9 páginas → qa-output/screenshots/ (gitignored)
+
     # Astro (scaffold, NO desplegado): construye a dist/, no toca el HTML LIVE
     npx astro build
 
@@ -137,6 +142,9 @@ Decisiones cerradas (no son pendientes; no recuestionar):
 
 ## 5 · Workflow y registro
 
+### Scoping de tareas Notion de este proyecto
+Filtrar SIEMPRE por relación a proyecto "Portafolio D" (`Proyectos, Ideas y Locuras de Diego`), nunca por palabra clave o tema. Bases relevantes: Changelog — Portafolio D, Tareas y Misiones, PRD - Portfolio (ver abajo).
+
 ### Registro en Notion — Portafolio D (SSOT de cambios)
 - Registro canónico: base "📝 Changelog — Portafolio D" (data source: collection://652b68c7-9cf5-441c-957c-f18b055db8b8). El `CHANGELOG.md` del repo es espejo técnico, no fuente. No crear páginas sueltas. No inventar nombres de propiedades.
 - Umbral único (tiene precedencia sobre cualquier guía anterior): entrada en el Changelog SOLO si hubo cambio significativo en el código o la estructura del repo/sitio. Un ajuste 100% dentro de Notion cierra su tarea (Estado + Resumen) pero NO genera changelog. Ante la duda, preguntar a Diego.
@@ -155,7 +163,12 @@ Decisiones cerradas (no son pendientes; no recuestionar):
 
 ### Tooling
 - CI futuro (GitHub Actions + Astro): `npm ci --omit=dev` — puppeteer/Chromium no se instala en CI.
-- Local: puppeteer es devDependency para QA visual; los scripts con `require('puppeteer')` corren desde la raíz del repo (desde scratchpad fallan con MODULE_NOT_FOUND).
+- Puppeteer es devDependency solo para scripts legacy que hacen `require('puppeteer')` explícitamente (corren desde la raíz del repo; desde scratchpad fallan con MODULE_NOT_FOUND). NO es la ruta de QA visual/a11y — esa es Playwright (ver abajo).
+- **QA visual y accesibilidad — ruta única, sin fallbacks**: `npm run lint` / `npm run test:a11y` / `npm run verify:visual` (Playwright + `@axe-core/playwright`, config en `playwright.config.ts`, specs en `tests/qa/`). Páginas cubiertas: `index.html`, `portfolio/index.html`, los 4 casos (`heineken`, `sofi`, `redux-incmty`, `innovation-systems`), `politicas-privacidad.html`, `terminos-y-condiciones.html`, `404.html`. Nunca improvisar un fallback ad-hoc de browser (ni Puppeteer ni Claude-in-Chrome) para QA: si Playwright falla, reportar el error tal cual, no rodearlo.
+- `stylelint` (config en `package.json` → `"stylelint"`) está ajustado a la convención BEM real del CSS (`selector-class-pattern` acepta `__`/`--`) y desactiva reglas puramente estilísticas nunca aplicadas (notación de color, saltos de línea, `single-line-max-declarations`, etc.) — esto no es debilitar el lint, es alinearlo con el CSS ya existente en vez de forzar una reescritura masiva fuera de alcance.
+- `qa-output/screenshots/` es regenerable (gitignored) — nunca se versiona.
+- `assets/css/colors_and_type.css` está excluido del glob de `lint` (`!assets/css/colors_and_type.css`): es el archivo deprecado sin uso ya documentado en la sección 4 ("nunca `colors_and_type.css`, sus variables ya no existen"). Es corrección de scope del linter, no del código.
+- Decisión: la config de stylelint vive inline en `package.json` (clave nativa) en lugar de `.stylelintrc.json`, para mantenerla fuera del alcance del hook `config-protection` del plugin ecc sin desactivarlo. Cualquier cambio futuro a esta config requiere aprobación explícita del usuario.
 
 ## 6 · Fuentes de verdad
 

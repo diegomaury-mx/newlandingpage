@@ -9,15 +9,44 @@
     "build": "astro build",
     "preview": "astro preview",
     "sync": "astro sync",
-    "cms:smoke": "tsx scripts/notion-smoke.ts"
+    "cms:smoke": "tsx scripts/notion-smoke.ts",
+    "lint": "stylelint \"assets/css/**/*.css\" \"!assets/css/colors_and_type.css\" && htmlhint index.html portfolio/index.html portfolio/heineken.html portfolio/sofi.html portfolio/redux-incmty.html portfolio/innovation-systems.html politicas-privacidad.html terminos-y-condiciones.html 404.html",
+    "test:a11y": "playwright test tests/qa/a11y.spec.ts",
+    "verify:visual": "playwright test tests/qa/visual.spec.ts"
   },
   "dependencies": {
     "@notionhq/client": "^5.23.2",
     "astro": "^5.18.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^26.1.1",
+    "htmlhint": "^1.9.2",
     "puppeteer": "^25.3.0",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard": "^40.0.0",
     "tsx": "^4.23.1"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "selector-class-pattern": "^[a-z0-9]+(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      "keyframes-name-pattern": null,
+      "property-no-vendor-prefix": null,
+      "rule-empty-line-before": null,
+      "at-rule-empty-line-before": null,
+      "comment-empty-line-before": null,
+      "custom-property-empty-line-before": null,
+      "declaration-block-single-line-max-declarations": null,
+      "declaration-block-no-redundant-longhand-properties": null,
+      "color-function-notation": null,
+      "color-function-alias-notation": null,
+      "alpha-value-notation": null,
+      "media-feature-range-notation": null,
+      "font-family-name-quotes": null,
+      "value-keyword-case": null,
+      "color-hex-length": null
+    }
   }
 }
