@@ -564,6 +564,11 @@ section { position: relative; }
   background: rgba(124, 63, 190, 0.05);
   transform: translateX(4px);
 }
+.work__arrow {
+  font-size: 1.25rem;
+  color: var(--dm-white-40);
+  transition: transform var(--dur-norm) var(--ease-out), color var(--dur-norm);
+}
 .work__link:hover .work__arrow { transform: translateX(6px); color: var(--dm-white-80); }
 .work__num {
   font-family: var(--font-display);
@@ -589,11 +594,6 @@ section { position: relative; }
   letter-spacing: 0.04em;
   white-space: nowrap;
   font-weight: 500;
-}
-.work__arrow {
-  font-size: 1.25rem;
-  color: var(--dm-white-40);
-  transition: transform var(--dur-norm) var(--ease-out), color var(--dur-norm);
 }
 .work__footer { margin-top: 2.5rem; }
 
