@@ -1,429 +1,168 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guía para Claude Code en este repositorio. Aquí viven SOLO invariantes: reglas que cambian el comportamiento de sesiones futuras y no son derivables del código. El historial vive en el Changelog — Portafolio D (Notion), no aquí.
 
-> **IMPORTANTE:** Toda implementación, documentación o contribución debe seguir el esquema definido en `.claude/esquema` ubicado en la raíz del repositorio. Consulta este archivo antes de crear o modificar cualquier sección, archivo o estructura.
+## 1 · Proyecto
 
-## Proyecto
+Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: https://diegomaury.mx (LIVE desde 2026-05-13).
 
-Portafolio profesional de Diego Maury — sitio estático desplegado en GitHub Pages.
+- HTML5 + CSS3 + JS vanilla; sin build system en producción.
+- Deploy: push a `master` (raíz = deploy source). Lo que no está en `master` no está LIVE.
+- Scaffold Astro montado en la raíz, NO desplegado: construye a `dist/`; el LIVE sigue siendo el HTML de la raíz. La migración avanza tarea por tarea vía la cadena "Diego CMS" en Notion (el gate de sprints original fue anulado por Diego). Astro v4.16 a propósito (honra `config.ts`). El schema `cases` de `src/content/config.ts` es aspiracional; el mapeo real Notion↔Astro está en `docs/platform/notion-astro-contract.md`. Hoy NO existe pipeline Notion → sitio: el HTML se edita a mano.
+- Idioma del sitio: español únicamente (sin toggle). Responder siempre en español.
+- Analítica en todas las páginas: GTM-NHT5827J + Microsoft Clarity x7ns7c22xi.
 
-URL: `https://diegomaury.mx` — **LIVE desde 2026-05-13**
+## 2 · Comandos
 
-## Stack técnico
+    # Servidor local (desde la raíz del repo; no hay build en producción)
+    python -m http.server 8080          # o: npx serve .
 
-- HTML5 + CSS3 + JavaScript vanilla (sin frameworks) — **así es el sitio LIVE hoy**
-- Sin build system **en producción**. **Ojo:** desde el 2026-07-19 el repo tiene un scaffold de **Astro** montado en la raíz (migración en curso vía la cadena "Diego CMS"), pero **no está desplegado**: construye a `dist/` y el sitio LIVE se sigue sirviendo del HTML de la raíz. Ver "Arquitectura futura — Astro" más abajo. El scaffold NO afecta al sitio LIVE.
-- Despliegue: GitHub Pages sirviendo desde **`master` / raíz** (CNAME `diegomaury.mx`). Cada push a `master` redespliega automáticamente. No hay rama `gh-pages` ni worktree (consolidado el 2026-06-15).
+    # Deploy: push a master. GitHub Pages redespliega solo.
+    git add -A && git commit -m "..." && git push origin master
 
-## Estructura del repositorio
+    # Verificador de métricas (obligatorio antes de publicar cifras; se exige exit 0)
+    node tools/verify-metrics.js
+    node --test tools/verify-metrics.test.js    # tests del verificador
 
-El sitio vive en la **raíz de `master`** (fuente única de verdad y deploy source). No hay worktree.
+    # Dependencias: local con npm install (conserva puppeteer devDep para QA visual);
+    # en CI usar npm ci --omit=dev (no instalar Chromium). Scripts con require('puppeteer')
+    # se ejecutan desde la raíz del repo.
 
-```
-/                               # ← raíz de master = sitio (deploy source)
-├── index.html                  # Página principal v2 — LIVE
-├── index-canonico.html         # PREVIEW aislado — NO live, ver nota abajo
-├── prototipo-portafolio.html   # PREVIEW Fase A2 (Claude Design) — noindex, sin analítica, no enlazado; fuente del patrón de galería de evidencia
-├── robots.txt / sitemap.xml    # SEO — LIVE
-├── CNAME                       # diegomaury.mx
-├── .nojekyll                   # deshabilita el pipeline Jekyll de GitHub Pages
-├── llms.txt / llms-full.txt    # Contexto para LLMs — LIVE
-├── README.md                   # Resumen público del repo (stack, estructura, deploy)
-├── CHANGELOG.md                # Historial de decisiones de arquitectura y sprints
-├── GOVERNANCE.md               # Reglas de contribución y decisión del proyecto
-├── assets/
-│   ├── css/styles.css          # Tokens DS v3 + todos los componentes
-│   ├── css/colors_and_type.css # Token file del DS
-│   ├── fonts/                  # Satoshi Variable + JetBrains Mono (local)
-│   ├── fonts-v2/                # Montserrat + Bitter + Space Mono (v2)
-│   ├── js/main.js              # Nav activa + scroll reveal (IntersectionObserver)
-│   └── img/                    # isotipodm.svg (bg-pattern), isotipo, logos, hexagon patterns
-├── cases/                       # Solo stubs de redirect (noindex,follow) desde 2026-07-19 — ver nota abajo
-│   ├── heineken.html            # Redirect -> ../portfolio/heineken.html
-│   ├── sofi.html                # Redirect -> ../portfolio/sofi.html
-│   ├── redux-incmty.html        # Redirect -> ../portfolio/redux-incmty.html
-│   ├── innovation-systems.html  # Redirect -> ../portfolio/innovation-systems.html
-│   └── fliphouse.html           # Página de transición → SOFI, noindex (ex-caso legacy, retirado 2026-07-12) — NO se movió
-├── portfolio/                   # Galería por eras (SPA) + los 4 casos como .html estáticos — LIVE
-│   ├── index.html                # SPA hash-routed
-│   ├── heineken.html             # Caso +600% — LIVE (movido desde cases/ el 2026-07-19)
-│   ├── sofi.html                 # LIVE (movido desde cases/ el 2026-07-19)
-│   ├── redux-incmty.html         # REDUX + INCmty Challenges — LIVE (movido desde cases/ el 2026-07-19)
-│   └── innovation-systems.html   # 3 subcasos FlipHouse/HackSureste/CAVA — LIVE (movido desde cases/ el 2026-07-19)
-├── cv/
-│   └── diego-maury-cv.pdf      # CV 2026 — LIVE
-├── backups/                    # index-v1-backup.html, index-v2.html (respaldos)
-├── docs/
-│   ├── superpowers/            # specs/ y plans/ de diseño (incluye plan de index-canonico.html)
-│   └── platform/                # conventions.md, seo-model.md — spec de la futura plataforma Astro (ver sección abajo)
-├── src/                         # Scaffold Astro montado 2026-07-19 (NO desplegado, ver sección Astro)
-│   ├── pages/index.astro        # Placeholder de scaffold — NO es el Home real
-│   ├── layouts|components|styles|utils/  # estructura vacía (.gitkeep) según conventions.md
-│   ├── env.d.ts                 # tipos Astro (generado)
-│   ├── content/                 # Astro Content Collections
-│   │   ├── config.ts             # Schemas Zod: cases, projects, playbooks, insights, services
-│   │   └── cases|projects|playbooks|insights|services/_README.md  # (prefijo _ = Astro los ignora)
-│   └── services/pgPool.js       # Backend Phase 2 (chatbot RAG, pendiente)
-├── public/                      # estáticos de Astro; public/cms-media/ = logos movidos desde src/content/img
-├── astro.config.mjs             # site diegomaury.mx, output static, NO desplegado aún
-├── package.json                 # astro ^4.16 + puppeteer devDep (recreado 2026-07-19)
-└── tsconfig.json                # strict
-```
+    # Astro (scaffold, NO desplegado): construye a dist/, no toca el HTML LIVE
+    npx astro build
 
-> **Carpetas locales fuera de git (ver `.gitignore`):** `_ds_import/` (bundle de handoff de Claude Design) y `.claude-design/lab/` (variantes de diseño exploradas, `variant-a..f.html`) existen en el filesystem local pero **no están versionadas ni se despliegan**. `.playwright-mcp/` y `.superpowers/` tampoco. No tratarlas como fuente de verdad del sitio LIVE.
+    # Data files de SOFI (assets/data/sofi/*): se regeneran EN el repo de SOFI
+    # (Fliphouse-whatsapp-agent · tools/portfolio-export/): build-fsm.js <ruta-del-sitio>,
+    # capture-run.js (Docker + OPENROUTER_API_KEY viva) y build-metrics.js
 
-> **Analítica:** todas las páginas del sitio llevan Google Tag Manager (`GTM-NHT5827J`) y Microsoft Clarity (`x7ns7c22xi`) en el `<head>`.
+## 3 · Arquitectura (solo lo no-obvio)
 
-## Comandos de desarrollo
+    /                        # raíz de master = sitio LIVE
+    ├── index.html           # Home LIVE
+    ├── index-canonico.html · prototipo-portafolio.html   # PREVIEWS aislados: noindex, sin analítica, no enlazados
+    ├── 404.html             # noindex
+    ├── portfolio/           # SPA por eras (index.html) + los 4 casos LIVE: heineken · sofi · redux-incmty · innovation-systems
+    ├── cases/               # SOLO stubs de redirect (noindex,follow) → portfolio/*.html · fliphouse.html = transición a SOFI
+    ├── assets/css/styles.css    # Tokens DS V2 + componentes (aliases --dm-* solo compatibilidad temporal)
+    ├── assets/data/         # metrics.json (generado desde Notion) · sofi/* (generados en el repo de SOFI)
+    ├── backups/             # respaldos servidos, noindex,nofollow
+    ├── docs/platform/       # cms-notion.md · conventions.md · seo-model.md · notion-astro-contract.md
+    ├── docs/superpowers/    # specs/ y plans/ de diseño
+    └── src/ · public/ · astro.config.mjs   # scaffold Astro — NO desplegado
 
-```bash
-# Servidor local (desde la raíz del repo)
-python -m http.server 8080
-# o: npx serve .
-```
+Carpetas locales no versionadas (`_ds_import/`, `.claude-design/lab/`, `.playwright-mcp/`, `.superpowers/`) no son fuente de verdad del sitio.
 
-```bash
-# Despliegue: simplemente push a master. GitHub Pages reconstruye solo.
-git add -A && git commit -m "..." && git push origin master
-```
+## 4 · Reglas críticas
 
-## index-canonico.html — PREVIEW aislado (no confundir con index.html LIVE)
+### Design system — V2 "Ember on Ink" (único nombre vigente; no usar numeraciones v2/v3 cruzadas)
 
-`index-canonico.html` es un archivo autocontenido (HTML+CSS+JS inline) en la raíz, creado según el plan `docs/superpowers/plans/2026-06-16-landing-canonica-bento.md` para probar un rediseño visual "Bento + Violeta" fiel a la maqueta canónica de Notion (SSOT: id `e5f9bb1b96224857a648b0212c3e9822`).
-
-- **No es LIVE:** lleva `noindex,nofollow` y analítica desactivada en el `<head>`.
-- **No está enlazado** desde ninguna página del sitio ni desde el sitemap.
-- **Aislamiento total:** no modifica `assets/css/styles.css` ni `assets/js/main.js`; solo reutiliza fuentes locales vía `@font-face` e `isotipodm.svg`.
-- Se sirve y compara localmente: `python -m http.server 8080` → `localhost:8080/index-canonico.html`.
-- Regla del plan: **no inventar datos** — métricas y hechos deben venir del SSOT en Notion; si el SSOT no cubre algo, se marca y se confirma con Diego.
-
-## Design system unificado — V2 "Ember on Ink" (desde 2026-07-19)
-
-**Regla irrompible del proyecto:** todo el sitio comparte un solo design system. No debe haber páginas en sistemas distintos. Fuente de verdad: proyecto Claude Design **"Diego Maury Design System V 2"** (`019dd0ff-c961-76e9-9815-68e47ca79ab8`, accesible vía `DesignSync`), archivo `v2-tokens.css`. Antes del 2026-07-19 el sitio corría dos sistemas (`index.html` en DS v2, casos+portfolio en DS v3 "Violeta Protagonista") — consolidado en una sola migración, ver `~/.claude/plans` de esa sesión y el Changelog — Portafolio D.
-
-### Paleta de color (tokens CSS)
+Regla irrompible: todo el sitio comparte un solo design system. Fuente de verdad: proyecto Claude Design "Diego Maury Design System V 2" (`019dd0ff-c961-76e9-9815-68e47ca79ab8`, vía DesignSync), archivo `v2-tokens.css`.
 
 | Token | Hex | Uso |
-|-------|-----|-----|
+|---|---|---|
 | `--bg` | `#0A0612` | Fondo principal (Deep Ink) |
 | `--bg-2` | `#1A1128` | Superficie: cards, paneles, hover |
 | `--border` | `#6A291B` | Bordes y separadores |
-| `--t1` | `#FAF8FC` | Texto primario |
-| `--t2` | `#DDDBE0` | Texto secundario |
-| `--t3` | `#A8A6AC` | Texto terciario |
-| `--ember` | `#FF5C39` | Acento único — exactamente una vez por pieza, en el elemento más importante |
-| `--ember-cta` | `#BF452B` | Ember oscurecido — única forma válida de usar ember como fondo sólido con texto blanco (el `--ember` puro da 3.07:1, falla AA; `--ember-cta` da ~4.9:1) |
+| `--t1` / `--t2` / `--t3` | `#FAF8FC` / `#DDDBE0` / `#A8A6AC` | Texto primario / secundario / terciario |
+| `--ember` | `#FF5C39` | Acento único — una vez por pieza, en el elemento más importante |
+| `--ember-cta` | `#BF452B` | Única forma válida de ember como fondo sólido con texto blanco (el puro da 3.07:1, falla AA) |
 
-**Reglas duras (no negociables):**
-1. Un solo acento: ember, una vez por pieza en el elemento más importante. Precedente ya aceptado: el logo del nav (siempre visible, es marca no acento de contenido) y los section-labels/eyebrows de cada sección no cuentan como violación — es el mismo patrón que index.html ya tenía LIVE antes de la migración.
-2. Sin gradientes, drop-shadows, blur ni glow decorativos. Excepción documentada: overlays de imagen (`linear-gradient` de `--bg` a alpha variable para legibilidad de texto sobre foto) y `backdrop-filter: blur()` en nav sticky — funcionales, no decorativos, aprobados por Diego 2026-07-02.
-3. Nunca `--dm-*`, nunca `colors_and_type.css`. `assets/css/styles.css` mantiene aliases `--dm-*` apuntando a los tokens V2 solo como compatibilidad temporal — no crear usos `--dm-*` nuevos.
+Tipografía: Plus Jakarta Sans (headlines, UI, body) + DM Mono (cifras, fechas, labels — uppercase, nunca párrafos). No reintroducir Montserrat/Bitter/Space Mono (`assets/fonts-v2/`, sin referenciar).
+
+Reglas duras (no negociables):
+1. Un solo acento ember por pieza. No cuentan como violación: logo del nav y section-labels/eyebrows (precedente aceptado).
+2. Sin gradientes, drop-shadows, blur ni glow decorativos. Excepciones aprobadas: overlays de imagen para legibilidad y `backdrop-filter: blur()` en nav sticky.
+3. Nunca `--dm-*` nuevos, nunca `colors_and_type.css` (sus variables ya no existen).
 4. `:focus-visible` en todo elemento interactivo: `outline: 2px solid var(--ember); outline-offset: 2px;`
-5. Isotipo: `assets/img/isotipo-ember.svg` (hexágono `--t1` + facetas `--ember`) en todo nav/footer de todas las páginas — no usar `isotipodm.svg` ni dibujar el hexágono en CSS puro para el logo de marca.
-
-### Tipografía
-
-| Familia | Carga | Uso |
-|---------|-------|-----|
-| Plus Jakarta Sans | Google Fonts | Headlines, UI, body |
-| DM Mono | Google Fonts | Cifras, fechas, labels, tags — siempre uppercase, nunca párrafos largos |
-
-`assets/fonts-v2/` (Montserrat/Bitter/Space Mono) queda como archivo local sin referenciar — no se borró, pero ningún token activo apunta ahí. No reintroducir esas familias.
-
-### Isotipo bg-pattern (sin cambio)
-
-El SVG `isotipodm.svg` se usa como fondo decorativo (textura repetida) en todas las secciones via `.bg-pattern::before`/`background-image` CSS, opacidad 0.02–0.03. Esto es un uso distinto al del logo de marca (ver regla 5 arriba) y no se tocó en la migración — no modificar este patrón.
-
-## Secciones (orden en index.html)
-
-1. **Hero** (fondo Catalyst-700) — tag Ember, headline Satoshi 800, sub, 2 CTAs, banda de 3 métricas
-2. **Selected Work** (Ink) — 3 filas editoriales con número Spark, nombre, meta, métrica
-3. **Trust Strip** (Ink) — logos de marcas: HEINEKEN, Tec, INCmty, FEMSA, HackSureste
-4. **Testimonials** (Ink) — embed de Senja (pendiente de activar)
-5. **Servicios** (Ink) — 3 tarjetas en grid con tag, nombre, entregables, tiempo
-6. **About** (Ink) — 2 cols: bio texto izquierda, herramientas/chips + cómo trabajo derecha
-7. **Experiencia** (Ink) — 4 roles en lista vertical: meta izquierda 220px, contenido derecha
-8. **Contacto** (Catalyst-700) — 3 canales: calendario, email, LinkedIn
-
-## Reglas de diseño
-
-- **Idioma: español únicamente** — no hay toggle de idioma
-- **Mobile-first:** breakpoints 375px, 768px, 1280px
-- **Performance:** JS < 80 KB gzipped, CSS < 15 KB
-- Animaciones solo en propiedades compositor-safe: `transform`, `opacity`
-- Respetar `prefers-reduced-motion` (el JS de scroll reveal lo omite si está activo)
-
-## Plantilla de caso de estudio
-
-Estructura fija: Contexto → Problema → Objetivo (métrica+timeframe) → Mi rol → Acciones (3–5 bullets) → Resultados (métricas normalizadas) → Evidencia → Aprendizajes
-
-Formato de cada logro: **Verbo + qué + cómo + impacto + timeframe**
-
-## Estado del contenido
-
-### Implementado (LIVE)
-- `index.html` — **v3 "Ember on Ink" (Variante F canónica)** activo desde 2026-06-22
-  - DS v2: Plus Jakarta Sans + DM Mono, bg `#0A0612`, acento único `--ember: #FF5C39`
-  - Secciones S1-S9: Hero, Tesis/Traductor, Patrón Spine, Selected Work (H1/H2/H3 S-T-A-R), IP Propia, Evidencia Forense, Servicios, AI-Native, CTA Final
-  - JS inline: scroll reveal (`data-reveal`/`is-visible`), contadores animados, nav activa, burger mobile
-  - GTM-NHT5827J + Clarity x7ns7c22xi preservados
-  - **Invariante DS (reemplazado 2026-07-19, ver sección "Design system unificado" abajo):** todo el sitio usa un solo sistema, V2 "Ember on Ink". Ya no hay split DS v2/DS v3.
-  - **Copy en voz de Diego (2026-07-10):** todo el copy narrativo del index está reescrito en primera persona + tuteo siguiendo el Writing DNA (Notion `7b7c6991078b407f9ae1031796cb7f0d`, fuente canónica de voz; corrige a "Estilo y voz"). Filo = postura + contraste "No es X. Es Y", NO sarcasmo. Sin em dash en contenido. Spec: `docs/superpowers/specs/2026-07-10-copy-voz-diego-index-design.md`.
-  - **Etiquetas de métricas alineadas al SSOT en index:** 9,905 = "Participantes inscritos", agregado de programas INCmty (HGC incluido), estimado (NO cifra de HGC; retirado de la tarjeta HEINEKEN). +600% = ed. 1 a ed. 3 (2019-2021). HackSureste 3,000+ = estimado, no acumulable con INCmty, sin "5 ediciones".
-  - **Los tres archivos publicables están alineados con la evidencia (2026-07-12, commit `005641d`, rama `feat/caso-sofi`).** `index.html`, `llms.txt` y `llms-full.txt` declaran ahora el grado de evidencia de cada cifra. Los dos `llms` abren con la leyenda de dos grados: **published** (tercero nombrado) y **own** (registros, CRM o estimación propia). Desaparecieron los encabezados "audit-ready": ninguna cifra está auditada. **OJO: el deploy sale de `master`. Mientras esto no se mergee, el sitio LIVE sigue publicando las cifras viejas.**
-  - `backups/index-v2.html` — respaldo del diseño anterior "Deep Tech & Friction"
-- `llms.txt` — live en raíz, visible en `diegomaury.mx/llms.txt`
-- GTM-NHT5827J — instalado en `<head>` y `<body>` de index.html
-- `portfolio/heineken.html`, `portfolio/innovation-systems.html`, `portfolio/redux-incmty.html` — LIVE (navegación desde v1; no enlazados desde v2 aún)
-- `portfolio/index.html` — galería por eras — LIVE
-- `cv/diego-maury-cv.pdf` — CV 2026
-- Dominio `diegomaury.mx` con HTTPS activo
-
-### Portfolio Upgrade v2 — Phase 1 COMPLETA (LIVE 2026-06-14)
-Plan completo en Notion: "Plan de Acción — Portfolio Upgrade v2 (2026-06-13)"
-
-Phase 1 (LIVE):
-- Sección "Trinchera" — post-mortem HEINEKEN Green Challenge (3 fallos documentados); 2do caso "en preparación"
-- Sección "Fraccional" — 3 modelos (Retainer mensual, Proyecto acotado, Asesoría estratégica) **sin rangos de precio**
-- Tarjetas RODI — formato financiero en tarjetas de proyectos
-- `llms.txt` y `llms-full.txt` publicados en raíz
-
-Pendiente Phase 1:
-- 2do post-mortem en Trinchera (por definir)
-
-Pendiente Phase 2 (semana siguiente):
-- Railway backend + Supabase pgvector + Claude API → chatbot RAG
-- Widget chatbot en index.html
-
-## Arquitectura futura — Astro (scaffold montado 2026-07-19, NO desplegado)
-
-> **Estado actual (2026-07-19, commit `d6465f0`):** el scaffold de Astro **ya está montado en la raíz del repo** (subproyecto Diego CMS). `astro build` corre OK. **Pero el sitio LIVE sigue siendo el HTML estático de la raíz** — Astro construye a `dist/` y NO se despliega: GitHub Actions se conecta en una tarea posterior de la cadena Diego CMS. El HTML LIVE (`index.html`, `portfolio/`, `cases/`, `assets/`, `cv/`) queda intacto como referencia de paridad hasta el cutover. No confundir el scaffold con el sitio en producción. La migración se ejecuta tarea por tarea vía la cadena "Diego CMS" en Notion (Tareas y Misiones), no de golpe.
-
-Fuente original de la decisión: `CHANGELOG.md` [v0.1.0] — 2026-06-27.
-
-- **Framework decidido:** Astro (Islands Architecture, output HTML estático, MDX, compatible con GitHub Pages, zero-JS por defecto).
-- **Content strategy:** Astro Content Collections — el contenido vivirá en `src/content/`, nunca dentro de los archivos de página. Los schemas Zod ya existen en `src/content/config.ts` (colecciones: `cases`, `projects`, `playbooks`, `insights`, `services`). **Nota (2026-07-19):** el schema `cases` de `config.ts` es aspiracional y NO coincide con las propiedades reales de la base Notion — el mapeo correcto (y de las 3 fuentes CMS) está en `docs/platform/notion-astro-contract.md`. Los docs de cada colección se renombraron `README.md → _README.md` para que Astro los ignore (el prefijo `_` excluye del build de contenido). El scaffold usa **Astro v4.16** a propósito, para honrar `config.ts` (`Requires: astro@^4.0.0`) sin tocarlo; migrar a v5 + actualizar `config.ts` es alcance de la tarea "CMS: validar contenido con Zod".
-- **Deploy futuro:** GitHub Pages seguirá sirviendo desde `master`, pero GitHub Actions correrá `astro build` → `/dist` (pendiente, tarea "CMS: configurar GitHub Actions y deploy automático"). El workflow de CI debe usar `npm ci --omit=dev` para no instalar puppeteer/Chromium (es devDependency solo para QA local).
-- **Design System:** consolidado antes de lo planeado — la unificación DS v2/DS v3 prevista para Sprint 2 se ejecutó el 2026-07-19 (ver "Design system unificado" arriba). El Sprint 2 futuro hereda un solo sistema de tokens ya vigente, no parte de cero.
-- **Documentación de convenciones ya escrita** (vinculante desde Sprint 1, sin efecto hoy): `docs/platform/conventions.md` (naming, estructura de carpetas Astro, convención MDX/frontmatter, convención de assets) y `docs/platform/seo-model.md` (metadata, Open Graph, JSON-LD, sitemap vía `@astrojs/sitemap`).
-- **Roles del proceso:** Diego Maury (Product Owner), ChatGPT (Product Strategist & UX Director), Silvia/Notion (Product Manager), Claude Code (Lead Software Engineer).
-- **Roadmap (según CHANGELOG):** Sprint 0 (Product Foundation, pendiente de PRD) → Sprint 0.5 (Domain & Content Architecture, **en progreso** — deliverables ya completados: CHANGELOG.md, schemas, docs de convenciones y SEO) → Sprint 1 (Astro Setup, bloqueado hasta aprobar Sprint 0) → Sprint 2 (Design System) → Sprint 3 (Home) → Sprint 4 (Páginas internas) → Sprint 5 (Optimización, incluye implementación real del modelo SEO).
-- **Regla operativa (actualizada 2026-07-19):** el gate original decía que ningún trabajo Astro empezaba sin aprobar Sprint 0. Diego lo **anuló explícitamente** al crear y dirigir la cadena de tareas "Diego CMS" en Notion, que ejecuta la migración a Astro paso a paso (confirmado vía AskUserQuestion el 2026-07-19: "montar Astro en la raíz ahora"). La migración avanza por esa cadena de tareas, una a la vez, no por el roadmap de sprints. El scaffold ya está montado (ver bloque de estado arriba).
-
-## CMS Notion del portafolio — Fases A0+A1+B1 CERRADAS (2026-07-11)
-
-Documentación completa: `docs/platform/cms-notion.md`. Resumen:
-
-- **A0:** no existe pipeline Notion → sitio. Las propiedades `TD:*` eran residuo de un intento viejo (vacías en las 27 fichas) y se borraron. El sitio LIVE sigue siendo HTML editado a mano.
-- **A1:** la base Notion `🗂️ SSOT - Portafolio Proyectos` (data source `88257bc9-e575-45e8-90df-f851f96e92f2`, 27 fichas) es ahora el CMS: 10 propiedades nuevas (`Estado publicación`, `Publicable`, `Capa`, `Canales`, `Capacidades`, `Métrica ancla`, `Organización`, `Tipo`, `Evidencia`, `Caso maestro`), 5 propiedades legacy deprecadas con prefijo `[DEPRECADO]` y 5 vistas.
-- **B1:** los 15 casos publicables están escritos con la plantilla v2 en el cuerpo de su ficha, con bloque de evidencia ✔/✖ por afirmación. **Clasificación: 4 Insignia (SOFI, HEINEKEN Green Challenge, HackSureste, REDUX) / 11 Soporte / 12 Archivo.** Todas en `Draft` y `Publicable = No`.
-- **A2 (front end):** el prototipo lo construye Diego en Claude Design. Brief de handoff en Notion `39a0fe3c51c581ba821ff977fb5946a4`.
-- **Regla operativa:** nada pasa a `Estado publicación = Publicado` desde este proyecto. Publicar es decisión de Diego, y exige `Evidencia` + `Métrica ancla` verificadas. **No inventar cifras:** toda afirmación cuantitativa lleva artefacto o un ✖ explícito.
-- **Cifras muertas, no resucitar:** el 9,905 NO es de HEINEKEN y no aparece en ninguna fuente documental. Las bolsas de premio de $80,000 (B-Challenge) y $120,000 (INC Prototype) no tienen respaldo. REDUX no son "200+ capacitados" sino 400+ solo en 2020 (Informe Anual 2020 del Tec). Tampoco resucitar las "5 ediciones" ni los "32 estados" de REDUX, ni el "36 registros" del sureste (la línea base documentada son **35 propuestas** el año previo a 2019, La Jornada Maya). BTEM es **Beca Talento Emprendedor**, no "Blockchain Tec de Monterrey".
-- **La capa decide si falta evidencia bloquea:** solo las fichas **Insignia** necesitan `Métrica ancla` + `Evidencia` verificadas para publicarse. Una ficha **Soporte** puede vivir sin métrica ancla (FreeLand declara "Sin cifras registradas" y eso es correcto: el problema sería fingir que la tiene). No reportar una ficha de Soporte como pendiente que bloquea el gate. El gate hoy son dos insumos: la cifra final del sureste y la captura del directorio de metodologías del Tec.
-- **Gotcha:** la propiedad `Objetivo con métrica y timeframe ` lleva un espacio al final de su nombre real.
-- El mapeo Notion → Zod (`src/content/config.ts`) es **diseño TO-BE del Sprint 1**. Hoy no hay sincronización.
-
-### Nota de diseño: nav scrollToSection
-La función de scroll se llama `scrollToSection` (no `scrollTo` — conflicto con `window.scrollTo`).
-
-## Auditoría integral del portafolio — remediación en curso (iniciada 2026-07-12)
-
-Corpus fuente: `C:\Users\DiegoLocal\Downloads\auditoria\` (5 partes de auditoría + Evidence Register + matriz de remediación REM-001–020, no versionado en este repo). Rol de Claude: Strategic Evidence & Portfolio Remediation Partner — evalúa cada REM con criterio propio, no las ejecuta "tal como fueron redactadas". Autorización explícita de Diego requerida por cambio, uno a la vez.
-
-**Regla operativa aprendida en esta sesión:** que dos superficies coincidan (p. ej. `index.html` y `llms-full.txt`) NO prueba que un claim sea correcto — ambas pueden compartir la misma estimación propia sin reconstruir. El estándar por claim público es: entidad, programa/edición, población, unidad, fuente o grado de evidencia. Si no se cumple, el claim se **retira sin nota que reconozca la inconsistencia** (una nota tipo "cifra agregada, desglose no reconstruido" expone el problema sin resolverlo — no se publica).
-
-**Estado por REM (2026-07-12):**
-- **REM-003 (HEINEKEN/INCmty):** hecho. `portfolio/heineken.html` — retirados 9,905, 900+/3,231 y #1 nacional (sin fuente reconciliable); +600% revisado con unidad/periodo/baseline/grado explícitos; nueva sección "Mecanismos de intervención" separa mecanismo de resultado.
-- **REM-004 (FlipHouse → SOFI):** hecho. `cases/fliphouse.html` retirado como case study vigente → stub `noindex,follow` hacia SOFI. Limpieza en cascada: `sitemap.xml`, `portfolio/index.html` (bloque ERA 04 completo + ítem de índice lateral), footer de `portfolio/heineken.html`.
-- **REM-005 (REDUX/INCmty/HackSureste):** **cerrado sin cambios por decisión explícita de Diego** ("déjalos"). `portfolio/redux-incmty.html` conserva 3,000+ (atribuido a INCmty aunque `llms-full.txt` lo asigna a HackSureste), &gt;$4M, 12 convocatorias, 200+/1,000+ sin reconciliar. **No volver a cuestionar esta decisión ni la separación de las tres entidades — ya está establecida.**
-- **REM-007 (absolutos no demostrados):** hecho. `index.html` (2), `portfolio/sofi.html` (1), `portfolio/innovation-systems.html` (2) — "funciona sin mí" → "diseñado para que el equipo lo opere"; alucinación FSM ya no implica content-safety; "en producción" y "cualquier vertical" retirados sin artefacto.
-- **REM-013 (reencuadrar RODI +1,291%): cerrado 2026-07-17.** Ya cumplido en `portfolio/sofi.html` desde su build original (modelado, cost-avoidance no ahorro realizado, sin auditoría externa, metodología a solicitud). Diego autorizó agregar el calificador en `index.html`: la mención en Selected Work (línea ~900) ahora lleva `data-metric="rodi-sofi"` y el texto "modelado (cost avoidance)" junto al valor. `node tools/verify-metrics.js` confirma 0 advertencias para `rodi-sofi` en `index.html`.
-- **REM-009 (retirar/reconvertir "Innovation Systems Builder"):** hecho, 2026-07-13. `portfolio/innovation-systems.html` reescrito de agregador de métricas de 3 entidades no relacionadas a ensayo de patrón transversal. Retirados: KPI grid del hero, las 3 tarjetas de métricas por subcaso, la sección "Resultados consolidados", la mención de VAPI/voice AI (podía leerse como arquitectura vigente), el enlace de footer a `redux-incmty.html` (era navegación preexistente pero seguía dirigiendo tráfico a un caso congelado) y `card-01.png` en og:image/twitter:image (posible tarjeta social con cifras retiradas, pendiente de revisión aparte). Único enlace de evidencia canónica en la página: SOFI, desde el subcaso FlipHouse. Anchor `../#trabajo` (no `#work`, legacy).
-- **REM-008 (contrato de evidencia por caso):** aprobado como **principio adaptado**, no el schema rígido de 10 bloques de SOFI. Regla mínima por tipo de claim (cuantitativo observado / estimación propia / modelo económico / cualitativo / post-handoff) — se aplica como criterio de validación en cambios futuros de cada caso, sin ejecución independiente. `redux-incmty.html` y `cases/fliphouse.html` quedan excluidos (congelado / ya no es caso vigente).
-- **Pendientes:** REM-001/002/006 (infraestructura semántica y role chronology), REM-010/011/012 (Bloque D, seniority — gate por evidencia real, no por trabajo), REM-014–020 (enforcement técnico). Fuera de REM: `llms-full.txt` "flagship" (DIFF-002, diferido por Diego); revisión del asset `card-01.png`.
-
-**Estado de git: remediación commiteada y desplegada.** Los commits `7f0b8d6` (REM-003/004/007) y `9d142fb` (REM-009) están en `master` y pushados a `origin/master` — el sitio LIVE ya publica la remediación. Registro en Notion: REM-003/004/007 con entradas del 2026-07-12; REM-009 con entrada del 2026-07-13 (creada el 2026-07-15).
-
-## Caso SOFI — `portfolio/sofi.html` (LIVE desde 2026-07-12, mergeado a `master`)
-
-Página de caso construida sobre el plan `docs/superpowers/plans/2026-07-11-artefactos-evidencia-sofi.md` y su spec. **LIVE y pública desde 2026-07-12:** `index, follow`, enlazada desde el work-item de FlipHouse en el index (`.work-case-link`) y dada de alta en el sitemap. Fue noindex y sin enlaces hasta que Diego aprobó publicarla.
-
-- **Los data files son generados, no se editan a mano.** `assets/data/sofi/sofi-fsm.js`, `sofi-conversation.js` y `sofi-metrics.js` se producen con `tools/portfolio-export/` **en el repo de SOFI** (`Fliphouse-whatsapp-agent`, rama `feat/portfolio-export`), no en este repo. Cada uno asigna a `window.SOFI_*` y se carga con `<script src>`: por eso la página abre igual con `file://` que en Pages, sin `fetch` ni CORS. Para regenerar: `node tools/portfolio-export/build-fsm.js <ruta-del-sitio>`, `capture-run.js` (necesita Docker + `OPENROUTER_API_KEY` viva) y `build-metrics.js`.
-- **El FSM no se dibuja.** Los 12 estados, los 3 terminales y el umbral 0.75 se extraen de `src/services/fsm.service.js` con un script. Si el código de SOFI cambia, se regenera el data file; no se toca el HTML.
-- **La conversación del simulador es una corrida real contra el sistema** (webhook con firma HMAC válida, modelo real, FSM real), con lead ficticio. **No hay ningún dato de FlipHouse en el repo, y no debe haberlo.** No se extrae nada de la Postgres de producción: se descartó por innecesario, no solo por riesgoso.
-- **Métrica de tests: 392, no la suite completa.** El conteo debe excluir `tests/portfolio-export/` (son tests del tooling de este portafolio, no del sistema SOFI). Con `npx jest` a secas saldrían 420 e inflaría la cobertura.
-- **La sección "Lo que no puedo probar" es estructural, no decorativa.** Las tres métricas de negocio siguen en ✖. El RODI de +1,291% **no está bajo NDA**: es un modelo propio (cost-avoidance modelado, sin auditoría externa). Presentarlo como bloqueado por NDA lo haría sonar más sólido de lo que es.
-- El video de `/brag` es **pieza de presentación, no evidencia**. El hueco existe en el hero y solo se renderiza si el archivo aparece.
-- Pendiente/candidato: el dashboard `app.html` de SOFI es un artefacto publicable que la spec dejó fuera a propósito (tiene un bug conocido de mensajes duplicados).
-
-## Registro en Notion — Portafolio D (SSOT de cambios del sitio)
-
-Fuente: página Notion `Instrucciones para Claude Code — Portafolio D (Notion MCP)` (`8b47026a4a8243ba90431c0424338d14`). Schemas verificados contra Notion el 2026-07-12.
-
-### Regla de oro
-
-- El registro canónico de cambios del sitio es la base **📝 Changelog — Portafolio D** (tab "Registro de versiones" del hub Portafolio D).
-- El `CHANGELOG.md` del repo es **espejo técnico, no fuente**. Si actualizas el repo, la entrada en Notion es obligatoria; el archivo es opcional.
-- **No crear páginas sueltas** de changelog ni de documentación fuera de las bases listadas abajo.
-- No inventar nombres de propiedades, opciones ni relaciones. Usar exactamente los que están aquí.
-
-### Qué se registra
-
-| Situación | ¿Entrada en Changelog? |
-|-----------|------------------------|
-| Cambio publicado en producción (copy, datos, diseño, estructura, SEO/llms, infraestructura) | Sí |
-| Corrección de datos o evidencia (cifras, métricas, claims) | Sí, indicando el respaldo documental usado |
-| Cambio de documentación del proyecto | Sí, con Componente `Documentación` |
-| **Lección aprendida** (creencia técnica de Claude corregida por Diego o por evidencia) | Sí, con Componente `Lecciones Aprendidas`, Sección `General` |
-| Trabajo menor sin publicar (borradores, experimentos locales) | No; se refleja en su tarea de Tareas y Misiones |
-| **Ajuste puramente dentro de Notion** (corregir un SSOT, resolver conflicto de copy entre páginas, actualizar una propiedad), sin tocar el repo | **No** |
-
-**Umbral canónico (Diego, 2026-07-19, tiene precedencia sobre la tabla):** solo se crea entrada en el Changelog — Portafolio D si hubo un **cambio significativo en el código o la estructura del proyecto** (el repo/sitio). Un ajuste que vive 100% dentro de Notion cierra su tarea (Estado + Resumen) pero NO genera changelog, aunque sea una corrección de datos/evidencia. La tabla de arriba es la guía general (más laxa); este umbral la acota. Ante la duda, preguntar a Diego antes de crear la entrada. Ver `~/.claude/memory/lessons-learned.md` (2026-07-19) y la memoria `feedback-changelog-solo-cambios-significativos`.
-
-Las lecciones aprendidas se registran en `~/.claude/memory/lessons-learned.md` (local, para Claude). El registro en el Changelog de Notion con Componente `Lecciones Aprendidas` aplica solo cuando la lección acompaña a un cambio de código/estructura ya registrable; una lección de proceso suelta no genera changelog por sí sola (mismo umbral de arriba).
-
-**Granularidad: un commit registrable = una entrada = una tarea.** No agrupar varios commits en una sola entrada, por pequeños que sean, ni "aprovechar" una entrada existente porque el cambio es parecido o del mismo día. Si el commit cae en la tabla de arriba, tiene su propia entrada y su propia tarea. Los commits que no caen en la tabla (refactors internos, experimentos, WIP) no generan nada.
-
-### Base 📝 Changelog — Portafolio D
-
-- Database: `b998e8e4664a45ae89f0f349876cec4b` · data source: `collection://652b68c7-9cf5-441c-957c-f18b055db8b8`
-- Propiedades (nombres reales):
-  - **Cambio** (title) — título corto tipo commit, ej. `Fix: cifras del hero alineadas a evidencia`
-  - **Fecha** (date) — fecha de publicación, `YYYY-MM-DD`
-  - **Componente** (select, una): `Copy` · `Datos y evidencia` · `Diseño` · `Estructura` · `SEO / llms` · `Infraestructura` · `Documentación` · `Lecciones Aprendidas`
-  - **Sección** (multi-select, una o varias): `Hero` · `Casos` · `Servicios` · `About` · `Testimonios` · `Editorial` · `Contacto` · `llms.txt` · `General`
-  - **Razón** (text) — por qué se hizo, 1-2 líneas
-  - **Impacto** (text) — efecto en el sitio o el posicionamiento, 1-2 líneas
-  - **Tareas y Misiones** (relation) — tarea que originó o dará seguimiento al cambio
-- En el cuerpo de la fila (opcional): archivos tocados, antes/después del copy, fuentes de evidencia, enlaces a commits.
-
-### Seguimiento en Tareas y Misiones
-
-**TODA ENTRADA DE CHANGELOG AMERITA CREAR UNA TAREA, pero no toda tarea creada amerita un Changelog.** La relación es unidireccional:
-
-- Changelog → tarea: **siempre**. No hay entrada sin su tarea propia en **Tareas y Misiones** (`3190fe3c51c58002a2f5da54caac485a` · `collection://3190fe3c-51c5-8074-a302-000b97e8a410`). Sin excepciones, aunque el cambio ya esté hecho y aunque exista una tarea parecida.
-- Tarea → changelog: **solo si el trabajo cae en la tabla de arriba**. Una tarea de exploración, de borrador o de decisión pendiente vive sola, sin entrada en el changelog. No inflar el changelog con trabajo que no se publicó.
-
-Crear la tarea con:
-
-- **Nombre de tarea**: `Documentar cambio: <título del cambio>`
-- **Estado**: `Por empezar`, o el que refleje la realidad (ver abajo)
-- **Prioridad**: `Media` por defecto
-- **Proyectos, Ideas y Locuras de Diego**: vincular a la página `Portafolio D` (`2db0fe3c51c5805dabc7d220b38ce405`)
-- **Resumen**: qué falta documentar o verificar del cambio
-
-Luego vincularla desde la propiedad `Tareas y Misiones` de la entrada del changelog.
-
-**Cardinalidad: una entrada puede tener varias tareas, pero una tarea no puede tener varios changelogs.**
-
-- Una entrada del changelog puede vincular **varias** tareas relacionadas, además de la suya propia.
-- Una tarea pertenece a **una sola** entrada del changelog. Antes de vincular una tarea preexistente, verificar que su propiedad `Changelog — Portafolio D` esté vacía. **Si ya tiene una entrada, no reutilizarla:** dejarla donde está y crear la tarea nueva de esta entrada.
-- Regla práctica: la tarea propia siempre es nueva. Las tareas preexistentes solo se enganchan si están huérfanas de changelog.
-
-**Cerrar la tarea es parte del trabajo, no un extra.** El `Estado` refleja la realidad, no la intención:
-
-- Si el trabajo de la tarea quedó terminado en la misma sesión → `Estado = Terminada`. No dejar tareas en `Por empezar` cuando ya están hechas.
-- Si quedó a medias → `En proceso`, con el `Resumen` diciendo qué falta.
-- Si depende de una decisión de Diego o de un tercero → `Bloqueada`, diciendo de qué depende.
-- Estados válidos: `Por empezar` · `En proceso` · `Bloqueada` · `Terminada` · `Archivada`.
-
-### Documentación del proyecto
-
-- Vive en la base **📁 Product Requirements Document - Portfolio** (tab "Documentación" del hub, `3190fe3c51c580f4a46bf9786c3b79f9` · `collection://3190fe3c-51c5-8005-aefb-000b5d0eff53`). Nunca como páginas sueltas de nivel superior ni como subpáginas de tareas.
-- Propiedades: **Nombre** (title) · **Tipo** (`Volumen`, `Proyecto`, `Caso de estudio`, `Página`, `Recurso`) · **Fase** (`Diagnóstico`, `Copy`, `Ejecución`, `Optimización`, `Referencia`) · **Estado** (`To do`, `En progreso`, `Hecho`) · **Fecha** · **Resumen** · **Link** · **Prioridad** (número).
-- Antes de publicar copy o datos, verificar contra los SSOT: SSOT - Identidad, SSOT - Portafolio, y los Canónicos (Canónico - CV Maestro, Canónico - Copy LinkedIn, en la Diego Maury WIKI). **Los claims sin respaldo documental no se publican.**
-- Si una versión nueva reemplaza un documento, la anterior se archiva o se marca obsoleta. Nunca deben coexistir dos versiones vigentes.
-
-### Registro de aprendizajes (memoria)
-
-Cada vez que se aprende algo nuevo que no es derivable del código ni del historial de git, se registra **en el momento**, no al final:
-
-- **Memoria del proyecto** — `~/.claude/projects/C--Users-DiegoLocal-Documents-Claude-Projects-Claude-Code-newlandingpage/memory/`: un archivo por hecho, con frontmatter (`name`, `description`, `metadata.type` = `user` | `feedback` | `project` | `reference`), más una línea de índice en `MEMORY.md` (`- [Título](archivo.md) — gancho`). Antes de crear, revisar si ya existe un archivo que cubra el hecho y actualizarlo en vez de duplicar. Si un aprendizaje resulta falso, borrar el archivo.
-- **Invariante del proyecto** (comportamiento del sistema, restricción técnica, convención) → va al `CLAUDE.md` de este repo, no a memoria.
-- **Creencia técnica corregida** (Claude asumió algo, Diego o la evidencia lo desmintió) → entrada en `~/.claude/memory/lessons-learned.md` con el formato del protocolo de cierre (creencia incorrecta / corrección / fuente / contexto) **y** entrada en el Changelog de Notion con Componente `Lecciones Aprendidas` y Sección `General`.
-- **Cifras y claims** — todo aprendizaje sobre datos del portafolio se valida contra los SSOT antes de guardarse. Las cifras muertas listadas arriba (9,905 como HEINEKEN, bolsas de $80,000 y $120,000, "200+ capacitados" de REDUX) no se resucitan en memoria ni en el sitio.
-
-### Al cerrar sesión (`/close-session`)
-
-El paso 5 del protocolo (`~/.claude/commands/close-session.md`) es "Notion — Inbox", que **no aplica a este proyecto** (ese flujo es de SOFI). En este repo, el cierre corre así:
-
-1. **Lecciones aprendidas** → `~/.claude/memory/lessons-learned.md` si hubo una creencia técnica corregida.
-2. **CLAUDE.md** → agregar los invariantes nuevos descubiertos en la sesión.
-3. **Memoria del proyecto** → crear o actualizar los archivos en `memory/` + su línea en `MEMORY.md`.
-4. **Notion** → para cada uno de estos casos de la sesión (cambio publicado en producción, corrección de datos/evidencia, cambio de documentación, **o lección aprendida del paso 1**): crear su **tarea propia nueva** en Tareas y Misiones, crear la entrada en el **Changelog — Portafolio D** con las propiedades exactas de arriba, y vincularlas. Nunca reciclar una tarea existente como la tarea de la entrada. Si no hubo ninguno de esos casos, omitir y decirlo en el resumen.
-5. **Barrido de pendientes** → ningún pendiente sobrevive fuera del sistema, aunque no amerite entrada de changelog. Listar todos los pendientes y pasos a seguir identificados en la sesión; clasificar cada uno: si ya existe tarea relacionada, actualizar su `Estado` y `Resumen` (nunca dejarla desactualizada); si no existe, crear una nueva en **Tareas y Misiones** con nombre accionable, `Estado` real (`Por empezar` o `Bloqueada`), `Prioridad` `Media` por defecto, **Portafolio D** asignado como proyecto en **Proyectos, Ideas y Locuras de Diego**, y `Resumen` con contexto suficiente para retomar sin releer la sesión. Buscar por título exacto antes de crear (anti-duplicados). Umbral: solo pendientes que requieren acción futura real; lo que se resuelve en menos de 2 minutos se resuelve en la sesión y no se registra. El resumen final debe mapear cada pendiente a su tarea (con link) — si un pendiente no tiene tarea, la sesión no está cerrada.
-6. **Estado de las tareas** → actualizar el `Estado` de toda tarea que se haya trabajado en la sesión. Terminada es `Terminada`, no `Por empezar`.
-7. **Resumen al usuario** → qué se registró en cada uno de los destinos.
-
-Buscar en Notion por **título exacto**, workspace **Notion de Diego**.
-
-## SSOT de Métricas — SOP de publicación (desde 2026-07-16)
-
-Spec: `docs/superpowers/specs/2026-07-15-ssot-metricas-design.md`. Base maestra: **📊 Métricas oficiales — Portafolio D** en Notion (data source `collection://213ea2d0-bffc-41b9-9877-92132551461c`, bajo el hub Portafolio D). Espejo: `assets/data/metrics.json` (generado desde la base, no editar a mano sin sincronizar con Notion).
-
-Toda publicación que toque métricas o copy con métricas sigue este orden, sin excepciones:
-
-1. Sincronizar Notion → `assets/data/metrics.json`
-2. Resolver placeholders `{{metrica:slug}}` si se ejecuta una maqueta
-3. `node tools/verify-metrics.js`
-4. Corregir discrepancias hasta exit 0
-5. Commit
-6. Push
-7. Entrada en el Changelog — Portafolio D
-
-Reglas: una métrica nueva se da de alta primero en la base Notion (nunca directo en el JSON); las cifras muertas viven en la base como `Retirada` y el verificador las acusa; los borradores pueden llevar cifras literales, lo publicable no. **Sesión 2 cerrada (2026-07-17):** 11 métricas en la base (10 seed + `sofi-leads-campana`); `index.html`, `portfolio/heineken.html` y `portfolio/sofi.html` marcados con `data-metric` (`portfolio/redux-incmty.html` e `innovation-systems.html` quedan sin marcar a propósito, ver más abajo); `llms.txt`/`llms-full.txt` ya no solo escanean la lista negra de Retiradas — `verifyText` valida match completo contra `metrics.json` vía `huerfanasEnTexto`. La Maqueta Sitio v2 en Notion (`2e0bbf20-7ead-49e8-812c-34032cfda454`) ya usa placeholders `{{metrica:slug}}`. Tests del verificador: `node --test tools/verify-metrics.test.js` (23 tests).
-
-**`portfolio/redux-incmty.html` no se marca con `data-metric` — es intencional, no un pendiente.** La página está congelada por REM-005 (ver sección de auditoría abajo): sus cifras de "3,000+" atribuidas a INCmty no reconcilian con el slug `hacksureste-participantes` del SSOT (misma cifra, entidad distinta). Marcarla forzaría una atribución incorrecta. `portfolio/innovation-systems.html` tampoco se marca — sus "30%"/"100%" son datos operativos del cliente (crédito puente, calificación manual), no claims del SSOT de Diego.
-
-**`calificadorClaves` debe usar la raíz de la palabra, no la forma flexionada.** El chequeo de calificador es un substring (`ventana.includes(clave)`), no coincidencia de palabra completa. `"estimado"` como clave no matchea `"estimada"` (concordancia de género con el sustantivo, ej. "cifra final estimada") y el verificador bloquea con un error de calificador faltante aunque el calificador esté presente. Usar la raíz sin terminación (`"estimad"`) para que cubra ambos géneros y el plural.
-
-**`heineken-proyectos-evaluados` (3,231) — confirmada como dato real por decisión explícita de Diego (2026-07-17), no como hallazgo pendiente.** Estado `Vigente`/`Pública` en el SSOT, marcada con `data-metric` en `index.html` (métrica del hero + mención en Selected Work). REM-003 la retiró solo de `portfolio/heineken.html` por fuente no reconciliable; esa página no se toca. No volver a marcarla como hallazgo ni a cuestionar la decisión.
-
-## Multimedia y evidencia visual (desde 2026-07-17, commit `6017a60`)
-
-- Los assets viven en `assets/img/cases/` (banners+logos de HGC/REDUX/HackSureste), `assets/img/evidencia/` (11 capturas: informes del Tec, La Jornada Maya, playlists, Talent Land) y `assets/img/logos/`.
-- **Integrado en LIVE:** galería "Evidencia" en `portfolio/heineken.html` (5 artefactos con grado declarado: fuente publicada / registro propio) + banner en su hero; banners fotográficos en Selected Work del `index.html` (HEINEKEN y HackSureste; FlipHouse conserva logo, no tiene banner publicable); banner+logo por era y galería de artefactos en `portfolio/` (BTEM y Talent Land excluidos por regla de coincidencia de entidad; nada de FlipHouse por REM-004); logo FlipHouse y hover states en `portfolio/sofi.html`; solo CSS decorativo en `innovation-systems.html` (REM-009).
-- **Regla de las tarjetas de evidencia: cero cifras nuevas en captions/alt.** Las cifras de los artefactos (3,975, 562, 2,400...) NO están en el SSOT de métricas; describir el artefacto sin números. Darlas de alta en Notion primero si algún día se quieren en texto.
-- Gotcha de DS: `.bg-pattern` de styles.css trae `pointer-events: none`; si una sección lo usa directo (como en sofi.html), hay que devolverle `pointer-events: auto`.
-- `portfolio/heineken.html` ya no usa `card-01.png` como og:image (usa su banner). **Cerrado 2026-07-17:** `render_card.html`, `export_cards.js` y `exported_cards/` se eliminaron del repo por decisión de Diego; `index.html`, `backups/portfolio-v1-eras.html` y `redux-incmty.html` migraron su og:image/twitter:image/JSON-LD a `assets/img/diego-maury.png` (los dos primeros) y `assets/img/cases/redux-banner.jpg` (el segundo).
-
-## Maqueta Sitio v2 — ejecutada 2026-07-17. Congelamiento de 90 días ANULADO (mismo día)
-
-La página Notion "🧱 Maqueta Sitio v2 · Copy final" (`2e0bbf20-7ead-49e8-812c-34032cfda454`) se ejecutó en el sitio LIVE: commits `8df92fd` (H1 canónico "Transformo ambición en sistemas que funcionan", subheadline nuevo, hero con exactamente 3 métricas ancla — RODI +1,291% modelado / 10+ años / 9,905 —, autopsias como titular-lección "Lección 01/02/03" con clase `.lesson-t`) y `6fc87ce` (retiro del "~40% menos carga de evaluación" de Lección 03 por decisión de Diego: no estaba en el SSOT de métricas y decidió retirarlo en vez de darlo de alta — no resucitar). El titular de Lección 02 ("Sin referentes, la respuesta no se adivina. Se itera.") fue aprobado explícitamente por Diego el 2026-07-17. 3,231 / +600% / +500% siguen viviendo en Selected Work, ya no en el hero. QA visual verificado con puppeteer (hero 1440, sección evidencia, hero 375). Sus checkboxes en Notion ya están marcados; el as-built completo vive en la página Notion "Sitemap as-built — diegomaury.mx (2026-07-17)" (base Documentación del hub).
-
-**El congelamiento de 90 días declarado al cerrar la maqueta NO está vigente.** Diego lo anuló el mismo 2026-07-17: la premisa del congelamiento era un cierre bien ejecutado, y Diego calificó la ejecución como mala ("lo hiciste pésimo"). No bloquear cambios de copy/estructura del index citando este congelamiento. Cambios al index se rigen por las reglas normales del proyecto (verificar contra SSOT, no inventar cifras, confirmar decisiones de diseño con Diego cuando aplique), no por una ventana de tiempo fija.
-
-**Gotcha de tooling:** puppeteer está instalado en `node_modules/` del repo (git-ignorado). **Actualización 2026-07-19:** ya existe un `package.json` (recreado para el scaffold de Astro, autorizado por Diego — el aviso anterior de "no recrearlo sin preguntar" quedó obsoleto). puppeteer es ahora una `devDependency` en ese `package.json` para que sobreviva a `npm install` (antes lo podaba por ser extraneous). No uses `npm ci` en local sin `--omit=dev` si quieres conservar puppeteer sin re-descargar Chromium. Los scripts que hagan `require('puppeteer')` deben correr desde la raíz del repo: si el script vive en el scratchpad, `require()` no resuelve `node_modules` (busca desde el directorio del script, no el cwd) y falla con MODULE_NOT_FOUND aunque el paquete exista.
-
-## Red de interconexión total — LIVE desde 2026-07-18 (commit `e5237cf`)
-
-A petición explícita de Diego ("quiero que todo sea una red"), la navegación entre páginas dejó de ser una cadena/hub-and-spoke parcial y ahora es un grafo completo: los 4 casos (`heineken.html`, `redux-incmty.html`, `innovation-systems.html`, `sofi.html`) se enlazan entre sí vía `case-nav-footer` (antes SOFI no tenía footer de navegación y era un callejón sin salida); `portfolio/index.html` (SPA hash-routed) agrega un CTA real "Ver caso completo" en cada vista de detalle vía la constante `CASE_PAGES` (mapea slug → ruta relativa `../cases/*.html`); `index.html` enlaza a HEINEKEN, REDUX+INCmty y al portfolio completo desde el footer.
-
-**Bug de producción corregido en el mismo commit:** el anchor `../#work` usado en navs y hero-back de las 4 páginas de caso apuntaba a un id que nunca existió en `index.html` (el id real de la sección Selected Work es `id="trabajo"`, no `id="work"`). Verificado con `grep -rn '#work' cases/` devolviendo cero resultados tras el fix.
-
-**`.case-nav-footer`/`.case-divider` se definen localmente por página**, no en `assets/css/styles.css` compartido — cada caso (incluido `sofi.html`, que no las tenía) trae su propio bloque `<style>` con estas clases. Si se agrega un nuevo caso, hay que replicar ese CSS local, no asumir que viene del DS compartido.
-
-## Auditoría de consistencia fase 1 — ejecutada 2026-07-19 (commit `0b4d525`, LIVE)
-
-- **CTA de agendar canónico: Notion Calendar** (`https://calendar.notion.so/meet/diegomaurymx/5aad3vun`) en todo el sitio, por decisión de Diego. Calendly fue retirado de los 4 casos; solo sobrevive en backups y docs como registro histórico. No reintroducir Calendly.
-- Existe `404.html` en la raíz (noindex, estilo Ink+Ember, enlaces a inicio y portafolio). Los 3 backups servidos (`index-v1-backup`, `index-v2`, `portfolio-v1-eras`) llevan `noindex,nofollow`.
-- Los 4 casos y `portfolio/index.html` llevan favicon (`isotipo-gradient.png`); los case-nav-footer de los 4 casos incluyen "Portafolio completo →" (`../portfolio/`) y todos retornan a `../#trabajo`.
-- El footer del portfolio lleva Agendar, CV y la frase de marca; su title/og es "Portafolio · Diego Maury" (sin em dash).
-- `portfolio/portfolio.css` y `portfolio.js` ya no existen: se movieron a `backups/portfolio-v1-eras.{css,js}` (la SPA del portfolio es autocontenida y nunca los referenció).
-- **Falso positivo conocido: el "doble h1" del portfolio.** Los dos `<h1>` del fuente están en templates JS que se reemplazan vía `app.innerHTML`; el DOM solo tiene uno a la vez. No "corregirlo".
-- **89.5% de SOFI: publicado (2026-07-19).** El slug `sofi-cobertura-automatica` ya estaba `Vigente`/`Pública` en `assets/data/metrics.json` desde el 2026-07-17 y ya vivía en `index.html` (hero, Selected Work, IP Propia). Lo único que faltaba era `portfolio/sofi.html` — corregido: se agregó como párrafo en la sección "Ficha técnica" (89.5% de cobertura automática sobre 191 leads, 2025-2026, medición propia). `node tools/verify-metrics.js` da 0 errores.
-- Pospuesto a fases futuras: refactor de estilos inline (index 38, redux 14, innovation 9).
-
-## Auditoría de navegador fase 2 — ejecutada 2026-07-19 (commits `eeb0076`…`3d41b98`, LIVE)
-
-- **WCAG, focus, console errors: hecho.** 0 errores de consola en las 7 páginas del sitio. 0 fallas de contraste WCAG tras corregir 7 bugs reales: links sin clase en `index.html` (azul default del navegador), `.section-label` casi invisible en `cases/sofi.html` (ver lección 2026-07-19 en `lessons-learned.md`), CTA primario (`--ember` puro da 3.07:1 con texto blanco, falla AA), chip de fecha en redux/innovation (4.30:1). **LCP:** medido informalmente vía `PerformanceObserver` en `index.html` (~768ms) — no se corrió Lighthouse formal, queda pendiente si se quiere el número exacto.
-- **Design system unificado a V2 "Ember on Ink"** en las 9 páginas del sitio (antes: `index.html` en DS v2, casos+portfolio en DS v3). Ver sección "Design system unificado" arriba para las reglas y tokens. Dos bugs reales destapados en el proceso: `.btn--primary` (botón "Agendar" del nav) y `.footer__tricolor` usaban `var(--dm-amethyst-grad)`/`var(--dm-tricolor)`, variables que ya no existían tras retirar `colors_and_type.css` — renderizaban transparentes/rotos en producción, invisibles a simple vista porque el color de fondo del body es casi igual.
-- **Rename `cases/*.html` → `portfolio/*.html`** (los 4 casos), decisión de Diego. Patrón de redirect usado, **reutilizable para futuros renames**: GitHub Pages no soporta 301 server-side (hosting estático, sin `_redirects`/`.htaccess`). El equivalente más fuerte disponible es `<meta name="robots" content="noindex,follow">` + `<link rel="canonical" href="URL_NUEVA">` + `<meta http-equiv="refresh" content="0; url=URL_NUEVA">` + `<script>location.replace('URL_NUEVA')</script>` en la ruta vieja. Los 4 archivos `cases/*.html` son ahora stubs de este tipo.
-- **`tools/verify-metrics.js` ahora escanea `portfolio/*.html` además de `cases/*.html`**, excluyendo explícitamente `portfolio/index.html` de `'Caso de estudio'` (es la SPA, no un caso). Esto destapó un hallazgo real preexistente en `portfolio/index.html`: el `data-metric="fliphouse-leads-crm"` en `evidenceRows` nunca se había verificado (el archivo no se escaneaba antes de hoy) y le faltaba el calificador "al CRM" — corregido.
-- **CHANGELOG.md corregido:** Sprint 0 tenía estado genérico "Pending" que no representaba el gate real de 8 entregables (PRD, IA, Sitemap definitivo, Navigation, User Journeys, Wireframes, Design Principles, Domain Model approval). El PRD se aprobó el 2026-07-20 (Notion, responsable Silvia) pero Sprint 1 sigue bloqueado hasta que los 8 estén aprobados por Diego — verificado contra el backlog real de Notion (`collection://2e64d20d-8cb2-43b4-9cb8-b83efdae288c`): las 8 filas ya existían, no hizo falta crear ninguna.
-
-## Idioma de respuestas
-
-Responder siempre en español.
+5. Logo de marca: `assets/img/isotipo-ember.svg` en todo nav/footer. `isotipodm.svg` solo como textura de fondo `.bg-pattern` (opacidad 0.02–0.03) — no modificar ese patrón.
+
+Gotchas y excepciones del DS:
+- `.case-nav-footer`/`.case-divider` son CSS local por página de caso (deliberado, no viven en `styles.css`). Caso nuevo = replicar ese bloque local.
+- `.bg-pattern` trae `pointer-events: none`; devolver `auto` si una sección lo usa directo.
+- El "doble h1" del portfolio es falso positivo (templates JS vía `innerHTML`) — no "corregirlo".
+- La función de scroll del nav es `scrollToSection` (no `scrollTo`).
+- Mobile-first (375/768/1280) · JS < 80 KB gzip · CSS < 15 KB · animar solo `transform`/`opacity` · respetar `prefers-reduced-motion`.
+
+### Copy y voz
+- Primera persona + tuteo según el Writing DNA (página Notion "Estilo y voz", fuente canónica). Filo = postura + contraste "No es X. Es Y", no sarcasmo. Sin em dash en contenido.
+- Plantilla de caso: Contexto → Problema → Objetivo (métrica+timeframe) → Mi rol → Acciones → Resultados → Evidencia → Aprendizajes. Logro = Verbo + qué + cómo + impacto + timeframe.
+- Testimonios (Senja): pendiente de activar; solo fuentes verificables.
+
+### Métricas y evidencia
+- No inventar cifras. Toda afirmación cuantitativa lleva artefacto o un ✖ explícito. Claims sin respaldo documental no se publican.
+- SSOT: base "📊 Métricas oficiales — Portafolio D" en Notion. Espejo generado: `assets/data/metrics.json` — no editar a mano. Métrica nueva se da de alta primero en Notion, nunca directo en el JSON.
+- SOP de publicación con métricas, sin excepciones: sincronizar Notion → `metrics.json` → resolver placeholders `{{metrica:slug}}` → `node tools/verify-metrics.js` → corregir hasta exit 0 → commit → push → entrada en Changelog.
+- Estándar por claim público: entidad + programa/edición + población + unidad + fuente o grado de evidencia (published = tercero nombrado / own = registros o estimación propia; nada está auditado). Si no se cumple, el claim se retira sin nota que reconozca la inconsistencia.
+- Que dos superficies coincidan NO prueba un claim: pueden compartir la misma estimación sin reconstruir.
+- `calificadorClaves` usa raíz de palabra (ej. "estimad"): el chequeo es substring, no palabra completa.
+- Cero cifras nuevas en captions/alt de evidencia visual: si no está en el SSOT, no va en texto.
+- Los borradores pueden llevar cifras literales; lo publicable no.
+
+Cifras — entrada canónica única (no resucitar):
+
+| Cifra | Estado canónico |
+|---|---|
+| 9,905 | Viva SOLO como "participantes inscritos, agregado de programas INCmty (HGC incluido), estimado" — métrica ancla del hero. Muerta como cifra de HEINEKEN. |
+| Bolsas $80,000 (B-Challenge) y $120,000 (INC Prototype) | Muertas, sin respaldo. |
+| "200+ capacitados" REDUX | Muerta: son 400+ solo en 2020 (Informe Anual Tec). |
+| "5 ediciones" y "32 estados" de REDUX · "36 registros" del sureste | Muertas (línea base documentada: 35 propuestas, La Jornada Maya). |
+| 3,231 (`heineken-proyectos-evaluados`) | Vigente/Pública por decisión de Diego; vive en `index.html`, NO en `portfolio/heineken.html`. No recuestionar. |
+| BTEM | = Beca Talento Emprendedor (no "Blockchain Tec de Monterrey"). |
+
+Decisiones cerradas (no son pendientes; no recuestionar):
+- `portfolio/redux-incmty.html`: congelado por REM-005 ("déjalos"), sin `data-metric` a propósito y excluido del contrato de evidencia. La separación REDUX/INCmty/HackSureste ya está establecida.
+- `portfolio/innovation-systems.html`: sin `data-metric` (sus 30%/100% son datos operativos del cliente, no claims del SSOT).
+- El congelamiento de 90 días del index está ANULADO (Diego). Los cambios se rigen por las reglas normales, no por ventanas de tiempo.
+- Publicar (`Estado publicación = Publicado` en el CMS) es decisión exclusiva de Diego y exige, solo para fichas Insignia, `Métrica ancla` + `Evidencia` verificadas; una ficha Soporte puede vivir sin métrica ancla (no reportarla como bloqueo).
+
+### CMS Notion (sin pipeline hoy)
+- La base `🗂️ SSOT - Portafolio Proyectos` (data source `88257bc9-e575-45e8-90df-f851f96e92f2`) es el CMS del contenido de casos.
+- Gotcha: la propiedad `Objetivo con métrica y timeframe ` lleva un espacio al final de su nombre real.
+
+### Caso SOFI (`portfolio/sofi.html`)
+- Data files `assets/data/sofi/*.js` generados con `tools/portfolio-export/` EN el repo de SOFI — no editar a mano. Si SOFI cambia, se regenera el data file; no se toca el HTML.
+- El data file publica 12 estados, 3 terminales conversacionales y umbral 0.75; `ALL_TERMINAL_STATES` del repo SOFI exporta 5 (incluye `COMPLETE_YES`/`COMPLETE_NO` de flow completions). Son alcances distintos: no "corregir" uno con el otro.
+- Métrica de tests: 392 (excluye `tests/portfolio-export/`; `npx jest` a secas da 420 e infla la cobertura).
+- RODI +1,291% = modelo propio (cost-avoidance modelado, sin auditoría externa, NO está bajo NDA). La sección "Lo que no puedo probar" es estructural: no rellenarla.
+- Cero datos de FlipHouse en el repo, y no debe haberlos.
+- El video de `/brag` es pieza de presentación, no evidencia.
+
+### Navegación
+- CTA de agendar canónico: Notion Calendar (https://calendar.notion.so/meet/diegomaurymx/5aad3vun`). No reintroducir Calendly.
+- Los 4 casos se enlazan en grafo completo vía `case-nav-footer`; retorno a `../#trabajo` (el id real es `trabajo`, no `work`).
+- Enlaces internos nuevos apuntan a `portfolio/*.html`; `cases/*.html` son solo stubs. La constante `CASE_PAGES` de la SPA documentaba rutas `../cases/*.html` (funcionan solo vía redirect): al tocar ese archivo, verificar y apuntar directo a `portfolio/`.
+- Patrón de redirect para renames (GitHub Pages no soporta 301): `noindex,follow` + `canonical` + `meta refresh` + `location.replace`.
+
+## 5 · Workflow y registro
+
+### Registro en Notion — Portafolio D (SSOT de cambios)
+- Registro canónico: base "📝 Changelog — Portafolio D" (data source: collection://652b68c7-9cf5-441c-957c-f18b055db8b8). El `CHANGELOG.md` del repo es espejo técnico, no fuente. No crear páginas sueltas. No inventar nombres de propiedades.
+- Umbral único (tiene precedencia sobre cualquier guía anterior): entrada en el Changelog SOLO si hubo cambio significativo en el código o la estructura del repo/sitio. Un ajuste 100% dentro de Notion cierra su tarea (Estado + Resumen) pero NO genera changelog. Ante la duda, preguntar a Diego.
+- Granularidad: un commit registrable = una entrada = una tarea propia nueva.
+- Propiedades del Changelog: `Cambio` (title) · `Fecha` · `Componente` (Copy · Datos y evidencia · Diseño · Estructura · SEO / llms · Infraestructura · Documentación · Lecciones Aprendidas) · `Sección` (Hero · Casos · Servicios · About · Testimonios · Editorial · Contacto · llms.txt · General) · `Razón` · `Impacto` · `Tareas y Misiones` (relation).
+- Tareas y Misiones (collection://3190fe3c-51c5-8074-a302-000b97e8a410): nombre `Documentar cambio: <título>`, Prioridad `Media`, proyecto Portafolio D en `Proyectos, Ideas y Locuras de Diego`, Estado real (`Por empezar` · `En proceso` · `Bloqueada` · `Terminada` · `Archivada`). Cardinalidad: una entrada puede tener varias tareas; una tarea pertenece a un solo changelog (no reciclar tareas que ya tienen changelog).
+- Documentación del proyecto: base "📁 Product Requirements Document - Portfolio" (collection://3190fe3c-51c5-8005-aefb-000b5d0eff53). Una sola versión vigente por documento; la reemplazada se marca obsoleta. Verificar copy/datos contra SSOT - Identidad, SSOT - Portafolio y los Canónicos antes de publicar.
+- Buscar en Notion por título exacto, workspace "Notion de Diego".
+
+### Memoria y cierre de sesión (/close-session)
+- Filtro de invariantes (paso "CLAUDE.md"): fecha + commit + "ejecutado/cerrado" = Changelog de Notion, NO CLAUDE.md. A este archivo solo entran invariantes no derivables del código.
+- Lección aprendida (creencia técnica corregida) → `~/.claude/memory/lessons-learned.md`; genera changelog solo si acompaña un cambio registrable.
+- Memoria del proyecto → `~/.claude/projects/...newlandingpage/memory/` (un archivo por hecho + índice en `MEMORY.md`; actualizar antes que duplicar).
+- Barrido de pendientes: ningún pendiente sobrevive fuera de Tareas y Misiones (anti-duplicados por título exacto; lo de <2 min se resuelve en la sesión, no se registra). El resumen final mapea cada pendiente a su tarea.
+- El paso "Notion — Inbox" del protocolo global no aplica a este repo (es de SOFI).
+
+### Tooling
+- CI futuro (GitHub Actions + Astro): `npm ci --omit=dev` — puppeteer/Chromium no se instala en CI.
+- Local: puppeteer es devDependency para QA visual; los scripts con `require('puppeteer')` corren desde la raíz del repo (desde scratchpad fallan con MODULE_NOT_FOUND).
+
+## 6 · Fuentes de verdad
+
+| Tema | Fuente de verdad |
+|---|---|
+| Código | Git (`master`) |
+| Contenido / copy | SSOT de copy + Writing DNA "Estilo y voz" (Notion) |
+| Métricas | 📊 Métricas oficiales — Portafolio D (espejo: `assets/data/metrics.json`) |
+| Diseño | Tokens DS V2 "Ember on Ink" (`v2-tokens.css`) |
+| Historial de cambios | Changelog — Portafolio D (Notion); `CHANGELOG.md` = espejo técnico |
+| CMS y mapeo Notion↔Astro | `docs/platform/cms-notion.md` · `notion-astro-contract.md` |
+| Invariantes de comportamiento | Este archivo |
