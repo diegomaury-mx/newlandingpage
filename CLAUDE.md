@@ -83,6 +83,8 @@ Gotchas y excepciones del DS:
 - La función de scroll del nav es `scrollToSection` (no `scrollTo`).
 - Mobile-first (375/768/1280) · JS < 80 KB gzip · CSS < 15 KB · animar solo `transform`/`opacity` · respetar `prefers-reduced-motion`.
 
+Footer unificado (desde 2026-07-22): el sitio no tiene mecanismo de include (HTML estático puro) — unificar el footer significa replicar markup exacto en cada página, no crear un partial. Canónico: marca+isotipo, tagline "Hagamos que las cosas pasen.", nav (Home · Portfolio · Agendar) y links legales (Política de privacidad · Términos y condiciones), copyright. Clases reales en `assets/css/styles.css:813-850` (`.footer`, `.footer__brand`, `.footer__nav`, `.footer__legal`, `.footer__copy`) — únicas centralizadas, usadas por las 4 páginas de caso + `politicas-privacidad.html` + `terminos-y-condiciones.html`. `index.html` y `portfolio/index.html` son autocontenidos a propósito (no cargan `styles.css`): llevan su propio footer con clases locales (`.footer-*` / `.foot__*`) — no forzarles el stylesheet compartido, solo mantener el mismo set de links. Ruta del Agendar canónico en el footer: `https://calendar.notion.so/meet/diegomaurymx/5aad3vun`.
+
 ### Copy y voz
 - Primera persona + tuteo según el Writing DNA (página Notion "Estilo y voz", fuente canónica). Filo = postura + contraste "No es X. Es Y", no sarcasmo. Sin em dash en contenido.
 - Plantilla de caso: Contexto → Problema → Objetivo (métrica+timeframe) → Mi rol → Acciones → Resultados → Evidencia → Aprendizajes. Logro = Verbo + qué + cómo + impacto + timeframe.
