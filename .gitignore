@@ -3,6 +3,9 @@ node_modules/
 .DS_Store
 desktop.ini
 
+# Config local de editor (VS Code)
+.vscode/
+
 # Astro (scaffold de migracion Diego CMS)
 dist/
 .astro/
