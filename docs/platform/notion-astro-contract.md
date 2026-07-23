@@ -1,6 +1,6 @@
 # Contrato de datos Notion → Astro (Fase A1 / Diego CMS)
 
-**Estado:** diseño TO-BE, sin implementar. Ningún código de este contrato está activo — el sitio LIVE sigue siendo HTML editado a mano. Este documento fija qué construirá `src/services/notion-client` y qué validará `src/content/config.ts` en el Sprint 1.
+**Estado:** implementado en `src/content/config.ts` desde 2026-07-23 (`cases`/`metrics`/`siteCopy` con `loader:` real, validado con `astro build` contra Notion real). El sitio LIVE sigue siendo HTML editado a mano — este pipeline corre solo en el scaffold Astro (`dist/`, no desplegado). `organization` y `type` de `cases` quedaron **opcionales** pese a decir "requerido" abajo: 12/27 y 11/27 fichas reales aún no tienen esos campos llenos (contenido Draft/Archivo sin curar) y bloquear el build entero por eso no tenía sentido — solo la regla de Insignia+publicado (métrica ancla + evidencia) bloquea de verdad.
 
 **Fuentes cubiertas (las 3 confirmadas en Diego CMS, 2026-07-19):**
 
