@@ -47,6 +47,7 @@ Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: 
     ├── index-canonico.html · prototipo-portafolio.html   # PREVIEWS aislados: noindex, sin analítica, no enlazados
     ├── 404.html             # noindex
     ├── portfolio/           # SPA por eras (index.html) + los 4 casos LIVE: heineken · sofi · redux-incmty · innovation-systems
+    ├── version2/            # LIVE desde 2026-07-23, indexable a propósito. Home comparativo con copy de la maqueta Notion "Version nueva" (posicionamiento "Strategic Program Director" en el h1, no solo el label). Autocontenido como index.html (mismo <style> inline copiado + ajustado), sin enlace cruzado con index.html. Exento del gate de assets/data/metrics.json: 2 cifras propias ("+30" programas, "400+" emprendedores) NO tienen data-metric ni pasan por verify-metrics.js — decisión explícita de Diego, esta página no es el índice oficial.
     ├── cases/               # SOLO stubs de redirect (noindex,follow) → portfolio/*.html · fliphouse.html = transición a SOFI
     ├── assets/css/styles.css    # Tokens DS V2 + componentes (aliases --dm-* solo compatibilidad temporal)
     ├── assets/data/         # metrics.json (generado desde Notion) · sofi/* (generados en el repo de SOFI)
