@@ -43,11 +43,11 @@ Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: 
 ## 3 · Arquitectura (solo lo no-obvio)
 
     /                        # raíz de master = sitio LIVE
-    ├── index.html           # Home LIVE
+    ├── index.html           # Home LIVE oficial desde 2026-07-23: contenido migrado de version2/ (posicionamiento "Strategic Program Director"). Exento del gate de assets/data/metrics.json: 2 cifras propias ("30+" programas, "400+" emprendedores) NO tienen data-metric ni pasan por verify-metrics.js — excepción heredada de version2, decisión explícita de Diego, vigente aunque ahora sea el índice oficial.
     ├── index-canonico.html · prototipo-portafolio.html   # PREVIEWS aislados: noindex, sin analítica, no enlazados
     ├── 404.html             # noindex
     ├── portfolio/           # SPA por eras (index.html) + los 4 casos LIVE: heineken · sofi · redux-incmty · innovation-systems
-    ├── version2/            # LIVE desde 2026-07-23, indexable a propósito. Home comparativo con copy de la maqueta Notion "Version nueva" (posicionamiento "Strategic Program Director" en el h1, no solo el label). Autocontenido como index.html (mismo <style> inline copiado + ajustado), sin enlace cruzado con index.html. Exento del gate de assets/data/metrics.json: 2 cifras propias ("+30" programas, "400+" emprendedores) NO tienen data-metric ni pasan por verify-metrics.js — decisión explícita de Diego, esta página no es el índice oficial.
+    ├── version2/            # Desde 2026-07-23: solo el stub de redirect (noindex,follow) hacia /. Su contenido (posicionamiento "Strategic Program Director") se promovió a index.html — ver "Home / index.html" abajo.
     ├── cases/               # SOLO stubs de redirect (noindex,follow) → portfolio/*.html · fliphouse.html = transición a SOFI
     ├── assets/css/styles.css    # Tokens DS V2 + componentes (aliases --dm-* solo compatibilidad temporal)
     ├── assets/data/         # metrics.json (generado desde Notion) · sofi/* (generados en el repo de SOFI)
@@ -114,7 +114,7 @@ Cifras — entrada canónica única (no resucitar):
 | Bolsas $80,000 (B-Challenge) y $120,000 (INC Prototype) | Muertas, sin respaldo. |
 | "200+ capacitados" REDUX | Muerta: son 400+ solo en 2020 (Informe Anual Tec). |
 | "5 ediciones" y "32 estados" de REDUX · "36 registros" del sureste | Muertas (línea base documentada: 35 propuestas, La Jornada Maya). |
-| 3,231 (`heineken-proyectos-evaluados`) | Vigente/Pública por decisión de Diego; vive en `index.html`, NO en `portfolio/heineken.html`. No recuestionar. |
+| 3,231 (`heineken-proyectos-evaluados`) | Vigente en el SSOT de Notion, pero desde el rediseño de index.html (2026-07-23, contenido migrado de version2) sin ubicación en el sitio — decisión explícita de Diego, no reintroducirla sin pedirlo. |
 | BTEM | = Beca Talento Emprendedor (no "Blockchain Tec de Monterrey"). |
 
 Decisiones cerradas (no son pendientes; no recuestionar):
