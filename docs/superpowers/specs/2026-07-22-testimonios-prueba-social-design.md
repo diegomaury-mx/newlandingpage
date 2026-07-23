@@ -37,7 +37,14 @@ Dos puntos de inserción, elegidos porque los testimonios actuales son endorseme
 ### Contenido del bloque antes de `contacto`
 
 - Widget de Senja de **tarjeta individual**, curado en Senja con un solo testimonio (candidato: Shaili Zappa).
-- **Pendiente:** este widget no existe todavía en Senja. Se deja el markup comentado con un placeholder claro (`<!-- TODO: pegar embed Senja widget individual -->`) hasta que Diego lo cree y pase el embed.
+- Embed confirmado (widget `d5b4c965-596d-4cb7-81d0-ef2a0b60ab6c`):
+
+```html
+<script src="https://widget.senja.io/widget/d5b4c965-596d-4cb7-81d0-ef2a0b60ab6c/platform.js" type="text/javascript" async></script>
+<div class="senja-embed" data-id="d5b4c965-596d-4cb7-81d0-ef2a0b60ab6c" data-mode="shadow" data-lazyload="false" style="display: block; width: 100%;"></div>
+```
+
+Igual que el widget grid, este HTML se inyecta vía JS (no vive estático en el DOM) para respetar la carga diferida.
 
 ### Markup y estilo
 
@@ -65,11 +72,10 @@ Este HTML se inyecta vía JS (no vive estático en el DOM) para respetar la carg
 
 - Colección `testimonials` en Astro/Diego CMS.
 - Distribución de testimonios por caso de estudio (no hay contenido verbatim que lo respalde hoy; se revisita cuando existan testimonios caso-específicos).
-- Creación del segundo widget de Senja (tarjeta individual) — la crea Diego en su panel; esta tarea deja el punto de integración listo con placeholder.
 - Feedback de taller Wella y semblanza de terceros (quedan en Notion, no entran a esta iteración).
 
 ## Testing
 
-- Verificar que el widget grid y el widget individual (cuando exista) cargan solo al hacer scroll cerca de su sección (Network tab, no debe haber requests a `widget.senja.io` en la carga inicial).
+- Verificar que el widget grid y el widget individual cargan solo al hacer scroll cerca de su sección (Network tab, no debe haber requests a `widget.senja.io` en la carga inicial).
 - `npm run lint` / `npm run test:a11y` / `npm run verify:visual` deben seguir pasando con las 2 secciones nuevas incluidas en el barrido de QA (agregar `index.html` ya está cubierto; verificar que las nuevas cards no rompan contraste AA ni estructura semántica).
 - Verificar visualmente en 375/768/1440 que las 3 cards estáticas y el widget no rompen el ritmo del layout existente.
