@@ -289,7 +289,7 @@
     /* ── ABOUT ── */
     .about-section { padding: 0; border-bottom: 1px solid var(--border); overflow: hidden; }
     .about-body {
-      max-width: 1160px; margin: 0 auto; padding: clamp(72px,7vw,112px) 32px 0;
+      max-width: 1160px; margin: 0 auto; padding: clamp(72px,7vw,112px) 32px clamp(56px,6vw,88px);
       display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 40px;
     }
     @media (max-width: 960px) { .about-body { grid-template-columns: 1fr; align-items: center; text-align: center; } }
@@ -559,6 +559,24 @@
       border: 1px solid var(--border); color: var(--t3); flex-shrink: 0;
     }
     .ip-desc { font-size: 13.5px; color: var(--t2); line-height: 1.6; margin-bottom: 20px; }
+    .hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center; }
+    .hero-media { border-radius: 20px; overflow: hidden; height: 380px; }
+    @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .hero-media { height: 240px; order: -1; } }
+    .ip-media { margin: -28px -30px 20px; height: 160px; border-radius: 13px 13px 0 0; overflow: hidden; }
+
+    /* ── CONVERSEMOS GRID (S7 version2) ── */
+    .conversemos-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; margin-bottom: 44px; }
+    .conversemos-media { border-radius: 16px; overflow: hidden; height: 260px; }
+    @media (max-width: 800px) { .conversemos-grid { grid-template-columns: 1fr; } .conversemos-media { height: 200px; } }
+
+    /* ── MEDIA PLACEHOLDER (pendiente de foto/imagen real) ── */
+    .media-placeholder {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 14px;
+      background: rgba(250,248,252,0.04); border: 1px dashed var(--border);
+      color: var(--t3); font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5;
+    }
     .ip-stats {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
       padding-top: 18px; border-top: 1px solid var(--border);
@@ -742,13 +760,50 @@
     .footer-copy a { color: var(--t3); text-decoration: none; transition: color 150ms; }
     .footer-copy a:hover { color: var(--t2); }
 
-    /* ── DIAGRAMA ESTRATEGIA→SISTEMA (S3/S4 version2) ── */
-    .diagram-block {
-      font-family: var(--mono); font-size: 12px; line-height: 1.6;
-      color: var(--t2); background: var(--bg-2); border: 1px solid var(--border);
-      border-radius: 13px; padding: 24px; overflow-x: auto; white-space: pre;
-      margin: 28px 0;
+    /* ── DIAGRAMA DE FLUJO ESTRATEGIA→OPERACIÓN (S3 version2) ── */
+    .flow-diagram { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; max-width: 780px; margin: 32px auto; }
+    .flow-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; flex: 1; min-width: 160px; }
+    .flow-card-head {
+      font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ember); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 9px;
     }
+    .flow-card-head::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ember); flex-shrink: 0; }
+    .flow-list { list-style: none; display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .flow-list li { font-size: 13.5px; color: var(--t2); padding-left: 15px; position: relative; }
+    .flow-list li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 7px; height: 1px; background: var(--t3); }
+    .flow-connector { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 18px; flex-shrink: 0; }
+    .flow-connector-line { width: 20px; height: 1px; background: var(--border); }
+    .flow-connector-label {
+      font-family: var(--mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--t3);
+    }
+    .flow-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .flow-chip {
+      font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--t1);
+      background: rgba(255,92,57,0.1); border: 1px solid rgba(255,92,57,0.3);
+      border-radius: 20px; padding: 5px 13px;
+    }
+    .flow-arrow { width: 8px; height: 8px; border-right: 1.5px solid var(--ember); border-bottom: 1.5px solid var(--ember); transform: rotate(-45deg); }
+
+    /* ── PIPELINE CREATIVO ASCENDENTE (S4 version2) ── */
+    .pipeline-creative { display: flex; align-items: flex-end; gap: 10px; margin: 40px 0 12px; max-width: 780px; }
+    .pc-step { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 12px; }
+    .pc-bar {
+      width: 100%; border-radius: 10px 10px 4px 4px;
+      background: linear-gradient(180deg, rgba(255,92,57,0.08), var(--bg-2));
+      border: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 10px; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--t2);
+    }
+    .pc-step.is-outcome .pc-bar { background: var(--ember); border-color: var(--ember); color: #fff; }
+    .pc-label { font-size: 11.5px; font-weight: 600; color: var(--t2); text-align: center; }
+    .pc-step.is-outcome .pc-label { color: var(--t1); }
+    @media (max-width: 680px) { .pipeline-creative { gap: 6px; } .pc-label { font-size: 10px; } }
+
+    /* ── PROBLEMA GRID (S3 version2) ── */
+    .problema-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; margin-bottom: 8px; }
+    .problema-media { border-radius: 16px; overflow: hidden; height: 260px; }
+    @media (max-width: 800px) { .problema-grid { grid-template-columns: 1fr; } .problema-media { height: 200px; } }
 
     /* ── TABLA DE CAPACIDADES (S4 version2) ── */
     .cap-table { width: 100%; border-collapse: collapse; margin: 28px 0; }
@@ -769,6 +824,14 @@
       color: var(--ember); text-decoration: none;
     }
     .ip-case-link:hover { text-decoration: underline; }
+    .ip-case-btn {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
+      background: var(--ember-cta); color: #fff; font-family: var(--mono);
+      font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 10px 18px; border: none; border-radius: 8px;
+      text-decoration: none; transition: opacity 150ms, transform 150ms;
+    }
+    .ip-case-btn:hover { opacity: 0.88; transform: translateY(-1px); }
   </style>
 </head>
 <body>
@@ -804,41 +867,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- S1 HERO -->
 <section class="section" id="hero">
   <div class="section-inner">
-    <div class="hero-label" data-reveal>Diego Maury · Strategic Program Director</div>
-    <h1 class="hero-h1" data-reveal style="--delay:.08s">
-      Diseño programas, procesos y sistemas para convertir la visión en <span class="accent">resultados tangibles</span>.
-    </h1>
-    <p class="hero-sub" data-reveal style="--delay:.14s">
-      Trabajo con organizaciones que saben lo que quieren lograr, pero necesitan un sistema para hacerlo realidad. Integro estrategia, operaciones y tecnología para que tu equipo pueda sostener el resultado por sí mismo.
-    </p>
-    <div class="hero-ctas" data-reveal style="--delay:.2s">
-      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="btn-primary" target="_blank" rel="noopener">
-        Agendar diagnóstico (30 min)
-      </a>
-      <a href="/cv/diego-maury-cv.pdf" class="btn-ghost" download>
-        Descargar CV
-      </a>
-    </div>
-    <div class="metrics" data-reveal style="--delay:.26s">
-      <div class="metric">
-        <div class="metric-n">30+</div>
-        <div class="metric-l">Proyectos liderados</div>
-        <div class="metric-s">Trayectoria acumulada, cifra propia</div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="hero-label" data-reveal>Diego Maury · Strategic Program Director</div>
+        <h1 class="hero-h1" data-reveal style="--delay:.08s">
+          Diseño programas, procesos y sistemas para convertir la visión en <span class="accent">resultados tangibles</span>.
+        </h1>
+        <p class="hero-sub" data-reveal style="--delay:.14s">
+          Trabajo con organizaciones que saben lo que quieren lograr, pero necesitan un sistema para hacerlo realidad. Integro estrategia, operaciones y tecnología para que tu equipo pueda sostener el resultado por sí mismo.
+        </p>
+        <div class="hero-ctas" data-reveal style="--delay:.2s">
+          <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="btn-primary" target="_blank" rel="noopener">
+            Agendar diagnóstico (30 min)
+          </a>
+          <a href="/cv/diego-maury-cv.pdf" class="btn-ghost" download>
+            Descargar CV
+          </a>
+        </div>
       </div>
-      <div class="metric">
-        <div class="metric-n">10+</div>
-        <div class="metric-l">Años de trayectoria</div>
-        <div class="metric-s">7+ en innovación y ecosistemas</div>
-      </div>
-      <div class="metric">
-        <div class="metric-n" data-count="9905" data-suffix="" data-metric="incmty-participantes-inscritos">9,905</div>
-        <div class="metric-l">Participantes inscritos</div>
-        <div class="metric-s">Agregado de programas INCmty (HGC incluido), estimado</div>
-      </div>
+      <div class="hero-media" data-reveal style="--delay:.1s"><div class="media-placeholder">Foto o visual de Diego</div></div>
     </div>
     <div class="trust" data-reveal style="--delay:.32s">
-      <div class="trust-label">Respaldo institucional</div>
       <div class="trust-track-wrap">
+        <div class="trust-label" style="font-size: 12px">He trabajado con</div>
         <div class="trust-track">
           <div class="trust-logo"><img src="../assets/img/logos/heineken.png" alt="HEINEKEN Mexico" loading="lazy"></div>
           <div class="trust-logo"><img src="../assets/img/logos/tec-de-monterrey.png" alt="Tec de Monterrey" loading="lazy"></div>
@@ -885,30 +936,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="about-right" data-reveal style="--delay:.18s">
       <p class="about-bio">Entro a operaciones que dependen de la memoria de una persona, de un Excel o de la buena voluntad del equipo. Mapeo el proceso real y diseño el sistema que lo reemplaza. No entrego un reporte y me voy: lo pongo en marcha, preparo a tu equipo para operarlo por su cuenta y dejo una forma de operar que tu equipo entiende, usa y sostiene.</p>
-      <div class="about-stats-inline">
-        <div class="about-stat"><div class="about-stat-n"><em>10+</em> años</div><div class="about-stat-l">De trayectoria profesional</div></div>
-        <div class="about-stat"><div class="about-stat-n"><em>30+</em> programas</div><div class="about-stat-l">Diseñados y operados</div></div>
-        <div class="about-stat"><div class="about-stat-n"><em>7+</em> años</div><div class="about-stat-l">En innovación y ecosistemas</div></div>
-      </div>
     </div>
   </div>
-
-  <div class="about-strip" data-reveal style="--delay:.24s">
-    <div class="about-strip-inner">
-      <div class="as-item">
-        <div class="as-n" data-metric="incmty-participantes-inscritos">9,905</div>
-        <div class="as-l">Participantes inscritos</div>
-        <div class="as-s">Programas INCmty agregados, estimado</div>
+  <div style="max-width:1160px;margin:0 auto;padding:0 32px">
+    <div class="metrics" data-reveal style="--delay:.26s">
+      <div class="metric">
+        <div class="metric-n">30+</div>
+        <div class="metric-l">Proyectos liderados</div>
+        <div class="metric-s">Trayectoria acumulada, cifra propia</div>
       </div>
-      <div class="as-item">
-        <div class="as-n" data-metric="rodi-sofi">+1,291%</div>
-        <div class="as-l">RODI modelado</div>
-        <div class="as-s">Cost-avoidance 2025-2026</div>
+      <div class="metric">
+        <div class="metric-n">10+</div>
+        <div class="metric-l">Años de trayectoria</div>
+        <div class="metric-s">7+ en innovación y ecosistemas</div>
       </div>
-      <div class="as-item">
-        <div class="as-n" data-metric="hacksureste-participantes">3,000+</div>
-        <div class="as-l">Participantes HackSureste</div>
-        <div class="as-s">Estimado, no acumulable con INCmty · 2018-2023</div>
+      <div class="metric">
+        <div class="metric-n" data-count="9905" data-suffix="" data-metric="incmty-participantes-inscritos">9,905</div>
+        <div class="metric-l">Participantes en programas</div>
+        <div class="metric-s">Agregado de programas INCmty (HGC incluido), estimado</div>
       </div>
     </div>
   </div>
@@ -917,38 +962,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- S3 EL PROBLEMA QUE RESUELVO -->
 <section class="section" id="problema">
   <div class="section-inner">
-    <div class="section-label" data-reveal>El problema que resuelvo</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">La mayoría de las organizaciones no tienen un problema de ejecución. Tienen un problema de traducción.</h2>
-    <p class="section-sub" data-reveal style="--delay:.12s">Cuando la estrategia llega al equipo, rara vez se pierde por falta de talento. Se pierde porque cada área interpreta algo distinto. Dirección habla de crecimiento, riesgo y retorno. Operaciones hablan de procesos, herramientas y urgencias. Entre esos dos mundos aparecen los retrasos, los retrabajos y las decisiones que nadie termina de asumir.</p>
-    <p class="section-sub" data-reveal style="--delay:.16s">Mi trabajo consiste en cerrar esa brecha. Traduzco la estrategia en programas, procesos y sistemas que el equipo puede ejecutar sin depender de interpretaciones. No traduzco para que se entiendan. Traduzco para que las cosas pasen. Es la misma disciplina detrás del crecimiento del <span data-metric="heineken-crecimiento-regional">+600%</span> en HEINEKEN Green Challenge y del diseño de un sistema para una empresa PropTech, que redujo el speed-to-lead de días a menos de cinco minutos.</p>
-    <pre class="diagram-block" data-reveal style="--delay:.22s">┌──────────────────────────────┐
-│          ESTRATEGIA          │
-├──────────────────────────────┤
-│ • Visión                     │
-│ • Objetivos                  │
-│ • Prioridades                │
-│ • Decisiones                 │
-└──────────────────────────────┘
-               │
-               ▼
-
-        TRADUZCO EN
-
-      • Programas
-      • Procesos
-      • Sistemas
-
-               │
-               ▼
-
-┌──────────────────────────────┐
-│          OPERACIÓN           │
-├──────────────────────────────┤
-│ • Ejecución                  │
-│ • Responsables               │
-│ • Indicadores                │
-│ • Resultados                 │
-└──────────────────────────────┘</pre>
+    <div class="problema-grid">
+      <div>
+        <div class="section-label" data-reveal>El problema que resuelvo</div>
+        <h2 class="section-title" data-reveal style="--delay:.06s">La mayoría de las organizaciones no tienen un problema de ejecución. Tienen un problema de traducción.</h2>
+        <p class="section-sub" data-reveal style="--delay:.12s">Cuando la estrategia llega al equipo, rara vez se pierde por falta de talento. Se pierde porque cada área interpreta algo distinto. Dirección habla de crecimiento, riesgo y retorno. Operaciones hablan de procesos, herramientas y urgencias. Entre esos dos mundos aparecen los retrasos, los retrabajos y las decisiones que nadie termina de asumir.</p>
+        <p class="section-sub" data-reveal style="--delay:.16s">Mi trabajo consiste en cerrar esa brecha. Traduzco la estrategia en programas, procesos y sistemas que el equipo puede ejecutar sin depender de interpretaciones. No traduzco para que se entiendan. Traduzco para que las cosas pasen. Es la misma disciplina detrás del crecimiento del <span data-metric="heineken-crecimiento-regional">+600%</span> en HEINEKEN Green Challenge y del diseño de un sistema para una empresa PropTech, que redujo el speed-to-lead de días a menos de cinco minutos.</p>
+      </div>
+      <div class="problema-media" data-reveal style="--delay:.1s"><div class="media-placeholder">Imagen o diagrama de apoyo</div></div>
+    </div>
+    <div class="flow-diagram" data-reveal style="--delay:.22s">
+      <div class="flow-card">
+        <div class="flow-card-head">Estrategia</div>
+        <ul class="flow-list"><li>Visión</li><li>Objetivos</li><li>Prioridades</li><li>Decisiones</li></ul>
+      </div>
+      <div class="flow-connector">
+        <span class="flow-connector-line"></span>
+        <span class="flow-connector-label">Traduzco en</span>
+        <div class="flow-chips"><span class="flow-chip">Programas</span><span class="flow-chip">Procesos</span><span class="flow-chip">Sistemas</span></div>
+        <span class="flow-connector-line"></span>
+        <span class="flow-arrow"></span>
+      </div>
+      <div class="flow-card">
+        <div class="flow-card-head">Operación</div>
+        <ul class="flow-list"><li>Ejecución</li><li>Responsables</li><li>Indicadores</li><li>Resultados</li></ul>
+      </div>
+    </div>
     <p class="section-sub" data-reveal style="--delay:.28s"><strong>La estrategia genera dirección. Los sistemas generan resultados. Mi trabajo es conectar ambos mundos.</strong></p>
   </div>
 </section>
@@ -972,11 +1011,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <tr><td>Educación</td><td>Tecnológico de Monterrey · EBC · Formación Ejecutiva</td></tr>
       </tbody>
     </table>
-    <p class="section-sub" data-reveal style="--delay:.2s"><strong>30+ proyectos documentados en múltiples industrias.</strong> <a class="inline-link" href="../portfolio/">Explorar portafolio completo →</a></p>
+    <p class="section-sub" data-reveal style="--delay:.2s; margin-bottom:20px"><strong>30+ proyectos documentados en múltiples industrias.</strong></p>
+    <a class="btn-primary" href="../portfolio/" data-reveal style="--delay:.22s; display:inline-flex; margin-bottom:44px;">Explorar portafolio completo →</a>
 
     <h3 class="section-title" data-reveal style="--delay:.24s; font-size: 1.4rem;">Casos destacados</h3>
     <div class="ip-grid" data-reveal style="--delay:.28s">
       <div class="ip">
+        <div class="ip-media"><div class="media-placeholder">Screenshot del sistema · FlipHouse</div></div>
         <div class="ip-row">
           <div>
             <div class="ip-label">FlipHouse · PropTech</div>
@@ -984,14 +1025,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
         <div class="ip-desc">Construí un sistema de IA para contactar, calificar y registrar leads automáticamente, reduciendo el speed-to-lead de días a menos de cinco minutos.</div>
-        <div class="ip-stats">
-          <div><div class="ip-stat-n" data-metric="fliphouse-speed-to-lead">&lt;5 min</div><div class="ip-stat-l">Speed-to-lead</div></div>
-          <div><div class="ip-stat-n" data-metric="sofi-cobertura-automatica">89.5%</div><div class="ip-stat-l">Cobertura automática</div></div>
-          <div><div class="ip-stat-n" data-metric="sofi-respuesta-sin-asesor">74.9%</div><div class="ip-stat-l">Tasa de respuesta</div></div>
-        </div>
-        <a class="ip-case-link" href="../portfolio/sofi.html">Ver caso completo →</a>
+        <a class="ip-case-btn" href="../portfolio/sofi.html">Ver caso completo →</a>
       </div>
       <div class="ip">
+        <div class="ip-media"><div class="media-placeholder">Foto · HEINEKEN Green Challenge</div></div>
         <div class="ip-row">
           <div>
             <div class="ip-label">HEINEKEN Green Challenge · Innovación Corporativa</div>
@@ -999,14 +1036,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
         <div class="ip-desc">Rediseñé la operación regional del programa para escalar sin aumentar la complejidad operativa.</div>
-        <div class="ip-stats">
-          <div><div class="ip-stat-n" data-metric="heineken-crecimiento-regional">+600%</div><div class="ip-stat-l">Crecimiento regional</div></div>
-          <div><div class="ip-stat-n">#1</div><div class="ip-stat-l">Sureste nacional</div></div>
-          <div><div class="ip-stat-n" data-metric="heineken-proyectos-evaluados">3,231</div><div class="ip-stat-l">Proyectos evaluados</div></div>
-        </div>
-        <a class="ip-case-link" href="../portfolio/heineken.html">Ver caso completo →</a>
+        <a class="ip-case-btn" href="../portfolio/heineken.html">Ver caso completo →</a>
       </div>
       <div class="ip">
+        <div class="ip-media"><div class="media-placeholder">Foto · HackSureste + REDUX</div></div>
         <div class="ip-row">
           <div>
             <div class="ip-label">HackSureste + REDUX · Ecosistema de Innovación</div>
@@ -1014,27 +1047,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
         <div class="ip-desc">Diseñé un ecosistema y una metodología que continúan generando impacto más allá de mi participación directa.</div>
-        <div class="ip-stats">
-          <div><div class="ip-stat-n" data-metric="hacksureste-participantes">3,000+</div><div class="ip-stat-l">Participantes</div></div>
-          <div><div class="ip-stat-n">400+</div><div class="ip-stat-l">Emprendedores formados</div></div>
-          <div><div class="ip-stat-n">Institucionalizada</div><div class="ip-stat-l">Metodología</div></div>
-        </div>
-        <a class="ip-case-link" href="../portfolio/redux-incmty.html">Ver caso completo →</a>
+        <a class="ip-case-btn" href="../portfolio/redux-incmty.html">Ver caso completo →</a>
       </div>
     </div>
 
     <p class="section-sub" data-reveal style="--delay:.34s"><strong>Lo que une todos estos proyectos.</strong> No importa si el reto está en ventas, innovación, educación o tecnología. El patrón siempre es el mismo.</p>
-    <pre class="diagram-block" data-reveal style="--delay:.4s">Estrategia
-     ↓
-Diagnóstico
-     ↓
-Programa
-     ↓
-Proceso
-     ↓
-Sistema
-     ↓
-Resultados</pre>
+    <div class="pipeline-creative" data-reveal style="--delay:.4s">
+      <div class="pc-step"><div class="pc-bar" style="height:44px">1</div><div class="pc-label">Estrategia</div></div>
+      <div class="pc-step"><div class="pc-bar" style="height:58px">2</div><div class="pc-label">Diagnóstico</div></div>
+      <div class="pc-step"><div class="pc-bar" style="height:72px">3</div><div class="pc-label">Programa</div></div>
+      <div class="pc-step"><div class="pc-bar" style="height:86px">4</div><div class="pc-label">Proceso</div></div>
+      <div class="pc-step"><div class="pc-bar" style="height:100px">5</div><div class="pc-label">Sistema</div></div>
+      <div class="pc-step is-outcome"><div class="pc-bar" style="height:118px">6</div><div class="pc-label">Resultados</div></div>
+    </div>
   </div>
 </section>
 
@@ -1123,6 +1148,7 @@ Resultados</pre>
     <p class="section-sub" data-reveal style="--delay:.12s">Cada organización es diferente. Lo que no cambia es que cada intervención deja aprendizajes, herramientas y modelos que fortalecen la siguiente. Con el tiempo, esos aprendizajes dejaron de ser experiencias aisladas y se convirtieron en activos reutilizables. No empiezo cada proyecto desde cero. Empiezo con años de conocimiento acumulado.</p>
     <div class="ip-grid" data-reveal style="--delay:.18s">
       <div class="ip">
+        <div class="ip-media"><div class="media-placeholder">Decoración · REDUX</div></div>
         <div class="ip-row">
           <div>
             <div class="ip-label">Framework registrado</div>
@@ -1136,12 +1162,14 @@ Resultados</pre>
           <div><div class="ip-stat-n">Framework</div><div class="ip-stat-l">Registrado</div></div>
           <div><div class="ip-stat-n">Institucionalizado</div><div class="ip-stat-l">Tec de Monterrey</div></div>
         </div>
+        <a class="ip-case-link" href="../portfolio/redux-incmty.html">Ver caso completo →</a>
       </div>
       <div class="ip">
+        <div class="ip-media"><div class="media-placeholder">Decoración · HackSureste</div></div>
         <div class="ip-row">
           <div>
             <div class="ip-label">Modelo operativo</div>
-            <div class="ip-name">HackSureste Ops Framework</div>
+            <div class="ip-name">HackSureste Ops</div>
           </div>
           <span class="ip-badge">5 años</span>
         </div>
@@ -1151,8 +1179,10 @@ Resultados</pre>
           <div><div class="ip-stat-n">30+</div><div class="ip-stat-l">Programas</div></div>
           <div><div class="ip-stat-n">#1</div><div class="ip-stat-l">Sureste MX</div></div>
         </div>
+        <a class="ip-case-link" href="../portfolio/redux-incmty.html">Ver caso completo →</a>
       </div>
       <div class="ip">
+        <div class="ip-media"><div class="media-placeholder">Decoración · SOFI</div></div>
         <div class="ip-row">
           <div>
             <div class="ip-label">Sistema de IA en producción</div>
@@ -1166,6 +1196,7 @@ Resultados</pre>
           <div><div class="ip-stat-n" data-metric="sofi-respuesta-sin-asesor">74.9%</div><div class="ip-stat-l">Respuesta</div></div>
           <div><div class="ip-stat-n" data-metric="fliphouse-speed-to-lead">&lt;5 min</div><div class="ip-stat-l">Speed-to-lead</div></div>
         </div>
+        <a class="ip-case-link" href="../portfolio/sofi.html">Ver caso completo →</a>
       </div>
     </div>
     <p class="section-sub" data-reveal style="--delay:.3s"><strong>El verdadero entregable.</strong> Los proyectos terminan. La capacidad permanece. Cada intervención deja nuevos modelos, mejores prácticas y conocimiento reutilizable que acelera la siguiente implementación. Eso significa menos tiempo descubriendo el problema y más tiempo construyendo la solución adecuada. Porque el objetivo nunca ha sido entregar un proyecto. Es construir capacidad que siga generando resultados cuando yo ya no esté.</p>
@@ -1188,16 +1219,16 @@ Resultados</pre>
         </div>
       </div>
       <div class="testimonial-card" data-reveal style="--delay:.24s">
-        <p class="testimonial-quote">"Su ambición de hacerlo diferente... el pensamiento lateral en la resolución de problemas... la capacidad colaborativa de conocer y reunir a los mejores."</p>
+        <p class="testimonial-quote">"Su ambición de hacerlo diferente, el pensamiento lateral en la resolución de problemas y la capacidad colaborativa de conocer y reunir a los mejores."</p>
         <div class="testimonial-cite">
           <span class="testimonial-name">Jorge Acevedo Pallares</span>
           <span class="testimonial-role">Director de Carbono y Sustentabilidad, Agencia Mexicana de Estudios Antárticos</span>
         </div>
       </div>
       <div class="testimonial-card" data-reveal style="--delay:.3s">
-        <p class="testimonial-quote">"En mi tiempo de conocer a Diego, el ha liderado iniciativas de las mas grandes que jamás haya visto México... Hackathon Nacional Redux, en el cual el fue mi proveedor."</p>
+        <p class="testimonial-quote">"En mi tiempo de conocer a Diego, él ha liderado iniciativas de las más grandes que jamás haya visto México... Hackathon Nacional REDUX, en el cual él fue mi proveedor."</p>
         <div class="testimonial-cite">
-          <span class="testimonial-name">Victor Calzadillas</span>
+          <span class="testimonial-name">Víctor Calzadillas</span>
           <span class="testimonial-role">Community Builder, Startup Chihuahua</span>
         </div>
       </div>
@@ -1212,12 +1243,18 @@ Resultados</pre>
     <div class="section-label" data-reveal>Formas de trabajar conmigo</div>
     <h2 class="section-title" data-reveal style="--delay:.06s">Hablemos.</h2>
     <p class="section-sub" data-reveal style="--delay:.12s">Si tu organización necesita transformar una estrategia en una operación sostenible, conversemos. La primera llamada no es una presentación comercial. Es una conversación para entender el contexto, identificar el reto y evaluar si soy la persona indicada para ayudarte. Si tiene sentido trabajar juntos, diseñaremos el siguiente paso. Si no, te lo diré con la misma claridad.</p>
-    <div class="about-roles" data-reveal style="--delay:.18s">
-      <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Transformación organizacional.</div></div>
-      <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Diseño de programas estratégicos.</div></div>
-      <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Operaciones y escalamiento.</div></div>
-      <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Inteligencia artificial y automatización.</div></div>
-      <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Innovación y nuevos modelos de operación.</div></div>
+    <div class="conversemos-grid" data-reveal style="--delay:.18s">
+      <div>
+        <h3 class="section-title" style="font-size:1.2rem;margin-bottom:20px">En una primera conversación podemos hablar sobre:</h3>
+        <div class="about-roles">
+          <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Transformación organizacional.</div></div>
+          <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Diseño de programas estratégicos.</div></div>
+          <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Operaciones y escalamiento.</div></div>
+          <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Inteligencia artificial y automatización.</div></div>
+          <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt">Innovación y nuevos modelos de operación.</div></div>
+        </div>
+      </div>
+      <div class="conversemos-media"><div class="media-placeholder">Foto de Diego en trabajo</div></div>
     </div>
     <p class="section-sub" data-reveal style="--delay:.24s"><strong>Agenda una conversación.</strong> 30 minutos para entender el reto y explorar posibles caminos.</p>
     <div class="hero-ctas" data-reveal style="--delay:.3s">
@@ -1240,7 +1277,7 @@ Resultados</pre>
   <div class="footer-inner">
     <div class="footer-brand">
       <img src="../assets/img/isotipo-ember.svg" width="24" height="24" alt="">
-      <span class="footer-tagline">Hagamos que las cosas pasen.</span>
+      <span class="footer-tagline">Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.</span>
     </div>
     <p class="footer-copy">
       © Diego Maury · diegomaury.mx ·
