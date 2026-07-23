@@ -331,6 +331,7 @@
 
     .about-right { display: flex; flex-direction: column; gap: 28px; padding-bottom: 56px; }
     .about-bio { font-size: 13.5px; color: var(--t2); line-height: 1.7; max-width: 36ch; }
+    .about-intro { font-size: 13.5px; color: var(--t2); line-height: 1.65; }
     .about-bio strong { color: var(--t1); }
     .about-stats-inline { display: flex; flex-direction: column; gap: 14px; }
     .about-stat { display: flex; flex-direction: column; gap: 3px; }
@@ -741,18 +742,32 @@
     footer {
       background: var(--bg);
       border-top: 1px solid var(--border);
-      padding: 2.5rem 0;
+      padding: 3rem 0 2rem;
     }
-    .footer-inner {
+    .footer-grid {
       max-width: 1160px; margin: 0 auto; padding: 0 32px;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 1.5rem; flex-wrap: wrap;
+      display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 2rem;
     }
-    .footer-brand { display: flex; align-items: center; gap: 10px; }
+    @media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr; gap: 1.75rem; } }
+    .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
     .footer-brand img { width: 24px; height: 24px; display: block; flex-shrink: 0; }
-    .footer-tagline {
-      font-family: var(--mono); font-size: 10px; font-weight: 500;
-      letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-secondary-text);
+    .footer-name { font-size: 14px; font-weight: 700; color: var(--t1); }
+    .footer-brand-col .footer-tagline {
+      font-size: 12.5px; color: var(--t2); line-height: 1.6; max-width: 32ch;
+      text-transform: none; letter-spacing: normal; font-family: var(--sans); font-weight: 400;
+    }
+    .footer-col-title {
+      font-family: var(--mono); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-secondary-text);
+      margin-bottom: 12px;
+    }
+    .footer-col { display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a, .footer-col span {
+      font-size: 12.5px; color: var(--t2); text-decoration: none; transition: color 150ms;
+    }
+    .footer-col a:hover { color: var(--t1); }
+    .footer-legal-row {
+      max-width: 1160px; margin: 28px auto 0; padding: 18px 32px 0; border-top: 1px solid var(--border);
     }
     .footer-copy {
       font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--t3);
@@ -896,15 +911,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="trust-logo"><img src="assets/img/logos/incmty.png" alt="INCmty" loading="lazy"></div>
           <div class="trust-logo"><img src="assets/img/logos/fliphouse.png" alt="FlipHouse" loading="lazy"></div>
           <div class="trust-logo"><img src="assets/img/logos/ebc.png" alt="EBC" loading="lazy"></div>
-          <div class="trust-logo"><img src="assets/img/logos/platzi.png" alt="Platzi" loading="lazy"></div>
-          <div class="trust-logo"><img src="assets/img/logos/talentland.png" alt="Talentland" loading="lazy"></div>
           <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/heineken.png" alt="" loading="lazy"></div>
           <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/tec-de-monterrey.png" alt="" loading="lazy"></div>
           <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/incmty.png" alt="" loading="lazy"></div>
           <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/fliphouse.png" alt="" loading="lazy"></div>
           <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/ebc.png" alt="" loading="lazy"></div>
-          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/platzi.png" alt="" loading="lazy"></div>
-          <div class="trust-logo" aria-hidden="true"><img src="assets/img/logos/talentland.png" alt="" loading="lazy"></div>
         </div>
       </div>
     </div>
@@ -920,6 +931,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="about-title-txt">Strategic Program Director</div>
       </div>
       <p class="about-tagline">Construyo lo que hace falta para que las cosas pasen.</p>
+      <p class="about-intro">A lo largo de mi carrera he construido comunidades, programas, metodologías y sistemas para ayudar a las organizaciones a convertir su visión en resultados tangibles.</p>
+      <p class="about-intro">No me interesa acumular proyectos. Me interesa resolver el mismo problema desde distintos frentes: construir la capacidad que una organización necesita para ejecutar mejor.</p>
+      <p class="about-intro">Esa forma de trabajar me ha llevado a desempeñar distintos roles.</p>
       <div class="about-roles">
         <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Como emprendedor</strong>, fundé HackSureste para construir un ecosistema regional de innovación desde cero</div></div>
         <div class="about-role"><div class="about-role-dot"></div><div class="about-role-txt"><strong>Como líder de programas</strong>, diseñé y operé iniciativas de innovación y emprendimiento para corporativos, universidades y ecosistemas en LATAM, incluyendo HEINEKEN Green Challenge</div></div>
@@ -1025,6 +1039,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
         <div class="ip-desc">Construí un sistema de IA para contactar, calificar y registrar leads automáticamente, reduciendo el speed-to-lead de días a menos de cinco minutos.</div>
+        <div class="svc-time" style="margin-bottom:8px;">Resultados</div>
+        <ul class="svc-list">
+          <li class="svc-item">Speed-to-lead a <span data-metric="fliphouse-speed-to-lead">menos de 5 minutos</span></li>
+          <li class="svc-item"><span data-metric="sofi-cobertura-automatica">89.5%</span> de cobertura automática</li>
+          <li class="svc-item"><span data-metric="sofi-respuesta-sin-asesor">74.9%</span> de tasa de respuesta</li>
+        </ul>
         <a class="ip-case-btn" href="portfolio/sofi.html">Ver caso completo →</a>
       </div>
       <div class="ip">
@@ -1036,6 +1056,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
         <div class="ip-desc">Rediseñé la operación regional del programa para escalar sin aumentar la complejidad operativa.</div>
+        <div class="svc-time" style="margin-bottom:8px;">Resultados</div>
+        <ul class="svc-list">
+          <li class="svc-item"><span data-metric="heineken-crecimiento-regional">+600%</span> de crecimiento regional</li>
+          <li class="svc-item">Sureste #1 a nivel nacional</li>
+          <li class="svc-item"><span data-metric="heineken-proyectos-evaluados">3,231</span> proyectos evaluados</li>
+        </ul>
         <a class="ip-case-btn" href="portfolio/heineken.html">Ver caso completo →</a>
       </div>
       <div class="ip">
@@ -1047,6 +1073,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
         <div class="ip-desc">Diseñé un ecosistema y una metodología que continúan generando impacto más allá de mi participación directa.</div>
+        <div class="svc-time" style="margin-bottom:8px;">Resultados</div>
+        <ul class="svc-list">
+          <li class="svc-item"><span data-metric="hacksureste-participantes">3,000+</span> participantes</li>
+          <li class="svc-item">400+ emprendedores formados</li>
+          <li class="svc-item">Metodología institucionalizada</li>
+        </ul>
         <a class="ip-case-btn" href="portfolio/redux-incmty.html">Ver caso completo →</a>
       </div>
     </div>
@@ -1207,14 +1239,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section" id="prueba-social">
   <div class="section-inner">
     <div class="section-label" data-reveal>Prueba social</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">No es autopromoción. Es lo que dicen quienes ya trabajaron conmigo.</h2>
-    <p class="section-sub" data-reveal style="--delay:.12s">Colegas, supervisores y clientes con los que he trabajado directamente en programas, hackathons y operaciones.</p>
+    <h2 class="section-title" data-reveal style="--delay:.06s">Lo que dicen quienes han trabajado conmigo.</h2>
+    <p class="section-sub" data-reveal style="--delay:.12s">Ninguna descripción de mi trabajo será más útil que la experiencia de las personas con las que he construido programas, operaciones y sistemas.</p>
     <div class="testimonial-grid">
       <div class="testimonial-card" data-reveal style="--delay:.18s">
         <p class="testimonial-quote" lang="en">"Diego is a truly extraordinary person to work with. He is constantly and consistently offering new ideas... The results Diego brings to his work are always above what is expected of him."</p>
         <div class="testimonial-cite">
           <span class="testimonial-name">Shaili Zappa</span>
-          <span class="testimonial-role">Technical Recruiter, Platzi (fue su supervisora)</span>
+          <span class="testimonial-role">Technical Recruiter, Platzi</span>
           <a class="inline-link" href="https://linkedin.com/in/shailizappa" target="_blank" rel="noopener" style="font-size:11px; margin-top:4px;">LinkedIn ↗</a>
         </div>
       </div>
@@ -1273,17 +1305,69 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <img src="assets/img/isotipo-ember.svg" width="24" height="24" alt="">
-      <span class="footer-tagline">Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.</span>
+<!-- S8 SIGUIENTE PASO -->
+<section class="section cta-section" id="siguiente-paso">
+  <div class="section-inner cta-inner">
+    <div class="cta-label-center" data-reveal>Siguiente paso</div>
+    <h2 class="cta-h" data-reveal style="--delay:.06s">¿Listo para convertir tu estrategia en un sistema que opera?</h2>
+    <p class="cta-sub" data-reveal style="--delay:.12s">Diagnóstico de 30 minutos: gratuito, confidencial y sin pitch. Trabajemos juntos o no, sales con más claridad sobre tu problema de la que traías al entrar.</p>
+    <div class="cta-steps" data-reveal style="--delay:.18s">
+      <div class="cta-step">
+        <div class="cta-step-n">Paso 01</div>
+        <div class="cta-step-t">Agenda una sesión</div>
+        <div class="cta-step-d">Elige el horario que te funcione. Sin formulario ni aprobación previa.</div>
+        <div class="cta-step-tag">30 min</div>
+      </div>
+      <div class="cta-step">
+        <div class="cta-step-n">Paso 02</div>
+        <div class="cta-step-t">Diagnóstico real</div>
+        <div class="cta-step-d">Hablamos del problema concreto: programa, stack, equipo, métricas. Sin generalidades.</div>
+        <div class="cta-step-tag">Sin pitch</div>
+      </div>
+      <div class="cta-step">
+        <div class="cta-step-n">Paso 03</div>
+        <div class="cta-step-t">Propuesta</div>
+        <div class="cta-step-d">Si hay fit, en 48 horas tienes alcance, métricas y timeline. Sin compromiso.</div>
+        <div class="cta-step-tag">48h</div>
+      </div>
     </div>
+    <div class="cta-buttons" data-reveal style="--delay:.24s">
+      <div class="hero-ctas" style="justify-content:center;">
+        <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="btn-primary" target="_blank" rel="noopener">Agendar diagnóstico (30 min)</a>
+        <a href="/cv/diego-maury-cv.pdf" class="btn-ghost" download>Descargar CV primero</a>
+      </div>
+      <div class="cta-trust">Sin compromiso <span class="dot"></span> Confidencial <span class="dot"></span> Diego atiende directamente</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand-col">
+      <div class="footer-brand">
+        <img src="assets/img/isotipo-ember.svg" width="24" height="24" alt="">
+        <span class="footer-name">Diego Maury</span>
+      </div>
+      <p class="footer-tagline">Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Explora</div>
+      <a href="portfolio/">Portafolio</a>
+      <a href="#evidencia">Casos de estudio</a>
+      <a href="#quien-soy">Sobre mí</a>
+      <a href="https://www.linkedin.com/in/diegomaury" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Contacto</div>
+      <a href="mailto:dm@diegomaury.mx">Correo electrónico</a>
+      <a href="https://www.linkedin.com/in/diegomaury" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" target="_blank" rel="noopener">Calendly</a>
+      <span>Ciudad de México, México</span>
+    </div>
+  </div>
+  <div class="footer-legal-row">
     <p class="footer-copy">
-      © Diego Maury · diegomaury.mx ·
-      <a href="mailto:dm@diegomaury.mx">dm@diegomaury.mx</a> ·
-      <a href="portfolio/">Portfolio completo →</a> ·
-      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" target="_blank" rel="noopener">Agendar</a> ·
+      © 2026 Diego Maury. Todos los derechos reservados. ·
       <a href="/politicas-privacidad.html">Política de privacidad</a> ·
       <a href="/terminos-y-condiciones.html">Términos y condiciones</a>
     </p>
