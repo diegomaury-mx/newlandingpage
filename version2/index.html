@@ -741,6 +741,34 @@
     }
     .footer-copy a { color: var(--t3); text-decoration: none; transition: color 150ms; }
     .footer-copy a:hover { color: var(--t2); }
+
+    /* ── DIAGRAMA ESTRATEGIA→SISTEMA (S3/S4 version2) ── */
+    .diagram-block {
+      font-family: var(--mono); font-size: 12px; line-height: 1.6;
+      color: var(--t2); background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 13px; padding: 24px; overflow-x: auto; white-space: pre;
+      margin: 28px 0;
+    }
+
+    /* ── TABLA DE CAPACIDADES (S4 version2) ── */
+    .cap-table { width: 100%; border-collapse: collapse; margin: 28px 0; }
+    .cap-table th, .cap-table td {
+      text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border);
+      font-size: 13px; color: var(--t2);
+    }
+    .cap-table th {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--t3); font-weight: 500;
+    }
+    .cap-table td:first-child { color: var(--t1); font-weight: 600; }
+
+    /* ── LINK DE CASO DENTRO DE .ip (S4 version2) ── */
+    .ip-case-link {
+      display: inline-block; margin-top: 14px; font-family: var(--mono);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--ember); text-decoration: none;
+    }
+    .ip-case-link:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
