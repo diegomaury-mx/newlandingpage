@@ -1,70 +1,122 @@
 /**
  * Astro Content Collections — Schema Definitions
  *
- * Sprint 0.5: Domain model only. No pages, routes, or components.
- * Sprint 1: This file activates when Astro is initialized (`npm create astro`).
+ * `cases`, `metrics` y `siteCopy` son las 3 colecciones del CMS de Notion
+ * (Diego CMS): cargan datos en build vía Content Layer API (`loader:`),
+ * validadas contra el contrato real en `docs/platform/notion-astro-contract.md`.
+ * `projects`, `playbooks`, `insights` y `services` son colecciones de archivo
+ * local, fuera del alcance de Diego CMS — sin tocar aquí.
  *
- * Requires: astro@^4.0.0
+ * Requires: astro@^5.0.0 (Content Layer API estable)
  * All date fields use ISO 8601 string format (e.g. "2024-03-15").
  * All slug references use kebab-case filenames without extension.
  */
 
 import { defineCollection, z } from 'astro:content';
+import { casesLoader, metricsLoader, siteCopyLoader } from '../services/notionLoaders.ts';
 
-// ─── Case Study ──────────────────────────────────────────────────────────────
+// ─── Case Study (fuente: SSOT - Portafolio Proyectos) ─────────────────────────
 
 const cases = defineCollection({
-  type: 'content',
+  loader: casesLoader,
+  schema: z
+    .object({
+      title: z.string().min(1),
+      // 12/27 fichas reales no tienen Organización y 11/27 no tienen Tipo
+      // (fichas Draft/Archivo aún sin curar) — opcionales para no bloquear
+      // el build entero por contenido en progreso que no se va a publicar.
+      organization: z.string().optional(),
+      type: z.string().optional(),
+      role: z.string(),
+      objective: z.string(),
+      resultsAndActions: z.string(),
+      quantData: z.string(),
+      anchorMetric: z.string(),
+      publicationStatus: z
+        .enum(['Draft', 'En revisión', 'Publicado', 'Archivado'])
+        .default('Draft'),
+      publishable: z.boolean().default(false),
+      layer: z.enum(['Insignia', 'Soporte', 'Archivo']),
+      channels: z.array(z.enum(['Sitio', 'LinkedIn', 'CV', 'llms.txt'])).default([]),
+      capabilities: z.array(z.string()).default([]),
+      evidenceUrl: z.string().url().optional(),
+      masterCase: z.array(z.string()).default([]),
+      editions: z.array(z.string()).default([]),
+      year: z.string().optional(),
+      banner: z.string().optional(),
+      logo: z.string().optional(),
+      // draft = NOT (Estado publicación == "Publicado" AND Publicable == true)
+      draft: z.boolean().default(true),
+    })
+    .superRefine((data, ctx) => {
+      // Regla transversal del contrato: capa Insignia no puede publicarse
+      // (draft = false) sin métrica ancla y evidencia verificadas.
+      if (data.layer === 'Insignia' && !data.draft) {
+        if (!data.anchorMetric.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['anchorMetric'],
+            message: 'Ficha Insignia publicada sin Métrica ancla — bloquea el build.',
+          });
+        }
+        if (!data.evidenceUrl) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['evidenceUrl'],
+            message: 'Ficha Insignia publicada sin Evidencia — bloquea el build.',
+          });
+        }
+      }
+    }),
+});
+
+// ─── Métricas oficiales (fuente: Métricas oficiales — Portafolio D) ───────────
+
+const metrics = defineCollection({
+  loader: metricsLoader,
+  schema: z.object({
+    metric: z.string().min(1),
+    slug: z.string().regex(/^[a-z0-9-]+$/, 'slug debe ser kebab-case'),
+    value: z.string(),
+    canonicalClaim: z.string(),
+    mandatoryQualifier: z.string(),
+    timeframe: z.string(),
+    entity: z.string().optional(),
+    allowedSurfaces: z
+      .array(
+        z.enum([
+          'Hero',
+          'Caso de estudio',
+          'llms.txt',
+          'CV',
+          'Pitch deck',
+          'LinkedIn',
+          'Sitio web',
+        ])
+      )
+      .default([]),
+    status: z.enum(['Vigente', 'Condicionada', 'Retirada', 'En revisión']).optional(),
+    publicability: z
+      .enum(['Pública', 'Interna', 'A solicitud', 'No publicable'])
+      .optional(),
+    evidenceGrade: z.enum(['published', 'own']).optional(),
+    reputationalRisk: z.enum(['Bajo', 'Medio', 'Alto']).optional(),
+    evidenceUrl: z.string().url().optional(),
+    source: z.string().optional(),
+    usageNote: z.string().optional(),
+    relatedCase: z.array(z.string()).default([]),
+    // buildable = Estado == "Vigente" AND Publicabilidad IN [Pública, A solicitud]
+    buildable: z.boolean(),
+  }),
+});
+
+// ─── Copy Oficial (fuente: Copy Oficial · diegomaury.mx, singleton) ───────────
+
+const siteCopy = defineCollection({
+  loader: siteCopyLoader,
   schema: z.object({
     title: z.string(),
-    organization: z.string(),
-    industry: z.string(),
-    role: z.string(),
-    period: z.object({
-      start: z.string(),
-      end: z.string().optional(), // omit if ongoing
-    }),
-    context: z.string(),
-    challenge: z.string(),
-    objectives: z.array(z.string()).min(1),
-    constraints: z.array(z.string()).optional(),
-    actions: z.array(z.string()).min(3),
-    results: z.array(z.string()).min(1),
-    metrics: z.array(
-      z.object({
-        label: z.string(),
-        value: z.string(),
-        delta: z.string().optional(), // e.g. "+600%", "-40%"
-      })
-    ).min(1),
-    lessonsLearned: z.array(z.string()).optional(),
-    relatedPlaybooks: z.array(z.string()).optional(), // slugs
-    relatedServices: z.array(z.string()).optional(),  // slugs
-    gallery: z.array(
-      z.object({
-        src: z.string(),
-        alt: z.string(),
-        caption: z.string().optional(),
-      })
-    ).optional(),
-    testimonial: z.object({
-      quote: z.string(),
-      author: z.string(),
-      role: z.string(),
-      organization: z.string(),
-    }).optional(),
-    cta: z.object({
-      label: z.string(),
-      href: z.string(),
-    }).optional(),
-    // SEO
-    seoTitle: z.string().optional(),
-    seoDescription: z.string().max(160).optional(),
-    ogImage: z.string().optional(),
-    // Publishing
-    publishedAt: z.string(),
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(true),
+    markdown: z.string(),
   }),
 });
 
@@ -194,6 +246,8 @@ const services = defineCollection({
 
 export const collections = {
   cases,
+  metrics,
+  siteCopy,
   projects,
   playbooks,
   insights,
