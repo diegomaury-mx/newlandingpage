@@ -155,7 +155,6 @@ Filtrar SIEMPRE por relación a proyecto "Portafolio D" (`Proyectos, Ideas y Loc
 - Buscar en Notion por título exacto, workspace "Notion de Diego".
 
 ### Memoria y cierre de sesión (/close-session)
-- Filtro de invariantes (paso "CLAUDE.md"): fecha + commit + "ejecutado/cerrado" = Changelog de Notion, NO CLAUDE.md. A este archivo solo entran invariantes no derivables del código.
 - Lección aprendida (creencia técnica corregida) → `~/.claude/memory/lessons-learned.md`; genera changelog solo si acompaña un cambio registrable.
 - Memoria del proyecto → `~/.claude/projects/...newlandingpage/memory/` (un archivo por hecho + índice en `MEMORY.md`; actualizar antes que duplicar).
 - Barrido de pendientes: ningún pendiente sobrevive fuera de Tareas y Misiones (anti-duplicados por título exacto; lo de <2 min se resuelve en la sesión, no se registra). El resumen final mapea cada pendiente a su tarea.
@@ -167,6 +166,7 @@ Filtrar SIEMPRE por relación a proyecto "Portafolio D" (`Proyectos, Ideas y Loc
 - **QA visual y accesibilidad — ruta única, sin fallbacks**: `npm run lint` / `npm run test:a11y` / `npm run verify:visual` (Playwright + `@axe-core/playwright`, config en `playwright.config.ts`, specs en `tests/qa/`). Páginas cubiertas: `index.html`, `portfolio/index.html`, los 4 casos (`heineken`, `sofi`, `redux-incmty`, `innovation-systems`), `politicas-privacidad.html`, `terminos-y-condiciones.html`, `404.html`. Nunca improvisar un fallback ad-hoc de browser (ni Puppeteer ni Claude-in-Chrome) para QA: si Playwright falla, reportar el error tal cual, no rodearlo.
 - `stylelint` (config en `package.json` → `"stylelint"`) está ajustado a la convención BEM real del CSS (`selector-class-pattern` acepta `__`/`--`) y desactiva reglas puramente estilísticas nunca aplicadas (notación de color, saltos de línea, `single-line-max-declarations`, etc.) — esto no es debilitar el lint, es alinearlo con el CSS ya existente en vez de forzar una reescritura masiva fuera de alcance.
 - `qa-output/screenshots/` es regenerable (gitignored) — nunca se versiona.
+- `verify:visual` (Playwright `fullPage` screenshot) captura la mayoría de las secciones en negro/vacío por debajo del hero: es el efecto esperado de `[data-reveal]` (`opacity:0` hasta que el `IntersectionObserver` del sitio dispara `.is-visible` por scroll real, no por el auto-scroll interno de Playwright al hacer stitching). Ya ocurre igual en `master` sin cambios — no es una regresión de una feature nueva. Para verificar visualmente contenido nuevo, usar el navegador real (Claude-in-Chrome) con scroll físico, no confiar en el PNG de `verify:visual` para secciones bajo el fold.
 - `assets/css/colors_and_type.css` está excluido del glob de `lint` (`!assets/css/colors_and_type.css`): es el archivo deprecado sin uso ya documentado en la sección 4 ("nunca `colors_and_type.css`, sus variables ya no existen"). Es corrección de scope del linter, no del código.
 - Decisión: la config de stylelint vive inline en `package.json` (clave nativa) en lugar de `.stylelintrc.json`, para mantenerla fuera del alcance del hook `config-protection` del plugin ecc sin desactivarlo. Cualquier cambio futuro a esta config requiere aprobación explícita del usuario.
 
@@ -175,7 +175,7 @@ Filtrar SIEMPRE por relación a proyecto "Portafolio D" (`Proyectos, Ideas y Loc
 | Tema | Fuente de verdad |
 |---|---|
 | Código | Git (`master`) |
-| Contenido / copy | SSOT de copy + Writing DNA "Estilo y voz" (Notion) |
+| Contenido / copy | Bloque "Copy Activo" (S1-S8, synced block) dentro de la página "Portafolio D" en Notion + Writing DNA "Estilo y voz". Regla propia: si el sitio cambia, este bloque se actualiza en la misma sesión — pero **nunca vía `notion-update-page update_content`** (bloque anidado con toggles/columns/callouts; ese comando ya ha borrado contenido hermano, ver `notion-update-content-gotcha` en memoria). Edición manual por Diego, con el texto preparado en un doc de `docs/superpowers/specs/`. |
 | Métricas | 📊 Métricas oficiales — Portafolio D (espejo: `assets/data/metrics.json`) |
 | Diseño | Tokens DS V2 "Ember on Ink" (`v2-tokens.css`) |
 | Historial de cambios | Changelog — Portafolio D (Notion); `CHANGELOG.md` = espejo técnico |
