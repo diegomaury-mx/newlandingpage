@@ -1472,6 +1472,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     countEls.forEach(el => counterObserver.observe(el));
   }
+
+  // ── Senja: carga diferida de widgets (grid + single) ──
+  function mountSenjaWidget(mountEl, widgetId) {
+    if (!mountEl || mountEl.dataset.senjaLoaded) return;
+    mountEl.dataset.senjaLoaded = 'true';
+
+    const embed = document.createElement('div');
+    embed.className = 'senja-embed';
+    embed.dataset.id = widgetId;
+    embed.dataset.mode = 'shadow';
+    embed.dataset.lazyload = 'false';
+    embed.style.display = 'block';
+    embed.style.width = '100%';
+    mountEl.appendChild(embed);
+
+    const script = document.createElement('script');
+    script.src = `https://widget.senja.io/widget/${widgetId}/platform.js`;
+    script.async = true;
+    document.body.appendChild(script);
+  }
+
+  const senjaWidgets = [
+    { id: 'senjaGridMount', widgetId: '93ff9581-ba54-4ba8-a053-f7d0889cd4d0' },
+    { id: 'senjaSingleMount', widgetId: 'd5b4c965-596d-4cb7-81d0-ef2a0b60ab6c' },
+  ];
+
+  const senjaObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const match = senjaWidgets.find(w => w.id === entry.target.id);
+        if (match) mountSenjaWidget(entry.target, match.widgetId);
+        senjaObserver.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '200px 0px' });
+
+  senjaWidgets.forEach(w => {
+    const el = document.getElementById(w.id);
+    if (el) senjaObserver.observe(el);
+  });
 </script>
 </body>
 </html>
