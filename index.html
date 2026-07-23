@@ -569,6 +569,26 @@
       text-transform: uppercase; color: var(--t3); margin-top: 5px;
     }
 
+    /* ── PRUEBA SOCIAL (S6) ── */
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    @media (max-width: 900px) { .testimonial-grid { grid-template-columns: 1fr; } }
+    .testimonial-card {
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 13px; padding: 26px 26px 24px;
+      display: flex; flex-direction: column; gap: 18px;
+      transition: border-color 200ms, transform 250ms var(--ease);
+    }
+    .testimonial-card:hover { border-color: var(--t3); transform: translateY(-3px); }
+    .testimonial-quote { font-size: 13.5px; line-height: 1.65; color: var(--t2); flex-grow: 1; }
+    .testimonial-cite { display: flex; flex-direction: column; gap: 2px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .testimonial-name { font-size: 13px; font-weight: 700; color: var(--t1); }
+    .testimonial-role {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--t3);
+    }
+    .testimonial-mount { min-height: 200px; }
+    .testimonial-mount--single { min-height: 260px; max-width: 640px; margin: 0 auto; }
+
     /* ── SERVICES (S7) ── */
     .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     @media (max-width: 900px) { .svc-grid { grid-template-columns: 1fr; } }
