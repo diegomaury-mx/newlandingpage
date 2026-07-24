@@ -128,7 +128,31 @@ const evidenceLabel = sections.get('S4')?.label ?? 'Evidencia';
 const evidenceHeadline = heading1(s4);
 const evidenceIntro = paragraphs(blocksBeforeHeading(s4, ['# Casos destacados']));
 const evidenceCards = caseCards(s4);
-const evidenceTable = firstTable(s4);
+
+// Slugs reales de la coleccion `cases` (verificados contra el build de
+// portfolio/[slug].astro). El copy anonimiza "PropTech" en vez de nombrar
+// FlipHouse, pero el caso real detras de esa tarjeta es SOFI.
+function caseLink(title: string): string | null {
+  const key = title.toLowerCase();
+  if (key.includes('proptech')) return '/portfolio/sofi';
+  if (key.includes('heineken')) return '/portfolio/heineken-green-challenge';
+  if (key.includes('hacksureste')) return '/portfolio/hacksureste';
+  return null;
+}
+
+// "111 ideas validadas en una sola edicion" no esta en el SSOT de metricas
+// (assets/data/metrics.json): no se puede verificar ni publicar per el SOP
+// de metricas, asi que se retira del render aunque siga en el copy de
+// Notion (pendiente de correccion en la fuente, ver spec 2026-07-24).
+const UNVERIFIED_METRIC_FRAGMENTS = [' · 111 ideas validadas en una sola edición'];
+function stripUnverifiedMetrics(cell: string): string {
+  return UNVERIFIED_METRIC_FRAGMENTS.reduce((acc, fragment) => acc.replace(fragment, ''), cell);
+}
+const rawEvidenceTable = firstTable(s4);
+const evidenceTable = rawEvidenceTable && {
+  ...rawEvidenceTable,
+  rows: rawEvidenceTable.rows.map((row) => row.map(stripUnverifiedMetrics)),
+};
 // El diagrama pasa de bloque de texto (una etapa por linea, separadas por
 // "↓") a un grafico visual de barras ascendentes: solo se necesitan los
 // nombres de etapa, en orden.
@@ -327,7 +351,20 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
     padding: 9px 17px; border-radius: 6px; text-decoration: none; margin-left: 8px; transition: opacity 150ms, transform 150ms;
   }
   .nav__cta:hover { opacity: 0.88; transform: translateY(-1px); }
-  @media (max-width: 900px) { .nav__links { display: none; } }
+  .nav__burger { display: none; background: none; border: none; cursor: pointer; padding: 6px; color: var(--t2); }
+  .nav__burger svg { display: block; }
+  @media (max-width: 900px) {
+    .nav__links {
+      display: none; position: fixed; inset: 60px 0 0 0;
+      background: rgba(10,6,18,0.98); backdrop-filter: blur(16px);
+      flex-direction: column; align-items: flex-start; gap: 0;
+      padding: 24px 32px; border-top: 1px solid var(--border); z-index: 49;
+    }
+    .nav__links.is-open { display: flex; }
+    .nav__link { font-size: 17px; padding: 12px 0; width: 100%; border-radius: 0; }
+    .nav__cta { margin-left: 0; margin-top: 12px; }
+    .nav__burger { display: block; }
+  }
 
   /* ── HERO ── */
   .hero { padding: 96px 0 64px; }
@@ -427,6 +464,8 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   .case-card__results { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
   .case-card__results li { font-family: var(--mono); font-size: 12.5px; color: var(--t1); padding-left: 16px; position: relative; }
   .case-card__results li::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--ember); }
+  .case-card__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--t2); text-decoration: none; padding-top: 6px; transition: color 150ms; }
+  .case-card__link:hover { color: var(--ember); }
 
   /* Tabla simple: sin caja/borde envolvente, solo lineas divisorias — el estilo que Diego prefiere. */
   .evidence__table { width: 100%; border-collapse: collapse; margin-top: 64px; font-size: 13px; }
@@ -512,7 +551,11 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   .talk { padding: 96px 0; background: var(--bg-2); border-top: 1px solid var(--border); }
   .talk h2 { margin-top: 14px; font-size: clamp(1.65rem, 2.7vw, 2.5rem); font-weight: 800; letter-spacing: -0.028em; line-height: 1.1; max-width: 30ch; }
   .talk > .wrap > p { margin-top: 16px; font-size: 15px; color: var(--t2); line-height: 1.75; max-width: 68ch; }
-  .talk__topics { margin-top: 48px; }
+  .talk__grid { margin-top: 48px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; }
+  .talk__media { border-radius: 16px; overflow: hidden; aspect-ratio: 4/5; max-width: 280px; margin: 0 auto; border: 1px solid var(--border); }
+  .talk__media img { width: 100%; height: 100%; object-fit: cover; }
+  @media (max-width: 800px) { .talk__grid { grid-template-columns: 1fr; } }
+  .talk__topics { margin-top: 0; }
   .talk__topics h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
   .talk__topics ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
   .talk__topics li { font-size: 14px; color: var(--t2); padding-left: 18px; position: relative; }
@@ -523,6 +566,8 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   .talk__alt { margin-top: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .talk__alt-item { display: flex; align-items: center; gap: 10px; }
   .talk__sep { font-family: var(--mono); font-size: 12px; color: var(--t3); }
+  .inline-link { color: var(--ember); text-decoration: underline; text-underline-offset: 2px; font-size: 14px; }
+  .inline-link:hover, .inline-link:focus-visible { color: var(--t1); }
 
   /* ── SIGUIENTE PASO (S8, cierre) ── */
   .final-cta { padding: 96px 0; text-align: center; }
@@ -578,6 +623,11 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
       <a href="#hablemos" class="nav__link">Conversemos</a>
       <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="nav__cta" target="_blank" rel="noopener">Agendar diagnóstico</a>
     </div>
+    <button type="button" class="nav__burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>
+    </button>
   </div>
 </nav>
 
@@ -701,6 +751,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
       <div class="evidence__cards">
         {evidenceCards.map((card) => {
           const logo = cardLogo(card.title);
+          const link = caseLink(card.title);
           return (
           <article class="case-card">
             {logo && <img class="case-card__logo" src={logo.src} alt={logo.alt} loading="lazy">}
@@ -712,6 +763,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
                 {card.results.map((result) => <li>{result}</li>)}
               </ul>
             )}
+            {link && <a href={link} class="case-card__link">Ver caso completo →</a>}
           </article>
           );
         })}
@@ -862,14 +914,19 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
     <h2>{talkHeadline}</h2>
     {talkIntro.map((p) => <p>{p}</p>)}
 
-    {talkTopics.length > 0 && (
-      <div class="talk__topics">
-        <h3>{talkTopicsHeading}</h3>
-        <ul>
-          {talkTopics.map((topic) => <li>{topic}</li>)}
-        </ul>
+    <div class="talk__grid">
+      {talkTopics.length > 0 && (
+        <div class="talk__topics">
+          <h3>{talkTopicsHeading}</h3>
+          <ul>
+            {talkTopics.map((topic) => <li>{topic}</li>)}
+          </ul>
+        </div>
+      )}
+      <div class="talk__media">
+        <img src="/cms-media/diego/diegomaurypng.png" alt="Diego Maury" loading="lazy" width="700" height="875">
       </div>
-    )}
+    </div>
 
     <div class="talk__agenda">
       <h3>Agenda una conversación</h3>
@@ -981,6 +1038,21 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
     }, { rootMargin: '-40% 0px -55% 0px' });
     navSections.forEach((section) => sectionObserver.observe(section));
   }
+
+  // ── Nav: menu movil (burger) ──
+  const navBurger = document.getElementById('navBurger');
+  const navLinksWrap = document.getElementById('navLinks');
+  navBurger?.addEventListener('click', () => {
+    const isOpen = navLinksWrap?.classList.toggle('is-open') ?? false;
+    navBurger.setAttribute('aria-expanded', String(isOpen));
+    navBurger.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+  });
+  navLinksWrap?.querySelectorAll('.nav__link, .nav__cta').forEach((link) => {
+    link.addEventListener('click', () => {
+      navLinksWrap.classList.remove('is-open');
+      navBurger?.setAttribute('aria-expanded', 'false');
+    });
+  });
 
   // ── Acordeon "Como trabajo" ──
   const accItems = document.querySelectorAll('.acc-item');
