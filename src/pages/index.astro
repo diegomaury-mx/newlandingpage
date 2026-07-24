@@ -44,6 +44,31 @@ const sections = siteCopy ? parseSiteCopySections(siteCopy.data.markdown) : new 
 const metricsEntries = await getCollection('metrics');
 const incmtyMetric = metricsEntries.find((entry) => entry.id === 'incmty-participantes-inscritos');
 
+// --- Identidad interna de las secciones ---------------------------------------
+// Los ids/anclas usan el CODIGO INTERNO del SSOT (S1..S8), no el titulo
+// visible. Diego renombra secciones en Notion ("Hablemos" -> "Colaboremos" en
+// el pivote del 2026-07-24) y un ancla derivada del titulo se rompe en cada
+// renombre. El codigo interno es estable; la etiqueta visible del nav se lee
+// del SSOT en cada build.
+const SECTION_IDS = {
+  S1: 's1-hero',
+  S2: 's2-quien-soy',
+  S3: 's3-problema',
+  S4: 's4-evidencia',
+  S5: 's5-como-trabajo',
+  S6: 's6-sistemas-propios',
+  S6b: 's6b-prueba-social',
+  S7: 's7-colaboremos',
+  S8: 's8-siguiente-paso',
+} as const;
+
+/** Items del nav: codigo interno fijo + etiqueta viva del SSOT. */
+const NAV_KEYS = ['S2', 'S3', 'S4', 'S5', 'S6', 'S7'] as const;
+const navItems = NAV_KEYS.filter((key) => sections.has(key)).map((key) => ({
+  href: `#${SECTION_IDS[key]}`,
+  label: sections.get(key)!.label,
+}));
+
 // --- S1 · Hero ---------------------------------------------------------------
 const s1 = sections.get('S1')?.blocks ?? [];
 const heroName = heading1(s1);
@@ -197,28 +222,57 @@ const testimonialsHeadline = heading1(s6b);
 const testimonialsIntro = paragraphs(blocksBeforeHeading(s6b, ['>']));
 const testimonialItems = testimonials(s6b);
 
-// --- S7 · Formas de trabajar conmigo ------------------------------------------
+// --- S7 · Colaboremos ---------------------------------------------------------
+// Los headings de esta seccion los renombra Diego en el SSOT (el pivote del
+// 2026-07-24 cambio "En una primera conversacion" -> "Temas en los que puedo
+// aportar" y "Agenda una conversacion" -> "Conversemos"). Se localizan por
+// nivel y posicion, nunca por su texto literal.
 const s7 = sections.get('S7')?.blocks ?? [];
-const talkLabel = sections.get('S7')?.label ?? 'Formas de trabajar conmigo';
+const talkLabel = sections.get('S7')?.label ?? 'Colaboremos';
 const talkHeadline = heading1(s7);
-const talkIntro = paragraphs(blocksBeforeHeading(s7, ['### En una primera conversación']));
-const talkTopicsHeading =
-  s7.find((b) => b.trim().startsWith('### En una primera conversación'))?.trim().slice(4).trim() ?? '';
-const talkTopics = bulletItems(blocksAfterHeading(s7, '### En una primera conversación'));
-const afterAgenda = blocksAfterHeading(s7, '## Agenda una conversación');
+const talkIntro = paragraphs(blocksBeforeHeading(s7, ['### ', '## ']));
+const talkTopicsHeading = s7.find((b) => b.trim().startsWith('### '))?.trim().slice(4).trim() ?? '';
+const talkTopics = bulletItems(s7);
+
+// Bloque "Estas contratando?": parrafo protagonista + su par de CTAs.
+const hiringIndex = s7.findIndex((b) => b.trim().startsWith('¿Estás contratando?'));
+const hiringText = hiringIndex >= 0 ? s7[hiringIndex].trim() : '';
+const hiringCtas = hiringIndex >= 0 ? ctaLabels(s7.slice(hiringIndex + 1)) : [];
+
+// Sub-bloque de agenda: ultimo heading_2 de la seccion.
+const agendaHeadingBlock = [...s7].reverse().find((b) => b.trim().startsWith('## '));
+const agendaHeading = agendaHeadingBlock?.trim().slice(3).trim() ?? 'Conversemos';
+const afterAgenda = agendaHeadingBlock ? blocksAfterHeading(s7, agendaHeadingBlock.trim()) : [];
 const talkAltLine = afterAgenda.find((b) => b.toLowerCase().includes('envíame un correo'))?.trim() ?? '';
 const talkAltLinks = talkAltLine.split('·').map((s) => s.trim()).filter(Boolean);
 // paragraphs() no filtra el separador "o" ni la linea de links alternos (no son
 // bullets/headings/etc.): se excluyen aparte para no duplicarlos como texto plano.
 const agendaIntro = paragraphs(afterAgenda).filter((p) => p !== 'o' && p !== talkAltLine);
-const agendaCtaLabel = ctaLabels(afterAgenda)[0] || 'Agendar diagnóstico (30 min)';
-const CONTACT_HREF: Record<string, string> = {
-  linkedin: 'https://www.linkedin.com/in/diegomaury',
-  correo: 'mailto:dm@diegomaury.mx',
-};
-function contactHref(label: string): string {
-  const key = label.toLowerCase().includes('linkedin') ? 'linkedin' : 'correo';
-  return CONTACT_HREF[key];
+const agendaCtaLabel = ctaLabels(afterAgenda)[0] || 'Agendar conversación (30 min)';
+
+// --- Destinos de CTA ----------------------------------------------------------
+// Se resuelven por la ETIQUETA del boton, nunca por su posicion: el SSOT
+// reordena y renombra CTAs (el pivote del 2026-07-24 cambio el primario del
+// hero de "Agendar diagnostico" a "Ver casos de estudio") y un mapeo
+// posicional mandaria "Ver casos de estudio" a Calendly.
+const CV_HREF = '/cv/diego-maury-cv.pdf';
+const LINKEDIN_HREF = 'https://www.linkedin.com/in/diegomaury';
+const MAIL_HREF = 'mailto:dm@diegomaury.mx';
+const CALENDAR_HREF = 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun';
+
+interface CtaTarget {
+  href: string;
+  download?: boolean;
+  external?: boolean;
+}
+
+function ctaTarget(label: string): CtaTarget {
+  const l = label.toLowerCase();
+  if (l.includes('caso') || l.includes('portafolio')) return { href: `#${SECTION_IDS.S4}` };
+  if (l.includes('cv')) return { href: CV_HREF, download: true };
+  if (l.includes('linkedin')) return { href: LINKEDIN_HREF, external: true };
+  if (l.includes('correo')) return { href: MAIL_HREF };
+  return { href: CALENDAR_HREF, external: true };
 }
 
 // --- S8 · Siguiente paso -------------------------------------------------------
@@ -227,14 +281,16 @@ function contactHref(label: string): string {
 const s8 = sections.get('S8')?.blocks ?? [];
 const finalLabel = sections.get('S8')?.label ?? 'Siguiente paso';
 const finalHeadline = heading2(s8);
-const finalIntro = paragraphs(blocksBeforeHeading(s8, ['### Paso 01']));
+const finalIntro = paragraphs(blocksBeforeHeading(s8, ['### ']));
 const finalStepCards = headingCards(s8, '### ');
 const finalSteps = finalStepCards.map((card) => ({
   title: card.title,
   description: card.paragraphs[0] ?? '',
   tag: card.paragraphs[1] ?? '',
 }));
-const afterSteps = blocksAfterHeading(s8, `### ${finalStepCards[finalStepCards.length - 1]?.title ?? ''}`);
+const afterSteps = finalStepCards.length
+  ? blocksAfterHeading(s8, `### ${finalStepCards[finalStepCards.length - 1].title}`)
+  : [];
 const finalCtas = ctaLabels(afterSteps);
 const finalTrustLine = afterSteps.find((b) => b.includes('·') && !ctaLabels([b]).length)?.trim() ?? '';
 
@@ -261,8 +317,8 @@ const copyrightLine = contactParagraphs.find((p) => p.startsWith('©')) ?? '© 2
 
 const EXPLORE_HREF: Record<string, string> = {
   Portafolio: '/portfolio',
-  'Casos de estudio': '#evidencia',
-  'Sobre mí': '#quien-soy',
+  'Casos de estudio': `#${SECTION_IDS.S4}`,
+  'Sobre mí': `#${SECTION_IDS.S2}`,
   Newsletter: 'https://diegomaury.substack.com',
   LinkedIn: 'https://www.linkedin.com/in/diegomaury',
 };
@@ -560,6 +616,15 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   .talk__topics ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
   .talk__topics li { font-size: 14px; color: var(--t2); padding-left: 18px; position: relative; }
   .talk__topics li::before { content: ""; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--ember); }
+  /* Bloque "Estas contratando?": protagonista visual de S7 per el spec del pivote. */
+  .hiring {
+    margin-top: 44px; padding: 32px 34px; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 14px; position: relative; overflow: hidden;
+  }
+  .hiring::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--ember); }
+  .hiring p { font-size: 16px; color: var(--t1); line-height: 1.7; max-width: 68ch; }
+  .hiring__ctas { margin-top: 22px; display: flex; gap: 14px; flex-wrap: wrap; }
+
   .talk__agenda { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); }
   .talk__agenda h3 { font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 700; margin-bottom: 16px; }
   .talk__agenda p { font-size: 14px; color: var(--t2); line-height: 1.7; max-width: 60ch; margin-bottom: 24px; }
@@ -610,18 +675,13 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
 
 <nav class="nav" id="nav" aria-label="Navegación principal">
   <div class="wrap nav__inner">
-    <a href="#hero" class="nav__brand">
+    <a href={`#${SECTION_IDS.S1}`} class="nav__brand">
       <span class="nav__mark" aria-hidden="true"></span>
       <span>Diego Maury</span>
     </a>
     <div class="nav__links" id="navLinks">
-      <a href="#quien-soy" class="nav__link">Quién soy</a>
-      <a href="#problema" class="nav__link">El problema</a>
-      <a href="#evidencia" class="nav__link">Evidencia</a>
-      <a href="#como-trabajo" class="nav__link">Cómo trabajo</a>
-      <a href="#sistemas-propios" class="nav__link">Sistemas propios</a>
-      <a href="#hablemos" class="nav__link">Conversemos</a>
-      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="nav__cta" target="_blank" rel="noopener">Agendar diagnóstico</a>
+      {navItems.map((item) => <a href={item.href} class="nav__link">{item.label}</a>)}
+      <a href={`#${SECTION_IDS.S4}`} class="nav__cta">Ver casos de estudio</a>
     </div>
     <button type="button" class="nav__burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
@@ -631,7 +691,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   </div>
 </nav>
 
-<section class="hero" id="hero">
+<section class="hero" id={SECTION_IDS.S1}>
   <div class="wrap">
     <div class="hero__grid">
       <div>
@@ -640,8 +700,18 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
         {heroSub && <p class="sub">{heroSub}</p>}
         {heroCtas.length > 0 && (
           <div class="hero__ctas">
-            <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="btn-primary" target="_blank" rel="noopener">{heroCtas[0]}</a>
-            {heroCtas[1] && <a href="/cv/diego-maury-cv.pdf" class="btn-ghost" download>{heroCtas[1]}</a>}
+            {heroCtas.map((label, i) => {
+              const t = ctaTarget(label);
+              return (
+                <a
+                  href={t.href}
+                  class={i === 0 ? 'btn-primary' : 'btn-ghost'}
+                  download={t.download}
+                  target={t.external ? '_blank' : undefined}
+                  rel={t.external ? 'noopener' : undefined}
+                >{label}</a>
+              );
+            })}
           </div>
         )}
       </div>
@@ -663,7 +733,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   </div>
 </section>
 
-<section class="about" id="quien-soy">
+<section class="about" id={SECTION_IDS.S2}>
   <div class="wrap about__grid">
     <div>
       <div class="about__tagline">{aboutTagline}</div>
@@ -695,7 +765,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   </div>
 </section>
 
-<section class="problem" id="problema">
+<section class="problem" id={SECTION_IDS.S3}>
   <div class="wrap">
     <div class="problem__grid">
       <div>
@@ -741,7 +811,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   </div>
 </section>
 
-<section class="evidence" id="evidencia">
+<section class="evidence" id={SECTION_IDS.S4}>
   <div class="wrap">
     <div class="eyebrow">{evidenceLabel}</div>
     <h2>{evidenceHeadline}</h2>
@@ -802,11 +872,12 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
     <div class="evidence__footer">
       {evidenceStatLine && <div class="evidence__stat">{evidenceStatLine}</div>}
       <a href="/portfolio" class="btn-primary">{evidenceCtaLabel} →</a>
+
     </div>
   </div>
 </section>
 
-<section class="how-we-work" id="como-trabajo">
+<section class="how-we-work" id={SECTION_IDS.S5}>
   <div class="wrap">
     <div class="eyebrow">{workLabel}</div>
     <h2>{workHeadline}</h2>
@@ -858,7 +929,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   </div>
 </section>
 
-<section class="systems" id="sistemas-propios">
+<section class="systems" id={SECTION_IDS.S6}>
   <div class="wrap">
     <div class="eyebrow">{systemsLabel}</div>
     <h2>{systemsHeadline}</h2>
@@ -886,7 +957,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   </div>
 </section>
 
-<section class="testimonials" id="testimonios">
+<section class="testimonials" id={SECTION_IDS.S6b}>
   <div class="wrap">
     <div class="eyebrow">{testimonialsLabel}</div>
     <h2>{testimonialsHeadline}</h2>
@@ -908,7 +979,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
   </div>
 </section>
 
-<section class="talk" id="hablemos">
+<section class="talk" id={SECTION_IDS.S7}>
   <div class="wrap">
     <div class="eyebrow">{talkLabel}</div>
     <h2>{talkHeadline}</h2>
@@ -928,18 +999,54 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
       </div>
     </div>
 
+    {hiringText && (
+      <div class="hiring">
+        <p>{hiringText}</p>
+        {hiringCtas.length > 0 && (
+          <div class="hiring__ctas">
+            {hiringCtas.map((label, i) => {
+              const t = ctaTarget(label);
+              return (
+                <a
+                  href={t.href}
+                  class={i === 0 ? 'btn-primary' : 'btn-ghost'}
+                  download={t.download}
+                  target={t.external ? '_blank' : undefined}
+                  rel={t.external ? 'noopener' : undefined}
+                >{label}</a>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    )}
+
     <div class="talk__agenda">
-      <h3>Agenda una conversación</h3>
+      <h3>{agendaHeading}</h3>
       {agendaIntro.map((p) => <p>{p}</p>)}
-      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="btn-primary" target="_blank" rel="noopener">{agendaCtaLabel}</a>
+      {(() => {
+        const t = ctaTarget(agendaCtaLabel);
+        return (
+          <a
+            href={t.href}
+            class="btn-primary"
+            download={t.download}
+            target={t.external ? '_blank' : undefined}
+            rel={t.external ? 'noopener' : undefined}
+          >{agendaCtaLabel}</a>
+        );
+      })()}
       {talkAltLinks.length > 0 && (
         <div class="talk__alt">
-          {talkAltLinks.map((label, i) => (
-            <span class="talk__alt-item">
-              {i > 0 && <span class="talk__sep">o</span>}
-              <a href={contactHref(label)} class="inline-link" target={label.toLowerCase().includes('linkedin') ? '_blank' : undefined} rel={label.toLowerCase().includes('linkedin') ? 'noopener' : undefined}>{label}</a>
-            </span>
-          ))}
+          {talkAltLinks.map((label, i) => {
+            const t = ctaTarget(label);
+            return (
+              <span class="talk__alt-item">
+                {i > 0 && <span class="talk__sep">o</span>}
+                <a href={t.href} class="inline-link" target={t.external ? '_blank' : undefined} rel={t.external ? 'noopener' : undefined}>{label}</a>
+              </span>
+            );
+          })}
         </div>
       )}
     </div>
@@ -947,7 +1054,7 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
 </section>
 
 {finalHeadline && (
-  <section class="final-cta" id="siguiente-paso">
+  <section class="final-cta" id={SECTION_IDS.S8}>
     <div class="wrap final-cta__inner">
       <div class="eyebrow">{finalLabel}</div>
       <h2>{finalHeadline}</h2>
@@ -968,8 +1075,18 @@ const CONTACT_ITEM_HREF: Record<string, string> = {
       <div class="final-cta__buttons">
         {finalCtas.length > 0 && (
           <div class="final-cta__ctas">
-            <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="btn-primary" target="_blank" rel="noopener">{finalCtas[0]}</a>
-            {finalCtas[1] && <a href="/cv/diego-maury-cv.pdf" class="btn-ghost" download>{finalCtas[1]}</a>}
+            {finalCtas.map((label, i) => {
+              const t = ctaTarget(label);
+              return (
+                <a
+                  href={t.href}
+                  class={i === 0 ? 'btn-primary' : 'btn-ghost'}
+                  download={t.download}
+                  target={t.external ? '_blank' : undefined}
+                  rel={t.external ? 'noopener' : undefined}
+                >{label}</a>
+              );
+            })}
           </div>
         )}
         {finalTrustLine && <div class="final-cta__trust">{finalTrustLine}</div>}

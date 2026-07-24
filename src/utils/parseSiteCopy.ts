@@ -16,7 +16,14 @@ export interface SiteCopySection {
   blocks: string[];
 }
 
-/** Divide el markdown en secciones S1-S8/SEO, heading de seccion excluido. */
+/**
+ * Divide el markdown en secciones S1-S8/SEO, heading de seccion excluido.
+ *
+ * Si una clave aparece mas de una vez gana la PRIMERA: en el SSOT el bloque
+ * "Version Actual" va antes que cualquier version conservada como obsoleta, y
+ * ambas reusan los mismos codigos S1..S8. Sobreescribir dejaria publicado el
+ * copy viejo (paso el 2026-07-24 con el pivote a caratula de portafolio).
+ */
 export function parseSiteCopySections(markdown: string): Map<string, SiteCopySection> {
   const blocks = markdown.split('\n\n');
   const sections = new Map<string, SiteCopySection>();
@@ -24,8 +31,13 @@ export function parseSiteCopySections(markdown: string): Map<string, SiteCopySec
   for (const block of blocks) {
     const match = block.match(SECTION_HEADING);
     if (match) {
-      current = { key: match[1], label: match[2], blocks: [] };
-      sections.set(current.key, current);
+      const key = match[1];
+      if (sections.has(key)) {
+        current = null; // seccion duplicada (version obsoleta): se descarta entera
+        continue;
+      }
+      current = { key, label: match[2], blocks: [] };
+      sections.set(key, current);
       continue;
     }
     if (current) current.blocks.push(block);

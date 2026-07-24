@@ -176,7 +176,15 @@ export function getFileUrls(page: PageObjectResponse, name: string): string[] {
 /**
  * Recupera recursivamente todos los bloques hijos de un bloque o pagina.
  * Pagina automaticamente y desciende a bloques con `has_children`.
+ *
+ * NO desciende a `child_page` ni `child_database`: son paginas separadas, no
+ * cuerpo de esta pagina. Sin este corte, el singleton siteCopy arrastraba el
+ * contenido de sus paginas hermanas archivadas ("Obsoleto · Secciones
+ * reemplazadas el 24 jul 2026"), cuyos headings usan las mismas claves S1..S8
+ * y terminaban pisando al copy vigente.
  */
+const NON_BODY_BLOCK_TYPES = new Set(["child_page", "child_database"]);
+
 export async function fetchBlockChildren(
   blockId: string,
 ): Promise<BlockObjectResponse[]> {
@@ -187,6 +195,7 @@ export async function fetchBlockChildren(
   const fullBlocks = children.filter(isFullBlock);
   const result: BlockObjectResponse[] = [];
   for (const block of fullBlocks) {
+    if (NON_BODY_BLOCK_TYPES.has(block.type)) continue;
     result.push(block);
     if (block.has_children) {
       const nested = await fetchBlockChildren(block.id);
