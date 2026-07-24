@@ -1,0 +1,528 @@
+---
+// Home del portafolio (Fase 2 · Diego CMS): mismo diseño de
+// prototipo-portafolio.html, pero leyendo la coleccion `cases` real (Notion)
+// en vez de los datos hardcodeados. Ruta: /portfolio.
+// Solo se muestran fichas con draft=false (Estado publicacion=Publicado
+// AND Publicable=true) en las secciones Insignia/Soporte; el Archivo se lista
+// aparte y no filtra por draft porque nunca se publica como pagina propia.
+// Sigue construyendo a dist/, no toca el sitio LIVE (astro.config.mjs).
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { slugify } from '../utils/slug.ts';
+
+type CaseEntry = CollectionEntry<'cases'>;
+
+function hasEvidence(entry: CaseEntry): boolean {
+  return entry.data.hasVerifiedEvidence;
+}
+
+// Titulo de tarjeta = resultado como afirmacion (H1 del caso), nunca el rol.
+// Cae al `title` de Notion solo si la ficha aun no tiene esa narrativa escrita.
+function cardTitle(entry: CaseEntry): string {
+  return entry.data.resultHeadline || entry.data.title;
+}
+
+const CONTEXT_LINE_MAX = 160;
+
+// Linea de contexto de tarjeta: prioriza `Contexto tarjeta` (escrita a mano
+// para verse sola en una tarjeta). Si esta vacia (ficha aun no curada para
+// tarjeta), cae a `Rol de Diego` truncado como aproximacion temporal.
+function contextLine(entry: CaseEntry): string {
+  if (entry.data.cardContext) return entry.data.cardContext;
+  const role = entry.data.role;
+  if (!role) return '';
+  return role.length > CONTEXT_LINE_MAX
+    ? `${role.slice(0, CONTEXT_LINE_MAX)}…`
+    : role;
+}
+
+const allCases = await getCollection('cases');
+const idToTitle = new Map(allCases.map((c) => [c.id, c.data.title]));
+
+const published = allCases.filter((c) => !c.data.draft);
+const insignia = published.filter((c) => c.data.layer === 'Insignia');
+const soporte = published.filter((c) => c.data.layer === 'Soporte');
+const archivo = allCases.filter((c) => c.data.layer === 'Archivo');
+
+const featured = insignia[0];
+const restInsignia = insignia.slice(1);
+
+const totalPublicadas = insignia.length + soporte.length;
+const conEvidencia = [...insignia, ...soporte].filter(hasEvidence).length;
+const sinEvidencia = totalPublicadas - conEvidencia;
+
+const organizaciones = Array.from(
+  new Set([...insignia, ...soporte].map((c) => c.data.organization).filter(Boolean)),
+) as string[];
+
+const pageTitle = 'Portafolio · Diego Maury';
+const pageDescription =
+  'Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM. Cada caso publica su estado de evidencia.';
+const canonicalUrl = new URL('/portfolio', Astro.site).toString();
+
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: [...insignia, ...soporte].map((c, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    url: new URL(`/portfolio/${slugify(c.data.title)}`, Astro.site).toString(),
+    name: cardTitle(c),
+  })),
+};
+---
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>{pageTitle}</title>
+<meta name="description" content={pageDescription}>
+<link rel="canonical" href={canonicalUrl}>
+<meta property="og:type" content="website">
+<meta property="og:title" content={pageTitle}>
+<meta property="og:description" content={pageDescription}>
+<meta property="og:url" content={canonicalUrl}>
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content={pageTitle}>
+<meta name="twitter:description" content={pageDescription}>
+<script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
+<!--
+  Fase 2 · Diego CMS — construido desde Notion (coleccion `cases`, Content
+  Layer API). NO es LIVE: noindex,nofollow, sin analitica. El scaffold Astro
+  construye a dist/ y no esta desplegado (ver astro.config.mjs). El sitio
+  LIVE sigue siendo el HTML estatico de la raiz del repo.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #0A0612;
+    --bg-2:   #1A1128;
+    --border: #2A1F3D;
+    --t1:     #FAF8FC;
+    --t2:     #9A8CB0;
+    --t3:     #8B7C9E;
+    --t-body: #DDDBE0;
+    --ember:  #FF5C39;
+    --sans:   'Plus Jakarta Sans', system-ui, sans-serif;
+    --mono:   'DM Mono', ui-monospace, monospace;
+    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+    --wrap:   1160px;
+    --wrap-narrow: 900px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--t1);
+    font-family: var(--sans); line-height: 1.5; min-height: 100vh;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: var(--ember); }
+  ::selection { background: var(--ember); color: var(--bg); }
+  :focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 32px; }
+  .wrap-narrow { max-width: var(--wrap-narrow); margin: 0 auto; padding: 0 32px; }
+  .band { border-bottom: 1px solid var(--border); }
+  .band--raised { background: var(--bg-2); }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before { content: ""; width: 18px; height: 1px; background: var(--ember); }
+  .eyebrow--plain { color: var(--t3); letter-spacing: 0.16em; font-size: 9px; }
+  .eyebrow--plain::before { display: none; }
+  .label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ember);
+  }
+  .meta {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--t3);
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,6,18,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav__inner { height: 60px; display: flex; align-items: center; justify-content: space-between; }
+  .nav__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--t1); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+  .nav__mark { width: 22px; height: 22px; background: var(--ember); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
+  .nav__right { display: flex; align-items: center; gap: 16px; }
+  .nav__badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3); border: 1px solid var(--border); padding: 5px 10px; border-radius: 5px; }
+  .nav__brand span, .nav__badge { white-space: nowrap; }
+
+  /* ── HERO ── */
+  .hero { padding: 88px 0 64px; }
+  .hero h1 {
+    font-size: clamp(1.9rem, 4vw, 3.2rem); font-weight: 300;
+    letter-spacing: -0.02em; line-height: 1.18; max-width: 22ch;
+    margin-top: 26px;
+  }
+  .hero p { margin-top: 24px; font-size: 15px; color: var(--t2); max-width: 58ch; line-height: 1.7; }
+
+  /* ── CONTADOR DE EVIDENCIA (firma) ── */
+  .counter { padding: 64px 0; }
+  .counter__grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; margin-top: 20px;
+  }
+  .counter__cell { background: var(--bg); padding: 28px 26px; }
+  .counter__num {
+    font-size: clamp(2rem, 3.4vw, 3rem); letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums; color: var(--t1);
+  }
+  .counter__num--total { font-weight: 800; }
+  .counter__num--ok    { font-weight: 700; }
+  .counter__num--no    { font-weight: 400; color: var(--t3); }
+  .counter__cap { font-size: 13px; color: var(--t2); margin-top: 6px; }
+  .counter__note { margin-top: 18px; font-size: 12.5px; color: var(--t3); max-width: 60ch; line-height: 1.6; }
+
+  /* ── BARRA DE PRUEBA ── */
+  .trust { padding: 40px 0; }
+  .trust__row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+  .trust__chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--t2);
+    border: 1px solid var(--border); border-radius: 7px; padding: 11px 18px;
+    background: rgba(250,248,252,0.02);
+  }
+
+  /* ── GALERIA INSIGNIA ── */
+  .gallery { padding: 72px 0; }
+  .gallery h2 {
+    font-size: clamp(1.4rem, 2.4vw, 2rem); font-weight: 800;
+    letter-spacing: -0.025em; margin: 14px 0 44px; max-width: 44ch;
+  }
+  .empty-note { font-size: 13px; color: var(--t3); margin-top: 8px; }
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: var(--bg-2); transition: border-color 200ms var(--ease);
+  }
+  .card:hover, .card:focus-visible { border-color: var(--ember); }
+  .card--featured { margin-bottom: 20px; }
+  .card--featured .card__split { display: grid; grid-template-columns: 1.3fr 1fr; }
+  .card__body { padding: 40px; border-right: 1px solid var(--border); }
+  .card__side { padding: 40px; }
+  .card__title {
+    font-size: clamp(1.3rem, 2vw, 1.7rem); font-weight: 700; line-height: 1.25;
+    letter-spacing: -0.015em; color: var(--t1); margin: 18px 0;
+  }
+  .card__caps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+  .cap {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--t3); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px;
+  }
+  .card__scale { font-size: 12.5px; color: var(--t3); }
+  .card__metric { font-size: 15px; color: var(--t1); line-height: 1.5; margin: 10px 0 16px; }
+  .tally {
+    display: flex; align-items: baseline; gap: 14px;
+    padding-top: 16px; border-top: 1px solid var(--border);
+    font-family: var(--mono);
+  }
+  .tally__ok { font-size: 15px; font-weight: 600; color: var(--t1); }
+  .tally__no { font-size: 15px; color: var(--t3); }
+  .tally__cta { margin-left: auto; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ember); }
+
+  .gallery__rest { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .card--small { display: flex; flex-direction: column; padding: 26px 24px; border-radius: 12px; }
+  .card--small .card__title { font-size: 15px; margin: 14px 0; flex: 1; }
+  .card--small .card__metric { font-size: 12.5px; color: var(--t2); margin: 0 0 16px; }
+  .card--small .tally { padding-top: 14px; }
+  .card--small .tally__ok { font-size: 13px; }
+  .card--small .tally__no { font-size: 13px; }
+
+  /* ── MEDIA DE CASO ── */
+  .card__media {
+    position: relative; overflow: hidden; background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .card__media img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(1) contrast(1.05) brightness(0.62);
+    transition: filter 320ms var(--ease), transform 320ms var(--ease);
+  }
+  .card:hover .card__media img, .card:focus-visible .card__media img {
+    filter: grayscale(0.35) contrast(1) brightness(0.8);
+    transform: scale(1.02);
+  }
+  .card__media::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,6,18,0.1) 0%, rgba(10,6,18,0.72) 100%);
+    pointer-events: none;
+  }
+  .card--featured .card__media { height: 100%; min-height: 260px; border-bottom: none; border-right: 1px solid var(--border); }
+  .card--small .card__media { height: 132px; margin: -26px -24px 18px; border-radius: 12px 12px 0 0; }
+  .card__media img.card__logo {
+    position: absolute; left: 20px; bottom: 16px; z-index: 2;
+    width: 44px; height: 44px; border-radius: 8px; object-fit: contain;
+    background: rgba(10,6,18,0.82); border: 1px solid var(--border); padding: 4px;
+    filter: none; transform: none;
+  }
+  .card:hover .card__media img.card__logo,
+  .card:focus-visible .card__media img.card__logo { filter: none; transform: none; }
+  .card--featured .card__split { grid-template-columns: 0.85fr 1.1fr 0.9fr; }
+
+  /* Caso sin imagen: el hueco es el mensaje */
+  .media-void {
+    display: flex; flex-direction: column; gap: 6px;
+    align-items: center; justify-content: center; text-align: center;
+    background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(139,124,158,0.05) 8px 9px);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--t3); padding: 16px;
+  }
+  .card--small .media-void { height: 132px; margin: -26px -24px 18px; border-radius: 12px 12px 0 0; }
+  .card--featured .media-void { min-height: 260px; border-bottom: none; border-right: 1px solid var(--border); }
+
+  /* ── SOPORTE ── */
+  .support { padding: 64px 0; }
+  .support h2 { font-size: 1.2rem; font-weight: 700; margin: 8px 0 28px; letter-spacing: -0.01em; }
+  .support__list { border-top: 1px solid var(--border); }
+  .support__row {
+    display: grid; grid-template-columns: 1.4fr 2fr 1.2fr; gap: 20px;
+    padding: 16px 4px; border-bottom: 1px solid var(--border); align-items: baseline;
+  }
+  .support__title { font-size: 13.5px; font-weight: 600; color: var(--t1); }
+  .support__result { font-size: 12.5px; color: var(--t2); line-height: 1.5; }
+  .support__ev { font-family: var(--mono); font-size: 10.5px; color: var(--t3); text-align: right; line-height: 1.5; }
+  .support__ev a { color: var(--ember); text-decoration: none; border-bottom: 1px solid rgba(255,92,57,0.4); }
+  .support__ev a:hover { color: var(--t1); border-bottom-color: var(--t1); }
+
+  /* ── ARCHIVO ── */
+  .archive { padding: 56px 0 100px; }
+  .archive__toggle {
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    background: none; border: 1px solid var(--border); border-radius: 8px; padding: 14px 20px;
+    color: var(--t1); font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: border-color 200ms var(--ease);
+  }
+  .archive__toggle:hover { border-color: var(--ember); }
+  .archive__glyph { color: var(--t3); }
+  .archive__note { margin-top: 12px; font-size: 12px; color: var(--t3); max-width: 60ch; }
+  .archive__grid {
+    margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .archive__cell { background: var(--bg); padding: 16px 18px; }
+  .archive__cell strong { display: block; font-size: 12.5px; font-weight: 600; color: var(--t-body); }
+  .archive__cell span { font-family: var(--mono); font-size: 9px; color: var(--t3); letter-spacing: 0.04em; display: block; margin-top: 5px; }
+  [hidden] { display: none !important; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .wrap, .wrap-narrow { padding: 0 20px; }
+    .counter__grid { grid-template-columns: 1fr; }
+    .card--featured .card__split { grid-template-columns: 1fr; }
+    .card__body { border-right: none; border-bottom: 1px solid var(--border); padding: 28px 24px; }
+    .card__side { padding: 28px 24px; }
+    .gallery__rest { grid-template-columns: 1fr; }
+    .support__row { grid-template-columns: 1fr; gap: 6px; }
+    .support__ev { text-align: left; }
+    .archive__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .nav__badge { display: none; }
+    .nav__right { gap: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="/portfolio">
+      <span class="nav__mark" aria-hidden="true"></span>
+      <span>Diego Maury</span>
+    </a>
+    <div class="nav__right">
+      <span class="nav__badge">Diego CMS · Fase 2</span>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<section class="band hero">
+  <div class="wrap">
+    <div class="eyebrow">Strategic Program Director</div>
+    <h1>Encuentro el mecanismo que frena la ejecución de operaciones complejas, y lo convierto en sistemas medibles que el equipo sostiene.</h1>
+    <p>Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM. Este portafolio no publica lo que no puede probar, y lo dice en cada cifra.</p>
+  </div>
+</section>
+
+<section class="band band--raised counter">
+  <div class="wrap">
+    <div class="eyebrow">Estado de evidencia · fichas publicadas</div>
+    <div class="counter__grid">
+      <div class="counter__cell">
+        <div class="counter__num counter__num--total">{totalPublicadas}</div>
+        <div class="counter__cap">fichas publicadas</div>
+      </div>
+      <div class="counter__cell">
+        <div class="counter__num counter__num--ok">✔ {conEvidencia}</div>
+        <div class="counter__cap">con al menos un artefacto verificado en su tabla de evidencia</div>
+      </div>
+      <div class="counter__cell">
+        <div class="counter__num counter__num--no">✖ {sinEvidencia}</div>
+        <div class="counter__cap">sin artefacto verificado todavía, declarado y no escondido</div>
+      </div>
+    </div>
+    <p class="counter__note">Ninguna ficha de este portafolio aparece sin su estado de evidencia. Un ✖ no es un error: es la marca que lo distingue de uno que solo publica lo que le conviene.</p>
+  </div>
+</section>
+
+{organizaciones.length > 0 && (
+  <section class="band trust">
+    <div class="wrap">
+      <div class="eyebrow eyebrow--plain">Organizaciones</div>
+      <div class="trust__row">
+        {organizaciones.map((org) => <div class="trust__chip">{org}</div>)}
+      </div>
+    </div>
+  </section>
+)}
+
+<section class="band gallery">
+  <div class="wrap">
+    <div class="eyebrow">Casos insignia</div>
+    <h2>Cada caso, con su cuenta real de qué se puede probar.</h2>
+    {insignia.length === 0 && (
+      <p class="empty-note">Sin fichas Insignia publicadas todavía.</p>
+    )}
+    {featured && (
+      <a class="card card--featured" href={`/portfolio/${slugify(featured.data.title)}`}>
+        <div class="card__split">
+          {featured.data.banner ? (
+            <div class="card__media">
+              <img src={featured.data.banner} alt={featured.data.title} loading="lazy" width="1200" height="600" />
+              {featured.data.logo && <img class="card__logo" src={featured.data.logo} alt="" aria-hidden="true" loading="lazy" width="40" height="40" />}
+            </div>
+          ) : (
+            <div class="media-void"><span>Sin imagen publicable</span></div>
+          )}
+          <div class="card__body">
+            <span class="meta">{featured.data.organization ?? '—'} · {featured.data.year ?? '—'}</span>
+            <h3 class="card__title">{cardTitle(featured)}</h3>
+            <div class="card__caps">
+              {featured.data.capabilities.slice(0, 3).map((cap) => <span class="cap">{cap}</span>)}
+            </div>
+            {contextLine(featured) && (
+              <div class="card__scale">{contextLine(featured)}</div>
+            )}
+          </div>
+          <div class="card__side">
+            <span class="meta">Métrica ancla</span>
+            <div class="card__metric">{featured.data.anchorMetric || 'Sin métrica ancla registrada'}</div>
+            <div class="tally">
+              {hasEvidence(featured) ? <span class="tally__ok">✔</span> : <span class="tally__no">✖</span>}
+              <span class="tally__cta">Ver caso →</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    )}
+    {restInsignia.length > 0 && (
+      <div class="gallery__rest">
+        {restInsignia.map((c) => (
+          <a class="card card--small" href={`/portfolio/${slugify(c.data.title)}`}>
+            {c.data.banner ? (
+              <div class="card__media">
+                <img src={c.data.banner} alt={c.data.title} loading="lazy" width="600" height="264" />
+                {c.data.logo && <img class="card__logo" src={c.data.logo} alt="" aria-hidden="true" loading="lazy" width="40" height="40" />}
+              </div>
+            ) : (
+              <div class="media-void"><span>Sin imagen publicable</span></div>
+            )}
+            <span class="meta">{c.data.organization ?? '—'} · {c.data.year ?? '—'}</span>
+            <h3 class="card__title">{cardTitle(c)}</h3>
+            <div class="card__metric">{c.data.anchorMetric || 'Sin métrica ancla registrada'}</div>
+            <div class="tally">
+              {hasEvidence(c) ? <span class="tally__ok">✔</span> : <span class="tally__no">✖</span>}
+              <span class="tally__cta">→</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="band support">
+  <div class="wrap">
+    <div class="eyebrow eyebrow--plain">Soporte · {soporte.length} proyectos</div>
+    <h2>Programas y convocatorias que completan el registro operativo.</h2>
+    {soporte.length === 0 ? (
+      <p class="empty-note">Sin fichas Soporte publicadas todavía.</p>
+    ) : (
+      <div class="support__list">
+        {soporte.map((c) => (
+          <div class="support__row">
+            <div class="support__title">{c.data.title}</div>
+            <div class="support__result">{c.data.objective || c.data.resultsAndActions}</div>
+            <div class="support__ev">
+              {c.data.evidenceUrl ? (
+                <a href={c.data.evidenceUrl} target="_blank" rel="noopener">Ver evidencia</a>
+              ) : (
+                c.data.quantData || 'Sin evidencia registrada'
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="archive">
+  <div class="wrap">
+    <button class="archive__toggle" id="archiveToggle" aria-expanded="false" aria-controls="archiveGrid">
+      <span>Archivo · {archivo.length} fichas</span>
+      <span class="archive__glyph" id="archiveGlyph">+</span>
+    </button>
+    <p class="archive__note">Existen. No se exhiben. Ediciones y variantes de los casos anteriores, conservadas para trazabilidad.</p>
+    {archivo.length > 0 && (
+      <div class="archive__grid" id="archiveGrid" hidden>
+        {archivo.map((c) => (
+          <div class="archive__cell">
+            <strong>{c.data.title}</strong>
+            <span>{c.data.masterCase[0] ? (idToTitle.get(c.data.masterCase[0]) ?? '—') : '—'}</span>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+</main>
+
+<script>
+  const btn = document.getElementById('archiveToggle');
+  const grid = document.getElementById('archiveGrid');
+  const glyph = document.getElementById('archiveGlyph');
+  if (btn && grid && glyph) {
+    btn.addEventListener('click', () => {
+      const open = grid.hasAttribute('hidden');
+      grid.toggleAttribute('hidden', !open);
+      btn.setAttribute('aria-expanded', String(open));
+      glyph.textContent = open ? '−' : '+';
+    });
+  }
+</script>
+
+</body>
+</html>

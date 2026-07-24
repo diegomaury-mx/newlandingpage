@@ -15,6 +15,7 @@
     "verify:visual": "playwright test tests/qa/visual.spec.ts"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
     "@notionhq/client": "^5.23.2",
     "astro": "^5.18.2"
   },

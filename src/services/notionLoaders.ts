@@ -21,6 +21,7 @@ import type {
   RichTextItemResponse,
 } from "@notionhq/client";
 import {
+  fetchBlockChildren,
   fetchCases,
   fetchMetrics,
   fetchSiteCopy,
@@ -51,10 +52,47 @@ function plain(richText: RichTextItemResponse[]): string {
   return richText.map((item) => item.plain_text).join("");
 }
 
-/** Convierte el arbol de bloques de una pagina de Notion a Markdown plano. */
+/** Escapa `|` para que el texto de una celda no rompa una fila de tabla Markdown. */
+function escapeTableCell(text: string): string {
+  return text.replace(/\|/g, "\\|").replace(/\n/g, " ");
+}
+
+/**
+ * Convierte el arbol de bloques de una pagina de Notion a Markdown plano.
+ * `fetchBlockChildren` aplana el arbol (un bloque "table" es seguido en el
+ * mismo arreglo por sus "table_row" hijos), asi que las tablas se consumen
+ * con un indice manual en vez de un for..of: sin esto, las tablas de
+ * Resultados y Evidencia (✔/✖ por afirmacion) se perderian en silencio.
+ */
 export function blocksToMarkdown(blocks: BlockObjectResponse[]): string {
   const lines: string[] = [];
-  for (const block of blocks) {
+  let i = 0;
+  while (i < blocks.length) {
+    const block = blocks[i];
+    if (block.type === "table") {
+      const rows: string[][] = [];
+      i += 1;
+      while (i < blocks.length && blocks[i].type === "table_row") {
+        const row = blocks[i] as Extract<BlockObjectResponse, { type: "table_row" }>;
+        rows.push(row.table_row.cells.map((cell) => escapeTableCell(plain(cell))));
+        i += 1;
+      }
+      if (rows.length > 0) {
+        const width = rows[0].length;
+        const header = block.table.has_column_header ? rows[0] : Array(width).fill("");
+        const body = block.table.has_column_header ? rows.slice(1) : rows;
+        // Una sola entrada en `lines` (join interno de una sola linea) para
+        // que la tabla completa siga siendo un solo bloque markdown, no una
+        // por fila, cuando el resultado se una con "\n\n" entre bloques.
+        const tableLines = [
+          `| ${header.join(" | ")} |`,
+          `| ${header.map(() => "---").join(" | ")} |`,
+          ...body.map((row) => `| ${row.join(" | ")} |`),
+        ];
+        lines.push(tableLines.join("\n"));
+      }
+      continue;
+    }
     const text = plain(blockRichText(block));
     switch (block.type) {
       case "heading_1":
@@ -89,21 +127,54 @@ export function blocksToMarkdown(blocks: BlockObjectResponse[]): string {
         if (text) lines.push(text);
         break;
     }
+    i += 1;
   }
   return lines.join("\n\n");
 }
 
 // --- Mappers propiedad -> shape del schema -----------------------------------
 
+/**
+ * Primer heading_1 del cuerpo de la ficha: el resultado narrado como
+ * afirmacion ("Escale X y logre Y"), distinto de la propiedad `title` (que
+ * solo lleva el nombre del programa/cliente). Vacio si la ficha no tiene H1.
+ */
+function extractResultHeadline(blocks: BlockObjectResponse[]): string {
+  const heading = blocks.find((block) => block.type === "heading_1");
+  return heading ? plain(blockRichText(heading)) : "";
+}
+
+/**
+ * True si al menos una fila de la tabla bajo el heading "## Evidencia" del
+ * cuerpo tiene un artefacto marcado (✔). El badge de evidencia de una ficha
+ * se hereda de esta tabla, nunca se declara aparte.
+ */
+function hasVerifiedEvidenceRow(blocks: BlockObjectResponse[]): boolean {
+  let inEvidenceSection = false;
+  for (const block of blocks) {
+    if (block.type === "heading_2") {
+      inEvidenceSection = plain(blockRichText(block)).trim().toLowerCase() === "evidencia";
+      continue;
+    }
+    if (!inEvidenceSection || block.type !== "table_row") continue;
+    const rowText = block.table_row.cells.map((cell) => plain(cell)).join(" ");
+    if (rowText.includes("✔")) return true;
+  }
+  return false;
+}
+
 /** Ficha de `SSOT - Portafolio Proyectos` -> data de la coleccion `cases`. */
-function mapCase(page: PageObjectResponse): Record<string, unknown> {
+async function mapCase(page: PageObjectResponse): Promise<Record<string, unknown>> {
   const publicationStatus = getSelect(page, "Estado publicación") ?? "Draft";
   const publishable = getCheckbox(page, "Publicable");
+  const blocks = await fetchBlockChildren(page.id);
   return {
     title: getTitle(page, "title"),
+    resultHeadline: extractResultHeadline(blocks),
     organization: getSelect(page, "Organización"),
     type: getSelect(page, "Tipo"),
     role: getRichText(page, "Rol de Diego"),
+    cardContext: getRichText(page, "Contexto tarjeta"),
     // Ojo: el nombre real de la propiedad lleva un espacio al final.
     objective: getRichText(page, "Objetivo con métrica y timeframe "),
     resultsAndActions: getRichText(page, "Resultados y acciones clave realizadas"),
@@ -115,11 +186,13 @@ function mapCase(page: PageObjectResponse): Record<string, unknown> {
     channels: getMultiSelect(page, "Canales"),
     capabilities: getMultiSelect(page, "Capacidades"),
     evidenceUrl: getUrl(page, "Evidencia"),
+    hasVerifiedEvidence: hasVerifiedEvidenceRow(blocks),
     masterCase: getRelationIds(page, "Caso maestro"),
     editions: getRelationIds(page, "Ediciones"),
     year: getSelect(page, "year"),
     banner: getFileUrls(page, "banner")[0],
     logo: getFileUrls(page, "logo")[0],
+    body: blocksToMarkdown(blocks),
     // draft = NOT (Publicado AND Publicable) — contrato, regla de publicacion.
     draft: !(publicationStatus === "Publicado" && publishable),
   };
@@ -158,7 +231,7 @@ function mapMetric(page: PageObjectResponse): Record<string, unknown> {
 function createDataSourceLoader(
   name: string,
   fetchFn: () => Promise<PageObjectResponse[]>,
-  mapFn: (page: PageObjectResponse) => Record<string, unknown>,
+  mapFn: (page: PageObjectResponse) => Record<string, unknown> | Promise<Record<string, unknown>>,
   idFn: (page: PageObjectResponse, data: Record<string, unknown>) => string,
 ): Loader {
   return {
@@ -180,7 +253,7 @@ function createDataSourceLoader(
       }
       const pages = await fetchFn();
       for (const page of pages) {
-        const raw = mapFn(page);
+        const raw = await mapFn(page);
         const id = idFn(page, raw);
         const data = await parseData({ id, data: raw });
         store.set({ id, data });

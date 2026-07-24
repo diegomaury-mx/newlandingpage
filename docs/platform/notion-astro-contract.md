@@ -2,6 +2,8 @@
 
 **Estado:** implementado en `src/content/config.ts` desde 2026-07-23 (`cases`/`metrics`/`siteCopy` con `loader:` real, validado con `astro build` contra Notion real). El sitio LIVE sigue siendo HTML editado a mano — este pipeline corre solo en el scaffold Astro (`dist/`, no desplegado). `organization` y `type` de `cases` quedaron **opcionales** pese a decir "requerido" abajo: 12/27 y 11/27 fichas reales aún no tienen esos campos llenos (contenido Draft/Archivo sin curar) y bloquear el build entero por eso no tenía sentido — solo la regla de Insignia+publicado (métrica ancla + evidencia) bloquea de verdad.
 
+**Actualización 2026-07-23 (Fase 2 · Home/casos desde CMS):** `cases` ganó 4 campos que no estaban en la propuesta original de este documento: `body` (Markdown plano del cuerpo de la ficha, vía `blocksToMarkdown` extendido con soporte de tablas), `resultHeadline` (primer H1 del cuerpo — el resultado narrado como afirmación, usado como título de tarjeta y de página de caso), `hasVerifiedEvidence` (boolean derivado de la tabla bajo `## Evidencia`: true si al menos una fila tiene ✔) y `cardContext` (mapea a la propiedad Notion nueva **"Contexto tarjeta"**, texto libre de ~160 caracteres pensado para verse solo en tarjeta). Esto NO contradice la regla de la sección "Tratamiento de evidencia (cases)" de abajo (el bloque ✔/✖ sigue viviendo como narrativa en el `body`, no se estructuró en Zod fila por fila) — `hasVerifiedEvidence` es un derivado de un solo bit (¿hay al menos un ✔?), no una estructuración del contenido de cada fila.
+
 **Fuentes cubiertas (las 3 confirmadas en Diego CMS, 2026-07-19):**
 
 | # | Fuente Notion | Tipo | Alimenta |
@@ -35,7 +37,8 @@
 | `Caso maestro` / `Ediciones` | relation (auto-relación) | `masterCase` / `editions` | `undefined` | agrupa ediciones bajo el maestro; capa Archivo solo se referencia desde aquí |
 | `year` | select | `year` | — | usar `year`, no `[DEPRECADO] Año` |
 | `banner`, `logo` | file | `banner`, `logo` | `undefined` | assets |
-| Cuerpo de la página (contenido de la ficha) | rich text | `body` (MDX) | — | fuente narrativa única: contexto, problema, sistema, autopsia y bloque de evidencia ✔/✖ viven aquí, no en propiedades |
+| `Contexto tarjeta` | text | `cardContext` | `''` | agregada 2026-07-23, no estaba en la propuesta original; frase corta (~160 car.) para tarjeta, separada de `Rol de Diego` para no truncar texto pensado para la página completa |
+| Cuerpo de la página (contenido de la ficha) | rich text | `body` (Markdown, no MDX real) | `''` | fuente narrativa única: contexto, problema, sistema, autopsia y bloque de evidencia ✔/✖ viven aquí, no en propiedades. Implementado 2026-07-23 vía `blocksToMarkdown`; también alimenta `resultHeadline` (primer H1) y `hasVerifiedEvidence` (¿al menos un ✔ en la tabla de Evidencia?) |
 
 **No migrar:** las 5 propiedades `[DEPRECADO] *` (se eliminan al cerrar Fase B1, no se mapean a Zod).
 
@@ -133,4 +136,4 @@ Ninguna fuente permite valores no verificados en contenido publicable. El build 
 - `siteCopy` referencia un slug de métrica que no existe en `metrics` o cuyo `buildable` es `false`,
 - una fila de `metrics` con `Estado != "Vigente"` es referenciada por cualquier fuente.
 
-Este documento no autoriza tocar `src/content/config.ts` todavía — eso es alcance de la tarea "CMS: validar contenido con Zod y fallos seguros".
+Nota histórica: hasta 2026-07-23 este documento marcaba `src/content/config.ts` como fuera de alcance ("eso es la tarea de validar con Zod"). ​Esa tarea y la Fase 2 completa (Home/casos/SEO) ya están implementadas — ver la actualización al inicio de este documento y CLAUDE.md sección 1.

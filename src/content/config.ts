@@ -22,12 +22,20 @@ const cases = defineCollection({
   schema: z
     .object({
       title: z.string().min(1),
+      // H1 del cuerpo de la ficha: el resultado narrado como afirmacion
+      // ("Escale X y logre Y"). Vive en el body, no en una propiedad — vacio
+      // si la ficha aun no tiene esa narrativa escrita.
+      resultHeadline: z.string().default(''),
       // 12/27 fichas reales no tienen Organización y 11/27 no tienen Tipo
       // (fichas Draft/Archivo aún sin curar) — opcionales para no bloquear
       // el build entero por contenido en progreso que no se va a publicar.
       organization: z.string().optional(),
       type: z.string().optional(),
       role: z.string(),
+      // Frase de ~160 caracteres escrita para la tarjeta (Contexto tarjeta en
+      // Notion), separada de `role` para no truncar texto pensado para la
+      // pagina completa del caso. Vacio hasta que se llene por ficha.
+      cardContext: z.string().default(''),
       objective: z.string(),
       resultsAndActions: z.string(),
       quantData: z.string(),
@@ -40,11 +48,18 @@ const cases = defineCollection({
       channels: z.array(z.enum(['Sitio', 'LinkedIn', 'CV', 'llms.txt'])).default([]),
       capabilities: z.array(z.string()).default([]),
       evidenceUrl: z.string().url().optional(),
+      // Badge de evidencia de tarjeta: se hereda de si al menos una fila de
+      // la tabla "## Evidencia" del cuerpo tiene un artefacto marcado (✔).
+      // Nunca se declara aparte de esa tabla (ver notionLoaders.ts).
+      hasVerifiedEvidence: z.boolean().default(false),
       masterCase: z.array(z.string()).default([]),
       editions: z.array(z.string()).default([]),
       year: z.string().optional(),
       banner: z.string().optional(),
       logo: z.string().optional(),
+      // Cuerpo completo de la ficha (Contexto, Problema, Sistema, Evidencia,
+      // etc.), aplanado a Markdown. Fuente narrativa para la pagina de caso.
+      body: z.string().default(''),
       // draft = NOT (Estado publicación == "Publicado" AND Publicable == true)
       draft: z.boolean().default(true),
     })

@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // Scaffold de migracion (subproyecto Diego CMS).
 //
@@ -6,12 +7,17 @@ import { defineConfig } from 'astro/config';
 // (index.html, portfolio/, cases/, assets/, cv/) mediante GitHub Pages desde
 // master. Este proyecto Astro construye a dist/ y NO se despliega todavia:
 // GitHub Actions se conecta en la tarea "CMS: configurar GitHub Actions y
-// deploy automatico". No hay paridad todavia; el Home y los casos se
-// construyen desde el CMS de Notion en tareas posteriores.
+// deploy automatico".
 //
-// La integracion @astrojs/sitemap y demas SEO se agregan en la tarea
-// "CMS: generar SEO y archivos derivados desde Notion", no aqui.
+// @astrojs/sitemap genera sitemap-index.xml en dist/ (no toca el sitemap del
+// sitio LIVE en la raiz del repo, que sigue siendo estatico). Se excluye la
+// ruta raiz (placeholder de scaffold, no contenido real del CMS).
 export default defineConfig({
   site: 'https://diegomaury.mx',
   output: 'static',
+  integrations: [
+    sitemap({
+      filter: (page) => page !== 'https://diegomaury.mx/',
+    }),
+  ],
 });

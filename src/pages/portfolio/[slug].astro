@@ -1,0 +1,271 @@
+---
+// Pagina individual de caso (Fase 2 · Diego CMS, punto 3). Reusa la estetica
+// de prototipo-portafolio.html para la vista de caso, pero el contenido
+// narrativo (Contexto, Problema, Sistema, Evidencia, etc.) sale del `body`
+// de cada ficha en Notion (Plantilla v2), no de datos hardcodeados.
+// Solo se generan paginas para fichas publicadas (draft=false); Draft/Archivo
+// no tienen ruta propia. Sigue construyendo a dist/, no toca el sitio LIVE.
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { renderMarkdown } from '../../utils/markdown.ts';
+import { slugify } from '../../utils/slug.ts';
+
+type CaseEntry = CollectionEntry<'cases'>;
+
+export async function getStaticPaths() {
+  const allCases = await getCollection('cases');
+  const published = allCases.filter((c) => !c.data.draft);
+  return published.map((entry) => ({
+    params: { slug: slugify(entry.data.title) },
+    props: { entry, allCases },
+  }));
+}
+
+interface Props {
+  entry: CaseEntry;
+  allCases: CaseEntry[];
+}
+
+const { entry, allCases } = Astro.props as Props;
+const idToTitle = new Map(allCases.map((c) => [c.id, c.data.title]));
+
+const displayTitle = entry.data.resultHeadline || entry.data.title;
+const bodyHtml = renderMarkdown(entry.data.body);
+const editionTitles = entry.data.editions
+  .map((id) => idToTitle.get(id))
+  .filter((title): title is string => Boolean(title));
+
+const DESCRIPTION_MAX = 155;
+const rawDescription = entry.data.objective || entry.data.cardContext || entry.data.role;
+const pageDescription =
+  rawDescription.length > DESCRIPTION_MAX
+    ? `${rawDescription.slice(0, DESCRIPTION_MAX)}…`
+    : rawDescription;
+const canonicalUrl = new URL(`/portfolio/${slugify(entry.data.title)}`, Astro.site).toString();
+
+const creativeWorkJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: displayTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  author: { '@type': 'Person', name: 'Diego Maury', url: 'https://diegomaury.mx' },
+  ...(entry.data.banner ? { image: entry.data.banner } : {}),
+};
+---
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>{displayTitle} · Diego Maury</title>
+<meta name="description" content={pageDescription}>
+<link rel="canonical" href={canonicalUrl}>
+<meta property="og:type" content="article">
+<meta property="og:title" content={`${displayTitle} · Diego Maury`}>
+<meta property="og:description" content={pageDescription}>
+<meta property="og:url" content={canonicalUrl}>
+{entry.data.banner && <meta property="og:image" content={entry.data.banner}>}
+<meta name="twitter:card" content={entry.data.banner ? 'summary_large_image' : 'summary'}>
+<meta name="twitter:title" content={`${displayTitle} · Diego Maury`}>
+<meta name="twitter:description" content={pageDescription}>
+<script type="application/ld+json" set:html={JSON.stringify(creativeWorkJsonLd)} />
+<!--
+  Fase 2 · Diego CMS — pagina de caso construida desde el body de Notion
+  (coleccion `cases`). NO es LIVE: noindex,nofollow, sin analitica. El
+  scaffold Astro construye a dist/ y no esta desplegado.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #0A0612;
+    --bg-2:   #1A1128;
+    --border: #2A1F3D;
+    --t1:     #FAF8FC;
+    --t2:     #9A8CB0;
+    --t3:     #8B7C9E;
+    --t-body: #DDDBE0;
+    --ember:  #FF5C39;
+    --sans:   'Plus Jakarta Sans', system-ui, sans-serif;
+    --mono:   'DM Mono', ui-monospace, monospace;
+    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+    --wrap-narrow: 900px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--t1);
+    font-family: var(--sans); line-height: 1.5; min-height: 100vh;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: var(--ember); }
+  ::selection { background: var(--ember); color: var(--bg); }
+  :focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap-narrow { max-width: var(--wrap-narrow); margin: 0 auto; padding: 0 32px; }
+  .band { border-bottom: 1px solid var(--border); }
+  .band--raised { background: var(--bg-2); }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before { content: ""; width: 18px; height: 1px; background: var(--ember); }
+  .label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ember);
+  }
+  .meta {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--t3);
+  }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,6,18,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav__inner { max-width: 1160px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+  .nav__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--t1); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+  .nav__mark { width: 22px; height: 22px; background: var(--ember); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
+  .nav__back { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t2); text-decoration: none; }
+  .nav__back:hover { color: var(--t1); }
+
+  .case-hero { position: relative; height: clamp(200px, 28vw, 320px); overflow: hidden; border-bottom: 1px solid var(--border); }
+  .case-hero img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.5) contrast(1.05); }
+  .case-hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,6,18,0.35) 0%, rgba(10,6,18,0.95) 100%);
+  }
+  .case-hero img.case-hero__logo {
+    position: absolute; z-index: 2; left: 50%; transform: translateX(-50%); bottom: 22px;
+    width: 60px; height: 60px; object-fit: contain; border-radius: 10px;
+    background: rgba(10,6,18,0.85); border: 1px solid var(--border); padding: 6px;
+    filter: none;
+  }
+
+  .case-head { padding: 72px 0 48px; }
+  .case-head h1 {
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem); font-weight: 300;
+    letter-spacing: -0.02em; line-height: 1.2; margin: 16px 0 20px;
+  }
+  .case-head__badge { display: flex; align-items: baseline; gap: 10px; font-family: var(--mono); font-size: 13px; }
+  .badge--ok { color: var(--t1); font-weight: 600; }
+  .badge--no { color: var(--t3); }
+
+  .case-two { padding: 56px 0; }
+  .case-two .label { margin-bottom: 10px; }
+
+  .prose { font-size: 14.5px; color: var(--t-body); line-height: 1.75; max-width: 70ch; }
+  .prose h1 { font-size: 1.4rem; font-weight: 800; color: var(--t1); margin: 0 0 8px; letter-spacing: -0.015em; }
+  .prose h2 { font-size: 1.2rem; font-weight: 700; color: var(--t1); margin: 32px 0 14px; letter-spacing: -0.01em; }
+  .prose h2:first-child { margin-top: 0; }
+  .prose h3 { font-size: 1rem; font-weight: 700; color: var(--t1); margin: 20px 0 10px; }
+  .prose p { margin: 0 0 14px; }
+  .prose ul, .prose ol { margin: 0 0 14px; padding-left: 20px; }
+  .prose li { margin-bottom: 8px; }
+  .prose blockquote {
+    margin: 0 0 14px; padding: 12px 18px; border-left: 2px solid var(--ember);
+    color: var(--t2); font-size: 13.5px; background: rgba(255,92,57,0.04); border-radius: 0 6px 6px 0;
+  }
+  .prose hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  .prose a { text-decoration: none; border-bottom: 1px solid rgba(255,92,57,0.4); }
+  .prose a:hover { color: var(--t1); border-bottom-color: var(--t1); }
+  .prose-table { margin: 0 0 20px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; overflow-x: auto; }
+  .prose-table table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .prose-table th {
+    background: var(--bg-2); text-align: left; padding: 10px 14px;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--t3); border-bottom: 1px solid var(--border);
+  }
+  .prose-table td { padding: 12px 14px; border-top: 1px solid var(--border); color: var(--t-body); vertical-align: top; }
+  .prose-table tr:first-child td { border-top: none; }
+
+  .empty-note { font-size: 13px; color: var(--t3); }
+
+  .case-archive { padding: 48px 0 96px; }
+  .case-archive__row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .case-archive__chip { font-size: 12px; color: var(--t2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; }
+
+  @media (max-width: 900px) {
+    .wrap-narrow { padding: 0 20px; }
+    .prose-table th { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <a class="nav__brand" href="/portfolio">
+      <span class="nav__mark" aria-hidden="true"></span>
+      <span>Diego Maury</span>
+    </a>
+    <a class="nav__back" href="/portfolio">&larr; Portafolio</a>
+  </div>
+</nav>
+
+<main>
+
+{entry.data.banner && (
+  <div class="case-hero">
+    <img src={entry.data.banner} alt={entry.data.title} width="1600" height="320" />
+    {entry.data.logo && <img class="case-hero__logo" src={entry.data.logo} alt="" aria-hidden="true" width="56" height="56" />}
+  </div>
+)}
+
+<section class="band case-head">
+  <div class="wrap-narrow">
+    <div class="meta">{entry.data.organization ?? '—'} · {entry.data.year ?? '—'} · {entry.data.type ?? '—'}</div>
+    <h1>{displayTitle}</h1>
+    <div class="case-head__badge">
+      {entry.data.hasVerifiedEvidence ? (
+        <span class="badge--ok">✔ Evidencia verificada en este caso</span>
+      ) : (
+        <span class="badge--no">✖ Evidencia pendiente de verificar</span>
+      )}
+    </div>
+  </div>
+</section>
+
+<section class="band band--raised case-two">
+  <div class="wrap-narrow">
+    <div class="label">Métrica ancla</div>
+    <p class="prose" style="margin-bottom:0">{entry.data.anchorMetric || 'Sin métrica ancla registrada'}</p>
+  </div>
+</section>
+
+<section class="case-two">
+  <div class="wrap-narrow">
+    {bodyHtml ? (
+      <div class="prose" set:html={bodyHtml} />
+    ) : (
+      <p class="empty-note">Esta ficha todavía no tiene el cuerpo narrativo (Contexto, Problema, Sistema, Evidencia) escrito en Notion.</p>
+    )}
+  </div>
+</section>
+
+{editionTitles.length > 0 && (
+  <section class="case-archive">
+    <div class="wrap-narrow">
+      <div class="eyebrow">Archivo de este caso</div>
+      <div class="case-archive__row">
+        {editionTitles.map((title) => <span class="case-archive__chip">{title}</span>)}
+      </div>
+    </div>
+  </section>
+)}
+
+</main>
+
+</body>
+</html>
