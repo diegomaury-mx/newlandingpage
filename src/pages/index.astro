@@ -4,10 +4,18 @@
 // `siteCopy` (pagina "Copy Oficial · diegomaury.mx (SSOT)", columna
 // "Version Actual") y parsea sus secciones S1-S8 con parseSiteCopy.ts.
 //
-// Primer corte (2026-07-24): solo S1 Hero, S2 Quien soy y S3 El problema
-// que resuelvo. El resto de las secciones (S4 Evidencia, S5 Como trabajo,
-// S6 Sistemas propios, S6b Prueba social, S7 Formas de trabajar, S7b
-// Confianza directa) quedan pendientes de un siguiente corte.
+// Tercer corte (2026-07-24): se agregan S5 Como trabajo, S6 Sistemas
+// propios, S6b Prueba social (solo los 3 testimonios explicitos del copy),
+// S7 Formas de trabajar conmigo y el Footer. S7b Confianza directa se omite
+// a proposito: su copy declara "sin copy propio, lo resuelve el widget"
+// (Senja), y los testimonios via widget dinamico siguen pendientes de
+// activar (ver memoria del proyecto). Los links de "Ver caso completo" por
+// tarjeta de S4 siguen pendientes (requieren mapear el anchor del copy al
+// slug real de cada ficha). Nota de diseno: esta pagina reusa los tokens de
+// color del DS V2 pero NO replica el layout/componentes reales del
+// index.html LIVE (nav con links, tira de metricas, etc.) — alineacion
+// visual completa pendiente de un corte dedicado (decision explicita de
+// Diego 2026-07-24: pausar diseno, priorizar copy).
 //
 // Sigue construyendo a dist/, no toca el sitio LIVE (astro.config.mjs).
 import { getCollection } from 'astro:content';
@@ -18,16 +26,36 @@ import {
   paragraphs,
   ctaLabels,
   valueAfter,
+  blocksBeforeHeading,
+  blocksAfterHeading,
+  bulletItems,
+  headingCards,
+  testimonials,
+  caseCards,
+  firstTable,
+  firstCodeBlock,
+  parseFlowDiagram,
 } from '../utils/parseSiteCopy.ts';
 
 const siteCopyEntries = await getCollection('siteCopy');
 const siteCopy = siteCopyEntries.find((entry) => entry.id === 'site');
 const sections = siteCopy ? parseSiteCopySections(siteCopy.data.markdown) : new Map();
 
+const metricsEntries = await getCollection('metrics');
+const incmtyMetric = metricsEntries.find((entry) => entry.id === 'incmty-participantes-inscritos');
+
 // --- S1 · Hero ---------------------------------------------------------------
 const s1 = sections.get('S1')?.blocks ?? [];
 const heroName = heading1(s1);
-const heroHeadline = heading2(s1);
+const heroHeadline =
+  heading2(s1) ||
+  `${heroName} — Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.`;
+// Acento ember sobre la frase de cierre, igual al tratamiento del H1 en el sitio LIVE.
+const HERO_ACCENT_PHRASE = 'resultados tangibles';
+const heroAccentIndex = heroHeadline.toLowerCase().indexOf(HERO_ACCENT_PHRASE);
+const heroHeadlineBefore = heroAccentIndex >= 0 ? heroHeadline.slice(0, heroAccentIndex) : heroHeadline;
+const heroHeadlineAccent = heroAccentIndex >= 0 ? heroHeadline.slice(heroAccentIndex, heroAccentIndex + HERO_ACCENT_PHRASE.length) : '';
+const heroHeadlineAfter = heroAccentIndex >= 0 ? heroHeadline.slice(heroAccentIndex + HERO_ACCENT_PHRASE.length) : '';
 const heroParas = paragraphs(s1);
 const heroRole = heroParas[0] ?? '';
 const heroSub = heroParas[1] ?? '';
@@ -44,6 +72,18 @@ const LOGO_MAP: Record<string, { src: string; alt: string }> = {
 };
 const heroLogos = heroLogoNames.map((name) => LOGO_MAP[name]).filter(Boolean);
 
+// Badge de logo por tarjeta (Evidencia, Sistemas propios): solo donde el
+// nombre del cliente sigue siendo publico en el copy. PropTech/SOFI se
+// generalizaron a proposito (anonimizacion del cliente real) y no llevan
+// logo, para no des-anonimizarlos visualmente.
+function cardLogo(title: string): { src: string; alt: string } | null {
+  if (/heineken/i.test(title)) return LOGO_MAP.HEINEKEN;
+  // Solo REDUX (institucionalizado en el Tec de Monterrey per copy S6), no
+  // HackSureste Ops: esa es marca propia de Diego, sin logo de cliente.
+  if (/redux/i.test(title)) return LOGO_MAP['Tecnológico de Monterrey'];
+  return null;
+}
+
 // --- S2 · Quien soy ------------------------------------------------------------
 const s2 = sections.get('S2')?.blocks ?? [];
 const aboutHeadline = heading2(s2);
@@ -53,7 +93,22 @@ const aboutIntro = aboutParas.slice(1, 4);
 const aboutRoles = aboutParas.slice(4, 7);
 const aboutBio = aboutParas[7] ?? '';
 const aboutStatsLine = aboutParas[8] ?? '';
-const aboutStats = aboutStatsLine.split('•').map((s) => s.trim()).filter(Boolean);
+const aboutStatsRaw = aboutStatsLine.split('•').map((s) => s.trim()).filter(Boolean);
+// Sub-labels ya publicados en el sitio LIVE (index.html, .metric-s) — no son
+// cifras nuevas, se reusan tal cual. El 3er stat ademas trae animacion
+// count-up, igual que en LIVE, usando el valor real de la coleccion `metrics`.
+const STAT_SUBLABELS = [
+  'Trayectoria acumulada, cifra propia',
+  '7+ en innovación y ecosistemas',
+  incmtyMetric?.data.mandatoryQualifier || 'Agregado de programas INCmty (HGC incluido), estimado',
+];
+const aboutStats = aboutStatsRaw.map((raw, i) => {
+  const match = raw.match(/^([\d.,]+\+?)\s*(.+)$/);
+  const n = match ? match[1] : raw;
+  const l = match ? match[2] : '';
+  const countTo = i === 2 ? (incmtyMetric?.data.value ?? n).replace(/\D/g, '') : '';
+  return { n, l, s: STAT_SUBLABELS[i] ?? '', countTo };
+});
 
 // --- S3 · El problema que resuelvo ---------------------------------------------
 const s3 = sections.get('S3')?.blocks ?? [];
@@ -65,6 +120,99 @@ const problemParas = paragraphs(s3).filter(
   (p) => !p.includes('\n') && !p.startsWith('┌') && p !== p.toUpperCase(),
 );
 const problemQuote = s3.find((b) => b.trim().startsWith('>'))?.trim().slice(1).trim() ?? '';
+const problemDiagram = parseFlowDiagram(firstCodeBlock(s3));
+
+// --- S4 · Evidencia ------------------------------------------------------------
+const s4 = sections.get('S4')?.blocks ?? [];
+const evidenceLabel = sections.get('S4')?.label ?? 'Evidencia';
+const evidenceHeadline = heading1(s4);
+const evidenceIntro = paragraphs(blocksBeforeHeading(s4, ['# Casos destacados']));
+const evidenceCards = caseCards(s4);
+const evidenceTable = firstTable(s4);
+// El diagrama pasa de bloque de texto (una etapa por linea, separadas por
+// "↓") a un grafico visual de barras ascendentes: solo se necesitan los
+// nombres de etapa, en orden.
+const evidenceStages = firstCodeBlock(s4)
+  .split('\n')
+  .map((line) => line.trim())
+  .filter((line) => line && line !== '↓');
+const evidenceStatLine = s4.find((b) => b.includes('proyectos documentados'))?.trim() ?? '';
+const evidenceCtaLabel =
+  s4
+    .find((b) => b.toLowerCase().includes('explorar portafolio'))
+    ?.replace(/→\s*/, '')
+    .replace(/#portafolio\s*$/i, '')
+    .trim() || 'Explorar portafolio completo';
+
+// --- S5 · Como trabajo -----------------------------------------------------
+const s5 = sections.get('S5')?.blocks ?? [];
+const workLabel = sections.get('S5')?.label ?? 'Cómo trabajo';
+const workHeadline = heading1(s5);
+const workIntro = paragraphs(blocksBeforeHeading(s5, ['## Mi modelo de intervención']));
+const afterModel = blocksAfterHeading(s5, '## Mi modelo de intervención');
+const workSteps = headingCards(blocksBeforeHeading(afterModel, ['## Lo que entrego']), '### ');
+const afterDeliver = blocksAfterHeading(s5, '## Lo que entrego');
+const deliverIntro = paragraphs(afterDeliver);
+const deliverItems = bulletItems(afterDeliver);
+
+// --- S6 · Sistemas propios ---------------------------------------------------
+const s6 = sections.get('S6')?.blocks ?? [];
+const systemsLabel = sections.get('S6')?.label ?? 'Sistemas propios';
+const systemsHeadline = heading1(s6);
+const systemsIntro = paragraphs(blocksBeforeHeading(s6, ['## REDUX']));
+const systemsCards = headingCards(blocksBeforeHeading(s6, ['## El verdadero entregable']), '## ');
+const systemsClosingHeading =
+  s6.find((b) => b.trim().startsWith('## El verdadero entregable'))?.trim().slice(3).trim() ??
+  'El verdadero entregable';
+const systemsClosing = paragraphs(blocksAfterHeading(s6, '## El verdadero entregable'));
+
+// --- S6b · Prueba social ------------------------------------------------------
+const s6b = sections.get('S6b')?.blocks ?? [];
+const testimonialsLabel = sections.get('S6b')?.label ?? 'Prueba social';
+const testimonialsHeadline = heading1(s6b);
+const testimonialsIntro = paragraphs(blocksBeforeHeading(s6b, ['>']));
+const testimonialItems = testimonials(s6b);
+
+// --- S7 · Formas de trabajar conmigo ------------------------------------------
+const s7 = sections.get('S7')?.blocks ?? [];
+const talkLabel = sections.get('S7')?.label ?? 'Formas de trabajar conmigo';
+const talkHeadline = heading1(s7);
+const talkIntro = paragraphs(blocksBeforeHeading(s7, ['### En una primera conversación']));
+const talkTopicsHeading =
+  s7.find((b) => b.trim().startsWith('### En una primera conversación'))?.trim().slice(4).trim() ?? '';
+const talkTopics = bulletItems(blocksAfterHeading(s7, '### En una primera conversación'));
+const afterAgenda = blocksAfterHeading(s7, '## Agenda una conversación');
+const talkAltLine = afterAgenda.find((b) => b.toLowerCase().includes('envíame un correo'))?.trim() ?? '';
+const talkAltLinks = talkAltLine.split('·').map((s) => s.trim()).filter(Boolean);
+// paragraphs() no filtra el separador "o" ni la linea de links alternos (no son
+// bullets/headings/etc.): se excluyen aparte para no duplicarlos como texto plano.
+const agendaIntro = paragraphs(afterAgenda).filter((p) => p !== 'o' && p !== talkAltLine);
+const agendaCtaLabel = ctaLabels(afterAgenda)[0] || 'Agendar diagnóstico (30 min)';
+const CONTACT_HREF: Record<string, string> = {
+  linkedin: 'https://www.linkedin.com/in/diegomaury',
+  correo: 'mailto:dm@diegomaury.mx',
+};
+function contactHref(label: string): string {
+  const key = label.toLowerCase().includes('linkedin') ? 'linkedin' : 'correo';
+  return CONTACT_HREF[key];
+}
+
+// --- S8 · Siguiente paso -------------------------------------------------------
+// Recuperada 2026-07-24 (spec docs/superpowers/specs/2026-07-24-recuperar-s8-y-cifras-s6.md):
+// no existia en el primer corte, Diego la pego en Notion despues.
+const s8 = sections.get('S8')?.blocks ?? [];
+const finalLabel = sections.get('S8')?.label ?? 'Siguiente paso';
+const finalHeadline = heading2(s8);
+const finalIntro = paragraphs(blocksBeforeHeading(s8, ['### Paso 01']));
+const finalStepCards = headingCards(s8, '### ');
+const finalSteps = finalStepCards.map((card) => ({
+  title: card.title,
+  description: card.paragraphs[0] ?? '',
+  tag: card.paragraphs[1] ?? '',
+}));
+const afterSteps = blocksAfterHeading(s8, `### ${finalStepCards[finalStepCards.length - 1]?.title ?? ''}`);
+const finalCtas = ctaLabels(afterSteps);
+const finalTrustLine = afterSteps.find((b) => b.includes('·') && !ctaLabels([b]).length)?.trim() ?? '';
 
 // --- SEO -------------------------------------------------------------------
 const seo = sections.get('SEO')?.blocks ?? [];
@@ -72,6 +220,33 @@ const pageTitle = valueAfter(seo, 'Title') || 'Diego Maury · Strategic Program 
 const pageDescription =
   valueAfter(seo, 'Meta description') ||
   'Strategic Program Director: diseño programas, procesos y sistemas que convierten la estrategia en ejecución y capacidad organizacional.';
+
+// --- Footer ------------------------------------------------------------------
+// El heading "## Footer" no matchea SECTION_HEADING (necesita "# Sn ·"), asi
+// que su contenido queda dentro de los blocks de la seccion SEO: se extrae
+// manualmente a partir de ese heading.
+const footerBlocks = blocksAfterHeading(seo, '## Footer');
+const beforeExplore = blocksBeforeHeading(footerBlocks, ['### Explora']);
+const footerBrandName = heading2(beforeExplore) || 'Diego Maury';
+const footerTagline = paragraphs(beforeExplore)[0] ?? '';
+const exploreItems = bulletItems(blocksBeforeHeading(blocksAfterHeading(footerBlocks, '### Explora'), ['### Contacto']));
+const afterContacto = blocksAfterHeading(footerBlocks, '### Contacto');
+const contactParagraphs = paragraphs(afterContacto);
+const contactItems = contactParagraphs.filter((p) => !p.startsWith('©'));
+const copyrightLine = contactParagraphs.find((p) => p.startsWith('©')) ?? '© 2026 Diego Maury. Todos los derechos reservados.';
+
+const EXPLORE_HREF: Record<string, string> = {
+  Portafolio: '/portfolio',
+  'Casos de estudio': '#evidencia',
+  'Sobre mí': '#quien-soy',
+  Newsletter: 'https://diegomaury.substack.com',
+  LinkedIn: 'https://www.linkedin.com/in/diegomaury',
+};
+const CONTACT_ITEM_HREF: Record<string, string> = {
+  'Correo electrónico': 'mailto:dm@diegomaury.mx',
+  LinkedIn: 'https://www.linkedin.com/in/diegomaury',
+  Calendly: 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun',
+};
 ---
 
 <!doctype html>
@@ -135,19 +310,31 @@ const pageDescription =
   .nav {
     position: sticky; top: 0; z-index: 50;
     background: rgba(10,6,18,0.92); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid transparent; transition: border-color 250ms, background 250ms;
   }
+  .nav.is-scrolled { background: rgba(10,6,18,0.98); border-bottom-color: var(--border); }
   .nav__inner { height: 60px; display: flex; align-items: center; justify-content: space-between; }
   .nav__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--t1); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
-  .nav__mark { width: 22px; height: 22px; background: var(--ember); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
+  .nav__mark { width: 22px; height: 22px; background: var(--ember); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); flex-shrink: 0; }
   .nav__badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3); border: 1px solid var(--border); padding: 5px 10px; border-radius: 5px; }
+  .nav__links { display: flex; gap: 0; align-items: center; }
+  .nav__link { font-size: 13px; font-weight: 500; color: var(--t2); padding: 7px 13px; border-radius: 6px; text-decoration: none; transition: color 150ms, background 150ms; letter-spacing: -0.01em; }
+  .nav__link:hover { color: var(--t1); background: rgba(255,255,255,0.05); }
+  .nav__link.is-active { color: var(--t1); }
+  .nav__cta {
+    display: inline-flex; align-items: center; background: var(--ember-cta); color: #fff;
+    font-family: var(--mono); font-size: 9.5px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 9px 17px; border-radius: 6px; text-decoration: none; margin-left: 8px; transition: opacity 150ms, transform 150ms;
+  }
+  .nav__cta:hover { opacity: 0.88; transform: translateY(-1px); }
+  @media (max-width: 900px) { .nav__links { display: none; } }
 
   /* ── HERO ── */
   .hero { padding: 96px 0 64px; }
   .hero__grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; }
   .hero h1 {
-    margin-top: 22px; font-size: clamp(2.1rem, 4.4vw, 3.6rem); font-weight: 300;
-    letter-spacing: -0.02em; line-height: 1.16; max-width: 20ch;
+    margin-top: 22px; font-size: clamp(2.4rem, 4.6vw, 4rem); font-weight: 800;
+    letter-spacing: -0.032em; line-height: 1.05; max-width: 20ch;
   }
   .hero h1 .accent { color: var(--ember); }
   .hero p.sub { margin-top: 24px; font-size: 16px; color: var(--t2); max-width: 52ch; line-height: 1.7; }
@@ -170,47 +357,227 @@ const pageDescription =
 
   .trust { margin-top: 64px; border-top: 1px solid var(--border); padding-top: 28px; }
   .trust__label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3); margin-bottom: 16px; }
-  .trust__row { display: flex; flex-wrap: wrap; gap: 28px; align-items: center; }
-  .trust__row img { height: 24px; width: auto; filter: grayscale(1) brightness(1.6); opacity: 0.7; }
+  .trust__track-wrap {
+    overflow: hidden; position: relative;
+    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  }
+  .trust__track { display: flex; width: max-content; gap: 28px; animation: marquee 24s linear infinite; }
+  .trust__track:hover { animation-play-state: paused; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .trust__track img { height: 24px; width: auto; filter: grayscale(1) brightness(1.6); opacity: 0.7; }
+  @media (prefers-reduced-motion: reduce) { .trust__track { animation: none; } }
 
   /* ── QUIEN SOY ── */
   .about { padding: 88px 0; background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
   .about__tagline { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--ember); text-transform: uppercase; margin-bottom: 16px; }
-  .about h2 { font-size: clamp(1.6rem, 2.8vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 20px; }
+  .about h2 { font-size: clamp(2rem, 3.2vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 20px; }
   .about p { color: var(--t2); font-size: 15px; line-height: 1.75; margin-bottom: 16px; }
   .about__roles { margin-top: 24px; display: flex; flex-direction: column; gap: 14px; }
   .about__role { display: flex; gap: 12px; font-size: 14px; color: var(--t2); line-height: 1.6; }
   .about__role-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); margin-top: 8px; flex-shrink: 0; }
   .about__bio { font-size: 15px; color: var(--t2); line-height: 1.75; }
-  .about__stats { margin-top: 32px; display: flex; gap: 32px; flex-wrap: wrap; }
-  .about__stat { font-family: var(--mono); font-size: 13px; color: var(--t3); }
+  .about__stats { margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; border-top: 1px solid var(--border); padding-top: 24px; }
+  .about__stat-n { font-family: var(--mono); font-size: clamp(1.5rem, 2.3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; color: var(--ember); line-height: 1; font-variant-numeric: tabular-nums; }
+  .about__stat-l { font-size: 13px; color: var(--t1); font-weight: 500; margin-top: 6px; }
+  .about__stat-s { font-family: var(--mono); font-size: 9.5px; color: var(--t3); margin-top: 4px; letter-spacing: 0.04em; }
 
   /* ── PROBLEMA ── */
   .problem { padding: 96px 0; }
-  .problem h2 { margin-top: 14px; font-size: clamp(1.6rem, 2.8vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; max-width: 26ch; }
+  .problem__grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; }
+  .problem h2 { margin-top: 14px; font-size: clamp(1.65rem, 2.7vw, 2.5rem); font-weight: 800; letter-spacing: -0.028em; line-height: 1.1; max-width: 26ch; }
   .problem p { margin-top: 20px; font-size: 15px; color: var(--t2); line-height: 1.75; max-width: 68ch; }
+  .problem__media {
+    aspect-ratio: 1/1; max-width: 260px; margin: 0 auto; border-radius: 16px; border: 1px solid var(--border);
+    background: var(--bg-2); display: flex; align-items: center; justify-content: center; padding: 32px;
+  }
+  .problem__media svg { width: 100%; height: 100%; }
   .problem blockquote {
     margin-top: 40px; padding: 28px 32px; border-left: 2px solid var(--ember);
     background: var(--bg-2); border-radius: 0 10px 10px 0; font-size: 16px;
     color: var(--t1); font-weight: 500; line-height: 1.6;
   }
+  .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 28px 0 4px; }
+  .flow-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; flex: 1; min-width: 150px; }
+  .flow-card h3 { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .flow-card h3::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ember); flex-shrink: 0; }
+  .flow-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .flow-card li { font-size: 12.5px; color: var(--t2); padding-left: 13px; position: relative; }
+  .flow-card li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 6px; height: 1px; background: var(--t3); }
+  .flow-connector { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 10px; flex-shrink: 0; }
+  .flow-connector__line { width: 20px; height: 1px; background: var(--border); }
+  .flow-connector__label { font-family: var(--mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3); }
+  .flow-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .flow-chip { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--t1); background: rgba(255,92,57,0.1); border: 1px solid rgba(255,92,57,0.3); border-radius: 20px; padding: 5px 13px; }
+  .flow-arrow { width: 8px; height: 8px; border-right: 1.5px solid var(--ember); border-bottom: 1.5px solid var(--ember); transform: rotate(-45deg); }
+
+  /* ── EVIDENCIA ── */
+  .evidence { padding: 96px 0; background: var(--bg-2); border-top: 1px solid var(--border); }
+  .evidence h2 { margin-top: 14px; font-size: clamp(1.65rem, 2.7vw, 2.5rem); font-weight: 800; letter-spacing: -0.028em; line-height: 1.1; max-width: 30ch; }
+  .evidence > .wrap > p { margin-top: 16px; font-size: 15px; color: var(--t2); line-height: 1.75; max-width: 68ch; }
+  .evidence > .wrap > p:first-of-type { font-weight: 600; color: var(--t1); }
+
+  .evidence__cards { margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .case-card { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .case-card__logo { display: block; height: 22px; width: auto; max-width: 100px; object-fit: contain; filter: grayscale(1) brightness(1.6); opacity: 0.85; margin-bottom: 12px; }
+  .case-card h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.35; }
+  .case-card p { font-size: 13.5px; color: var(--t2); line-height: 1.65; }
+  .case-card__label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ember); margin-bottom: 4px; }
+  .case-card__results { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+  .case-card__results li { font-family: var(--mono); font-size: 12.5px; color: var(--t1); padding-left: 16px; position: relative; }
+  .case-card__results li::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--ember); }
+
+  /* Tabla simple: sin caja/borde envolvente, solo lineas divisorias — el estilo que Diego prefiere. */
+  .evidence__table { width: 100%; border-collapse: collapse; margin-top: 64px; font-size: 13px; }
+  .evidence__table th, .evidence__table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--t2); }
+  .evidence__table th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3); font-weight: 500; }
+  .evidence__table td:first-child { color: var(--t1); font-weight: 600; }
+
+  /* Flujo horizontal de pasos conectados ("glass" sin blur: fondo translucido + borde, sin backdrop-filter). */
+  .evidence__diagram { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 48px auto 0; max-width: 760px; justify-content: center; }
+  .diagram-step { display: flex; align-items: center; gap: 6px; }
+  .diagram-pill {
+    display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 20px;
+    background: rgba(250,248,252,0.05); border: 1px solid var(--border);
+  }
+  .diagram-pill-n { font-family: var(--mono); font-size: 10px; color: var(--t3); }
+  .diagram-label { font-size: 12.5px; font-weight: 600; color: var(--t2); white-space: nowrap; }
+  .diagram-step.is-outcome .diagram-pill { background: rgba(255,92,57,0.14); border-color: var(--ember); }
+  .diagram-step.is-outcome .diagram-pill-n { color: var(--ember); }
+  .diagram-step.is-outcome .diagram-label { color: var(--t1); }
+  .diagram-connector { width: 14px; height: 1px; background: var(--border); flex-shrink: 0; }
+
+  .evidence__footer { margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+  .evidence__stat { font-family: var(--mono); font-size: 13px; color: var(--t1); font-weight: 600; }
+
+  /* ── COMO TRABAJO (acordeon) ── */
+  .how-we-work { padding: 96px 0; }
+  .how-we-work h2 { margin-top: 14px; font-size: clamp(1.65rem, 2.7vw, 2.5rem); font-weight: 800; letter-spacing: -0.028em; line-height: 1.1; max-width: 30ch; }
+  .how-we-work > .wrap > p { margin-top: 16px; font-size: 15px; color: var(--t2); line-height: 1.75; max-width: 68ch; }
+  .accordion-wrap { margin-top: 48px; display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }
+  @media (max-width: 760px) { .accordion-wrap { grid-template-columns: 1fr; gap: 0; } }
+  .accordion-list { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg-2); }
+  .acc-item { border-bottom: 1px solid var(--border); cursor: pointer; }
+  .acc-item:last-child { border-bottom: none; }
+  .acc-item-head { display: flex; align-items: center; gap: 16px; padding: 20px 22px; transition: background 200ms; background: none; border: none; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+  .acc-item:hover .acc-item-head { background: rgba(250,248,252,0.03); }
+  .acc-item-n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--t3); flex-shrink: 0; width: 24px; transition: color 200ms; }
+  .acc-item.is-active .acc-item-n { color: var(--ember); }
+  .acc-item-t { font-size: 14.5px; font-weight: 700; color: var(--t2); transition: color 200ms; }
+  .acc-item.is-active .acc-item-t { color: var(--t1); }
+  .acc-item-toggle { margin-left: auto; font-family: var(--mono); font-size: 16px; color: var(--t3); }
+  .acc-item.is-active .acc-item-toggle { color: var(--ember); }
+  .acc-detail { max-height: 0; overflow: hidden; transition: max-height 300ms var(--ease); }
+  .acc-item.is-active .acc-detail { max-height: 200px; }
+  .acc-detail p { font-size: 12.5px; color: var(--t2); line-height: 1.6; padding: 0 22px 20px 62px; }
+  .acc-panel { position: sticky; top: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-2); padding: 28px 26px; }
+  @media (max-width: 760px) { .acc-panel { display: none; } }
+  .acc-panel-n { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); margin-bottom: 14px; }
+  .acc-panel-t { font-size: 20px; font-weight: 800; color: var(--t1); margin-bottom: 12px; }
+  .acc-panel-d { font-size: 13px; color: var(--t2); line-height: 1.65; margin-bottom: 18px; }
+  .acc-pips { display: flex; gap: 6px; }
+  .acc-pip { width: 20px; height: 3px; border-radius: 2px; background: var(--border); transition: background 200ms; }
+  .acc-pip.is-active { background: var(--ember); }
+  .deliver-heading { margin-top: 64px; font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 700; letter-spacing: -0.01em; }
+  .deliver-cards { margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .deliver-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; font-size: 14px; color: var(--t1); line-height: 1.5; display: flex; align-items: flex-start; gap: 12px; }
+  .deliver-card__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); margin-top: 8px; flex-shrink: 0; }
+
+  /* ── SISTEMAS PROPIOS ── */
+  .systems { padding: 96px 0; background: var(--bg-2); border-top: 1px solid var(--border); }
+  .systems h2 { margin-top: 14px; font-size: clamp(1.65rem, 2.7vw, 2.5rem); font-weight: 800; letter-spacing: -0.028em; line-height: 1.1; max-width: 30ch; }
+  .systems > .wrap > p { margin-top: 16px; font-size: 15px; color: var(--t2); line-height: 1.75; max-width: 68ch; }
+  .systems__cards { margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .system-card { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 28px; }
+  .system-card h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .system-card p { font-size: 13.5px; color: var(--t2); line-height: 1.65; margin-bottom: 10px; }
+  .system-card p:last-child { margin-bottom: 0; }
+  .systems__closing { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .systems__closing h3 { font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .systems__closing p { font-size: 14px; color: var(--t2); line-height: 1.7; max-width: 68ch; margin-bottom: 10px; }
+
+  /* ── PRUEBA SOCIAL ── */
+  .testimonials { padding: 96px 0; }
+  .testimonials h2 { margin-top: 14px; font-size: clamp(1.65rem, 2.7vw, 2.5rem); font-weight: 800; letter-spacing: -0.028em; line-height: 1.1; max-width: 30ch; }
+  .testimonials > .wrap > p { margin-top: 16px; font-size: 15px; color: var(--t2); line-height: 1.75; max-width: 68ch; }
+  .testimonial-grid { margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .testimonial-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 26px; display: flex; flex-direction: column; gap: 16px; }
+  .testimonial-card p { font-size: 13.5px; color: var(--t2); line-height: 1.65; }
+  .testimonial-card footer { border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 2px; }
+  .testimonial-card footer strong { font-size: 13px; color: var(--t1); }
+  .testimonial-card footer span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--t3); }
+
+  /* ── HABLEMOS ── */
+  .talk { padding: 96px 0; background: var(--bg-2); border-top: 1px solid var(--border); }
+  .talk h2 { margin-top: 14px; font-size: clamp(1.65rem, 2.7vw, 2.5rem); font-weight: 800; letter-spacing: -0.028em; line-height: 1.1; max-width: 30ch; }
+  .talk > .wrap > p { margin-top: 16px; font-size: 15px; color: var(--t2); line-height: 1.75; max-width: 68ch; }
+  .talk__topics { margin-top: 48px; }
+  .talk__topics h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+  .talk__topics ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .talk__topics li { font-size: 14px; color: var(--t2); padding-left: 18px; position: relative; }
+  .talk__topics li::before { content: ""; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--ember); }
+  .talk__agenda { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .talk__agenda h3 { font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 700; margin-bottom: 16px; }
+  .talk__agenda p { font-size: 14px; color: var(--t2); line-height: 1.7; max-width: 60ch; margin-bottom: 24px; }
+  .talk__alt { margin-top: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .talk__alt-item { display: flex; align-items: center; gap: 10px; }
+  .talk__sep { font-family: var(--mono); font-size: 12px; color: var(--t3); }
+
+  /* ── SIGUIENTE PASO (S8, cierre) ── */
+  .final-cta { padding: 96px 0; text-align: center; }
+  .final-cta__inner { max-width: 760px; margin: 0 auto; }
+  .final-cta .eyebrow { justify-content: center; }
+  .final-cta h2 { margin-top: 18px; font-size: clamp(1.9rem, 3.6vw, 3.1rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.08; }
+  .final-cta p { margin-top: 18px; font-size: 1.02rem; color: var(--t2); line-height: 1.7; max-width: 50ch; margin-left: auto; margin-right: auto; }
+  .final-cta__steps { margin-top: 44px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 13px; overflow: hidden; text-align: left; }
+  .final-cta__step { background: var(--bg-2); padding: 28px 26px 32px; }
+  .final-cta__step-n { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); margin-bottom: 18px; }
+  .final-cta__step-t { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--t1); }
+  .final-cta__step-d { font-size: 12.5px; color: var(--t2); line-height: 1.55; margin-bottom: 14px; }
+  .final-cta__step-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t3); border: 1px solid var(--border); border-radius: 3px; padding: 3px 7px; display: inline-block; }
+  .final-cta__buttons { margin-top: 44px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .final-cta__ctas { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .final-cta__trust { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3); }
+  @media (max-width: 680px) { .final-cta__steps { grid-template-columns: 1fr; } }
+
+  /* ── FOOTER ── */
+  .site-footer { padding: 64px 0 32px; border-top: 1px solid var(--border); }
+  .site-footer__grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 32px; }
+  .site-footer__brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 14px; font-weight: 700; }
+  .site-footer__tagline { font-size: 12.5px; color: var(--t2); line-height: 1.6; max-width: 32ch; }
+  .site-footer__col-title { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); margin-bottom: 12px; }
+  .site-footer__col { display: flex; flex-direction: column; gap: 9px; }
+  .site-footer__col a, .site-footer__col span { font-size: 12.5px; color: var(--t2); text-decoration: none; }
+  .site-footer__col a:hover { color: var(--t1); }
+  .site-footer__legal { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 10px; color: var(--t3); }
 
   @media (max-width: 860px) {
-    .hero__grid, .about__grid { grid-template-columns: 1fr; }
+    .hero__grid, .about__grid, .problem__grid { grid-template-columns: 1fr; }
     .hero__media { max-width: 320px; margin: 0 auto; }
+    .about__stats { grid-template-columns: 1fr; }
+    .evidence__cards, .systems__cards, .testimonial-grid { grid-template-columns: 1fr; }
+    .site-footer__grid { grid-template-columns: 1fr; gap: 24px; }
   }
 </style>
 </head>
 <body>
 
-<nav class="nav" aria-label="Navegación principal">
+<nav class="nav" id="nav" aria-label="Navegación principal">
   <div class="wrap nav__inner">
     <a href="#hero" class="nav__brand">
       <span class="nav__mark" aria-hidden="true"></span>
       <span>Diego Maury</span>
     </a>
-    <span class="nav__badge">DIEGO CMS · HOME · FASE 1</span>
+    <div class="nav__links" id="navLinks">
+      <a href="#quien-soy" class="nav__link">Quién soy</a>
+      <a href="#problema" class="nav__link">El problema</a>
+      <a href="#evidencia" class="nav__link">Evidencia</a>
+      <a href="#como-trabajo" class="nav__link">Cómo trabajo</a>
+      <a href="#sistemas-propios" class="nav__link">Sistemas propios</a>
+      <a href="#hablemos" class="nav__link">Conversemos</a>
+      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="nav__cta" target="_blank" rel="noopener">Agendar diagnóstico</a>
+    </div>
   </div>
 </nav>
 
@@ -219,7 +586,7 @@ const pageDescription =
     <div class="hero__grid">
       <div>
         <div class="eyebrow">{heroRole || 'Strategic Program Director'}</div>
-        <h1>{heroHeadline || `${heroName} — Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.`}</h1>
+        <h1>{heroHeadlineBefore}{heroHeadlineAccent && <span class="accent">{heroHeadlineAccent}</span>}{heroHeadlineAfter}</h1>
         {heroSub && <p class="sub">{heroSub}</p>}
         {heroCtas.length > 0 && (
           <div class="hero__ctas">
@@ -235,8 +602,11 @@ const pageDescription =
     {heroLogos.length > 0 && (
       <div class="trust">
         <div class="trust__label">He trabajado con</div>
-        <div class="trust__row">
-          {heroLogos.map((logo) => <img src={logo.src} alt={logo.alt} loading="lazy">)}
+        <div class="trust__track-wrap">
+          <div class="trust__track">
+            {heroLogos.map((logo) => <img src={logo.src} alt={logo.alt} loading="lazy">)}
+            {heroLogos.map((logo) => <img src={logo.src} alt="" aria-hidden="true" loading="lazy">)}
+          </div>
         </div>
       </div>
     )}
@@ -262,7 +632,13 @@ const pageDescription =
       <p class="about__bio">{aboutBio}</p>
       {aboutStats.length > 0 && (
         <div class="about__stats">
-          {aboutStats.map((stat) => <div class="about__stat">{stat}</div>)}
+          {aboutStats.map((stat) => (
+            <div>
+              <div class="about__stat-n" data-count={stat.countTo || undefined}>{stat.n}</div>
+              <div class="about__stat-l">{stat.l}</div>
+              {stat.s && <div class="about__stat-s">{stat.s}</div>}
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -271,12 +647,400 @@ const pageDescription =
 
 <section class="problem" id="problema">
   <div class="wrap">
-    <div class="eyebrow">{problemLabel}</div>
-    <h2>{problemHeadline}</h2>
-    {problemParas.map((p) => <p>{p}</p>)}
+    <div class="problem__grid">
+      <div>
+        <div class="eyebrow">{problemLabel}</div>
+        <h2>{problemHeadline}</h2>
+        {problemParas.map((p) => <p>{p}</p>)}
+      </div>
+      <div class="problem__media" role="img" aria-label="Diagrama: estrategia y operación conectadas por un sistema">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
+          <circle cx="160" cy="40" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
+          <circle cx="100" cy="160" r="22" stroke="var(--ember)" stroke-width="2.5" fill="rgba(255,92,57,0.1)"></circle>
+          <line x1="40" y1="56" x2="92" y2="142" stroke="var(--border)" stroke-width="2"></line>
+          <line x1="160" y1="56" x2="108" y2="142" stroke="var(--border)" stroke-width="2"></line>
+          <line x1="56" y1="40" x2="144" y2="40" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 5"></line>
+        </svg>
+      </div>
+    </div>
+
+    {problemDiagram && (
+      <div class="flow-diagram">
+        <div class="flow-card">
+          <h3>{problemDiagram.fromLabel}</h3>
+          <ul>{problemDiagram.fromItems.map((item) => <li>{item}</li>)}</ul>
+        </div>
+        <div class="flow-connector">
+          <span class="flow-connector__line"></span>
+          <span class="flow-connector__label">{problemDiagram.connectorLabel}</span>
+          <div class="flow-chips">
+            {problemDiagram.connectorItems.map((item) => <span class="flow-chip">{item}</span>)}
+          </div>
+          <span class="flow-connector__line"></span>
+          <span class="flow-arrow"></span>
+        </div>
+        <div class="flow-card">
+          <h3>{problemDiagram.toLabel}</h3>
+          <ul>{problemDiagram.toItems.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
+    )}
+
     {problemQuote && <blockquote>{problemQuote}</blockquote>}
   </div>
 </section>
+
+<section class="evidence" id="evidencia">
+  <div class="wrap">
+    <div class="eyebrow">{evidenceLabel}</div>
+    <h2>{evidenceHeadline}</h2>
+    {evidenceIntro.map((p) => <p>{p}</p>)}
+
+    {evidenceCards.length > 0 && (
+      <div class="evidence__cards">
+        {evidenceCards.map((card) => {
+          const logo = cardLogo(card.title);
+          return (
+          <article class="case-card">
+            {logo && <img class="case-card__logo" src={logo.src} alt={logo.alt} loading="lazy">}
+            <h3>{card.title}</h3>
+            {card.situation && <p><span class="case-card__label">Situación</span>{card.situation}</p>}
+            {card.action && <p><span class="case-card__label">Acción</span>{card.action}</p>}
+            {card.results.length > 0 && (
+              <ul class="case-card__results">
+                {card.results.map((result) => <li>{result}</li>)}
+              </ul>
+            )}
+          </article>
+          );
+        })}
+      </div>
+    )}
+
+    {evidenceTable && (
+      <table class="evidence__table">
+        <thead>
+          <tr>{evidenceTable.header.map((cell) => <th>{cell}</th>)}</tr>
+        </thead>
+        <tbody>
+          {evidenceTable.rows.map((row) => (
+            <tr>{row.map((cell) => <td>{cell}</td>)}</tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+
+    {evidenceStages.length > 0 && (
+      <div class="evidence__diagram">
+        {evidenceStages.map((stage, i) => (
+          <>
+            {i > 0 && <span class="diagram-connector"></span>}
+            <div class={`diagram-step${i === evidenceStages.length - 1 ? ' is-outcome' : ''}`}>
+              <div class="diagram-pill">
+                <span class="diagram-pill-n">{i + 1}</span>
+                <span class="diagram-label">{stage}</span>
+              </div>
+            </div>
+          </>
+        ))}
+      </div>
+    )}
+
+    <div class="evidence__footer">
+      {evidenceStatLine && <div class="evidence__stat">{evidenceStatLine}</div>}
+      <a href="/portfolio" class="btn-primary">{evidenceCtaLabel} →</a>
+    </div>
+  </div>
+</section>
+
+<section class="how-we-work" id="como-trabajo">
+  <div class="wrap">
+    <div class="eyebrow">{workLabel}</div>
+    <h2>{workHeadline}</h2>
+    {workIntro.map((p) => <p>{p}</p>)}
+
+    {workSteps.length > 0 && (
+      <div class="accordion-wrap">
+        <div class="accordion-list" id="accList">
+          {workSteps.map((step, i) => {
+            const [n, ...titleParts] = step.title.split('·');
+            const title = titleParts.join('·').trim() || step.title;
+            return (
+              <div class={`acc-item${i === 0 ? ' is-active' : ''}`} data-n={n.trim()} data-t={title}>
+                <button type="button" class="acc-item-head">
+                  <span class="acc-item-n">{n.trim()}</span>
+                  <span class="acc-item-t">{title}</span>
+                  <span class="acc-item-toggle">{i === 0 ? '−' : '+'}</span>
+                </button>
+                <div class="acc-detail">
+                  {step.paragraphs.map((p) => <p>{p}</p>)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div class="acc-panel" id="accPanel">
+          <div class="acc-panel-n">{workSteps[0]?.title.split('·')[0]?.trim()}</div>
+          <div class="acc-panel-t">{workSteps[0]?.title.split('·').slice(1).join('·').trim()}</div>
+          <div class="acc-panel-d">{workSteps[0]?.paragraphs[0]}</div>
+          <div class="acc-pips">
+            {workSteps.map((_, i) => <span class={`acc-pip${i === 0 ? ' is-active' : ''}`}></span>)}
+          </div>
+        </div>
+      </div>
+    )}
+
+    <h3 class="deliver-heading">Lo que entrego</h3>
+    {deliverIntro.map((p) => <p>{p}</p>)}
+    {deliverItems.length > 0 && (
+      <div class="deliver-cards">
+        {deliverItems.map((item) => (
+          <div class="deliver-card">
+            <span class="deliver-card__dot"></span>
+            <span>{item}</span>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="systems" id="sistemas-propios">
+  <div class="wrap">
+    <div class="eyebrow">{systemsLabel}</div>
+    <h2>{systemsHeadline}</h2>
+    {systemsIntro.map((p) => <p>{p}</p>)}
+
+    {systemsCards.length > 0 && (
+      <div class="systems__cards">
+        {systemsCards.map((card) => {
+          const logo = cardLogo(card.title);
+          return (
+            <div class="system-card">
+              {logo && <img class="case-card__logo" src={logo.src} alt={logo.alt} loading="lazy">}
+              <h3>{card.title}</h3>
+              {card.paragraphs.map((p) => <p>{p}</p>)}
+            </div>
+          );
+        })}
+      </div>
+    )}
+
+    <div class="systems__closing">
+      <h3>{systemsClosingHeading}</h3>
+      {systemsClosing.map((p) => <p>{p}</p>)}
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonios">
+  <div class="wrap">
+    <div class="eyebrow">{testimonialsLabel}</div>
+    <h2>{testimonialsHeadline}</h2>
+    {testimonialsIntro.map((p) => <p>{p}</p>)}
+
+    {testimonialItems.length > 0 && (
+      <div class="testimonial-grid">
+        {testimonialItems.map((item) => (
+          <blockquote class="testimonial-card">
+            <p>{item.quote}</p>
+            <footer>
+              <strong>{item.name}</strong>
+              {item.roleLines.map((line) => <span>{line}</span>)}
+            </footer>
+          </blockquote>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="talk" id="hablemos">
+  <div class="wrap">
+    <div class="eyebrow">{talkLabel}</div>
+    <h2>{talkHeadline}</h2>
+    {talkIntro.map((p) => <p>{p}</p>)}
+
+    {talkTopics.length > 0 && (
+      <div class="talk__topics">
+        <h3>{talkTopicsHeading}</h3>
+        <ul>
+          {talkTopics.map((topic) => <li>{topic}</li>)}
+        </ul>
+      </div>
+    )}
+
+    <div class="talk__agenda">
+      <h3>Agenda una conversación</h3>
+      {agendaIntro.map((p) => <p>{p}</p>)}
+      <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="btn-primary" target="_blank" rel="noopener">{agendaCtaLabel}</a>
+      {talkAltLinks.length > 0 && (
+        <div class="talk__alt">
+          {talkAltLinks.map((label, i) => (
+            <span class="talk__alt-item">
+              {i > 0 && <span class="talk__sep">o</span>}
+              <a href={contactHref(label)} class="inline-link" target={label.toLowerCase().includes('linkedin') ? '_blank' : undefined} rel={label.toLowerCase().includes('linkedin') ? 'noopener' : undefined}>{label}</a>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+{finalHeadline && (
+  <section class="final-cta" id="siguiente-paso">
+    <div class="wrap final-cta__inner">
+      <div class="eyebrow">{finalLabel}</div>
+      <h2>{finalHeadline}</h2>
+      {finalIntro.map((p) => <p>{p}</p>)}
+
+      {finalSteps.length > 0 && (
+        <div class="final-cta__steps">
+          {finalSteps.map((step) => (
+            <div class="final-cta__step">
+              <div class="final-cta__step-n">{step.title}</div>
+              {step.description && <div class="final-cta__step-d">{step.description}</div>}
+              {step.tag && <div class="final-cta__step-tag">{step.tag}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div class="final-cta__buttons">
+        {finalCtas.length > 0 && (
+          <div class="final-cta__ctas">
+            <a href="https://calendar.notion.so/meet/diegomaurymx/5aad3vun" class="btn-primary" target="_blank" rel="noopener">{finalCtas[0]}</a>
+            {finalCtas[1] && <a href="/cv/diego-maury-cv.pdf" class="btn-ghost" download>{finalCtas[1]}</a>}
+          </div>
+        )}
+        {finalTrustLine && <div class="final-cta__trust">{finalTrustLine}</div>}
+      </div>
+    </div>
+  </section>
+)}
+
+<footer class="site-footer">
+  <div class="wrap site-footer__grid">
+    <div>
+      <div class="site-footer__brand">
+        <span class="nav__mark" aria-hidden="true"></span>
+        <span>{footerBrandName}</span>
+      </div>
+      {footerTagline && <p class="site-footer__tagline">{footerTagline}</p>}
+    </div>
+    {exploreItems.length > 0 && (
+      <div class="site-footer__col">
+        <div class="site-footer__col-title">Explora</div>
+        {exploreItems.map((item) => (
+          EXPLORE_HREF[item]
+            ? <a href={EXPLORE_HREF[item]} target={EXPLORE_HREF[item].startsWith('http') ? '_blank' : undefined} rel={EXPLORE_HREF[item].startsWith('http') ? 'noopener' : undefined}>{item}</a>
+            : <span>{item}</span>
+        ))}
+      </div>
+    )}
+    {contactItems.length > 0 && (
+      <div class="site-footer__col">
+        <div class="site-footer__col-title">Contacto</div>
+        {contactItems.map((item) => (
+          CONTACT_ITEM_HREF[item]
+            ? <a href={CONTACT_ITEM_HREF[item]} target={CONTACT_ITEM_HREF[item].startsWith('http') ? '_blank' : undefined} rel={CONTACT_ITEM_HREF[item].startsWith('http') ? 'noopener' : undefined}>{item}</a>
+            : <span>{item}</span>
+        ))}
+      </div>
+    )}
+  </div>
+  <div class="wrap">
+    <p class="site-footer__legal">{copyrightLine}</p>
+  </div>
+</footer>
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Nav: fondo solido al hacer scroll + link activo por seccion visible ──
+  const navEl = document.getElementById('nav');
+  const navLinks = document.querySelectorAll('.nav__link[href^="#"]');
+  const navSections = [...navLinks]
+    .map((link) => document.querySelector(link.getAttribute('href') ?? ''))
+    .filter((el): el is Element => el !== null);
+
+  window.addEventListener('scroll', () => {
+    navEl?.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+  if (navSections.length > 0) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach((link) => {
+          link.classList.toggle('is-active', link.getAttribute('href') === `#${entry.target.id}`);
+        });
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    navSections.forEach((section) => sectionObserver.observe(section));
+  }
+
+  // ── Acordeon "Como trabajo" ──
+  const accItems = document.querySelectorAll('.acc-item');
+  const accPanelN = document.getElementById('accPanel')?.querySelector('.acc-panel-n');
+  const accPanelT = document.getElementById('accPanel')?.querySelector('.acc-panel-t');
+  const accPanelD = document.getElementById('accPanel')?.querySelector('.acc-panel-d');
+  const accPips = document.querySelectorAll('.acc-pip');
+
+  accItems.forEach((item, idx) => {
+    const head = item.querySelector('.acc-item-head');
+    head?.addEventListener('click', () => {
+      accItems.forEach((other) => {
+        other.classList.remove('is-active');
+        const toggle = other.querySelector('.acc-item-toggle');
+        if (toggle) toggle.textContent = '+';
+      });
+      item.classList.add('is-active');
+      const toggle = item.querySelector('.acc-item-toggle');
+      if (toggle) toggle.textContent = '−';
+
+      if (accPanelN) accPanelN.textContent = item.dataset.n ?? '';
+      if (accPanelT) accPanelT.textContent = item.dataset.t ?? '';
+      if (accPanelD) accPanelD.textContent = item.querySelector('.acc-detail p')?.textContent ?? '';
+      accPips.forEach((pip, pIdx) => pip.classList.toggle('is-active', pIdx === idx));
+    });
+  });
+
+  // ── Contadores de metricas ──
+  if (!prefersReduced) {
+    const countEls = document.querySelectorAll('[data-count]');
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    function animateCount(el: Element) {
+      const target = parseInt((el as HTMLElement).dataset.count ?? '0', 10);
+      const duration = 1400;
+      const start = performance.now();
+
+      function frame(now: number) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = Math.round(easeOut(progress) * target);
+        el.textContent = value.toLocaleString('es-MX');
+        if (progress < 1) requestAnimationFrame(frame);
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    countEls.forEach((el) => counterObserver.observe(el));
+  }
+</script>
 
 </body>
 </html>
