@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert');
 const path = require('node:path');
-const { loadMetrics } = require('./verify-metrics.js');
+const { loadMetrics } = require('./verify-metrics.cjs');
 
 const FIX = (f) => path.join(__dirname, 'fixtures', f);
 
@@ -19,7 +19,7 @@ test('loadMetrics lanza BAD_METRICS si el JSON esta malformado', () => {
   assert.throws(() => loadMetrics(FIX('metrics-malformado.json')), (e) => e.code === 'BAD_METRICS');
 });
 
-const { findDataMetrics, verifyHtml } = require('./verify-metrics.js');
+const { findDataMetrics, verifyHtml } = require('./verify-metrics.cjs');
 
 test('findDataMetrics extrae slug, texto y posicion', () => {
   const html = '<p>hola <span class="n" data-metric="demo-vigente">+42%</span> estimado, 2026</p>';
@@ -83,7 +83,7 @@ test('verifyHtml acepta el calificador dentro de la ventana', () => {
   assert.deepStrictEqual(r.errors, []);
 });
 
-const { verifyText } = require('./verify-metrics.js');
+const { verifyText } = require('./verify-metrics.cjs');
 
 test('verifyHtml acusa cifras Retiradas presentes en el HTML', () => {
   const { metrics } = loadMetrics(FIX('metrics-ok.json'));
@@ -136,7 +136,7 @@ test('verifyHtml emite warning por numeros con pinta de metrica sin data-metric'
 
 test('CLI: exit 2 si el espejo no existe', () => {
   try {
-    execFileSync('node', ['tools/verify-metrics.js', '--metrics', 'tools/fixtures/no-existe.json'], { encoding: 'utf8' });
+    execFileSync('node', ['tools/verify-metrics.cjs', '--metrics', 'tools/fixtures/no-existe.json'], { encoding: 'utf8' });
     assert.fail('debio salir con codigo distinto de 0');
   } catch (err) {
     assert.strictEqual(err.status, 2);
@@ -168,7 +168,7 @@ test('verifyHtml acusa error si data-metric apunta a una metrica Retirada', () =
   assert.ok(r.errors.some((e) => /superficie/i.test(e)));
 });
 
-const { run } = require('./verify-metrics.js');
+const { run } = require('./verify-metrics.cjs');
 
 test('run devuelve 2 si index.html no existe en la raiz', () => {
   // tools/fixtures como raiz: tiene el espejo pero no index.html
@@ -178,7 +178,7 @@ test('run devuelve 2 si index.html no existe en la raiz', () => {
 
 test('CLI: exit 2 si --metrics viene sin ruta', () => {
   try {
-    execFileSync('node', ['tools/verify-metrics.js', '--metrics'], { encoding: 'utf8' });
+    execFileSync('node', ['tools/verify-metrics.cjs', '--metrics'], { encoding: 'utf8' });
     assert.fail('debio salir con codigo distinto de 0');
   } catch (err) {
     assert.strictEqual(err.status, 2);

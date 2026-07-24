@@ -22,8 +22,8 @@ Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: 
     git add -A && git commit -m "..." && git push origin master
 
     # Verificador de métricas (obligatorio antes de publicar cifras; se exige exit 0)
-    node tools/verify-metrics.js
-    node --test tools/verify-metrics.test.js    # tests del verificador
+    node tools/verify-metrics.cjs
+    node --test tools/verify-metrics.test.cjs    # tests del verificador
 
     # Dependencias: local con npm install (conserva puppeteer devDep para QA visual);
     # en CI usar npm ci --omit=dev (no instalar Chromium). Scripts con require('puppeteer')
@@ -44,7 +44,7 @@ Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: 
 ## 3 · Arquitectura (solo lo no-obvio)
 
     /                        # raíz de master = sitio LIVE
-    ├── index.html           # Home LIVE oficial desde 2026-07-23: contenido migrado de version2/ (posicionamiento "Strategic Program Director"). Exento del gate de assets/data/metrics.json: 2 cifras propias ("30+" programas, "400+" emprendedores) NO tienen data-metric ni pasan por verify-metrics.js — excepción heredada de version2, decisión explícita de Diego, vigente aunque ahora sea el índice oficial.
+    ├── index.html           # Home LIVE oficial desde 2026-07-23: contenido migrado de version2/ (posicionamiento "Strategic Program Director"). Exento del gate de assets/data/metrics.json: 2 cifras propias ("30+" programas, "400+" emprendedores) NO tienen data-metric ni pasan por verify-metrics.cjs — excepción heredada de version2, decisión explícita de Diego, vigente aunque ahora sea el índice oficial.
     ├── index-canonico.html · prototipo-portafolio.html   # PREVIEWS aislados: noindex, sin analítica, no enlazados
     ├── 404.html             # noindex
     ├── portfolio/           # SPA por eras (index.html) + los 4 casos LIVE: heineken · sofi · redux-incmty · innovation-systems
@@ -100,7 +100,7 @@ Footer unificado (desde 2026-07-22): el sitio no tiene mecanismo de include (HTM
 ### Métricas y evidencia
 - No inventar cifras. Toda afirmación cuantitativa lleva artefacto o un ✖ explícito. Claims sin respaldo documental no se publican.
 - SSOT: base "📊 Métricas oficiales — Portafolio D" en Notion. Espejo generado: `assets/data/metrics.json` — no editar a mano. Métrica nueva se da de alta primero en Notion, nunca directo en el JSON.
-- SOP de publicación con métricas, sin excepciones: sincronizar Notion → `metrics.json` → resolver placeholders `{{metrica:slug}}` → `node tools/verify-metrics.js` → corregir hasta exit 0 → commit → push → entrada en Changelog.
+- SOP de publicación con métricas, sin excepciones: sincronizar Notion → `metrics.json` → resolver placeholders `{{metrica:slug}}` → `node tools/verify-metrics.cjs` → corregir hasta exit 0 → commit → push → entrada en Changelog.
 - Estándar por claim público: entidad + programa/edición + población + unidad + fuente o grado de evidencia (published = tercero nombrado / own = registros o estimación propia; nada está auditado). Si no se cumple, el claim se retira sin nota que reconozca la inconsistencia.
 - Que dos superficies coincidan NO prueba un claim: pueden compartir la misma estimación sin reconstruir.
 - `calificadorClaves` usa raíz de palabra (ej. "estimad"): el chequeo es substring, no palabra completa.
