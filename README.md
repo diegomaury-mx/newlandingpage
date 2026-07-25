@@ -1,50 +1,51 @@
 # Diego Maury — Portafolio Profesional
 
-Sitio estático desplegado en **[diegomaury.mx](https://diegomaury.mx)** · LIVE desde 2026-05-13
+Sitio en **[diegomaury.mx](https://diegomaury.mx)** · LIVE desde 2026-05-13 · construido con Astro y desplegado vía GitHub Actions desde 2026-07-25
 
 ---
 
 ## Stack
 
-- HTML5 + CSS3 + JavaScript vanilla (sin frameworks, sin build system)
-- Deploy: **GitHub Pages sirviendo desde `master` / raíz** — cada push a `master` redespliega automáticamente
+- Astro `^5.18.2` (Content Layer API), CSS y JS vanilla — sin framework de UI
+- Contenido (casos, métricas, copy del home) leído en build time desde Notion vía `src/services/notionLoaders.ts`
+- Deploy: **GitHub Pages con Source = GitHub Actions** (`build_type: workflow`, no branch/raíz) — `.github/workflows/deploy.yml` corre `astro build` en cada push a `master` y publica `dist/`
 - Dominio: `diegomaury.mx` con HTTPS activo
 - Analítica: Google Tag Manager (`GTM-NHT5827J`) + Microsoft Clarity (`x7ns7c22xi`) en todas las páginas
 
 ## Estructura
 
 ```
-/                               # raíz de master = sitio (deploy source)
-├── index.html                  # Página principal — LIVE
+/
+├── src/                         # Astro real: esto define el sitio LIVE (pages, content collections, notionLoaders)
+│   ├── pages/index.astro        # Home (S1-S8, lee el singleton siteCopy)
+│   ├── pages/portfolio.astro    # Listado de casos (colección `cases`)
+│   └── pages/portfolio/[slug].astro  # Caso individual
+├── public/                      # Se copia 1:1 a dist/: 404.html, legal, portfolio/*.html legacy, cases/*.html, assets/, cv/
+├── index.html · portfolio/index.html · 404.html (raíz)  # MUERTOS para LIVE, se conservan en el repo sin servirse (ver CLAUDE.md)
+├── index-canonico.html · prototipo-portafolio.html      # Previews aislados, noindex, no enlazados
 ├── robots.txt / sitemap.xml
-├── CNAME                       # diegomaury.mx
-├── .nojekyll                   # deshabilita el pipeline Jekyll de GitHub Pages
-├── llms.txt / llms-full.txt    # Contexto para LLMs
-├── assets/
-│   ├── css/styles.css          # Design tokens v3 + componentes (cases/portfolio)
-│   ├── fonts/ · fonts-v2/       # Tipografía local
-│   ├── js/main.js              # Nav activa + scroll reveal
-│   ├── js/sofi-case.js         # Simulador y panel del FSM del caso SOFI
-│   ├── data/sofi/              # Data files del caso SOFI — generados, no editar a mano
-│   └── img/                    # Isotipo, logos, patrones
-├── cases/                      # Casos de estudio (Heineken, Innovation Systems, REDUX, SOFI; fliphouse.html es stub de transición a SOFI)
-├── portfolio/                  # Galería por eras
-├── cv/                         # CV en PDF
-├── backups/                    # Respaldos de versiones anteriores del index
-├── src/                        # Content collections (Astro, en preparación — ver CHANGELOG.md)
-└── docs/                       # Specs y planes de diseño
+├── CNAME                        # diegomaury.mx
+├── llms.txt / llms-full.txt     # Contexto para LLMs
+├── assets/                      # Servido vía public/ — CSS (DS "Ember on Ink"), fuentes, JS, data (metrics.json, sofi/*)
+├── cases/                       # Solo stubs de redirect → portfolio/*.html
+├── docs/platform/                # cms-notion.md · conventions.md · seo-model.md · notion-astro-contract.md · manual-cms.md
+├── docs/superpowers/             # Specs y planes de diseño
+└── tools/ · scripts/ · tests/    # Verificador de métricas, QA visual/a11y (Playwright)
 ```
 
 ## Desarrollo local
 
 ```bash
+# Servidor de HTML legacy (no toca el build de Astro)
 python -m http.server 8080
-# o: npx serve .
+
+# Build/preview real de Astro (esto es lo que corre en CI y define el sitio LIVE)
+npx astro build
 ```
 
 ## Deploy
 
-No requiere pasos manuales: cualquier push a `master` dispara el rebuild de GitHub Pages.
+Push a `master` dispara `.github/workflows/deploy.yml` (GitHub Actions): `astro build` (requiere el secret `NOTION_TOKEN`) → sube `dist/` → `actions/deploy-pages`. No hay pasos manuales.
 
 ```bash
 git add -A && git commit -m "..." && git push origin master
@@ -62,11 +63,10 @@ Toda cifra publicada declara su grado de evidencia (documentada o estimada). **L
 
 ## Estado del proyecto
 
-- Sitio v3 "Ember on Ink" (Variante F canónica) — LIVE desde 2026-06-22
-- Casos de estudio y portfolio por eras — LIVE
-- Caso SOFI (`cases/sofi.html`) — LIVE y público desde 2026-07-12: indexable, enlazado desde el index y en el sitemap
-- Cifras del index y de los `llms.txt` alineadas a la evidencia verificada (2026-07-12)
-- Sprint 0.5 (arquitectura de contenido, Astro) — en preparación, ver `CHANGELOG.md`
+- Sitio construido con Astro y desplegado vía GitHub Actions — LIVE desde 2026-07-25
+- Home (`/`) y `/portfolio` leen contenido real de Notion en build time (sin datos hardcodeados)
+- Los 4 casos del CMS (`/portfolio`): Heineken, REDUX, SOFI, HackSureste
+- Cifras del sitio y de los `llms.txt` alineadas a la evidencia verificada, con gate bloqueante (`tools/verify-metrics.cjs`)
 
 ## Contacto
 
