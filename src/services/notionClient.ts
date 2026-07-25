@@ -29,6 +29,9 @@ export const NOTION_SOURCES = {
   cases: "88257bc9-e575-45e8-90df-f851f96e92f2",
   siteCopy: "d9ab8508-660a-43e8-ac45-9386dd7903d9",
   metrics: "213ea2d0-bffc-41b9-9877-92132551461c",
+  // Base "🖼️ CMS Imágenes — Portafolio D" (2026-07-25): slots de imagen que
+  // hoy viven hardcodeados en el codigo (foto de Diego, logos de trust bar).
+  imageSlots: "8dda9726-a42d-407d-ba84-334b4a1ef7a1",
 } as const;
 
 /**
@@ -160,6 +163,16 @@ export function getRelationIds(
   return prop.relation.map((relation) => relation.id);
 }
 
+/** status -> nombre de la opcion o `undefined`. */
+export function getStatus(
+  page: PageObjectResponse,
+  name: string,
+): string | undefined {
+  const prop = getProp(page, name);
+  if (prop?.type !== "status") return undefined;
+  return prop.status?.name;
+}
+
 /** files -> arreglo de URLs (externas o de archivo subido). */
 export function getFileUrls(page: PageObjectResponse, name: string): string[] {
   const prop = getProp(page, name);
@@ -221,6 +234,15 @@ export async function fetchMetrics(): Promise<PageObjectResponse[]> {
   const notion = getNotionClient();
   const rows = await collectPaginatedAPI(notion.dataSources.query, {
     data_source_id: NOTION_SOURCES.metrics,
+  });
+  return rows.filter(isFullPage);
+}
+
+/** Todas las filas de la base `🖼️ CMS Imágenes — Portafolio D` (colecc. imageSlots). */
+export async function fetchImageSlots(): Promise<PageObjectResponse[]> {
+  const notion = getNotionClient();
+  const rows = await collectPaginatedAPI(notion.dataSources.query, {
+    data_source_id: NOTION_SOURCES.imageSlots,
   });
   return rows.filter(isFullPage);
 }

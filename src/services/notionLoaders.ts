@@ -23,6 +23,7 @@ import type {
 import {
   fetchBlockChildren,
   fetchCases,
+  fetchImageSlots,
   fetchMetrics,
   fetchSiteCopy,
   getCheckbox,
@@ -31,6 +32,7 @@ import {
   getRelationIds,
   getRichText,
   getSelect,
+  getStatus,
   getTitle,
   getUrl,
   hasNotionToken,
@@ -223,6 +225,18 @@ function mapMetric(page: PageObjectResponse): Record<string, unknown> {
     buildable:
       status === "Vigente" &&
       (publicability === "Pública" || publicability === "A solicitud"),
+  };
+}
+
+/** Fila de `🖼️ CMS Imágenes — Portafolio D` -> data de la coleccion `imageSlots`. */
+export function mapImageSlot(page: PageObjectResponse): Record<string, unknown> {
+  return {
+    slot: getTitle(page, "Slot"),
+    imageUrl: getFileUrls(page, "Imagen")[0],
+    sizeRequired: getRichText(page, "Tamaño requerido"),
+    formatRequired: getSelect(page, "Formato requerido"),
+    status: getStatus(page, "Estado"),
+    description: getRichText(page, "Descripcion"),
   };
 }
 
