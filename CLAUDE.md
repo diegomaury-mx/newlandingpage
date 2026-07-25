@@ -4,12 +4,13 @@ Guía para Claude Code en este repositorio. Aquí viven SOLO invariantes: reglas
 
 ## 1 · Proyecto
 
-Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: https://diegomaury.mx (LIVE desde 2026-05-13).
+Portafolio profesional de Diego Maury — sitio en GitHub Pages. URL: https://diegomaury.mx (LIVE desde 2026-05-13; migrado a Astro + GitHub Actions el 2026-07-25).
 
-- HTML5 + CSS3 + JS vanilla; sin build system en producción.
-- Deploy: push a `master` (raíz = deploy source). Lo que no está en `master` no está LIVE.
-- Scaffold Astro montado en la raíz, NO desplegado: construye a `dist/`; el LIVE sigue siendo el HTML de la raíz. La migración avanza tarea por tarea vía la cadena "Diego CMS" en Notion (el gate de sprints original fue anulado por Diego). Astro real instalado: `^5.18.2` (Content Layer API estable, no v4 — corregido 2026-07-23; la nota anterior de "v4.16 a propósito" estaba obsoleta). Desde 2026-07-23 `src/content/config.ts` ya NO es aspiracional: `cases`/`metrics`/`siteCopy` usan `loader:` (`src/services/notionLoaders.ts`) y schema Zod alineado 1:1 con `docs/platform/notion-astro-contract.md`, con guardrail `superRefine` que bloquea el build si una ficha Insignia se publica sin Métrica ancla + Evidencia. Sin `NOTION_TOKEN` el build de producción (`astro build`/`astro sync`) falla a propósito; `.env` local gitignored, token lo administra Diego (recrear cuando falte).
-- **Fase 2 del hub "⚙️ Diego CMS" completa (2026-07-23):** `src/pages/portfolio.astro` (listado, ruta `/portfolio`) y `src/pages/portfolio/[slug].astro` (caso individual) leen la colección `cases` real — ya no hay datos hardcodeados. `notionLoaders.ts` ahora también trae el cuerpo (`body`) de cada ficha vía `blocksToMarkdown` (con soporte de tablas Notion, incluida la tabla ✔/✖ de Evidencia) y deriva `resultHeadline` (H1 del cuerpo) y `hasVerifiedEvidence` (heredado de esa tabla, no declarado aparte). SEO (`@astrojs/sitemap`, meta/OG/canonical, JSON-LD `ItemList`/`CreativeWork`) y `src/pages/llms.txt.ts` (filtra por canal `llms.txt`, distinto del `llms.txt` real en la raíz del repo) también están montados. Gotcha de build: `astro dev`/`astro build` tardan ~90-115s en el paso `[notion-cases]` (medido en vivo 2026-07-24: 88.5s) porque traen el body completo de las 27 fichas; no asumir que el proceso está colgado antes de ~2 min — si `astro dev` de verdad se cuelga, servir `dist/` con un servidor estático (`python -m http.server`) es más confiable para QA visual que esperarlo. El 4º caso LIVE ya no es "Innovation Systems": por instrucción de Diego (2026-07-24) se sustituyó por **HackSureste**, ficha ya Publicado+Publicable+Insignia en Notion con métrica ancla y evidencia — los 4 casos del CMS (`/portfolio`) son Heineken, REDUX, SOFI, HackSureste. La tarea Notion de crear la ficha "Innovation Systems" quedó Archivada. Fase 3 (GitHub Actions + deploy) sigue sin arrancar; el pipeline Astro sigue sin conectar a `diegomaury.mx`. **Home (`/`) — completo (2026-07-24, commits `e55c789`/`76779eb`/`6db68d1`):** `src/pages/index.astro` lee el singleton `siteCopy` (parseado por `src/utils/parseSiteCopy.ts`, que divide el markdown plano por headings `S<n> · <nombre>`/`SEO`) y renderiza S1-S8 + Footer con el copy canónico. S7b se omite a propósito (su copy declara "sin copy propio, lo resuelve el widget" de Senja, aún pendiente de activar). Sigue SIN desplegarse.
+- **Deploy — Fase 3 completa (2026-07-25):** el Source de GitHub Pages es `GitHub Actions` (`build_type: workflow`, no branch/raíz). `.github/workflows/deploy.yml` corre en cada push a `master`: `astro build` (con `NOTION_TOKEN` como secret del repo) → sube `dist/` como Pages artifact → `actions/deploy-pages`. El LIVE ya no es el HTML estático de la raíz servido directo por Pages: es la salida de `astro build`. `public/` se copia tal cual dentro de `dist/`, así que todo lo que vive ahí (los 4 stubs legacy de casos, `cases/*.html`, `politicas-privacidad.html`, `terminos-y-condiciones.html`, `404.html`, `assets/`, `robots.txt`) sigue sirviéndose igual. **Gotcha real (causó un incidente en vivo al activar el Source por primera vez):** las páginas Astro (`index.astro`, `portfolio.astro`, `portfolio/[slug].astro`) traían `noindex,nofollow` hardcodeado y sin GTM/Clarity porque se construyeron como scaffold "no desplegado" — cualquier página Astro nueva necesita el mismo snippet GTM-NHT5827J + Clarity x7ns7c22xi que `index.astro` (ver commit `2299e30`) y NUNCA debe llevar `noindex` salvo que sea explícitamente un preview no enlazado.
+- **`index.html` y `portfolio/index.html` de la raíz del repo ya NO se sirven en LIVE** (no hay copia de ellos en `public/`, así que `astro build` no los incluye en `dist/`): quedaron reemplazados por `src/pages/index.astro` y `src/pages/portfolio.astro` respectivamente. Siguen en el repo pero son código muerto para producción; no editarlos esperando que el cambio aparezca en el sitio.
+- Scaffold Astro real instalado: `^5.18.2` (Content Layer API estable, no v4 — corregido 2026-07-23; la nota anterior de "v4.16 a propósito" estaba obsoleta). Desde 2026-07-23 `src/content/config.ts` ya NO es aspiracional: `cases`/`metrics`/`siteCopy` usan `loader:` (`src/services/notionLoaders.ts`) y schema Zod alineado 1:1 con `docs/platform/notion-astro-contract.md`, con guardrail `superRefine` que bloquea el build si una ficha Insignia se publica sin Métrica ancla + Evidencia. Sin `NOTION_TOKEN` el build de producción (`astro build`/`astro sync`) falla a propósito; `.env` local gitignored, token lo administra Diego (recrear cuando falte); el mismo token vive como secret `NOTION_TOKEN` en el repo de GitHub para CI.
+- **Fase 2 del hub "⚙️ Diego CMS" completa (2026-07-23):** `src/pages/portfolio.astro` (listado, ruta `/portfolio`) y `src/pages/portfolio/[slug].astro` (caso individual) leen la colección `cases` real — ya no hay datos hardcodeados. `notionLoaders.ts` ahora también trae el cuerpo (`body`) de cada ficha vía `blocksToMarkdown` (con soporte de tablas Notion, incluida la tabla ✔/✖ de Evidencia) y deriva `resultHeadline` (H1 del cuerpo) y `hasVerifiedEvidence` (heredado de esa tabla, no declarado aparte). SEO (`@astrojs/sitemap`, meta/OG/canonical, JSON-LD `ItemList`/`CreativeWork`) y `src/pages/llms.txt.ts` (filtra por canal `llms.txt`, distinto del `llms.txt` real en la raíz del repo) también están montados. Gotcha de build: `astro dev`/`astro build` tardan ~90-115s en el paso `[notion-cases]` (medido en vivo 2026-07-24: 88.5s) porque traen el body completo de las 27 fichas; no asumir que el proceso está colgado antes de ~2 min. El 4º caso LIVE ya no es "Innovation Systems": por instrucción de Diego (2026-07-24) se sustituyó por **HackSureste**, ficha ya Publicado+Publicable+Insignia en Notion con métrica ancla y evidencia — los 4 casos del CMS (`/portfolio`) son Heineken, REDUX, SOFI, HackSureste. La tarea Notion de crear la ficha "Innovation Systems" quedó Archivada.
+- **Home (`/`) — completo y LIVE (2026-07-24/25, commits `e55c789`/`76779eb`/`6db68d1`/`2299e30`):** `src/pages/index.astro` lee el singleton `siteCopy` (parseado por `src/utils/parseSiteCopy.ts`, que divide el markdown plano por headings `S<n> · <nombre>`/`SEO`) y renderiza S1-S8 + Footer con el copy canónico. S7b se omite a propósito (su copy declara "sin copy propio, lo resuelve el widget" de Senja, aún pendiente de activar).
 - Idioma del sitio: español únicamente (sin toggle). Responder siempre en español.
 - Analítica en todas las páginas: GTM-NHT5827J + Microsoft Clarity x7ns7c22xi.
 
@@ -18,7 +19,8 @@ Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: 
     # Servidor local (desde la raíz del repo; no hay build en producción)
     python -m http.server 8080          # o: npx serve .
 
-    # Deploy: push a master. GitHub Pages redespliega solo.
+    # Deploy: push a master → dispara .github/workflows/deploy.yml (GitHub Actions,
+    # Pages Source = "workflow") → astro build + deploy-pages. Ya no es deploy-from-branch.
     git add -A && git commit -m "..." && git push origin master
 
     # Verificador de métricas (obligatorio antes de publicar cifras; se exige exit 0)
@@ -34,7 +36,8 @@ Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: 
     npm run test:a11y     # axe-core (@axe-core/playwright) contra las 9 páginas clave, WCAG A/AA
     npm run verify:visual # screenshots desktop+mobile de las 9 páginas → qa-output/screenshots/ (gitignored)
 
-    # Astro (scaffold, NO desplegado): construye a dist/, no toca el HTML LIVE
+    # Astro: esto es lo que corre en CI y define el sitio LIVE. Correrlo local
+    # NO toca diegomaury.mx (eso requiere push a master); sirve para QA antes de subir.
     npx astro build
 
     # Data files de SOFI (assets/data/sofi/*): se regeneran EN el repo de SOFI
@@ -43,19 +46,20 @@ Portafolio profesional de Diego Maury — sitio estático en GitHub Pages. URL: 
 
 ## 3 · Arquitectura (solo lo no-obvio)
 
-    /                        # raíz de master = sitio LIVE
-    ├── index.html           # Home LIVE oficial desde 2026-07-23: contenido migrado de version2/ (posicionamiento "Strategic Program Director"). Exento del gate de assets/data/metrics.json: 2 cifras propias ("30+" programas, "400+" emprendedores) NO tienen data-metric ni pasan por verify-metrics.cjs — excepción heredada de version2, decisión explícita de Diego, vigente aunque ahora sea el índice oficial.
-    ├── index-canonico.html · prototipo-portafolio.html   # PREVIEWS aislados: noindex, sin analítica, no enlazados
-    ├── 404.html             # noindex
-    ├── portfolio/           # SPA por eras (index.html) + los 4 casos LIVE: heineken · sofi · redux-incmty · innovation-systems
-    ├── version2/            # Desde 2026-07-23: solo el stub de redirect (noindex,follow) hacia /. Su contenido (posicionamiento "Strategic Program Director") se promovió a index.html — ver "Home / index.html" abajo.
-    ├── cases/               # SOLO stubs de redirect (noindex,follow) → portfolio/*.html · fliphouse.html = transición a SOFI
-    ├── assets/css/styles.css    # Tokens DS V2 + componentes (aliases --dm-* solo compatibilidad temporal)
+    /                        # raíz del repo — YA NO es el deploy source directo (ver Fase 3 arriba)
+    ├── index.html           # MUERTO para LIVE desde 2026-07-25 (no hay copia en public/): reemplazado por src/pages/index.astro. Se conserva en el repo, no se sirve.
+    ├── index-canonico.html · prototipo-portafolio.html   # PREVIEWS aislados: noindex, sin analítica, no enlazados, no forman parte del build de Astro (fuera de public/)
+    ├── 404.html             # MUERTO para LIVE en la raíz; el 404 real servido es public/404.html (mismo contenido, copiado a dist/ por Astro)
+    ├── portfolio/           # index.html (SPA por eras) MUERTO para LIVE desde 2026-07-25, reemplazado por src/pages/portfolio.astro. Los 4 HTML de casos legacy (heineken · sofi · redux-incmty · innovation-systems) SÍ siguen LIVE vía public/portfolio/*.html
+    ├── version2/            # stub de redirect (noindex,follow) hacia /, servido vía public/ igual que antes
+    ├── cases/               # SOLO stubs de redirect (noindex,follow) → portfolio/*.html · fliphouse.html = transición a SOFI, servidos vía public/cases/
+    ├── assets/css/styles.css    # Tokens DS V2 + componentes (aliases --dm-* solo compatibilidad temporal); servido vía public/assets/
     ├── assets/data/         # metrics.json (generado desde Notion) · sofi/* (generados en el repo de SOFI)
     ├── backups/             # respaldos servidos, noindex,nofollow
     ├── docs/platform/       # cms-notion.md · conventions.md · seo-model.md · notion-astro-contract.md
     ├── docs/superpowers/    # specs/ y plans/ de diseño
-    └── src/ · public/ · astro.config.mjs   # scaffold Astro — NO desplegado
+    ├── public/              # espejo de todo lo que Astro debe servir tal cual (copiado 1:1 a dist/ en cada build): 404.html, politicas-privacidad.html, terminos-y-condiciones.html, portfolio/*.html legacy, cases/*.html, robots.txt, assets/, cms-media/, cv/. Página nueva que deba vivir fuera de src/pages/ va aquí, o `astro build` no la incluye.
+    └── src/ · astro.config.mjs   # Astro real — esto es lo que define el sitio LIVE desde 2026-07-25 (ver Fase 3 arriba)
 
 Carpetas locales no versionadas (`_ds_import/`, `.claude-design/lab/`, `.playwright-mcp/`, `.superpowers/`) no son fuente de verdad del sitio.
 
@@ -165,7 +169,7 @@ Filtrar SIEMPRE por relación a proyecto "Portafolio D" (`Proyectos, Ideas y Loc
 - El paso "Notion — Inbox" del protocolo global no aplica a este repo (es de SOFI).
 
 ### Tooling
-- CI futuro (GitHub Actions + Astro): `npm ci --omit=dev` — puppeteer/Chromium no se instala en CI.
+- CI real (`.github/workflows/deploy.yml`, GitHub Actions + Astro, LIVE desde 2026-07-25): `npm ci --omit=dev` — puppeteer/Chromium no se instala en CI.
 - **El verificador de métricas es `.cjs`, no `.js` (2026-07-24).** `package.json` tiene `"type": "module"` desde el scaffold Astro, así que un `.js` con `require()` revienta con `ReferenceError` antes de validar nada — el gate estuvo muerto en silencio hasta que se detectó. Se renombró a `tools/verify-metrics.cjs` + `tools/verify-metrics.test.cjs` (fix mínimo, sin reescribir a ESM). Regla derivada: cualquier script nuevo del repo que use CommonJS va en `.cjs`, y un gate documentado no cuenta como gate hasta verificar que corre.
 - Puppeteer es devDependency solo para scripts legacy que hacen `require('puppeteer')` explícitamente (corren desde la raíz del repo; desde scratchpad fallan con MODULE_NOT_FOUND). NO es la ruta de QA visual/a11y — esa es Playwright (ver abajo).
 - **QA visual y accesibilidad — ruta única, sin fallbacks**: `npm run lint` / `npm run test:a11y` / `npm run verify:visual` (Playwright + `@axe-core/playwright`, config en `playwright.config.ts`, specs en `tests/qa/`). Páginas cubiertas: `index.html`, `portfolio/index.html`, los 4 casos (`heineken`, `sofi`, `redux-incmty`, `innovation-systems`), `politicas-privacidad.html`, `terminos-y-condiciones.html`, `404.html`. Nunca improvisar un fallback ad-hoc de browser (ni Puppeteer ni Claude-in-Chrome) para QA: si Playwright falla, reportar el error tal cual, no rodearlo.
