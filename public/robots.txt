@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://diegomaury.mx/sitemap.xml

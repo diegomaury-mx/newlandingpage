@@ -12,7 +12,9 @@
     "cms:smoke": "tsx scripts/notion-smoke.ts",
     "lint": "stylelint \"assets/css/**/*.css\" \"!assets/css/colors_and_type.css\" && htmlhint index.html portfolio/index.html portfolio/heineken.html portfolio/sofi.html portfolio/redux-incmty.html portfolio/innovation-systems.html politicas-privacidad.html terminos-y-condiciones.html 404.html",
     "test:a11y": "playwright test tests/qa/a11y.spec.ts",
-    "verify:visual": "playwright test tests/qa/visual.spec.ts"
+    "verify:visual": "playwright test tests/qa/visual.spec.ts",
+    "test:a11y:astro": "playwright test --config=playwright.astro.config.ts tests/qa/a11y.astro.spec.ts",
+    "verify:visual:astro": "playwright test --config=playwright.astro.config.ts tests/qa/visual.astro.spec.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

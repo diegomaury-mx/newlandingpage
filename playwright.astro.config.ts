@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/qa',
-  testIgnore: '**/*.astro.spec.ts',
+  testMatch: '**/*.astro.spec.ts',
   timeout: 30_000,
   expect: { timeout: 15_000 },
   retries: 0,
@@ -10,15 +10,15 @@ export default defineConfig({
   reporter: 'list',
   use: {
     headless: true,
-    baseURL: 'http://localhost:8080',
+    baseURL: 'http://localhost:4322',
     navigationTimeout: 30_000,
     actionTimeout: 15_000,
   },
   webServer: {
-    command: 'python -m http.server 8080',
-    url: 'http://localhost:8080',
+    command: 'npx astro preview --port 4322',
+    url: 'http://localhost:4322',
     reuseExistingServer: !process.env.CI,
-    timeout: 30_000,
+    timeout: 60_000,
   },
   projects: [
     {

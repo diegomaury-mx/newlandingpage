@@ -30,6 +30,7 @@ _ds_import/
 
 # QA visual (Playwright): screenshots regenerables, no se versionan
 qa-output/screenshots/
+qa-output/screenshots-astro/
 
 # Playwright: artefactos de test run locales
 /test-results/
