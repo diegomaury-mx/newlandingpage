@@ -77,16 +77,20 @@ Regla irrompible: todo el sitio comparte un solo design system. Fuente de verdad
 | `--ember` | `#FF5C39` | Acento único — una vez por pieza, en el elemento más importante |
 | `--ember-cta` | `#BF452B` | Única forma válida de ember como fondo sólido con texto blanco (el puro da 3.07:1, falla AA) |
 
-Tipografía: Plus Jakarta Sans (headlines, UI, body) + DM Mono (cifras, fechas, labels — uppercase, nunca párrafos). No reintroducir Montserrat/Bitter/Space Mono (`assets/fonts-v2/`, sin referenciar).
+Tipografía: Plus Jakarta Sans (headlines, UI, body) + DM Mono (cifras, fechas, labels — uppercase, nunca párrafos). Montserrat/Bitter/Space Mono (V1) y `colors_and_type.css` fueron eliminados del repo el 2026-07-25 (cero referencias activas) — no reintroducirlos ni recrear `assets/fonts-v2/`.
 
 Reglas duras (no negociables):
 1. Un solo acento ember por pieza. No cuentan como violación: logo del nav y section-labels/eyebrows (precedente aceptado).
 2. Sin gradientes, drop-shadows, blur ni glow decorativos. Excepciones aprobadas: overlays de imagen para legibilidad y `backdrop-filter: blur()` en nav sticky.
-3. Nunca `--dm-*` nuevos, nunca `colors_and_type.css` (sus variables ya no existen).
+3. Nunca `--dm-*` nuevos. Los `--dm-*` existentes en `assets/css/styles.css` son alias de compatibilidad que ya resuelven a los tokens V2 (`--dm-ink: var(--bg)`, etc.) — usados por las 4 páginas de caso legacy LIVE, no se retiran sin decisión aparte.
 4. `:focus-visible` en todo elemento interactivo: `outline: 2px solid var(--ember); outline-offset: 2px;`
 5. Logo de marca: `assets/img/isotipo-ember.svg` en todo nav/footer. `isotipodm.svg` solo como textura de fondo `.bg-pattern` (opacidad 0.02–0.03) — no modificar ese patrón.
+6. Pesos tipográficos: solo {300, 400, 500, 700} (800 no existe en la escala del DS). Titulares con tamaño >48px (en su punto máximo del `clamp`) usan peso 300 (regla D4 del Manual de Marca); el resto de headlines usa máximo 700.
+7. Radios de borde en la escala {0, 3(XS, badges/tags), 6(SM, botones/inputs), 10(MD, cards/paneles), 16(LG, modales/hero cards)}px. Pills (chips totalmente redondeados) son la única excepción válida fuera de escala, con `border-radius: 999px`.
 
 Gotchas y excepciones del DS:
+- `assets/img/logos/*.png`: nombres en minúsculas sin espacios (ej. `hacksureste-blanco.png`), consistente con el resto de la carpeta — no subir archivos con nombre "Logo Bonito Final.png".
+- `assets/img/logos/sofi.png` (versión a color, agregada 2026-07-24) NO tiene canal alpha — fondo blanco sólido horneado en el PNG, no transparente. Si se necesita sobre fondo oscuro/de color, usar `sofi-blanco.png` o regenerar con transparencia real.
 - `.case-nav-footer`/`.case-divider` son CSS local por página de caso (deliberado, no viven en `styles.css`). Caso nuevo = replicar ese bloque local.
 - `.bg-pattern` trae `pointer-events: none`; devolver `auto` si una sección lo usa directo.
 - El "doble h1" del portfolio es falso positivo (templates JS vía `innerHTML`) — no "corregirlo".
@@ -180,7 +184,6 @@ Filtrar SIEMPRE por relación a proyecto "Portafolio D" (`Proyectos, Ideas y Loc
 - `stylelint` (config en `package.json` → `"stylelint"`) está ajustado a la convención BEM real del CSS (`selector-class-pattern` acepta `__`/`--`) y desactiva reglas puramente estilísticas nunca aplicadas (notación de color, saltos de línea, `single-line-max-declarations`, etc.) — esto no es debilitar el lint, es alinearlo con el CSS ya existente en vez de forzar una reescritura masiva fuera de alcance.
 - `qa-output/screenshots/` es regenerable (gitignored) — nunca se versiona.
 - `verify:visual` (Playwright `fullPage` screenshot) captura la mayoría de las secciones en negro/vacío por debajo del hero: es el efecto esperado de `[data-reveal]` (`opacity:0` hasta que el `IntersectionObserver` del sitio dispara `.is-visible` por scroll real, no por el auto-scroll interno de Playwright al hacer stitching). Ya ocurre igual en `master` sin cambios — no es una regresión de una feature nueva. Para verificar visualmente contenido nuevo, usar el navegador real (Claude-in-Chrome) con scroll físico, no confiar en el PNG de `verify:visual` para secciones bajo el fold.
-- `assets/css/colors_and_type.css` está excluido del glob de `lint` (`!assets/css/colors_and_type.css`): es el archivo deprecado sin uso ya documentado en la sección 4 ("nunca `colors_and_type.css`, sus variables ya no existen"). Es corrección de scope del linter, no del código.
 - Decisión: la config de stylelint vive inline en `package.json` (clave nativa) en lugar de `.stylelintrc.json`, para mantenerla fuera del alcance del hook `config-protection` del plugin ecc sin desactivarlo. Cualquier cambio futuro a esta config requiere aprobación explícita del usuario.
 
 ## 6 · Fuentes de verdad
