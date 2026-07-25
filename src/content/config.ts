@@ -13,7 +13,12 @@
  */
 
 import { defineCollection, z } from 'astro:content';
-import { casesLoader, metricsLoader, siteCopyLoader } from '../services/notionLoaders.ts';
+import {
+  casesLoader,
+  imageSlotsLoader,
+  metricsLoader,
+  siteCopyLoader,
+} from '../services/notionLoaders.ts';
 
 // ─── Case Study (fuente: SSOT - Portafolio Proyectos) ─────────────────────────
 
@@ -132,6 +137,24 @@ const siteCopy = defineCollection({
   schema: z.object({
     title: z.string(),
     markdown: z.string(),
+  }),
+});
+
+// ─── Image Slots (fuente: 🖼️ CMS Imágenes — Portafolio D) ─────────────────────
+// Slots de imagen hoy hardcodeados en index.astro (foto de Diego, logos de
+// trust bar). `slot` es la llave tecnica que el codigo usa para buscar cada
+// fila; `status !== 'Listo'` o `imageUrl` ausente = el render cae al fallback
+// hardcodeado actual, para no romper el sitio mientras Diego sube archivos.
+
+const imageSlots = defineCollection({
+  loader: imageSlotsLoader,
+  schema: z.object({
+    slot: z.string().min(1),
+    imageUrl: z.string().url().optional(),
+    sizeRequired: z.string().default(''),
+    formatRequired: z.string().optional(),
+    status: z.enum(['Sin empezar', 'En curso', 'Listo']).optional(),
+    description: z.string().default(''),
   }),
 });
 
@@ -263,6 +286,7 @@ export const collections = {
   cases,
   metrics,
   siteCopy,
+  imageSlots,
   projects,
   playbooks,
   insights,

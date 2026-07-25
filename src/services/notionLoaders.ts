@@ -293,6 +293,14 @@ export const metricsLoader: Loader = createDataSourceLoader(
   (_page, data) => String(data.slug ?? ""),
 );
 
+/** Coleccion `imageSlots`: id = Slot (title, llave tecnica unica del contrato). */
+export const imageSlotsLoader: Loader = createDataSourceLoader(
+  "notion-image-slots",
+  fetchImageSlots,
+  mapImageSlot,
+  (_page, data) => String(data.slot ?? ""),
+);
+
 /** Singleton `siteCopy`: id fijo `site`; cuerpo aplanado a Markdown. */
 export const siteCopyLoader: Loader = {
   name: "notion-site-copy",

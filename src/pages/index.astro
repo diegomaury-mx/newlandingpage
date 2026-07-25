@@ -39,6 +39,17 @@ const sections = siteCopy ? parseSiteCopySections(siteCopy.data.markdown) : new 
 const metricsEntries = await getCollection('metrics');
 const incmtyMetric = metricsEntries.find((entry) => entry.id === 'incmty-participantes-inscritos');
 
+// --- CMS Imagenes (base "🖼️ CMS Imágenes — Portafolio D") --------------------
+// Slots hoy editables desde Notion (foto de Diego, logos de trust bar). Un
+// slot sin archivo publicado (status !== 'Listo' o sin imageUrl) cae al
+// fallback hardcodeado actual, para no romper el sitio mientras se migra
+// contenido caso por caso.
+const imageSlotEntries = await getCollection('imageSlots');
+function slotSrc(slotId: string, fallback: string): string {
+  const entry = imageSlotEntries.find((e) => e.id === slotId);
+  return entry?.data.status === 'Listo' && entry.data.imageUrl ? entry.data.imageUrl : fallback;
+}
+
 // --- Identidad interna de las secciones ---------------------------------------
 // Los ids/anclas usan el CODIGO INTERNO del SSOT (S1..S8), no el titulo
 // visible. Diego renombra secciones en Notion ("Hablemos" -> "Colaboremos" en
@@ -84,11 +95,11 @@ const heroLogosLine = heroParas[3] ?? '';
 const heroLogoNames = heroLogosLine.replace(/^Logos sugeridos:\s*/i, '').split('·').map((s) => s.trim()).filter(Boolean);
 
 const LOGO_MAP: Record<string, { src: string; alt: string }> = {
-  HEINEKEN: { src: '/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png', alt: 'HEINEKEN Mexico' },
-  'Tecnológico de Monterrey': { src: '/cms-media/logos/tec%20de%20monterrey.png', alt: 'Tecnológico de Monterrey' },
-  INCmty: { src: '/cms-media/logos/incmty.png', alt: 'INCmty' },
-  EBC: { src: '/cms-media/logos/EBC.png', alt: 'EBC' },
-  FlipHouse: { src: '/cms-media/logos/Fliphouse_logo1.png', alt: 'FlipHouse' },
+  HEINEKEN: { src: slotSrc('logo-heineken', '/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png'), alt: 'HEINEKEN Mexico' },
+  'Tecnológico de Monterrey': { src: slotSrc('logo-tec-de-monterrey', '/cms-media/logos/tec%20de%20monterrey.png'), alt: 'Tecnológico de Monterrey' },
+  INCmty: { src: slotSrc('logo-incmty', '/cms-media/logos/incmty.png'), alt: 'INCmty' },
+  EBC: { src: slotSrc('logo-ebc', '/cms-media/logos/EBC.png'), alt: 'EBC' },
+  FlipHouse: { src: slotSrc('logo-fliphouse', '/cms-media/logos/Fliphouse_logo1.png'), alt: 'FlipHouse' },
 };
 const heroLogos = heroLogoNames.map((name) => LOGO_MAP[name]).filter(Boolean);
 
@@ -868,7 +879,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         )}
       </div>
       <div class="hero-media" data-reveal style="--delay:.1s">
-        <img src="/cms-media/diego/diegomaurypng.png" alt={heroName || 'Diego Maury'} loading="eager" fetchpriority="high" width="700" height="875">
+        <img src={slotSrc('foto-diego', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="eager" fetchpriority="high" width="700" height="875">
       </div>
     </div>
     {heroLogos.length > 0 && (
@@ -910,7 +921,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="about-photo-wrap" data-reveal style="--delay:.1s">
       <div class="about-circle-bg"></div>
       <div class="about-photo-slot">
-        <img src="/cms-media/diego/diegomaurypng.png" width="700" height="700" alt={heroName || 'Diego Maury'} loading="lazy">
+        <img src={slotSrc('foto-diego', '/cms-media/diego/diegomaurypng.png')} width="700" height="700" alt={heroName || 'Diego Maury'} loading="lazy">
       </div>
     </div>
 
@@ -1182,7 +1193,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       )}
       <div class="conversemos-media">
-        <img src="/cms-media/diego/diegomaurypng.png" alt={heroName || 'Diego Maury'} loading="lazy" width="700" height="875">
+        <img src={slotSrc('foto-diego', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="lazy" width="700" height="875">
       </div>
     </div>
 
