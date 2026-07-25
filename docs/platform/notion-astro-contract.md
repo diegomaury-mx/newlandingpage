@@ -137,3 +137,25 @@ Ninguna fuente permite valores no verificados en contenido publicable. El build 
 - una fila de `metrics` con `Estado != "Vigente"` es referenciada por cualquier fuente.
 
 Nota histórica: hasta 2026-07-23 este documento marcaba `src/content/config.ts` como fuera de alcance ("eso es la tarea de validar con Zod"). ​Esa tarea y la Fase 2 completa (Home/casos/SEO) ya están implementadas — ver la actualización al inicio de este documento y CLAUDE.md sección 1.
+
+---
+
+## 4. `🖼️ CMS Imágenes — Portafolio D` → `imageSlots` (agregada 2026-07-25)
+
+Cuarta fuente, agregada para eliminar imágenes hardcodeadas en `index.astro` (foto de Diego repetida 3 veces, 5 logos de un `LOGO_MAP` en código). Database nueva bajo la página "Portafolio D" (`collection://8dda9726-a42d-407d-ba84-334b4a1ef7a1`), NO es una extensión de `SSOT - Portafolio Proyectos` (los `banner`/`logo` de cada caso siguen viviendo ahí, ya funcionaban vía Files & media desde antes — ver sección 1).
+
+| Propiedad Notion | Tipo Notion | Campo Zod | Nota |
+|---|---|---|---|
+| `Slot` | title | `slot` | Llave técnica exacta usada en el código (`slotSrc('<slot>', fallback)` en `index.astro`); no renombrar sin actualizar el código |
+| `Imagen` | files | `imageUrl` | Opcional — slot sin archivo subido |
+| `Tamaño requerido` | text | `sizeRequired` | Referencia para quien sube el archivo |
+| `Formato requerido` | select: PNG/JPG/WebP/SVG | `formatRequired` | — |
+| `Estado` | status: Sin empezar/En curso/Listo | `status` | Solo `"Listo"` con `imageUrl` presente hace que el sitio use la imagen de Notion; cualquier otro caso cae al path hardcodeado (fallback), nunca rompe el build |
+| `Descripcion` | text | `description` | Dónde vive el slot en el código (sección, archivo, línea aprox.) |
+
+**Regla de resolución (`slotSrc`, en `index.astro`):**
+```
+usa imageUrl SOLO SI status == "Listo" AND imageUrl existe; si no, usa el fallback hardcodeado
+```
+
+Slots dados de alta al crear la base (2026-07-25): `foto-diego`, `logo-heineken`, `logo-tec-de-monterrey`, `logo-incmty`, `logo-ebc`, `logo-fliphouse`. Todos en `Estado = Sin empezar` — el sitio sigue usando los paths hardcodeados hasta que Diego suba cada archivo y cambie el Estado a `Listo`.
