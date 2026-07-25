@@ -76,8 +76,23 @@ const itemListJsonLd = {
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NHT5827J');</script>
+<!-- End Google Tag Manager -->
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "x7ns7c22xi");
+</script>
+<!-- End Microsoft Clarity -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
 <title>{pageTitle}</title>
 <meta name="description" content={pageDescription}>
 <link rel="canonical" href={canonicalUrl}>
@@ -91,9 +106,7 @@ const itemListJsonLd = {
 <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
 <!--
   Fase 2 · Diego CMS — construido desde Notion (coleccion `cases`, Content
-  Layer API). NO es LIVE: noindex,nofollow, sin analitica. El scaffold Astro
-  construye a dist/ y no esta desplegado (ver astro.config.mjs). El sitio
-  LIVE sigue siendo el HTML estatico de la raiz del repo.
+  Layer API).
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -342,6 +355,10 @@ const itemListJsonLd = {
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NHT5827J"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <nav class="nav">
   <div class="wrap nav__inner">
