@@ -1,0 +1,64 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--t1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: var(--ember); }
+  ::selection { background: var(--ember); color: var(--bg); }
+  :focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+
+  /* ── SCROLL REVEAL ── */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    transition-delay: var(--delay, 0s);
+  }
+  [data-reveal].is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] { opacity: 1; transform: none; transition: none; }
+  }
+
+
+  /* ── SECTION BASE ── */
+  .section { padding: clamp(72px, 7vw, 112px) 32px; border-bottom: 1px solid var(--border); }
+  .section:first-of-type { padding-top: calc(clamp(72px,7vw,112px) + 64px); }
+  .section-inner { max-width: 1160px; margin: 0 auto; }
+  .section-label {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+  }
+  .section-label::before { content: ''; width: 18px; height: 1px; background: var(--ember); }
+  .section-title { font-size: clamp(1.65rem, 2.7vw, 2.5rem); font-weight: 700; letter-spacing: -0.028em; line-height: 1.1; margin-bottom: 12px; }
+  .section-sub { font-size: 1rem; color: var(--t2); line-height: 1.7; margin-bottom: 24px; max-width: 68ch; }
+  .inline-link { color: var(--ember); text-decoration: underline; text-underline-offset: 2px; }
+  .inline-link:hover, .inline-link:focus-visible { color: var(--t1); }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ember-cta); color: #fff; font-family: var(--mono);
+    font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 14px 26px; border-radius: 6px; border: none; cursor: pointer;
+    text-decoration: none; transition: opacity 150ms, transform 150ms;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--t1); font-family: var(--mono);
+    font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 13px 24px; border-radius: 6px; border: 1px solid var(--border);
+    cursor: pointer; text-decoration: none; transition: border-color 150ms, background 150ms, transform 150ms;
+  }
+  .btn-ghost:hover { border-color: var(--t2); background: rgba(255,255,255,0.03); transform: translateY(-2px); }
+
+  
+
+  /* "Lo que entrego": sin componente propio en el DS de referencia, se
+     reutiliza el patron de lista con punto (about-roles) ya existente. */
+  .deliver-heading { margin-top: 56px; font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; }

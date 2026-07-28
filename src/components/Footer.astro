@@ -1,0 +1,104 @@
+---
+import "../styles/footer.css";
+
+import { site } from "../config/site";
+---
+
+<footer>
+
+  <div class="footer-grid">
+
+    <section>
+
+      <div class="footer-brand">
+        <img
+          src={site.brand.logo}
+          width="24"
+          height="24"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+
+        <span class="footer-name">
+          {site.brand.name}
+        </span>
+      </div>
+
+      <p class="footer-tagline">
+        {site.brand.tagline}
+      </p>
+
+    </section>
+
+    <nav
+      class="footer-col"
+      aria-label="Explora"
+    >
+
+      <h2 class="footer-col-title">
+        Explora
+      </h2>
+
+      {
+        site.footer.explore.map((item) => (
+          <a
+            href={item.href}
+            target={item.href.startsWith("http") ? "_blank" : undefined}
+            rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+
+    </nav>
+
+    <address class="footer-col">
+
+      <h2 class="footer-col-title">
+        Contacto
+      </h2>
+
+      {
+        site.footer.contact.map((item) => (
+          <a
+            href={item.href}
+            target={item.href.startsWith("http") ? "_blank" : undefined}
+            rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+
+      <span class="footer-location">
+        {site.footer.location}
+      </span>
+
+    </address>
+
+  </div>
+
+  <div class="footer-legal-row">
+
+    <p class="footer-copy">
+      {site.footer.copyright}
+    </p>
+
+    <nav
+      class="footer-legal"
+      aria-label="Información legal"
+    >
+      {
+        site.footer.legal.map((item) => (
+          <a href={item.href}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+  </div>
+
+</footer>

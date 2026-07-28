@@ -1,0 +1,20 @@
+
+  /* ── TOKENS DS v2 "Ember on Ink" ── */
+  :root {
+    --bg:     #0A0612;
+    --bg-2:   #1A1128;
+    --border: #6A291B;
+    --t1:     #FAF8FC;
+    --t2:     #DDDBE0;
+    --t3:     #A8A6AC;
+    --ember:  #FF5C39;
+    --ember-cta: #BF452B; /* ember oscurecido: cumple AA 4.5:1 con texto blanco en botones */
+    --accent-secondary:      var(--ember);
+    --accent-secondary-text: var(--ember);
+    --sans:   'Plus Jakarta Sans', system-ui, sans-serif;
+    --mono:   'DM Mono', ui-monospace, monospace;
+    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+
+ 

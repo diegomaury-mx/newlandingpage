@@ -222,11 +222,16 @@ export async function fetchBlockChildren(
 
 /** Todas las fichas de la base `SSOT - Portafolio Proyectos` (colecc. cases). */
 export async function fetchCases(): Promise<PageObjectResponse[]> {
-  const notion = getNotionClient();
-  const rows = await collectPaginatedAPI(notion.dataSources.query, {
-    data_source_id: NOTION_SOURCES.cases,
-  });
-  return rows.filter(isFullPage);
+  try {
+    const notion = getNotionClient();
+    const rows = await collectPaginatedAPI(notion.dataSources.query, {
+      data_source_id: NOTION_SOURCES.cases,
+    });
+    return rows.filter(isFullPage);
+  } catch (err) {
+    console.error("NOTION ERROR:", err);
+    throw err;
+  }
 }
 
 /** Todas las filas de la base `Metricas oficiales` (colecc. metrics). */

@@ -1,0 +1,168 @@
+---
+import "../styles/navbar.css";
+import { site } from "../config/site";
+
+interface Props {
+  heroName?: string;
+  brandHref?: string;
+  ctaHref?: string;
+  ctaLabel?: string;
+  backHref?: string;
+  badge?: string;
+}
+
+const {
+  heroName = site.brand.name,
+  brandHref = "/",
+  ctaHref,
+  ctaLabel,
+  backHref,
+  badge,
+}: Props = Astro.props;
+---
+
+<nav class="nav" aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a
+      href={brandHref}
+      class="nav-brand"
+      aria-label={`${heroName}, Inicio`}
+    >
+      <span class="nav-mark">
+        <img
+          src={site.brand.logo}
+          width="28"
+          height="28"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </span>
+
+      <span class="nav-name">
+        {heroName}
+      </span>
+    </a>
+
+    <div class="nav__links">
+      {site.navigation.map((item) => (
+        <a
+          href={item.href}
+          class="nav__link"
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+
+    <div class="nav__right">
+      {badge && (
+        <span class="nav__badge">
+          {badge}
+        </span>
+      )}
+
+      {backHref && (
+        <a
+          class="nav__back"
+          href={backHref}
+        >
+          &larr; Portafolio
+        </a>
+      )}
+
+      {ctaHref && ctaLabel && (
+        <a
+          class="nav-cta"
+          href={ctaHref}
+        >
+          {ctaLabel}
+        </a>
+      )}
+    </div>
+
+    <button
+      type="button"
+      class="nav__burger"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+    >
+      <svg
+        width="22"
+        height="16"
+        viewBox="0 0 22 16"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M1 1h20M1 8h20M1 15h20"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<script is:inline>
+  const nav = document.querySelector(".nav");
+
+  if (!nav) return;
+
+  const burger = nav.querySelector(".nav__burger");
+  const links = nav.querySelector(".nav__links");
+
+  const navLinks = nav.querySelectorAll('.nav__link[href^="#"]');
+
+  const sections = [...navLinks]
+    .map((link) => document.querySelector(link.getAttribute("href") ?? ""))
+    .filter(Boolean);
+
+  const onScroll = () => {
+    nav.classList.toggle("is-scrolled", window.scrollY > 8);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  if (sections.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          navLinks.forEach((link) => {
+            link.classList.toggle(
+              "is-active",
+              link.getAttribute("href") === `#${entry.target.id}`
+            );
+          });
+        });
+      },
+      {
+        rootMargin: "-40% 0px -55% 0px",
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  burger?.addEventListener("click", () => {
+    const isOpen = links?.classList.toggle("is-open") ?? false;
+
+    burger.setAttribute("aria-expanded", String(isOpen));
+    burger.setAttribute(
+      "aria-label",
+      isOpen ? "Cerrar menú" : "Abrir menú"
+    );
+  });
+
+  links?.querySelectorAll(".nav__link").forEach((link) => {
+    link.addEventListener("click", () => {
+      links.classList.remove("is-open");
+      burger?.setAttribute("aria-expanded", "false");
+      burger?.setAttribute("aria-label", "Abrir menú");
+    });
+  });
+</script>
