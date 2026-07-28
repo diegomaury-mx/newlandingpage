@@ -76,6 +76,15 @@ Idea
 - [x] SEO Model documentation (`docs/platform/seo-model.md`)
 - [x] Conventions documentation (`docs/platform/conventions.md`)
 
+### 2026-07-28 — Public pages mapping
+
+- Added `docs/published-pages-map.md`, `docs/published-pages-map.json`, and `docs/published-pages-map.csv` mapping published URLs to repository source files. Use these artifacts to trace where a live page is authored and for validation/automation tasks.
+
+### 2026-07-28 — Published assets report
+
+- Added `docs/published-assets-report.json` and `docs/published-assets-report.csv` listing all assets under `public/` grouped by type (html, js, css, fonts, images, data). These files help audits, CDN syncs, and CI validation.
+
+
 ### Definition of Done
 
 A sprint is considered complete only when all of the following are true:

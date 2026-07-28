@@ -1,0 +1,24 @@
+url,source_path,note
+/,src/pages/index.astro,Página principal generada por Astro
+/portfolio,src/pages/portfolio.astro,Listado de portfolio
+/llms.txt,src/pages/llms.txt.ts,Salida llms.txt dinámica
+
+/404.html,public/404.html,Página 404 (estática)
+/politicas-privacidad.html,public/politicas-privacidad.html,Política de privacidad (estática)
+/terminos-y-condiciones.html,public/terminos-y-condiciones.html,Términos y condiciones (estática)
+/robots.txt,public/robots.txt,Robots.txt (estático)
+
+/portfolio/heineken.html,public/portfolio/heineken.html,Caso legacy
+/portfolio/sofi.html,public/portfolio/sofi.html,Caso legacy
+/portfolio/redux-incmty.html,public/portfolio/redux-incmty.html,Caso legacy
+/portfolio/innovation-systems.html,public/portfolio/innovation-systems.html,Caso legacy
+
+/cases/fliphouse.html,public/cases/fliphouse.html,Caso legacy (redirect stub)
+/cases/heineken.html,public/cases/heineken.html,Caso legacy (redirect stub)
+/cases/innovation-systems.html,public/cases/innovation-systems.html,Caso legacy (redirect stub)
+/cases/redux-incmty.html,public/cases/redux-incmty.html,Caso legacy (redirect stub)
+/cases/sofi.html,public/cases/sofi.html,Caso legacy (redirect stub)
+
+/assets/css/styles.css,public/assets/css/styles.css,Hoja de estilos publicada (fuente: assets/css/styles.css)
+/assets/js/gtm.js,public/js/gtm.js,Script GTM
+/assets/data/metrics.json,public/assets/data/metrics.json,Métricas (espejo de Notion)

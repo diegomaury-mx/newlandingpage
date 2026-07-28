@@ -1,0 +1,25 @@
+[
+  {"url":"/","source":"src/pages/index.astro","note":"Página principal generada por Astro"},
+  {"url":"/portfolio","source":"src/pages/portfolio.astro","note":"Listado de portfolio"},
+  {"url":"/llms.txt","source":"src/pages/llms.txt.ts","note":"Salida llms.txt dinámica"},
+
+  {"url":"/404.html","source":"public/404.html","note":"Página 404 (estática)"},
+  {"url":"/politicas-privacidad.html","source":"public/politicas-privacidad.html","note":"Política de privacidad (estática)"},
+  {"url":"/terminos-y-condiciones.html","source":"public/terminos-y-condiciones.html","note":"Términos y condiciones (estática)"},
+  {"url":"/robots.txt","source":"public/robots.txt","note":"Robots.txt (estático)"},
+
+  {"url":"/portfolio/heineken.html","source":"public/portfolio/heineken.html","note":"Caso legacy"},
+  {"url":"/portfolio/sofi.html","source":"public/portfolio/sofi.html","note":"Caso legacy"},
+  {"url":"/portfolio/redux-incmty.html","source":"public/portfolio/redux-incmty.html","note":"Caso legacy"},
+  {"url":"/portfolio/innovation-systems.html","source":"public/portfolio/innovation-systems.html","note":"Caso legacy"},
+
+  {"url":"/cases/fliphouse.html","source":"public/cases/fliphouse.html","note":"Caso legacy (redirect stub)"},
+  {"url":"/cases/heineken.html","source":"public/cases/heineken.html","note":"Caso legacy (redirect stub)"},
+  {"url":"/cases/innovation-systems.html","source":"public/cases/innovation-systems.html","note":"Caso legacy (redirect stub)"},
+  {"url":"/cases/redux-incmty.html","source":"public/cases/redux-incmty.html","note":"Caso legacy (redirect stub)"},
+  {"url":"/cases/sofi.html","source":"public/cases/sofi.html","note":"Caso legacy (redirect stub)"},
+
+  {"url":"/assets/css/styles.css","source":"public/assets/css/styles.css","note":"Hoja de estilos publicada (fuente: assets/css/styles.css)"},
+  {"url":"/assets/js/gtm.js","source":"public/js/gtm.js","note":"Script GTM"},
+  {"url":"/assets/data/metrics.json","source":"public/assets/data/metrics.json","note":"Métricas (espejo de Notion)"}
+]

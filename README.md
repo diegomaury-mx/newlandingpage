@@ -68,6 +68,14 @@ Toda cifra publicada declara su grado de evidencia (documentada o estimada). **L
 - Los 4 casos del CMS (`/portfolio`): Heineken, REDUX, SOFI, HackSureste
 - Cifras del sitio y de los `llms.txt` alineadas a la evidencia verificada, con gate bloqueante (`tools/verify-metrics.cjs`)
 
+## Actividades recientes (resumen)
+
+- 2026-07-28: Generada relación de páginas publicadas → archivos fuente en `docs/published-pages-map.*` (MD/JSON/CSV).
+- 2026-07-28: Escaneo de assets públicos y creado `docs/published-assets-report.json` y `docs/published-assets-report.csv` (lista de HTML, JS, CSS, fonts, imágenes y datos bajo `public/`).
+- CHANGELOG actualizado con entradas sobre los artefactos anteriores.
+
+Los archivos en `docs/` sirven para auditoría, validación y para construir checks CI que verifiquen que cada recurso publicado tenga su origen en el repo.
+
 ## Contacto
 
 Diego Maury · [diegomaury.mx](https://diegomaury.mx) · hola@diegomaury.mx

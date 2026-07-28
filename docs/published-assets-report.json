@@ -1,0 +1,61 @@
+[
+  {"url":"/404.html","file":"public/404.html","type":"html"},
+  {"url":"/politicas-privacidad.html","file":"public/politicas-privacidad.html","type":"html"},
+  {"url":"/terminos-y-condiciones.html","file":"public/terminos-y-condiciones.html","type":"html"},
+  {"url":"/robots.txt","file":"public/robots.txt","type":"text"},
+
+  {"url":"/portfolio/heineken.html","file":"public/portfolio/heineken.html","type":"html"},
+  {"url":"/portfolio/sofi.html","file":"public/portfolio/sofi.html","type":"html"},
+  {"url":"/portfolio/redux-incmty.html","file":"public/portfolio/redux-incmty.html","type":"html"},
+  {"url":"/portfolio/innovation-systems.html","file":"public/portfolio/innovation-systems.html","type":"html"},
+
+  {"url":"/cases/fliphouse.html","file":"public/cases/fliphouse.html","type":"html"},
+  {"url":"/cases/heineken.html","file":"public/cases/heineken.html","type":"html"},
+  {"url":"/cases/innovation-systems.html","file":"public/cases/innovation-systems.html","type":"html"},
+  {"url":"/cases/redux-incmty.html","file":"public/cases/redux-incmty.html","type":"html"},
+  {"url":"/cases/sofi.html","file":"public/cases/sofi.html","type":"html"},
+
+  {"url":"/js/gtm.js","file":"public/js/gtm.js","type":"js"},
+  {"url":"/assets/js/main.js","file":"public/assets/js/main.js","type":"js"},
+  {"url":"/assets/js/sofi-case.js","file":"public/assets/js/sofi-case.js","type":"js"},
+
+  {"url":"/assets/css/styles.css","file":"public/assets/css/styles.css","type":"css"},
+
+  {"url":"/assets/fonts/Satoshi-Variable.ttf","file":"public/assets/fonts/Satoshi-Variable.ttf","type":"font"},
+  {"url":"/assets/fonts/Satoshi-VariableItalic.ttf","file":"public/assets/fonts/Satoshi-VariableItalic.ttf","type":"font"},
+  {"url":"/assets/fonts/JetBrainsMono-Italic-VariableFont_wght.ttf","file":"public/assets/fonts/JetBrainsMono-Italic-VariableFont_wght.ttf","type":"font"},
+
+  {"url":"/assets/data/metrics.json","file":"public/assets/data/metrics.json","type":"data"},
+  {"url":"/assets/data/sofi/sofi-metrics.js","file":"public/assets/data/sofi/sofi-metrics.js","type":"data"},
+  {"url":"/assets/data/sofi/sofi-fsm.js","file":"public/assets/data/sofi/sofi-fsm.js","type":"data"},
+  {"url":"/assets/data/sofi/sofi-conversation.js","file":"public/assets/data/sofi/sofi-conversation.js","type":"data"},
+
+  {"url":"/assets/img/isotipo-ember.svg","file":"public/assets/img/isotipo-ember.svg","type":"image"},
+  {"url":"/assets/img/isotipo-light.svg","file":"public/assets/img/isotipo-light.svg","type":"image"},
+  {"url":"/assets/img/isotipo-white.png","file":"public/assets/img/isotipo-white.png","type":"image"},
+  {"url":"/assets/img/diego-maury.png","file":"public/assets/img/diego-maury.png","type":"image"},
+  {"url":"/cms-media/diego/diegomaurypng.png","file":"public/cms-media/diego/diegomaurypng.png","type":"image"},
+
+  {"url":"/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png","file":"public/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png","type":"image"},
+  {"url":"/cms-media/logos/Fliphouse_logo1.png","file":"public/cms-media/logos/Fliphouse_logo1.png","type":"image"},
+  {"url":"/cms-media/logos/EBC.png","file":"public/cms-media/logos/EBC.png","type":"image"},
+  {"url":"/cms-media/logos/incmty.png","file":"public/cms-media/logos/incmty.png","type":"image"},
+  {"url":"/cms-media/logos/platzi.png","file":"public/cms-media/logos/platzi.png","type":"image"},
+  {"url":"/cms-media/logos/talentland.png","file":"public/cms-media/logos/talentland.png","type":"image"},
+  {"url":"/cms-media/logos/Logo_de_COPARMEX.jpg","file":"public/cms-media/logos/Logo_de_COPARMEX.jpg","type":"image"},
+
+  {"url":"/assets/img/logos/heineken.png","file":"public/assets/img/logos/heineken.png","type":"image"},
+  {"url":"/assets/img/logos/fliphouse.png","file":"public/assets/img/logos/fliphouse.png","type":"image"},
+  {"url":"/assets/img/logos/platzi.png","file":"public/assets/img/logos/platzi.png","type":"image"},
+  {"url":"/assets/img/logos/incmty.png","file":"public/assets/img/logos/incmty.png","type":"image"},
+  {"url":"/assets/img/logos/talentland.png","file":"public/assets/img/logos/talentland.png","type":"image"},
+
+  {"url":"/assets/img/evidencia/tec2020-p174-btem.jpg","file":"public/assets/img/evidencia/tec2020-p174-btem.jpg","type":"image"},
+  {"url":"/assets/img/evidencia/tec2020-p181-hgc.jpg","file":"public/assets/img/evidencia/tec2020-p181-hgc.jpg","type":"image"},
+  {"url":"/assets/img/evidencia/tec2020-p180-incmty.jpg","file":"public/assets/img/evidencia/tec2020-p180-incmty.jpg","type":"image"},
+  {"url":"/assets/img/evidencia/playlist-redux.jpg","file":"public/assets/img/evidencia/playlist-redux.jpg","type":"image"},
+  {"url":"/assets/img/evidencia/playlist-hgc.jpg","file":"public/assets/img/evidencia/playlist-hgc.jpg","type":"image"},
+  {"url":"/assets/img/evidencia/playlist-hacksureste.jpg","file":"public/assets/img/evidencia/playlist-hacksureste.jpg","type":"image"},
+  {"url":"/assets/img/evidencia/tec2021-p416-hgc-redux.jpg","file":"public/assets/img/evidencia/tec2021-p416-hgc-redux.jpg","type":"image"},
+  {"url":"/assets/img/evidencia/tec2021-p415-incmty.jpg","file":"public/assets/img/evidencia/tec2021-p415-incmty.jpg","type":"image"}
+]
