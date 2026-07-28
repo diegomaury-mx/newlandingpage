@@ -17,9 +17,11 @@
     "verify:visual:astro": "playwright test --config=playwright.astro.config.ts tests/qa/visual.astro.spec.ts"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.3",
     "@notionhq/client": "^5.23.2",
-    "astro": "^5.18.2"
+    "astro": "^5.18.2",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",

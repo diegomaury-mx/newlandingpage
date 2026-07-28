@@ -28,7 +28,7 @@ import type {
 export const NOTION_SOURCES = {
   cases: "88257bc9-e575-45e8-90df-f851f96e92f2",
   siteCopy: "d9ab8508-660a-43e8-ac45-9386dd7903d9",
-  metrics: "238e1ae6-aa2c-4784-bd9f-a2d7e8966954",
+  metrics: "213ea2d0-bffc-41b9-9877-92132551461c",
   // Base "🖼️ CMS Imágenes — Portafolio D" (2026-07-25): slots de imagen que
   // hoy viven hardcodeados en el codigo (foto de Diego, logos de trust bar).
   imageSlots: "8dda9726-a42d-407d-ba84-334b4a1ef7a1",

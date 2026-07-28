@@ -150,7 +150,7 @@ const problemHeadline = heading2(s3);
 const problemParas = paragraphs(s3).filter(
   (p) => !p.includes('\n') && !p.startsWith('┌') && p !== p.toUpperCase(),
 );
-const problemQuote = s3.find((b) => b.trim().startsWith('>'))?.trim().slice(1).trim() ?? '';
+const problemQuote = s3.find((b: string) => b.trim().startsWith('>'))?.trim().slice(1).trim() ?? '';
 const problemDiagram = parseFlowDiagram(firstCodeBlock(s3));
 
 // --- S4 · Evidencia ------------------------------------------------------------
@@ -213,10 +213,10 @@ function stageBarHeight(index: number, total: number): string {
   const step = total > 1 ? (max - min) / (total - 1) : 0;
   return `${Math.round(min + step * index)}px`;
 }
-const evidenceStatLine = s4.find((b) => b.includes('proyectos documentados'))?.trim() ?? '';
+const evidenceStatLine = s4.find((b: string) => b.includes('proyectos documentados'))?.trim() ?? '';
 const evidenceCtaLabel =
   s4
-    .find((b) => b.toLowerCase().includes('explorar portafolio'))
+    .find((b: string) => b.toLowerCase().includes('explorar portafolio'))
     ?.replace(/→\s*/, '')
     .replace(/#portafolio\s*$/i, '')
     .trim() || 'Explorar portafolio completo';
@@ -239,7 +239,7 @@ const systemsHeadline = heading1(s6);
 const systemsIntro = paragraphs(blocksBeforeHeading(s6, ['## REDUX']));
 const systemsCards = headingCards(blocksBeforeHeading(s6, ['## El verdadero entregable']), '## ');
 const systemsClosingHeading =
-  s6.find((b) => b.trim().startsWith('## El verdadero entregable'))?.trim().slice(3).trim() ??
+  s6.find((b: string) => b.trim().startsWith('## El verdadero entregable'))?.trim().slice(3).trim() ??
   'El verdadero entregable';
 const systemsClosing = paragraphs(blocksAfterHeading(s6, '## El verdadero entregable'));
 
@@ -271,11 +271,11 @@ const s7 = sections.get('S7')?.blocks ?? [];
 const talkLabel = sections.get('S7')?.label ?? 'Colaboremos';
 const talkHeadline = heading1(s7);
 const talkIntro = paragraphs(blocksBeforeHeading(s7, ['### ', '## ']));
-const talkTopicsHeading = s7.find((b) => b.trim().startsWith('### '))?.trim().slice(4).trim() ?? '';
+const talkTopicsHeading = s7.find((b: string) => b.trim().startsWith('### '))?.trim().slice(4).trim() ?? '';
 const talkTopics = bulletItems(s7);
 
 // Bloque "Estas contratando?": parrafo protagonista + su par de CTAs.
-const hiringIndex = s7.findIndex((b) => b.trim().startsWith('¿Estás contratando?'));
+const hiringIndex = s7.findIndex((b: string) => b.trim().startsWith('¿Estás contratando?'));
 const hiringText = hiringIndex >= 0 ? s7[hiringIndex].trim() : '';
 const hiringCtas = hiringIndex >= 0 ? ctaLabels(s7.slice(hiringIndex + 1)) : [];
 
@@ -828,10 +828,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </style>
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NHT5827J"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+<!-- Google Tag Manager -->
+<script is:inline src="/js/gtm.js"></script>
+<!-- End Google Tag Manager -->
 
 <nav id="nav" aria-label="Navegación principal">
   <div class="nav-inner">
