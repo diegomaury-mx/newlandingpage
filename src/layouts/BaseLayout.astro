@@ -10,11 +10,21 @@ import { site } from "../config/site";
 interface Props {
   title?: string;
   description?: string;
+  canonicalUrl?: string;
+  ogType?: string;
+  jsonLd?: unknown;
+  enableGtm?: boolean;
+  enableClarity?: boolean;
 }
 
 const {
   title = site.title,
   description = site.description,
+  canonicalUrl,
+  ogType = "website",
+  jsonLd,
+  enableGtm = false,
+  enableClarity = false,
 }: Props = Astro.props;
 ---
 
@@ -36,10 +46,89 @@ const {
       content={description}
     />
 
+    {canonicalUrl && (
+      <link
+        rel="canonical"
+        href={canonicalUrl}
+      />
+    )}
+
+    <meta
+      property="og:type"
+      content={ogType}
+    />
+
+    <meta
+      property="og:title"
+      content={title}
+    />
+
+    <meta
+      property="og:description"
+      content={description}
+    />
+
+    {canonicalUrl && (
+      <meta
+        property="og:url"
+        content={canonicalUrl}
+      />
+    )}
+
+    <meta
+      name="twitter:card"
+      content="summary"
+    />
+
+    <meta
+      name="twitter:title"
+      content={title}
+    />
+
+    <meta
+      name="twitter:description"
+      content={description}
+    />
+
+    {jsonLd && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(jsonLd)}
+      />
+    )}
+
+    {enableClarity && (
+      <script is:inline>
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "x7ns7c22xi");
+      </script>
+    )}
+
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
     <slot name="head" />
   </head>
 
   <body>
+    {enableGtm && <script is:inline src="/js/gtm.js"></script>}
+
     <Navbar />
 
     <main>
