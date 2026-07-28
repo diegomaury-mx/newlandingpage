@@ -47,23 +47,23 @@ export const site = {
 	// ---------------------------------------------------------------------------
 
 	navigation: [
-		{
-			label: "Sobre mí",
-			href: "#about",
-		},
-		{
-			label: "Portafolio",
-			href: "/portfolio",
-		},
-		{
-			label: "Cómo trabajo",
-			href: "#process",
-		},
-		{
-			label: "Contacto",
-			href: "#contact",
-		},
-	],
+	{
+		label: "Sobre mí",
+		href: "/#s2-quien-soy",
+	},
+	{
+		label: "Portafolio",
+		href: "/portfolio",
+	},
+	{
+		label: "Cómo trabajo",
+		href: "/#s5-como-trabajo",
+	},
+	{
+		label: "Contacto",
+		href: "/#s7-colaboremos",
+	},
+],
 
 	// ---------------------------------------------------------------------------
 	// Footer
@@ -81,7 +81,7 @@ export const site = {
 			},
 			{
 				label: "Sobre mí",
-				href: "#about",
+				href: "/#s2-quien-soy",
 			},
 			{
 				label: "Newsletter",
@@ -96,7 +96,7 @@ export const site = {
 		contact: [
 			{
 				label: "Correo electrónico",
-				href: "mailto:hola@diegomaury.mx",
+				href: "mailto:dm@diegomaury.mx",
 			},
 			{
 				label: "LinkedIn",
