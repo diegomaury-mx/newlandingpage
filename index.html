@@ -46,8 +46,8 @@
     ]
   }
   </script>
-  <link rel="icon" type="image/png" href="assets/img/isotipo-gradient.png">
-  <link rel="apple-touch-icon" href="assets/img/isotipo-gradient.png">
+  <link rel="icon" type="image/png" href="assets/img/isotipo-light.svg">
+  <link rel="apple-touch-icon" href="assets/img/isotipo-light.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -101,6 +101,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 90;
       background: rgba(10,6,18,0.92);
       border-bottom: 1px solid transparent;
+      -webkit-backdrop-filter: blur(16px);
       backdrop-filter: blur(16px);
       transition: border-color 250ms, background 250ms;
     }
@@ -148,7 +149,7 @@
     @media (max-width: 768px) {
       .nav__links {
         display: none; position: fixed; inset: 64px 0 0 0;
-        background: rgba(10,6,18,0.98); backdrop-filter: blur(16px);
+        background: rgba(10,6,18,0.98); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
         flex-direction: column; align-items: flex-start; gap: 0;
         padding: 24px 32px; border-top: 1px solid var(--border);
       }
@@ -1535,3 +1536,4 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </script>
 </body>
 </html>
+

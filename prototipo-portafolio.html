@@ -66,11 +66,17 @@
   }
 
   /* ── NAV ── */
-  .nav {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(10,6,18,0.92); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
+ .nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10,6,18,0.92);
+
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid var(--border);
+}
   .nav__inner { height: 60px; display: flex; align-items: center; justify-content: space-between; }
   .nav__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--t1); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
   .nav__mark { width: 22px; height: 22px; background: var(--ember); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
@@ -732,27 +738,6 @@ function renderHome() {
         <div class="eyebrow">Strategic Program Director</div>
         <h1>Encuentro el mecanismo que frena la ejecución de operaciones complejas, y lo convierto en sistemas medibles que el equipo sostiene.</h1>
         <p>Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM. Este portafolio no publica lo que no puede probar, y lo dice en cada cifra.</p>
-      </div>
-    </section>
-
-    <section class="band band--raised counter">
-      <div class="wrap">
-        <div class="eyebrow">Estado de evidencia · casos insignia</div>
-        <div class="counter__grid">
-          <div class="counter__cell">
-            <div class="counter__num counter__num--total">${total}</div>
-            <div class="counter__cap">afirmaciones publicadas</div>
-          </div>
-          <div class="counter__cell">
-            <div class="counter__num counter__num--ok">✔ ${tt.ok}</div>
-            <div class="counter__cap">con artefacto verificable</div>
-          </div>
-          <div class="counter__cell">
-            <div class="counter__num counter__num--no">✖ ${tt.no}</div>
-            <div class="counter__cap">sin artefacto, declarado y no escondido</div>
-          </div>
-        </div>
-        <p class="counter__note">Ninguna cifra de este portafolio aparece sin su estado de evidencia. Un ✖ no es un error: es la marca que lo distingue de uno que solo publica lo que le conviene.</p>
       </div>
     </section>
 
