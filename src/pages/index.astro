@@ -402,10 +402,21 @@ const pageDescription =
           </div>
         )}
       </div>
-      <div class="hero-media" data-reveal style="--delay:.1s">
-        <img src={slotSrc('foto-diego-hero', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="eager" fetchpriority="high" width="700" height="875">
-      </div>
-    </div>
+     <div class="hero-media" data-reveal style="--delay:.1s">
+  <video
+    src="/cms-media/diego/diego_hero2.mp4"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    width="700"
+    height="875"
+  >
+    Tu navegador no soporta video HTML5.
+  </video>
+</div>
+
     {heroLogos.length > 0 && (
       <div class="trust" data-reveal style="--delay:.32s">
         <div class="trust-label">He trabajado con</div>
