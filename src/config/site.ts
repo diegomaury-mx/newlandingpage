@@ -22,7 +22,7 @@ export const site = {
 		logo: "/assets/img/isotipo-ember.svg",
 
 		tagline:
-			"Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.",
+			"Strategic Program Director. Hagamos que las cosas pasen.",
 	},
 
 	// ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ export const site = {
 		scheduling:
 			"https://calendar.notion.so/meet/diegomaurymx/5aad3vun",
 
-		email: "mailto:hola@diegomaury.mx",
+		email: "mailto:dm@diegomaury.mx",
 
 		newsletter: "https://diegomaury.substack.com",
 	},

@@ -103,10 +103,32 @@ const heroLogos = heroLogoNames.map((name) => LOGO_MAP[name]).filter(Boolean);
 // generalizaron a proposito (anonimizacion del cliente real) y no llevan
 // logo, para no des-anonimizarlos visualmente.
 function cardLogo(title: string): { src: string; alt: string } | null {
-  if (/heineken/i.test(title)) return LOGO_MAP.HEINEKEN;
-  // Solo REDUX (institucionalizado en el Tec de Monterrey per copy S6), no
-  // HackSureste Ops: esa es marca propia de Diego, sin logo de cliente.
-  if (/redux/i.test(title)) return LOGO_MAP['Tecnológico de Monterrey'];
+  if (/proptech/i.test(title)) {
+    return {
+      src: slotSrc('logo-proptech-evidencia', '/assets/img/logos/proptech.svg'),
+      alt: 'PropTech',
+    };
+  }
+  if (/heineken/i.test(title)) {
+    return {
+      src: slotSrc('logo-heineken-evidencia','/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png'),
+      alt:'HEINEKEN Mexico',
+    };
+  }
+  if (/redux/i.test(title)) {
+    return {
+      src: slotSrc('logo-tec-de-monterrey-evidencia','/cms-media/logos/tec%20de%20monterrey.png'),
+      alt:'Tecnológico de Monterrey',
+    };
+  }
+  return null;
+}
+
+function systemsLogo(title: string): { src: string; alt: string } | null {
+  const key = title.toLowerCase();
+  if (key.includes('redux')) return { src: slotSrc('ip-logo-redux','/assets/img/logos/redux.svg'), alt:'REDUX' };
+  if (key.includes('hacksureste')) return { src: slotSrc('ip-logo-hacksureste','/assets/img/logos/hacksureste.svg'), alt:'HackSureste' };
+  if (key.includes('sofi')) return { src: slotSrc('ip-logo-sofi','/assets/img/logos/sofi.svg'), alt:'SOFI' };
   return null;
 }
 
@@ -375,7 +397,7 @@ const pageDescription =
         )}
       </div>
       <div class="hero-media" data-reveal style="--delay:.1s">
-        <img src={slotSrc('foto-diego', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="eager" fetchpriority="high" width="700" height="875">
+        <img src={slotSrc('foto-diego-hero', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="eager" fetchpriority="high" width="700" height="875">
       </div>
     </div>
     {heroLogos.length > 0 && (
@@ -417,7 +439,7 @@ const pageDescription =
     <div class="about-photo-wrap" data-reveal style="--delay:.1s">
       <div class="about-circle-bg"></div>
       <div class="about-photo-slot">
-        <img src={slotSrc('foto-diego', '/cms-media/diego/diegomaurypng.png')} width="700" height="700" alt={heroName || 'Diego Maury'} loading="lazy">
+        <img src={slotSrc('foto-diego-about', '/cms-media/diego/diegomaurypng.png')} width="700" height="700" alt={heroName || 'Diego Maury'} loading="lazy">
       </div>
     </div>
 
@@ -621,7 +643,7 @@ const pageDescription =
     {systemsCards.length > 0 && (
       <div class="ip-grid" data-reveal style="--delay:.18s">
         {systemsCards.map((card) => {
-          const logo = cardLogo(card.title);
+          const logo = systemsLogo(card.title);
           const link = systemsCaseLink(card.title);
           return (
             <div class="ip">
@@ -689,7 +711,7 @@ const pageDescription =
         </div>
       )}
       <div class="conversemos-media">
-        <img src={slotSrc('foto-diego', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="lazy" width="700" height="875">
+        <img src={slotSrc('foto-diego-colaboremos', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="lazy" width="700" height="875">
       </div>
     </div>
 
