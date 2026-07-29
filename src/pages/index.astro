@@ -278,6 +278,12 @@ const testimonialsLabel = sections.get('S6b')?.label ?? 'Prueba social';
 const testimonialsHeadline = heading1(s6b);
 const testimonialsIntro = paragraphs(blocksBeforeHeading(s6b, ['>']));
 const testimonialItems = testimonials(s6b);
+const moreExperiencesHeading =
+  s6b.find((b: string) => b.trim() === '## Más experiencias')
+    ?.replace(/^##\s*/, '') ?? '';
+
+const moreExperiences = blocksAfterHeading(s6b, '## Más experiencias');
+const senjaId = moreExperiences[0]?.trim();
 
 // --- S7 · Colaboremos ---------------------------------------------------------
 // Los headings de esta seccion los renombra Diego en el SSOT (el pivote del
@@ -671,20 +677,40 @@ const pageDescription =
   <div class="section-inner">
     <div class="section-label" data-reveal>{testimonialsLabel}</div>
     <h2 class="section-title" data-reveal style="--delay:.06s">{testimonialsHeadline}</h2>
-    {testimonialsIntro.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
+    {testimonialsIntro.map((p) => (
+      <p class="section-sub" data-reveal>{p}</p>
+    ))}
 
     {testimonialItems.length > 0 && (
-      <div class="testimonial-grid">
-        {testimonialItems.map((item, i) => (
-          <blockquote class="testimonial-card" data-reveal style={`--delay:${0.18 + i * 0.06}s`}>
-            <p class="testimonial-quote">{item.quote}</p>
-            <footer class="testimonial-cite">
-              <span class="testimonial-name">{item.name}</span>
-              {item.roleLines.map((line) => <span class="testimonial-role">{line}</span>)}
-            </footer>
-          </blockquote>
-        ))}
-      </div>
+      <>
+        <div class="testimonial-grid">
+          {testimonialItems.map((item, i) => (
+            <blockquote class="testimonial-card" data-reveal style={`--delay:${0.18 + i * 0.06}s`}>
+              <p class="testimonial-quote">{item.quote}</p>
+              <footer class="testimonial-cite">
+                <span class="testimonial-name">{item.name}</span>
+                {item.roleLines.map((line) => (
+                  <span class="testimonial-role">{line}</span>
+                ))}
+              </footer>
+            </blockquote>
+          ))}
+        </div>
+
+        {senjaId && (
+          <>
+            <h3 class="deliver-heading">{moreExperiencesHeading}</h3>
+
+            <div
+              class="senja-embed"
+              data-id={senjaId}
+              data-mode="shadow"
+              data-lazyload="false"
+              style="width:100%;margin-top:24px;"
+            ></div>
+          </>
+        )}
+      </>
     )}
   </div>
 </section>
