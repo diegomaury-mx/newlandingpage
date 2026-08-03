@@ -54,13 +54,16 @@
   border-radius: 10px;
 }
 .trust-logo img {
-  max-width: 80%;
-  max-height: 60%;
+  max-width: 85%;
+  max-height: 82%;
   width: auto;
   height: auto;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0.82;
+  transition: opacity 200ms;
 }
   .trust-logo:hover { background: rgba(250,248,252,0.08); border-color: var(--t3); }
-  .trust-logo img { height: 24px; width: 90px; object-fit: contain; object-position: center; opacity: 0.82; transition: opacity 200ms; }
   .trust-logo:hover img { opacity: 1; }
   @media (prefers-reduced-motion: reduce) { .trust-track { animation: none; } }
 
