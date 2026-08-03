@@ -158,4 +158,6 @@ Cuarta fuente, agregada para eliminar imágenes hardcodeadas en `index.astro` (f
 usa imageUrl SOLO SI status == "Listo" AND imageUrl existe; si no, usa el fallback hardcodeado
 ```
 
+**Gotcha corregido (2026-08-03, no reintroducir):** `imageUrl` (y `banner`/`logo` de `cases`) NUNCA es la URL cruda de Notion en el dato ya cargado por el loader. La API de Notion devuelve una URL firmada de S3 (`prod-files-secure.s3...`) que expira en ~1h (`X-Amz-Expires=3600`); como Cloudflare Pages solo reconstruye en cada push (no hay rebuild diario), esa firma expiraba antes de la siguiente visita y la imagen se rompía en producción. `createDataSourceLoader` (`notionLoaders.ts`) descarga cada campo listado en `imageFields` con `cacheNotionImage` (`notionImageCache.ts`) y lo reemplaza por una copia local en `public/cms-media/notion/` (gitignored, se regenera en cada build) antes de guardarlo en el store. Si la descarga falla, el campo queda `undefined` y el fallback hardcodeado de `slotSrc`/las plantillas de caso se usa igual — no rompe el build.
+
 Slots dados de alta al crear la base (2026-07-25): `foto-diego`, `logo-heineken`, `logo-tec-de-monterrey`, `logo-incmty`, `logo-ebc`, `logo-fliphouse`. Todos en `Estado = Sin empezar` — el sitio sigue usando los paths hardcodeados hasta que Diego suba cada archivo y cambie el Estado a `Listo`.

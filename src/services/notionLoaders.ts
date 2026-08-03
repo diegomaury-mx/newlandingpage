@@ -37,6 +37,7 @@ import {
   getUrl,
   hasNotionToken,
 } from "./notionClient.ts";
+import { cacheNotionImage } from "./notionImageCache.ts";
 
 // --- Conversion de bloques a Markdown (para siteCopy) ------------------------
 
@@ -264,6 +265,11 @@ function createDataSourceLoader(
   fetchFn: () => Promise<PageObjectResponse[]>,
   mapFn: (page: PageObjectResponse) => Record<string, unknown> | Promise<Record<string, unknown>>,
   idFn: (page: PageObjectResponse, data: Record<string, unknown>) => string,
+  // Campos del shape mapeado que llevan una URL de Notion (S3 firmada,
+  // expira en ~1h): se descargan y se reemplazan por una copia local antes
+  // de guardarse, para que el HTML de produccion nunca dependa de una firma
+  // que puede expirar entre un build y la siguiente visita.
+  imageFields: string[] = [],
 ): Loader {
   return {
     name,
@@ -286,6 +292,12 @@ function createDataSourceLoader(
       for (const page of pages) {
         const raw = await mapFn(page);
         const id = idFn(page, raw);
+        for (const field of imageFields) {
+          const url = raw[field];
+          if (typeof url === "string" && url) {
+            raw[field] = await cacheNotionImage(url, `${name}-${id}-${field}`, logger);
+          }
+        }
         const data = await parseData({ id, data: raw });
         store.set({ id, data });
       }
@@ -300,6 +312,7 @@ export const casesLoader: Loader = createDataSourceLoader(
   fetchCases,
   mapCase,
   (page) => page.id,
+  ["banner", "logo"],
 );
 
 /** Coleccion `metrics`: id = slug (kebab-case, llave primaria de facto). */
@@ -316,6 +329,7 @@ export const imageSlotsLoader: Loader = createDataSourceLoader(
   fetchImageSlots,
   mapImageSlot,
   (_page, data) => String(data.slot ?? ""),
+  ["imageUrl"],
 );
 
 /** Singleton `siteCopy`: id fijo `site`; cuerpo aplanado a Markdown. */

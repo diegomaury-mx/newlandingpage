@@ -150,7 +150,10 @@ const imageSlots = defineCollection({
   loader: imageSlotsLoader,
   schema: z.object({
     slot: z.string().min(1),
-    imageUrl: z.string().url().optional(),
+    // Ruta local (`/cms-media/notion/...`), no una URL externa: el loader
+    // descarga la imagen de Notion en build y la cachea como asset propio
+    // (ver gotcha 2026-08-03 en notion-astro-contract.md seccion 4).
+    imageUrl: z.string().optional(),
     sizeRequired: z.string().default(''),
     formatRequired: z.string().optional(),
     status: z.enum(['Sin empezar', 'En curso', 'Listo']).optional(),

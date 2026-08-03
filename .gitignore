@@ -32,6 +32,10 @@ _ds_import/
 qa-output/screenshots/
 qa-output/screenshots-astro/
 
+# Cache de imagenes de Notion (descargadas en cada build por los content
+# loaders, ver src/services/notionImageCache.ts): regenerable, no se versiona
+public/cms-media/notion/
+
 # Playwright: artefactos de test run locales
 /test-results/
 /playwright-report/
