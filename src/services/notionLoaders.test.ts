@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import type { PageObjectResponse } from "@notionhq/client";
-import { mapImageSlot } from "./notionLoaders.ts";
+import type { BlockObjectResponse, PageObjectResponse } from "@notionhq/client";
+import { blocksToMarkdown, mapImageSlot } from "./notionLoaders.ts";
+
+function fakeBlock(type: string, richText: { plain_text: string }[]): BlockObjectResponse {
+  return { type, [type]: { rich_text: richText } } as unknown as BlockObjectResponse;
+}
 
 function fakePage(properties: PageObjectResponse["properties"]): PageObjectResponse {
   return { id: "page-id", properties } as PageObjectResponse;
@@ -45,4 +49,28 @@ test("mapImageSlot deja imageUrl undefined cuando el slot no tiene archivo subid
   assert.equal(data.slot, "logo-ebc");
   assert.equal(data.imageUrl, undefined);
   assert.equal(data.status, "Sin empezar");
+});
+
+test("blocksToMarkdown fusiona items consecutivos de una misma lista en un solo bloque", () => {
+  const blocks = [
+    fakeBlock("bulleted_list_item", [{ plain_text: "Primero" }]),
+    fakeBlock("bulleted_list_item", [{ plain_text: "Segundo" }]),
+    fakeBlock("bulleted_list_item", [{ plain_text: "Tercero" }]),
+  ];
+
+  const markdown = blocksToMarkdown(blocks);
+
+  assert.equal(markdown, "- Primero\n- Segundo\n- Tercero");
+});
+
+test("blocksToMarkdown no fusiona una lista con la siguiente si hay un heading entre medio", () => {
+  const blocks = [
+    fakeBlock("bulleted_list_item", [{ plain_text: "Antes" }]),
+    fakeBlock("heading_2", [{ plain_text: "Siguiente sección" }]),
+    fakeBlock("bulleted_list_item", [{ plain_text: "Después" }]),
+  ];
+
+  const markdown = blocksToMarkdown(blocks);
+
+  assert.equal(markdown, "- Antes\n\n## Siguiente sección\n\n- Después");
 });

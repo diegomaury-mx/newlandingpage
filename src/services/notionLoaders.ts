@@ -60,6 +60,23 @@ function escapeTableCell(text: string): string {
 }
 
 /**
+ * Agrega un item de lista a `lines`, fusionandolo con el bloque anterior si
+ * ese bloque es una lista del mismo tipo (mismo marcador en todas sus
+ * lineas). Sin esto, `lines.join("\n\n")` separa cada item de una lista de
+ * Notion en su propio bloque de un solo elemento, y `renderMarkdown` (que
+ * parte el markdown por `\n{2,}`) termina generando un `<ul>`/`<ol>` distinto
+ * por item en vez de una sola lista continua.
+ */
+function appendListItem(lines: string[], marker: RegExp, line: string): void {
+  const last = lines[lines.length - 1];
+  if (last !== undefined && last.split("\n").every((existingLine) => marker.test(existingLine))) {
+    lines[lines.length - 1] = `${last}\n${line}`;
+  } else {
+    lines.push(line);
+  }
+}
+
+/**
  * Convierte el arbol de bloques de una pagina de Notion a Markdown plano.
  * `fetchBlockChildren` aplana el arbol (un bloque "table" es seguido en el
  * mismo arreglo por sus "table_row" hijos), asi que las tablas se consumen
@@ -107,13 +124,13 @@ export function blocksToMarkdown(blocks: BlockObjectResponse[]): string {
         lines.push(`### ${text}`);
         break;
       case "bulleted_list_item":
-        lines.push(`- ${text}`);
+        appendListItem(lines, /^- (?!\[)/, `- ${text}`);
         break;
       case "numbered_list_item":
-        lines.push(`1. ${text}`);
+        appendListItem(lines, /^\d+\.\s/, `1. ${text}`);
         break;
       case "to_do":
-        lines.push(`- [ ] ${text}`);
+        appendListItem(lines, /^- \[ \] /, `- [ ] ${text}`);
         break;
       case "quote":
       case "callout":
