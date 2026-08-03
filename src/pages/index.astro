@@ -9,8 +9,9 @@
 // mano antes de la migracion a Astro) sobre esta misma logica dinamica de
 // Notion. index.html queda como referencia muerta para LIVE (ver CLAUDE.md);
 // esta pagina es ahora la unica fuente de verdad visual + de contenido.
-// S7b Confianza directa se sigue omitiendo a proposito: su copy declara "sin
-// copy propio, lo resuelve el widget" (Senja), pendiente de activar.
+// S7 Colaboremos se retiro (2026-07-31): su contenido quedo absorbido por S6b
+// (testimonios + widget Senja, ya activado via script al final del archivo) y
+// S8 (CTA final). El nav "Contacto" apunta a S8, no a un ancla S7.
 //
 // Sigue construyendo a dist/, no toca el sitio LIVE (astro.config.mjs).
 import { getCollection } from 'astro:content';
@@ -66,7 +67,6 @@ const SECTION_IDS = {
   S5: 's5-como-trabajo',
   S6: 's6-sistemas-propios',
   S6b: 's6b-prueba-social',
-  S7: 's7-colaboremos',
   S8: 's8-siguiente-paso',
 } as const;
 
@@ -75,7 +75,7 @@ const s1 = sections.get('S1')?.blocks ?? [];
 const heroName = heading1(s1);
 const heroHeadline =
   heading2(s1) ||
-  `${heroName} — Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.`;
+  `${heroName}. Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.`;
 // Acento ember sobre la frase de cierre, igual al tratamiento del H1 en el sitio LIVE.
 const HERO_ACCENT_PHRASE = 'resultados tangibles';
 const heroAccentIndex = heroHeadline.toLowerCase().indexOf(HERO_ACCENT_PHRASE);
@@ -284,34 +284,6 @@ const moreExperiencesHeading =
 
 const moreExperiences = blocksAfterHeading(s6b, '## Más experiencias');
 const senjaId = moreExperiences[0]?.trim();
-
-// --- S7 · Colaboremos ---------------------------------------------------------
-// Los headings de esta seccion los renombra Diego en el SSOT (el pivote del
-// 2026-07-24 cambio "En una primera conversacion" -> "Temas en los que puedo
-// aportar" y "Agenda una conversacion" -> "Conversemos"). Se localizan por
-// nivel y posicion, nunca por su texto literal.
-const s7 = sections.get('S7')?.blocks ?? [];
-const talkLabel = sections.get('S7')?.label ?? 'Colaboremos';
-const talkHeadline = heading1(s7);
-const talkIntro = paragraphs(blocksBeforeHeading(s7, ['### ', '## ']));
-const talkTopicsHeading = s7.find((b: string) => b.trim().startsWith('### '))?.trim().slice(4).trim() ?? '';
-const talkTopics = bulletItems(s7);
-
-// Bloque "Estas contratando?": parrafo protagonista + su par de CTAs.
-const hiringIndex = s7.findIndex((b: string) => b.trim().startsWith('¿Estás contratando?'));
-const hiringText = hiringIndex >= 0 ? s7[hiringIndex].trim() : '';
-const hiringCtas = hiringIndex >= 0 ? ctaLabels(s7.slice(hiringIndex + 1)) : [];
-
-// Sub-bloque de agenda: ultimo heading_2 de la seccion.
-const agendaHeadingBlock = [...s7].reverse().find((b) => b.trim().startsWith('## '));
-const agendaHeading = agendaHeadingBlock?.trim().slice(3).trim() ?? 'Conversemos';
-const afterAgenda = agendaHeadingBlock ? blocksAfterHeading(s7, agendaHeadingBlock.trim()) : [];
-const talkAltLine = afterAgenda.find((b) => b.toLowerCase().includes('envíame un correo'))?.trim() ?? '';
-const talkAltLinks = talkAltLine.split('·').map((s) => s.trim()).filter(Boolean);
-// paragraphs() no filtra el separador "o" ni la linea de links alternos (no son
-// bullets/headings/etc.): se excluyen aparte para no duplicarlos como texto plano.
-const agendaIntro = paragraphs(afterAgenda).filter((p) => p !== 'o' && p !== talkAltLine);
-const agendaCtaLabel = ctaLabels(afterAgenda)[0] || 'Agendar conversación (30 min)';
 
 // --- Destinos de CTA ----------------------------------------------------------
 // Se resuelven por la ETIQUETA del boton, nunca por su posicion: el SSOT
@@ -677,6 +649,7 @@ const pageDescription =
   <div class="section-inner">
     <div class="section-label" data-reveal>{testimonialsLabel}</div>
     <h2 class="section-title" data-reveal style="--delay:.06s">{testimonialsHeadline}</h2>
+
     {testimonialsIntro.map((p) => (
       <p class="section-sub" data-reveal>{p}</p>
     ))}
@@ -685,10 +658,16 @@ const pageDescription =
       <>
         <div class="testimonial-grid">
           {testimonialItems.map((item, i) => (
-            <blockquote class="testimonial-card" data-reveal style={`--delay:${0.18 + i * 0.06}s`}>
+            <blockquote
+              class="testimonial-card"
+              data-reveal
+              style={`--delay:${0.18 + i * 0.06}s`}
+            >
               <p class="testimonial-quote">{item.quote}</p>
+
               <footer class="testimonial-cite">
                 <span class="testimonial-name">{item.name}</span>
+
                 {item.roleLines.map((line) => (
                   <span class="testimonial-role">{line}</span>
                 ))}
@@ -715,88 +694,8 @@ const pageDescription =
   </div>
 </section>
 
-<!-- S7 COLABOREMOS -->
-<section class="section" id={SECTION_IDS.S7}>
-  <div class="section-inner">
-    <div class="section-label" data-reveal>{talkLabel}</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">{talkHeadline}</h2>
-    {talkIntro.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
-
-    <div class="conversemos-grid" data-reveal style="--delay:.18s">
-      {talkTopics.length > 0 && (
-        <div>
-          {talkTopicsHeading && <h3 class="section-title" style="font-size:1.2rem;margin-bottom:20px">{talkTopicsHeading}</h3>}
-          <div class="about-roles">
-            {talkTopics.map((topic) => (
-              <div class="about-role">
-                <div class="about-role-dot"></div>
-                <div class="about-role-txt">{topic}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      <div class="conversemos-media">
-        <img src={slotSrc('foto-diego-colaboremos', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="lazy" width="700" height="875">
-      </div>
-    </div>
-
-    {hiringText && (
-      <div class="svc-argument" data-reveal style="--delay:.24s">
-        <p>{hiringText}</p>
-        {hiringCtas.length > 0 && (
-          <div class="hero-ctas" style="margin-top:20px;margin-bottom:0">
-            {hiringCtas.map((label, i) => {
-              const t = ctaTarget(label);
-              return (
-                <a
-                  href={t.href}
-                  class={i === 0 ? 'btn-primary' : 'btn-ghost'}
-                  download={t.download}
-                  target={t.external ? '_blank' : undefined}
-                  rel={t.external ? 'noopener' : undefined}
-                >{label}</a>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    )}
-
-    <div class="talk__agenda">
-      <h3>{agendaHeading}</h3>
-      {agendaIntro.map((p) => <p class="section-sub">{p}</p>)}
-      {(() => {
-        const t = ctaTarget(agendaCtaLabel);
-        return (
-          <a
-            href={t.href}
-            class="btn-primary"
-            download={t.download}
-            target={t.external ? '_blank' : undefined}
-            rel={t.external ? 'noopener' : undefined}
-          >{agendaCtaLabel}</a>
-        );
-      })()}
-      {talkAltLinks.length > 0 && (
-        <div class="talk__alt">
-          {talkAltLinks.map((label, i) => {
-            const t = ctaTarget(label);
-            return (
-              <span class="talk__alt-item">
-                {i > 0 && <span class="talk__sep">o</span>}
-                <a href={t.href} class="inline-link" target={t.external ? '_blank' : undefined} rel={t.external ? 'noopener' : undefined}>{label}</a>
-              </span>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  </div>
-</section>
-
-{finalHeadline && (
-  <section class="section cta-section" id={SECTION_IDS.S8}>
+<!-- S8 SIGUIENTE PASO -->
+<section class="section cta-section" id={SECTION_IDS.S8}>
     <div class="section-inner cta-inner">
       <div class="cta-label-center" data-reveal>{finalLabel}</div>
       <h2 class="cta-h" data-reveal style="--delay:.06s">{finalHeadline}</h2>
@@ -918,6 +817,22 @@ const pageDescription =
     countEls.forEach((el) => counterObserver.observe(el));
   }
 </script>
+<script is:inline>
+  (() => {
+    const container = document.querySelector(".senja-embed");
+    if (!container) return;
 
+    const widgetId = container.getAttribute("data-id");
+    if (!widgetId) return;
+
+    if (!document.querySelector(`script[data-senja="${widgetId}"]`)) {
+      const script = document.createElement("script");
+      script.src = `https://widget.senja.io/widget/${widgetId}/platform.js`;
+      script.async = true;
+      script.dataset.senja = widgetId;
+      document.body.appendChild(script);
+    }
+  })();
+</script>
 </BaseLayout>
 

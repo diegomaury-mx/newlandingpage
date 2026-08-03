@@ -61,7 +61,7 @@ export const site = {
 	},
 	{
 		label: "Contacto",
-		href: "/#s7-colaboremos",
+		href: "/#s8-siguiente-paso",
 	},
 ],
 
