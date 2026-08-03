@@ -7,6 +7,8 @@
  * acotada y conocida.
  */
 
+import { slugify } from "./slug.ts";
+
 function escapeHtml(text: string): string {
   return text
     .replace(/&/g, "&amp;")
@@ -59,7 +61,8 @@ export function renderMarkdown(markdown: string): string {
     } else if (trimmed.startsWith("### ")) {
       html.push(`<h3>${renderInline(trimmed.slice(4))}</h3>`);
     } else if (trimmed.startsWith("## ")) {
-      html.push(`<h2>${renderInline(trimmed.slice(3))}</h2>`);
+      const heading = trimmed.slice(3);
+      html.push(`<h2 id="${slugify(heading)}">${renderInline(heading)}</h2>`);
     } else if (trimmed.startsWith("# ")) {
       html.push(`<h1>${renderInline(trimmed.slice(2))}</h1>`);
     } else if (lines.every((line) => line.trim().startsWith("- "))) {
@@ -79,4 +82,22 @@ export function renderMarkdown(markdown: string): string {
   }
 
   return html.join("\n");
+}
+
+export interface MarkdownSection {
+  title: string;
+  id: string;
+}
+
+/** Extrae los encabezados `##` de nivel de seccion (Contexto, Problema, etc.) para navegacion. */
+export function extractSections(markdown: string): MarkdownSection[] {
+  if (!markdown.trim()) return [];
+  return markdown
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter((block) => block.startsWith("## "))
+    .map((block) => {
+      const title = block.slice(3).trim();
+      return { title, id: slugify(title) };
+    });
 }
