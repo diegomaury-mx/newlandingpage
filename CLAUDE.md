@@ -113,6 +113,7 @@ Footer unificado (desde 2026-07-22): el sitio no tiene mecanismo de include (HTM
 - SOP de publicación con métricas, sin excepciones: sincronizar Notion → `metrics.json` → resolver placeholders `{{metrica:slug}}` → `node tools/verify-metrics.cjs` → corregir hasta exit 0 → commit → push → entrada en Changelog.
 - Estándar por claim público: entidad + programa/edición + población + unidad + fuente o grado de evidencia (published = tercero nombrado / own = registros o estimación propia; nada está auditado). Si no se cumple, el claim se retira sin nota que reconozca la inconsistencia.
 - Que dos superficies coincidan NO prueba un claim: pueden compartir la misma estimación sin reconstruir.
+- Corregir una cifra en el **cuerpo** de una ficha SSOT (bloque Evidencia/Resultados del `content`) no actualiza sus **propiedades** (`Objetivo con métrica y timeframe `, `Rol de Diego`, `Datos cuantitativos`, campos `[DEPRECADO]`) — son campos independientes en Notion. Detectado 2026-08-03: la "Nota de consolidación" del 2026-07-11 en REDUX corrigió el cuerpo (200+ → 400+) pero dejó la propiedad `Objetivo...` (fuente de la meta description del sitio) con la cifra vieja. Al corregir una cifra, revisar y actualizar ambos.
 - `calificadorClaves` usa raíz de palabra (ej. "estimad"): el chequeo es substring, no palabra completa.
 - Cero cifras nuevas en captions/alt de evidencia visual: si no está en el SSOT, no va en texto.
 - Los borradores pueden llevar cifras literales; lo publicable no.
