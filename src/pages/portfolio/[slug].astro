@@ -33,6 +33,24 @@ const { entry, allCases } = Astro.props as Props;
 const idToTitle = new Map(allCases.map((c) => [c.id, c.data.title]));
 
 const displayTitle = entry.data.resultHeadline || entry.data.title;
+
+// El <title> de pestana/SERP necesita ser corto (<=60 car., ver
+// docs/platform/seo-keyword-mapping-2026-08-03.md hallazgo tecnico 2): usar el
+// resultHeadline narrativo completo aqui lo duplicaba con ~118 caracteres. El
+// H1 visible (displayTitle arriba) SI sigue usando el resultHeadline completo,
+// sin cambios. Match por nombre interno del caso, mismo patron que
+// caseLink/systemsLogo en index.astro.
+const SEO_SHORT_TITLES: Record<string, string> = {
+  heineken: 'HEINEKEN Green Challenge · Innovación · Diego Maury',
+  redux: 'REDUX · Bootcamp de economía circular · Diego Maury',
+  hacksureste: 'HackSureste · Hackathon del sureste mexicano · Diego Maury',
+  sofi: 'SOFI · Automatización comercial con IA · Diego Maury',
+};
+function seoTitle(title: string): string {
+  const key = title.toLowerCase();
+  const match = Object.entries(SEO_SHORT_TITLES).find(([k]) => key.includes(k));
+  return match ? match[1] : `${title} · Diego Maury`;
+}
 const bodyHtml = renderMarkdown(entry.data.body);
 const sections = extractSections(entry.data.body);
 const editionTitles = entry.data.editions
@@ -59,7 +77,7 @@ const creativeWorkJsonLd = {
 ---
 
 <BaseLayout
-  title={`${displayTitle} · Diego Maury`}
+  title={seoTitle(entry.data.title)}
   description={pageDescription}
   canonicalUrl={canonicalUrl}
   ogType="article"

@@ -333,13 +333,32 @@ const finalTrustParts = finalTrustLine.split('·').map((s) => s.trim()).filter(B
 // --- SEO -------------------------------------------------------------------
 const seo = sections.get('SEO')?.blocks ?? [];
 const pageTitle = valueAfter(seo, 'Title') || 'Diego Maury · Strategic Program Director';
+// "consultor" es un experimento paralelo en capa invisible (meta description +
+// knowsAbout del JSON-LD), aprobado 2026-08-03: evaluar a 90 dias con Search
+// Console; si el CTR de queries con "consultor" pierde contra las de rol
+// ("director de programas"), se retira. El copy visible (S1-S8) no se toca.
 const pageDescription =
   valueAfter(seo, 'Meta description') ||
-  'Strategic Program Director: diseño programas, procesos y sistemas que convierten la estrategia en ejecución y capacidad organizacional.';
-
-
+  'Strategic Program Director y consultor de innovación: diseño programas y sistemas que convierten estrategia en ejecución.';
+const canonicalUrl = new URL('/', Astro.site).toString();
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Diego Maury',
+  url: 'https://diegomaury.mx',
+  jobTitle: 'Strategic Program Director',
+  sameAs: ['https://www.linkedin.com/in/diegomaury/'],
+  knowsAbout: [
+    'Dirección de programas de innovación',
+    'RevOps',
+    'Ecosistemas de emprendimiento en LATAM',
+    'Consultoría de innovación',
+  ],
+};
 ---
 <BaseLayout
+  canonicalUrl={canonicalUrl}
+  jsonLd={personJsonLd}
   title={pageTitle}
   description={pageDescription}
 >
