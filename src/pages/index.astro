@@ -94,7 +94,11 @@ const LOGO_MAP: Record<string, { src: string; alt: string }> = {
   'Tecnológico de Monterrey': { src: slotSrc('logo-tec-de-monterrey', '/cms-media/logos/tec%20de%20monterrey.png'), alt: 'Tecnológico de Monterrey' },
   INCmty: { src: slotSrc('logo-incmty', '/cms-media/logos/incmty.png'), alt: 'INCmty' },
   EBC: { src: slotSrc('logo-ebc', '/cms-media/logos/EBC.png'), alt: 'EBC' },
-  FlipHouse: { src: slotSrc('logo-fliphouse', '/cms-media/logos/Fliphouse_logo1.png'), alt: 'FlipHouse' },
+  // FlipHouse deliberadamente fuera de este mapa (2026-08-11): es el cliente
+  // real y confidencial detras del caso SOFI/PropTech. Mostrar su logo en el
+  // trust bar del home desanonimiza el caso al instante. No reintroducir esta
+  // entrada aunque "FlipHouse" siga apareciendo en la linea "Logos sugeridos"
+  // de Notion S1 — ese texto tambien debe corregirse (ver CLAUDE.md).
 };
 const heroLogos = heroLogoNames.map((name) => LOGO_MAP[name]).filter(Boolean);
 
@@ -762,7 +766,6 @@ const personJsonLd = {
       </div>
     </div>
   </section>
-)}
 
 <script>
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
