@@ -12,6 +12,11 @@ import type { LoaderContext } from "astro/loaders";
 
 const CACHE_DIR = path.join(process.cwd(), "public", "cms-media", "notion");
 
+// Cloudflare Pages rechaza assets estaticos de mas de 25MB. Un margen de
+// 20MB evita que una foto de evidencia subida sin comprimir tumbe el deploy
+// completo; se descarta con warning en vez de romper el build.
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
+
 const EXTENSION_BY_CONTENT_TYPE: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
@@ -41,6 +46,13 @@ export async function cacheNotionImage(
     const extension = EXTENSION_BY_CONTENT_TYPE[contentType] ?? extensionFromUrl(url) ?? "jpg";
     const fileName = `${sanitizeCacheKey(cacheKey)}.${extension}`;
     const buffer = Buffer.from(await response.arrayBuffer());
+    if (buffer.byteLength > MAX_FILE_BYTES) {
+      logger.warn(
+        `[notion-image-cache] "${cacheKey}" pesa ${Math.round(buffer.byteLength / 1024 / 1024)}MB ` +
+          `(limite ${MAX_FILE_BYTES / 1024 / 1024}MB) — se omite para no romper el deploy. Comprime el archivo en Notion.`,
+      );
+      return undefined;
+    }
     await mkdir(CACHE_DIR, { recursive: true });
     await writeFile(path.join(CACHE_DIR, fileName), buffer);
     return `/cms-media/notion/${fileName}`;

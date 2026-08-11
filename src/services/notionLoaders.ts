@@ -113,7 +113,13 @@ export function blocksToMarkdown(blocks: BlockObjectResponse[]): string {
       }
       continue;
     }
-    const text = plain(blockRichText(block));
+    // .trim(): un bloque pegado a mano en Notion (ej. el ID del widget Senja
+    // en S6b) puede traer un salto de linea sobrante al final. Sin recortarlo,
+    // el join("\n\n") produce 3 saltos de linea seguidos antes del bloque
+    // siguiente; al volver a separar por "\n\n" el heading siguiente queda
+    // con un "\n" al inicio y deja de matchear SECTION_HEADING (^# ...), lo
+    // que borra esa seccion completa (paso con S8 el 2026-08-03).
+    const text = plain(blockRichText(block)).trim();
     switch (block.type) {
       case "heading_1":
         lines.push(`# ${text}`);
@@ -183,6 +189,23 @@ function hasVerifiedEvidenceRow(blocks: BlockObjectResponse[]): boolean {
   return false;
 }
 
+/**
+ * Parsea "Videos de evidencia" (texto libre, una URL por linea, formato
+ * opcional "Etiqueta | URL") a una lista de links externos. Los videos son
+ * forzosamente un link, nunca un archivo subido a Notion (ver mapCase).
+ */
+function parseEvidenceVideos(raw: string): { label: string; url: string }[] {
+  return raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [first, second] = line.split("|").map((part) => part.trim());
+      return second ? { label: first, url: second } : { label: "Ver video", url: first };
+    })
+    .filter((item) => /^https?:\/\//.test(item.url));
+}
+
 /** Ficha de `SSOT - Portafolio Proyectos` -> data de la coleccion `cases`. */
 async function mapCase(page: PageObjectResponse): Promise<Record<string, unknown>> {
   const publicationStatus = getSelect(page, "Estado publicación") ?? "Draft";
@@ -206,6 +229,13 @@ async function mapCase(page: PageObjectResponse): Promise<Record<string, unknown
     channels: getMultiSelect(page, "Canales"),
     capabilities: getMultiSelect(page, "Capacidades"),
     evidenceUrl: getUrl(page, "Evidencia"),
+    // Fotos subidas directo a Notion (se cachean localmente, ver imageFields
+    // abajo). Los videos NUNCA se suben como archivo: van forzosamente como
+    // link externo (YouTube/Drive) en "Videos de evidencia" — un video pesado
+    // puede romper el limite de ~25MB por archivo estatico de Cloudflare
+    // Pages, y este loader no tiene forma de avisarlo antes del deploy.
+    evidenceMedia: getFileUrls(page, "Evidencia visual"),
+    evidenceVideos: parseEvidenceVideos(getRichText(page, "Videos de evidencia")),
     hasVerifiedEvidence: hasVerifiedEvidenceRow(blocks),
     masterCase: getRelationIds(page, "Caso maestro"),
     editions: getRelationIds(page, "Ediciones"),
@@ -293,9 +323,18 @@ function createDataSourceLoader(
         const raw = await mapFn(page);
         const id = idFn(page, raw);
         for (const field of imageFields) {
-          const url = raw[field];
-          if (typeof url === "string" && url) {
-            raw[field] = await cacheNotionImage(url, `${name}-${id}-${field}`, logger);
+          const value = raw[field];
+          if (typeof value === "string" && value) {
+            raw[field] = await cacheNotionImage(value, `${name}-${id}-${field}`, logger);
+          } else if (Array.isArray(value)) {
+            const cached = await Promise.all(
+              value.map((url, index) =>
+                typeof url === "string" && url
+                  ? cacheNotionImage(url, `${name}-${id}-${field}-${index}`, logger)
+                  : Promise.resolve(undefined),
+              ),
+            );
+            raw[field] = cached.filter((url): url is string => Boolean(url));
           }
         }
         const data = await parseData({ id, data: raw });
@@ -312,7 +351,7 @@ export const casesLoader: Loader = createDataSourceLoader(
   fetchCases,
   mapCase,
   (page) => page.id,
-  ["banner", "logo"],
+  ["banner", "logo", "evidenceMedia"],
 );
 
 /** Coleccion `metrics`: id = slug (kebab-case, llave primaria de facto). */

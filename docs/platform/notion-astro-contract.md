@@ -34,6 +34,8 @@
 | `Canales` | multi: Sitio / LinkedIn / CV / llms.txt | `channels` | `[]` | filtra en qué superficie aparece |
 | `Capacidades` | multi (9 opciones canónicas) | `capabilities` | `[]` | máx. 3-4 por caso, lista cerrada en Taxonomía |
 | `Evidencia` | url | `evidenceUrl` | `undefined` | opcional — puede no existir (capa Soporte) |
+| `Evidencia visual` | file (multi) | `evidenceMedia` | `[]` | agregada 2026-08-11; **solo fotos**. Cada archivo se cachea localmente (`imageFields`, igual que `banner`/`logo`), con límite de 20MB por archivo — Cloudflare Pages rechaza assets >25MB, así que un archivo más pesado se omite con warning en vez de romper el build |
+| `Videos de evidencia` | text | `evidenceVideos` | `[]` | agregada 2026-08-11; texto libre, una URL por línea (formato opcional `Etiqueta \| URL`). **Regla dura: los videos son forzosamente un link externo (YouTube/Drive), nunca un archivo subido a Notion** — decisión explícita de Diego, evita romper el límite de tamaño de Cloudflare Pages con un video sin comprimir |
 | `Caso maestro` / `Ediciones` | relation (auto-relación) | `masterCase` / `editions` | `undefined` | agrupa ediciones bajo el maestro; capa Archivo solo se referencia desde aquí |
 | `year` | select | `year` | — | usar `year`, no `[DEPRECADO] Año` |
 | `banner`, `logo` | file | `banner`, `logo` | `undefined` | assets |

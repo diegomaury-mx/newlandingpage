@@ -53,6 +53,13 @@ const cases = defineCollection({
       channels: z.array(z.enum(['Sitio', 'LinkedIn', 'CV', 'llms.txt'])).default([]),
       capabilities: z.array(z.string()).default([]),
       evidenceUrl: z.string().url().optional(),
+      // Fotos de evidencia subidas directo a Notion, cacheadas localmente en
+      // build (ver notionImageCache.ts). Los videos NUNCA viven aqui: van
+      // forzosamente en `evidenceVideos` como link externo, nunca como
+      // archivo — evita romper el limite de tamano de assets de Cloudflare
+      // Pages con un video sin comprimir.
+      evidenceMedia: z.array(z.string()).default([]),
+      evidenceVideos: z.array(z.object({ label: z.string(), url: z.string().url() })).default([]),
       // Badge de evidencia de tarjeta: se hereda de si al menos una fila de
       // la tabla "## Evidencia" del cuerpo tiene un artefacto marcado (✔).
       // Nunca se declara aparte de esa tabla (ver notionLoaders.ts).

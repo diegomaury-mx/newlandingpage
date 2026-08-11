@@ -130,6 +130,28 @@ const creativeWorkJsonLd = {
       </div>
     </div>
 
+    {(entry.data.evidenceMedia.length > 0 || entry.data.evidenceVideos.length > 0) && (
+      <section class="case-evidence-media">
+        <div class="eyebrow">Evidencia visual</div>
+        {entry.data.evidenceMedia.length > 0 && (
+          <div class="evidence-photo-grid">
+            {entry.data.evidenceMedia.map((src) => (
+              <a class="evidence-photo" href={src} target="_blank" rel="noopener">
+                <img src={src} alt="" loading="lazy" width="400" height="300" />
+              </a>
+            ))}
+          </div>
+        )}
+        {entry.data.evidenceVideos.length > 0 && (
+          <div class="evidence-video-list">
+            {entry.data.evidenceVideos.map((video) => (
+              <a class="evidence-video-link" href={video.url} target="_blank" rel="noopener">{video.label}</a>
+            ))}
+          </div>
+        )}
+      </section>
+    )}
+
     {editionTitles.length > 0 && (
       <section class="case-archive">
         <div class="eyebrow">Archivo de este caso</div>
