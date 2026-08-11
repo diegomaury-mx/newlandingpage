@@ -57,6 +57,8 @@ Orden de secciones:
 **Fase 0 — Investigación y redacción (previa a tocar código):**
 Búsqueda amplia en el workspace de Notion de Diego siguiendo las fuentes y categorías del brief original (experiencia profesional, docente, facilitación/mentoring/speaking, expertise temática) más evidencia visual disponible por caso candidato. Construcción del documento Faculty Profile completo (14 secciones del brief original) como página de Notion. Control de calidad: cada afirmación contra Notion, sin contradicciones, gaps identificados explícitamente. Diego revisa y aprueba este documento antes de que se escriba una sola línea de `/docencia`.
 
+Fase 0 parte del inventario preliminar y los 5 riesgos ya identificados en la sección 9 — no repite la búsqueda desde cero. En particular, resuelve primero el riesgo 2 (partir del análisis de inconsistencias ya existente) antes de redactar cualquier afirmación sobre experiencia docente o años de trayectoria.
+
 **Fase 1 — Implementación del sitio:**
 Una vez aprobado el documento de Notion, se deriva el resumen editorial para `/docencia.astro`, se construye la página siguiendo la estructura de la sección 4, se agrega el link en Footer, se agrega a la suite de QA (`tests/qa/pages.astro.ts`), se verifica lint/a11y/visual, se commitea y se registra en Changelog — Portafolio D (Notion), con su tarea correspondiente en Tareas y Misiones.
 
