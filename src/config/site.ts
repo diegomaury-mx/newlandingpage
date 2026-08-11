@@ -119,11 +119,11 @@ export const site = {
 		legal: [
 			{
 				label: "Política de privacidad",
-				href: "/politicas-privacidad",
+				href: "/politicas-privacidad.html",
 			},
 			{
 				label: "Términos y condiciones",
-				href: "/terminos-y-condiciones",
+				href: "/terminos-y-condiciones.html",
 			},
 		],
 	},
