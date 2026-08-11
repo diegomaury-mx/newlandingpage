@@ -74,3 +74,22 @@ Cada fase es su propio ciclo (spec ya cubre ambas a nivel de diseño; el plan de
 - No se modifica el CTA principal del home ni la narrativa S1-S8 existente.
 - No se reintroduce ningún elemento de funnel de ventas de consultoría (el pivote de julio 2026 se mantiene intacto).
 - No se sincroniza automáticamente el documento de Notion con la página del sitio — actualizaciones futuras del documento completo no se reflejan en `/docencia` salvo edición manual explícita.
+
+## 9 · Inventario preliminar de evidencia (pre-Fase 0) y riesgos a resolver
+
+Búsqueda exploratoria (2026-08-11) sobre el workspace de Diego para las cuatro categorías de docencia (experiencia docente dentro de la trayectoria profesional, certificaciones y cursos tomados, ponencias impartidas, talleres impartidos y tomados). Resultado: hay más material del esperado, pero disperso y con riesgos de vigencia que Fase 0 debe resolver antes de dar por completo el documento.
+
+### Evidencia encontrada por categoría
+
+- **Docencia dentro de la experiencia profesional:** facilitación en el Diplomado en Alta Dirección Empresarial (nivel MBA, módulos de Transformación Digital y Gestión del Talento) en "Canónico - CV Maestro"; 16 horas de facilitación en el Diplomado de Recursos Humanos en "Canónico - Copy LinkedIn"; diplomados ejecutivos en CIDE, UNAM e ITAM en "Skill — module-designer (v3, Diplomados Edition)".
+- **Certificaciones y cursos tomados:** base dedicada "Capacitaciones y Cursos - Diego Maury" (Gestión de Equipos Ágiles, Fundamentos de Gestión de Proyectos, PMBOK, Inteligencia Emocional, Liderazgo, Negociación, Escuela de Habilidades Blandas); "Notion Certification Info"; sección "Educación y Certificaciones" dentro de "Reporte Profesional Completo sobre Diego Maury".
+- **Ponencias impartidas:** página dedicada "Ponencias que ya imparto" (ya referenciada en la sección 4); cifra de "+50 workshops y conferencias facilitadas" en una página archivada.
+- **Talleres impartidos y tomados:** impartidos en "Dominando el Business Pitch y Storytelling", BTEM Training 2022/2023 y StartUp Training (Tec de Monterrey), REDUX. Tomados: no existe una lista separada; la base de Capacitaciones y Cursos mezcla cursos y capacitaciones sin distinguir impartido de tomado.
+
+### Riesgos a resolver antes de cerrar Fase 0
+
+1. Evidencia docente relevante (profesor de Emprendimiento e Innovación en Tec de Monterrey y Escuela Bancaria y Comercial, mentor y coach en Platzi y FIJE) vive solo en una página archivada y no aparece en el CV Maestro vigente. Verificar vigencia antes de usarla.
+2. Ya existe una página "📊 Análisis de Inconsistencias — Perfil Profesional Diego Maury" que documenta contradicciones entre CVs (años de experiencia, ubicación). Fase 0 debe partir de ahí para no heredar errores ya identificados.
+3. Existen dos páginas "Master CV - Diego Maury (English)" con el mismo título, una archivada y otra vigente. Confirmar cuál es la fuente válida antes de citar experiencia docente en inglés.
+4. La certificación PMP solo aparece como requisito deseable en una vacante a la que Diego aplicó, no como certificación propia confirmada. No incluir como logro sin verificar primero.
+5. No hay lista propia de talleres tomados como aprendiz. Decidir si Fase 0 la reconstruye o si no aplica.
