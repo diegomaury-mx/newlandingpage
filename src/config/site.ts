@@ -76,6 +76,10 @@ export const site = {
 				href: "/portfolio",
 			},
 			{
+				label: "Docencia",
+				href: "/docencia",
+			},
+			{
 				label: "Casos de estudio",
 				href: "/portfolio", // TODO: actualizar cuando exista ruta propia
 			},
@@ -115,11 +119,11 @@ export const site = {
 		legal: [
 			{
 				label: "Política de privacidad",
-				href: "/politicas-privacidad.html",
+				href: "/politicas-privacidad",
 			},
 			{
 				label: "Términos y condiciones",
-				href: "/terminos-y-condiciones.html",
+				href: "/terminos-y-condiciones",
 			},
 		],
 	},
