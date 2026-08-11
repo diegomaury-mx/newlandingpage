@@ -1,0 +1,201 @@
+.docencia-hero {
+  padding: clamp(64px, 10vw, 120px) 0 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.docencia-hero__eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ember);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.docencia-hero__eyebrow::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--ember);
+}
+
+.docencia-hero__title {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--t1);
+  max-width: 20ch;
+  margin-bottom: 24px;
+}
+
+.docencia-hero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--t2);
+  max-width: 62ch;
+}
+
+.docencia-areas {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.docencia-areas h2,
+.docencia-cases h2,
+.docencia-diff h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--t1);
+  margin-bottom: 24px;
+}
+
+.docencia-areas-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.docencia-areas-table th,
+.docencia-areas-table td {
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--t2);
+}
+
+.docencia-areas-table th {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--t3);
+  font-weight: 500;
+}
+
+.docencia-areas-table td:first-child {
+  color: var(--t1);
+  font-weight: 500;
+}
+
+.docencia-cases {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.docencia-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.docencia-case {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.docencia-case__type {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+
+.docencia-case__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--t1);
+}
+
+.docencia-case__body p {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--t2);
+  margin: 0 0 10px;
+}
+
+.docencia-case__body p:last-child {
+  margin-bottom: 0;
+}
+
+.docencia-diff {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.docencia-diff ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.docencia-diff li {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--t2);
+  padding-left: 22px;
+  position: relative;
+}
+
+.docencia-diff li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 10px;
+  height: 1px;
+  background: var(--ember);
+}
+
+.docencia-cta {
+  padding: 64px 0 96px;
+  text-align: center;
+}
+
+.docencia-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.docencia-cta__button {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.docencia-cta__button:hover {
+  opacity: 0.85;
+}
+
+.docencia-cta__button--primary {
+  background: var(--ember-cta);
+  color: #fff;
+}
+
+.docencia-cta__button--secondary {
+  border: 1px solid var(--border);
+  color: var(--t1);
+}
+
+.docencia-cta__button:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 2px;
+}
