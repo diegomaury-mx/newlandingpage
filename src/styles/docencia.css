@@ -199,3 +199,28 @@
   outline: 2px solid var(--ember);
   outline-offset: 2px;
 }
+
+.docencia-case__evidence-link,
+.docencia-case__evidence-note {
+  font-size: 12px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.docencia-case__evidence-link {
+  color: var(--t3);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  align-self: flex-start;
+}
+
+.docencia-case__evidence-link:hover,
+.docencia-case__evidence-link:focus-visible {
+  color: var(--t1);
+  border-bottom-color: var(--t1);
+}
+
+.docencia-case__evidence-note {
+  color: var(--t3);
+  font-style: italic;
+}
