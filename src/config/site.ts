@@ -21,8 +21,12 @@ export const site = {
 
 		logo: "/assets/img/isotipo-ember.svg",
 
+		logoHorizontal: "/assets/img/logo-horizontal-dark.svg",
+
 		tagline:
 			"Strategic Program Director. Hagamos que las cosas pasen.",
+
+		footerTagline: "Hagamos que las cosas pasen.",
 	},
 
 	// ---------------------------------------------------------------------------
@@ -80,10 +84,6 @@ export const site = {
 				href: "/docencia",
 			},
 			{
-				label: "Casos de estudio",
-				href: "/portfolio", // TODO: actualizar cuando exista ruta propia
-			},
-			{
 				label: "Sobre mí",
 				href: "/#s2-quien-soy",
 			},
@@ -94,6 +94,10 @@ export const site = {
 			{
 				label: "LinkedIn",
 				href: "https://www.linkedin.com/in/diegomaury/",
+			},
+			{
+				label: "Instagram",
+				href: "https://www.instagram.com/diegomaury.mx",
 			},
 		],
 
@@ -110,6 +114,11 @@ export const site = {
 				label: "Agendar conversación",
 				href: "https://calendar.notion.so/meet/diegomaurymx/5aad3vun",
 			},
+			{
+				label: "Descargar CV",
+				href: "/cv/diego-maury-cv.pdf",
+				download: true,
+			},
 		],
 
 		location: "Ciudad de México, México",
@@ -119,11 +128,11 @@ export const site = {
 		legal: [
 			{
 				label: "Política de privacidad",
-				href: "/politicas-privacidad.html",
+				href: "/politicas-privacidad",
 			},
 			{
 				label: "Términos y condiciones",
-				href: "/terminos-y-condiciones.html",
+				href: "/terminos-y-condiciones",
 			},
 		],
 	},

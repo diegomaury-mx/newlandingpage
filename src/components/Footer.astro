@@ -12,21 +12,17 @@ import { site } from "../config/site";
 
       <div class="footer-brand">
         <img
-          src={site.brand.logo}
-          width="24"
-          height="24"
-          alt=""
+          src={site.brand.logoHorizontal}
+          width="280"
+          height="55"
+          alt={site.brand.name}
           loading="lazy"
           decoding="async"
         />
-
-        <span class="footer-name">
-          {site.brand.name}
-        </span>
       </div>
 
       <p class="footer-tagline">
-        {site.brand.tagline}
+        {site.brand.footerTagline}
       </p>
 
     </section>
@@ -66,6 +62,7 @@ import { site } from "../config/site";
             href={item.href}
             target={item.href.startsWith("http") ? "_blank" : undefined}
             rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+            download={"download" in item && item.download ? true : undefined}
           >
             {item.label}
           </a>
