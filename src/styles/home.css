@@ -43,12 +43,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 180px;
   height: 72px;
   margin: 0 8px;
   flex-shrink: 0;
-
   background: rgba(250,248,252,.04);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -107,33 +105,50 @@
   @media (max-width: 960px) { .about-right { align-items: center; } .about-bio { text-align: center; } }
 
   /* ── PROBLEMA ── */
-  .problema-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; margin-bottom: 8px; }
+  .problema-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: start; margin-bottom: 40px; }
+  .problema-copy .section-sub { margin-bottom: 20px; }
+  .problema-copy .section-sub:last-child { margin-bottom: 0; }
+  .problema-title { font-weight: 300; font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.375rem); }
   .problema-media {
-    border-radius: 16px; overflow: hidden; height: 260px; border: 1px solid var(--border);
-    background: var(--bg-2); display: flex; align-items: center; justify-content: center; padding: 28px;
+    border-radius: 16px; border: 1px solid var(--border);
+    background: var(--bg-2); display: flex; align-items: center; justify-content: center;
+    padding: 32px; min-height: 340px;
   }
-  .problema-media svg { width: 100%; height: 100%; max-width: 220px; }
-  @media (max-width: 800px) { .problema-grid { grid-template-columns: 1fr; } .problema-media { height: 200px; } }
+  .problema-media svg { width: 100%; max-width: 260px; }
+  @media (max-width: 800px) { .problema-grid { grid-template-columns: 1fr; } .problema-media { min-height: 220px; } }
 
-  .flow-diagram { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; max-width: 780px; margin: 32px auto; }
-  .flow-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 16px; padding: 20px 22px; flex: 1; min-width: 160px; }
-  .flow-card-head {
-    font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ember); margin-bottom: 16px; display: flex; align-items: center; gap: 9px;
+  .problem-flow { border: 1px solid var(--border); border-radius: 16px; background: var(--bg-2); padding: 36px 40px; margin-top: 32px; }
+  .problem-flow-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; position: relative; }
+  .problem-flow-line { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--border); z-index: 0; }
+  .problem-flow-node {
+    position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); border-radius: 6px; padding: 16px 22px; background: var(--bg);
+    font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ember); width: fit-content;
   }
-  .flow-card-head::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ember); flex-shrink: 0; }
-  .flow-list { list-style: none; display: grid; grid-template-columns: 1fr; gap: 8px; }
-  .flow-list li { font-size: 13.5px; color: var(--t2); padding-left: 15px; position: relative; }
-  .flow-list li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 7px; height: 1px; background: var(--t3); }
-  .flow-connector { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 18px; flex-shrink: 0; }
-  .flow-connector-line { width: 20px; height: 1px; background: var(--border); }
-  .flow-connector-label { font-family: var(--mono); font-size: 9.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3); }
-  .flow-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .flow-chip {
-    font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--t1);
-    background: rgba(255,92,57,0.1); border: 1px solid rgba(255,92,57,0.3); border-radius: 999px; padding: 5px 13px;
+  .problem-flow-node-start { justify-self: start; }
+  .problem-flow-node-end { justify-self: end; }
+  .problem-flow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); flex-shrink: 0; }
+  .problem-flow-center {
+    position: relative; z-index: 1; justify-self: center; display: flex; flex-direction: column;
+    align-items: center; gap: 4px; padding: 0 28px; background: var(--bg-2);
   }
-  .flow-arrow { width: 8px; height: 8px; border-right: 1.5px solid var(--ember); border-bottom: 1.5px solid var(--ember); transform: rotate(-45deg); }
+  .problem-flow-center-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--t3); white-space: nowrap;
+  }
+  .problem-flow-center-arrow { color: var(--ember); font-size: 16px; line-height: 1; }
+  @media (max-width: 560px) {
+    .problem-flow-row { grid-template-columns: 1fr; gap: 20px; }
+    .problem-flow-line { display: none; }
+    .problem-flow-node-start, .problem-flow-node-end { justify-self: center; }
+    .problem-flow-center { padding: 0; background: transparent; }
+  }
+
+  .problema-quote {
+    max-width: 640px; margin: 64px auto 0; text-align: center;
+    font-size: clamp(1.15rem, 1rem + 1vw, 1.5rem); font-weight: 700; line-height: 1.4; color: var(--t1);
+  }
 
   /* ── TABLA DE CAPACIDADES ── */
   .cap-table { width: 100%; border-collapse: collapse; margin: 28px 0; }

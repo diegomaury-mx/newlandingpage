@@ -470,46 +470,42 @@ const personJsonLd = {
 <section class="section" id={SECTION_IDS.S3}>
   <div class="section-inner">
     <div class="problema-grid">
-      <div>
+      <div class="problema-copy">
         <div class="section-label" data-reveal>{problemLabel}</div>
-        <h2 class="section-title" data-reveal style="--delay:.06s">{problemHeadline}</h2>
+        <h2 class="section-title problema-title" data-reveal style="--delay:.06s">{problemHeadline}</h2>
         {problemParas.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
       </div>
       <div class="problema-media" data-reveal style="--delay:.1s" role="img" aria-label="Diagrama: estrategia y operación conectadas por un sistema">
-        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="40" cy="40" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
-          <circle cx="160" cy="40" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
-          <circle cx="100" cy="160" r="22" stroke="var(--ember)" stroke-width="2.5" fill="rgba(255,92,57,0.1)"></circle>
-          <line x1="40" y1="56" x2="92" y2="142" stroke="var(--border)" stroke-width="2"></line>
-          <line x1="160" y1="56" x2="108" y2="142" stroke="var(--border)" stroke-width="2"></line>
-          <line x1="56" y1="40" x2="144" y2="40" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 5"></line>
+        <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="30" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
+          <circle cx="160" cy="30" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
+          <circle cx="100" cy="130" r="24" stroke="var(--ember)" stroke-width="2.5" fill="rgba(255,92,57,0.1)"></circle>
+          <line x1="46" y1="44" x2="90" y2="112" stroke="var(--border)" stroke-width="2"></line>
+          <line x1="154" y1="44" x2="110" y2="112" stroke="var(--border)" stroke-width="2"></line>
+          <line x1="56" y1="30" x2="144" y2="30" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 5"></line>
         </svg>
       </div>
     </div>
 
     {problemDiagram && (
-      <div class="flow-diagram" data-reveal style="--delay:.22s">
-        <div class="flow-card">
-          <div class="flow-card-head">{problemDiagram.fromLabel}</div>
-          <ul class="flow-list">{problemDiagram.fromItems.map((item) => <li>{item}</li>)}</ul>
-        </div>
-        <div class="flow-connector">
-          <span class="flow-connector-line"></span>
-          <span class="flow-connector-label">{problemDiagram.connectorLabel}</span>
-          <div class="flow-chips">
-            {problemDiagram.connectorItems.map((item) => <span class="flow-chip">{item}</span>)}
+      <div class="problem-flow" data-reveal style="--delay:.22s">
+        <div class="problem-flow-row">
+          <span class="problem-flow-line"></span>
+          <div class="problem-flow-node problem-flow-node-start">
+            <span class="problem-flow-dot"></span>{problemDiagram.fromLabel}
           </div>
-          <span class="flow-connector-line"></span>
-          <span class="flow-arrow"></span>
-        </div>
-        <div class="flow-card">
-          <div class="flow-card-head">{problemDiagram.toLabel}</div>
-          <ul class="flow-list">{problemDiagram.toItems.map((item) => <li>{item}</li>)}</ul>
+          <div class="problem-flow-center">
+            <span class="problem-flow-center-label">{problemDiagram.connectorLabel}</span>
+            <span class="problem-flow-center-arrow">›</span>
+          </div>
+          <div class="problem-flow-node problem-flow-node-end">
+            <span class="problem-flow-dot"></span>{problemDiagram.toLabel}
+          </div>
         </div>
       </div>
     )}
 
-    {problemQuote && <p class="section-sub" data-reveal style="--delay:.28s"><strong>{problemQuote}</strong></p>}
+    {problemQuote && <p class="problema-quote" data-reveal style="--delay:.28s">{problemQuote}</p>}
   </div>
 </section>
 
