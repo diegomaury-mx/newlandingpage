@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects. Politicas-privacidad y terminos-y-condiciones
+# migraron de HTML suelto (public/) a paginas Astro con Navbar/Footer reales
+# (2026-08-03). Redirect 301 para no romper enlaces/SEO existentes a la URL
+# .html vieja.
+/politicas-privacidad.html /politicas-privacidad 301
+/terminos-y-condiciones.html /terminos-y-condiciones 301

@@ -1,0 +1,131 @@
+---
+// Migrada desde public/terminos-y-condiciones.html (HTML suelto sin Navbar,
+// footer legacy) a pagina Astro real con BaseLayout, para que comparta
+// Navbar/Footer/DS con el resto del sitio. La URL vieja .html redirige aqui
+// via public/_redirects (301).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/legal.css';
+
+const pageTitle = 'Términos y condiciones · Diego Maury';
+const pageDescription = 'Términos y condiciones de uso del sitio diegomaury.mx';
+const canonicalUrl = new URL('/terminos-y-condiciones', Astro.site).toString();
+---
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl={canonicalUrl}
+  enableGtm
+>
+  <section class="section">
+    <div class="section-inner legal-page">
+      <h1>Términos y condiciones</h1>
+      <p class="legal-updated">Última actualización: 21 de julio de 2026. Todos los derechos reservados.</p>
+
+      <p>El presente contrato describe los términos y condiciones aplicables al uso del contenido, productos y/o servicios del sitio web <a class="inline-link" href="https://diegomaury.mx"><strong>diegomaury.mx</strong></a>, del cual es titular <strong>Diego Maury</strong>, operando como consultor independiente y operador de la plataforma SOFI. Para hacer uso del contenido, productos y/o servicios, el usuario deberá sujetarse a los presentes términos y condiciones.</p>
+
+      <p>Consulta también nuestra <a class="inline-link" href="/politicas-privacidad">Política de Privacidad</a>.</p>
+
+      <hr>
+
+      <section>
+        <h2>I. Objeto</h2>
+        <p>El objeto es regular el acceso y utilización del contenido, productos y/o servicios a disposición del público en el dominio <a class="inline-link" href="https://diegomaury.mx">diegomaury.mx</a> y a través de la plataforma SOFI. El titular se reserva el derecho de realizar cualquier tipo de modificación en el sitio web y en los servicios en cualquier momento y sin previo aviso. El acceso al sitio es libre y gratuito; la utilización de ciertos servicios de consultoría puede implicar un costo. El sitio está dirigido a usuarios mayores de edad residentes en México.</p>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>II. Usuario</h2>
+        <p>La actividad del usuario en <a class="inline-link" href="https://diegomaury.mx">diegomaury.mx</a> y en la plataforma SOFI estará sujeta a los presentes términos. El usuario se compromete a:</p>
+        <ul>
+          <li>Utilizar el contenido y los servicios de forma lícita, sin afectar derechos de terceros ni infringir la legislación aplicable.</li>
+          <li>Proporcionar información veraz y actualizada al momento de registrarse o contactarnos.</li>
+          <li>No utilizar medios automatizados para acceder, raspar o extraer información del sitio sin autorización expresa.</li>
+        </ul>
+        <p>El usuario manifiesta ser mayor de edad y tener capacidad legal para aceptar estos términos.</p>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>III. Acceso y navegación</h2>
+        <p>El titular no garantiza la continuidad ni disponibilidad ininterrumpida del sitio o de la plataforma SOFI, pero realizará las acciones razonables para su buen funcionamiento. Diego Maury no será responsable por daños derivados de interrupciones, errores técnicos o acceso no autorizado ajenos a su control.</p>
+        <p><strong>Al contactar a través de WhatsApp Business</strong>, el usuario acepta que sus mensajes y número telefónico sean tratados para dar seguimiento a su solicitud, conforme a la Política de Privacidad.</p>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>IV. Política de Privacidad y Protección de Datos</h2>
+        <p>Conforme a la <strong>Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)</strong>, Diego Maury se compromete a proteger los datos personales de los usuarios. El uso de datos se limitará a lo previsto en la <a class="inline-link" href="/politicas-privacidad">Política de Privacidad</a> disponible en <a class="inline-link" href="https://diegomaury.mx">diegomaury.mx</a>.</p>
+        <p>Al usar los servicios o contactarnos, el usuario acepta el tratamiento de sus datos conforme a dicha Política. Diego Maury podrá modificar el Aviso de Privacidad en cualquier momento, publicando la versión actualizada en el sitio.</p>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>V. Descripción de los servicios</h2>
+        <p>A través de <a class="inline-link" href="https://diegomaury.mx">diegomaury.mx</a> y la plataforma SOFI se ofrecen los siguientes servicios:</p>
+        <ul>
+          <li><strong>Consultoría estratégica:</strong> servicios de dirección fraccional, innovación y operaciones para empresas y startups.</li>
+          <li><strong>SOFI:</strong> sistema de inteligencia artificial para calificación de leads y gestión operativa vía WhatsApp Business.</li>
+          <li><strong>Contenido informativo:</strong> artículos, recursos y materiales relacionados con innovación, operaciones y tecnología.</li>
+        </ul>
+        <p>Las condiciones específicas de cada servicio contratado se regularán mediante propuesta o contrato por separado.</p>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>VI. Política de enlaces</h2>
+        <p>El sitio <a class="inline-link" href="https://diegomaury.mx">diegomaury.mx</a> puede contener enlaces a sitios web de terceros. Diego Maury no se hace responsable del contenido, políticas de privacidad ni prácticas de dichos sitios. La inclusión de un enlace no implica respaldo ni asociación.</p>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>VII. Propiedad intelectual</h2>
+        <p>Todo el contenido disponible en <a class="inline-link" href="https://diegomaury.mx">diegomaury.mx</a> (incluyendo textos, diseños, logos, imágenes, código y materiales de la plataforma SOFI) es propiedad de Diego Maury o cuenta con licencia de uso, y se encuentra protegido por la legislación mexicana en materia de propiedad intelectual.</p>
+
+        <p>Queda prohibida la reproducción, distribución o uso comercial de cualquier contenido sin autorización expresa y por escrito del titular.</p>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>VIII. Limitación de responsabilidad</h2>
+        <p>Diego Maury no será responsable por:</p>
+        <ul>
+          <li>Daños directos, indirectos o consecuentes derivados del uso o imposibilidad de uso del sitio o de SOFI.</li>
+          <li>Errores u omisiones en el contenido publicado.</li>
+          <li>Interrupciones del servicio por causas ajenas al control del titular (fuerza mayor, fallas de terceros proveedores, etc.).</li>
+        </ul>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>IX. Modificaciones a los términos</h2>
+        <p>Diego Maury podrá modificar los presentes Términos y Condiciones en cualquier momento. Las versiones actualizadas se publicarán en <a class="inline-link" href="https://diegomaury.mx/terminos-y-condiciones">https://diegomaury.mx/terminos-y-condiciones</a>. El uso continuado del sitio o de los servicios tras la publicación de cambios implica la aceptación de los mismos.</p>
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>X. Legislación y jurisdicción</h2>
+        <p>La relación entre el titular y el usuario se regirá e interpretará conforme a las leyes aplicables en los <strong>Estados Unidos Mexicanos</strong>. Para cualquier controversia derivada del uso del sitio o de los servicios, las partes se someterán a la jurisdicción de los tribunales competentes de la <strong>Ciudad de México</strong>, renunciando a cualquier otro fuero que pudiera corresponderles.</p>
+
+        <p><strong>Titular:</strong> Diego Maury<br>
+        <strong>Contacto:</strong> <a class="inline-link" href="mailto:diegomaurymx@gmail.com">diegomaurymx@gmail.com</a><br>
+        <strong>Sitio web:</strong> <a class="inline-link" href="https://diegomaury.mx">https://diegomaury.mx</a></p>
+      </section>
+
+      <hr>
+
+      <p class="legal-footnote">
+        Última actualización: 21 de julio de 2026. Todos los derechos reservados.<br>
+        Consulta también nuestra <a class="inline-link" href="/politicas-privacidad">Política de Privacidad</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
