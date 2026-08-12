@@ -61,6 +61,7 @@ const pageTitle = 'Portafolio · Diego Maury';
 const pageDescription =
   'Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM. Cada caso publica su estado de evidencia.';
 const canonicalUrl = new URL('/portfolio', Astro.site).toString();
+const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
 
 const itemListJsonLd = {
   '@context': 'https://schema.org',
@@ -79,6 +80,7 @@ const itemListJsonLd = {
   description={pageDescription}
   canonicalUrl={canonicalUrl}
   jsonLd={itemListJsonLd}
+  ogImage={ogImage}
   enableGtm
 >
   <div class="portfolio-page">

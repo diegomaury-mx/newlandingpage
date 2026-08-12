@@ -345,6 +345,7 @@ const pageDescription =
   valueAfter(seo, 'Meta description') ||
   'Strategic Program Director y consultor de innovación: diseño programas y sistemas que convierten estrategia en ejecución.';
 const canonicalUrl = new URL('/', Astro.site).toString();
+const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
 const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -365,6 +366,7 @@ const personJsonLd = {
   jsonLd={personJsonLd}
   title={pageTitle}
   description={pageDescription}
+  ogImage={ogImage}
 >
 <!-- Google Tag Manager -->
 <script is:inline src="/js/gtm.js"></script>
