@@ -74,7 +74,7 @@
   @media (max-width: 960px) { .about-body { grid-template-columns: 1fr; align-items: center; text-align: center; } }
   .about-left { display: flex; flex-direction: column; gap: 24px; padding-bottom: 56px; }
   .about-name { font-size: clamp(2.2rem, 3.6vw, 3.2rem); font-weight: 300; letter-spacing: -0.03em; line-height: 1; }
-  .about-title-txt { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember); margin-top: 6px; }
+  .about-title-txt { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember); margin-top: 16px; }
   .about-tagline { font-size: 14px; color: var(--t2); line-height: 1.65; max-width: 36ch; }
   .about-roles { display: flex; flex-direction: column; gap: 9px; }
   .about-role { display: flex; align-items: flex-start; gap: 10px; }
@@ -110,7 +110,13 @@
   }
   .about-intro-p { font-size: 14px; color: var(--t2); line-height: 1.7; max-width: none; }
   .about-intro-p strong { color: var(--t1); }
-  @media (max-width: 960px) { .about-intro-full { text-align: center; } }
+  @media (max-width: 960px) {
+    .about-intro-full { text-align: center; }
+    .about-left { order: 1; }
+    .about-intro-full { order: 2; }
+    .about-photo-wrap { order: 3; }
+    .about-right { order: 4; }
+  }
 
   /* ── PROBLEMA ── */
   .problema-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: start; margin-bottom: 40px; }
