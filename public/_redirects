@@ -4,3 +4,7 @@
 # .html vieja.
 /politicas-privacidad.html /politicas-privacidad 301
 /terminos-y-condiciones.html /terminos-y-condiciones 301
+
+# URL pre-Astro sin prefijo /portfolio/, indexada en Search Console (baseline
+# 2026-08-03) y hoy 404 en el sitio live.
+/hacksureste /portfolio/hacksureste/ 301
