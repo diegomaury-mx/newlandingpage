@@ -135,8 +135,8 @@ const creativeWorkJsonLd = {
         <div class="eyebrow">Evidencia visual</div>
         {entry.data.evidenceMedia.length > 0 && (
           <div class="evidence-photo-grid">
-            {entry.data.evidenceMedia.map((src) => (
-              <a class="evidence-photo" href={src} target="_blank" rel="noopener">
+            {entry.data.evidenceMedia.map((src, i) => (
+              <a class="evidence-photo" href={src} target="_blank" rel="noopener" aria-label={`Ver foto ${i + 1} de evidencia`}>
                 <img src={src} alt="" loading="lazy" width="400" height="300" />
               </a>
             ))}
