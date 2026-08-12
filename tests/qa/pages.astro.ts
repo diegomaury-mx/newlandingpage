@@ -17,7 +17,7 @@ export const ASTRO_QA_PAGES = [
   { name: 'caso-incmty-b-challenge-2021', path: '/portfolio/incmty-b-challenge-2021/' },
   { name: 'caso-incmty-disruptair-2022', path: '/portfolio/incmty-disruptair-challenge-2022/' },
   { name: 'docencia', path: '/docencia/' },
-  { name: 'politicas-privacidad', path: '/politicas-privacidad/' },
-  { name: 'terminos-y-condiciones', path: '/terminos-y-condiciones/' },
+  { name: 'politicas-privacidad', path: '/politicas-privacidad.html' },
+  { name: 'terminos-y-condiciones', path: '/terminos-y-condiciones.html' },
   { name: '404', path: '/404.html' },
 ];
