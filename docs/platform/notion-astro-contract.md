@@ -9,8 +9,8 @@
 | # | Fuente Notion | Tipo | Alimenta |
 |---|---|---|---|
 | 1 | `SSOT - Portafolio Proyectos` (`collection://88257bc9-e575-45e8-90df-f851f96e92f2`) | Database, 27 fichas | Colección `cases` |
-| 2 | `Copy Oficial · diegomaury.mx (SSOT)` (página única `d9ab8508-660a-43e8-ac45-9386dd7903d9`) | Página, no database | Colección singleton `siteCopy` (no existe hoy en `config.ts`) |
-| 3 | `Métricas oficiales — Portafolio D` (`collection://213ea2d0-bffc-41b9-9877-92132551461c`) | Database, 11 métricas | Colección `metrics` (no existe hoy en `config.ts`) |
+| 2 | `Copy Oficial · diegomaury.mx (SSOT)` (página única `d9ab8508-660a-43e8-ac45-9386dd7903d9`) | Página, no database | Colección singleton `siteCopy` — implementada en `config.ts` desde 2026-07-23 |
+| 3 | `Métricas oficiales — Portafolio D` (`collection://213ea2d0-bffc-41b9-9877-92132551461c`) | Database, 11 métricas | Colección `metrics` — implementada en `config.ts` desde 2026-07-23 |
 
 ---
 
@@ -60,11 +60,11 @@ La evidencia **no** es un campo estructurado único: vive en dos lugares.
 
 ---
 
-## 2. `Copy Oficial · diegomaury.mx (SSOT)` → `siteCopy` (singleton, no existe en `config.ts` hoy)
+## 2. `Copy Oficial · diegomaury.mx (SSOT)` → `siteCopy`
 
 Esta fuente **no es una base de datos**: es una página única con contenido consolidado en secciones `S1`–`S8` (Hero, Quién soy, Problema, Evidencia, Cómo trabajo, Sistemas propios, Formas de trabajar, Siguiente paso) más un bloque de metadatos SEO. No tiene propiedades tipadas de Notion — es texto libre estructurado por encabezados Markdown.
 
-**Propuesta de colección Astro:** `type: 'data'`, una sola entrada (`site.json` o `site.yaml`), no MDX de contenido narrativo por caso. Ejemplo de forma (no definitivo, a validar en la tarea de Zod):
+**Schema real implementado (`config.ts`, desde 2026-07-23):** `{ title: z.string(), markdown: z.string() }` — mucho más simple que la propuesta original de abajo. El loader (`siteCopyLoader`) trae el markdown crudo tal cual; la división por secciones `S1`–`S8` no vive en Zod, la hace `src/utils/parseSiteCopy.ts` en runtime (parseo por heading `S<n> ·`, con la defensa de clave-duplicada-gana-la-primera documentada en CLAUDE.md §"Gotcha del loader"). La propuesta de schema anidado hero/about/problem de abajo **no se implementó así** — se dejó como referencia histórica de la exploración original:
 
 ```ts
 const siteCopy = defineCollection({
