@@ -29,8 +29,6 @@ import {
   bulletItems,
   headingCards,
   testimonials,
-  caseCards,
-  firstTable,
   firstCodeBlock,
   parseFlowDiagram,
 } from '../utils/parseSiteCopy.ts';
@@ -52,6 +50,12 @@ function slotSrc(slotId: string, fallback: string): string {
   const entry = imageSlotEntries.find((e) => e.id === slotId);
   return entry?.data.status === 'Listo' && entry.data.imageUrl ? entry.data.imageUrl : fallback;
 }
+
+// Slot del diagrama de S3 "El problema que resuelvo": sin archivo publicado en
+// Notion (status !== 'Listo'), el sitio conserva el SVG dibujado a mano como
+// fallback en vez de romper el layout.
+const problemaDiagramaSlot = imageSlotEntries.find((e) => e.id === 'diagrama-problema');
+const problemaDiagramaReady = Boolean(problemaDiagramaSlot?.data.status === 'Listo' && problemaDiagramaSlot.data.imageUrl);
 
 // --- Identidad interna de las secciones ---------------------------------------
 // Los ids/anclas usan el CODIGO INTERNO del SSOT (S1..S8), no el titulo
@@ -102,32 +106,6 @@ const LOGO_MAP: Record<string, { src: string; alt: string }> = {
 };
 const heroLogos = heroLogoNames.map((name) => LOGO_MAP[name]).filter(Boolean);
 
-// Badge de logo por tarjeta (Evidencia, Sistemas propios): solo donde el
-// nombre del cliente sigue siendo publico en el copy. PropTech/SOFI se
-// generalizaron a proposito (anonimizacion del cliente real) y no llevan
-// logo, para no des-anonimizarlos visualmente.
-function cardLogo(title: string): { src: string; alt: string } | null {
-  if (/proptech/i.test(title)) {
-    return {
-      src: slotSrc('logo-proptech-evidencia', '/assets/img/logos/proptech.svg'),
-      alt: 'PropTech',
-    };
-  }
-  if (/heineken/i.test(title)) {
-    return {
-      src: slotSrc('logo-heineken-evidencia','/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png'),
-      alt:'HEINEKEN Mexico',
-    };
-  }
-  if (/redux/i.test(title)) {
-    return {
-      src: slotSrc('logo-tec-de-monterrey-evidencia','/cms-media/logos/tec%20de%20monterrey.png'),
-      alt:'Tecnológico de Monterrey',
-    };
-  }
-  return null;
-}
-
 function systemsLogo(title: string): { src: string; alt: string } | null {
   const key = title.toLowerCase();
   if (key.includes('redux')) return { src: slotSrc('ip-logo-redux','/assets/img/logos/redux.svg'), alt:'REDUX' };
@@ -175,72 +153,56 @@ const problemQuote = s3.find((b: string) => b.trim().startsWith('>'))?.trim().sl
 const problemDiagram = parseFlowDiagram(firstCodeBlock(s3));
 
 // --- S4 · Evidencia ------------------------------------------------------------
+// Rediseño 2026-08-12 (instrucciones de Diego): la seccion deja de listar
+// marcas/casos/metricas (eso vive en /portfolio y en las fichas de caso) y
+// pasa a un diagrama radial que solo comunica amplitud de campos de
+// aplicacion. Copy vuelve a salir del bloque S4 de Notion (Copy Oficial
+// SSOT), con una estructura nueva: heading1 = titulo, primer parrafo =
+// intro, "Centro" (bold) + valor = nodo central, bloque de codigo = un campo
+// por linea, parrafo final = cierre. Mientras Diego no pegue este formato en
+// Notion, s4 sigue teniendo el contenido viejo (tabla) y estos campos caen
+// vacios — el render se protege abajo con guards de longitud.
 const s4 = sections.get('S4')?.blocks ?? [];
 const evidenceLabel = sections.get('S4')?.label ?? 'Evidencia';
-const evidenceHeadline = heading1(s4);
-const evidenceIntro = paragraphs(blocksBeforeHeading(s4, ['# Casos destacados']));
-const evidenceCards = caseCards(s4);
-
-// Slugs reales de la coleccion `cases` (verificados contra el build de
-// portfolio/[slug].astro). El copy anonimiza "PropTech" en vez de nombrar
-// FlipHouse, pero el caso real detras de esa tarjeta es SOFI.
-function caseLink(title: string): string | null {
-  const key = title.toLowerCase();
-  if (key.includes('proptech')) return '/portfolio/sofi';
-  if (key.includes('heineken')) return '/portfolio/heineken-green-challenge';
-  if (key.includes('hacksureste')) return '/portfolio/hacksureste';
-  return null;
-}
-
-// El componente real del DS (.ip, ver index.html "Casos destacados"/"Sistemas
-// propios") separa una etiqueta de categoria (ip-label) del nombre del
-// entregable (ip-name). El copy de Notion sigue el mismo patron "Categoria ·
-// Nombre" que ya usa workSteps() para "01 · Definir el destino": se reutiliza
-// el mismo split, nunca se inventa la etiqueta.
-function splitIpTitle(title: string): { label: string; name: string } {
-  const parts = title.split('·');
-  if (parts.length > 1) {
-    return { label: parts[0].trim(), name: parts.slice(1).join('·').trim() };
-  }
-  return { label: '', name: title.trim() };
-}
-
-// "111 ideas validadas en una sola edicion" no esta en el SSOT de metricas
-// (assets/data/metrics.json): no se puede verificar ni publicar per el SOP
-// de metricas, asi que se retira del render aunque siga en el copy de
-// Notion (pendiente de correccion en la fuente, ver spec 2026-07-24).
-const UNVERIFIED_METRIC_FRAGMENTS = [' · 111 ideas validadas en una sola edición'];
-function stripUnverifiedMetrics(cell: string): string {
-  return UNVERIFIED_METRIC_FRAGMENTS.reduce((acc, fragment) => acc.replace(fragment, ''), cell);
-}
-const rawEvidenceTable = firstTable(s4);
-const evidenceTable = rawEvidenceTable && {
-  ...rawEvidenceTable,
-  rows: rawEvidenceTable.rows.map((row) => row.map(stripUnverifiedMetrics)),
-};
-// El diagrama pasa de bloque de texto (una etapa por linea, separadas por
-// "↓") al componente real "pipeline-creative" (barras ascendentes, ver
-// index.html S4): solo se necesitan los nombres de etapa, en orden. La
-// altura de cada barra se calcula proporcional a su posicion (rampa
-// generica), no son valores fijos como en el HTML de referencia porque el
-// numero de etapas es dinamico segun el copy.
-const evidenceStages = firstCodeBlock(s4)
+const evidenceTitle = heading1(s4);
+const evidenceIntroText = paragraphs(blocksBeforeHeading(s4, ['Centro']))[0] ?? '';
+const evidenceCenterNode = valueAfter(s4, 'Centro');
+const evidenceFieldLabels = firstCodeBlock(s4)
   .split('\n')
   .map((line) => line.trim())
-  .filter((line) => line && line !== '↓');
-function stageBarHeight(index: number, total: number): string {
-  const min = 44;
-  const max = 118;
-  const step = total > 1 ? (max - min) / (total - 1) : 0;
-  return `${Math.round(min + step * index)}px`;
+  .filter(Boolean);
+const afterFieldsFence = blocksAfterHeading(blocksAfterHeading(s4, '```'), '```');
+const evidenceClosing = paragraphs(afterFieldsFence)[0] ?? '';
+
+// Orden = orden de lectura mobile (el mismo orden en que Diego escribe las
+// lineas en Notion). El mismo orden define la posicion en el radial desktop
+// (i=0 arriba, avanzando en sentido horario), asi que un solo array gobierna
+// las tres variantes responsive. La key es solo un hook tecnico para
+// asociar cada campo con su linea/punto en el hover — no viene de Notion.
+const EVIDENCE_FIELDS = evidenceFieldLabels.map((label, i) => ({ key: `field-${i}`, label }));
+
+// Geometria del diagrama radial (solo desktop, >960px): nodos distribuidos
+// a partes iguales alrededor de 360°, empezando arriba (-90°), en un sistema
+// de coordenadas 0-100 que mapea 1:1 a porcentajes CSS sobre un contenedor
+// cuadrado (aspect-ratio:1). Hibrido D+C (decision 2026-08-12): los campos
+// son texto puro, sin caja ni fondo opaco, asi que a diferencia de la
+// primera version SI hace falta un gap real entre el final de la linea y el
+// texto — por eso el radio de la linea/punto terminal (EVIDENCE_DOT_RADIUS)
+// queda notoriamente mas corto que el radio del texto (EVIDENCE_NODE_RADIUS).
+const EVIDENCE_NODE_RADIUS = 40;
+const EVIDENCE_DOT_RADIUS = 31;
+function evidencePoint(index: number, total: number, radius: number): { x: number; y: number } {
+  const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
+  return {
+    x: Math.round((50 + radius * Math.cos(angle)) * 100) / 100,
+    y: Math.round((50 + radius * Math.sin(angle)) * 100) / 100,
+  };
 }
-const evidenceStatLine = s4.find((b: string) => b.includes('proyectos documentados'))?.trim() ?? '';
-const evidenceCtaLabel =
-  s4
-    .find((b: string) => b.toLowerCase().includes('explorar portafolio'))
-    ?.replace(/→\s*/, '')
-    .replace(/#portafolio\s*$/i, '')
-    .trim() || 'Explorar portafolio completo';
+const evidenceNodes = EVIDENCE_FIELDS.map((field, i) => ({
+  ...field,
+  node: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_NODE_RADIUS),
+  dot: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_DOT_RADIUS),
+}));
 
 // --- S5 · Como trabajo -----------------------------------------------------
 const s5 = sections.get('S5')?.blocks ?? [];
@@ -426,7 +388,6 @@ const personJsonLd = {
         {heroRole && <div class="about-title-txt">{heroRole}</div>}
       </div>
       {aboutTagline && <p class="about-tagline">{aboutTagline}</p>}
-      {aboutIntro.map((p) => <p class="about-tagline">{p}</p>)}
       {aboutRoles.length > 0 && (
         <div class="about-roles">
           {aboutRoles.map((role) => (
@@ -450,6 +411,12 @@ const personJsonLd = {
       {aboutBio && <p class="about-bio">{aboutBio}</p>}
       {aboutHeadline && <p class="about-bio">{aboutHeadline}</p>}
     </div>
+
+    {aboutIntro.length > 0 && (
+      <div class="about-intro-full" data-reveal style="--delay:.14s">
+        {aboutIntro.map((p) => <p class="about-intro-p">{p}</p>)}
+      </div>
+    )}
   </div>
   {aboutStats.length > 0 && (
     <div style="max-width:1160px;margin:0 auto;padding:0 32px">
@@ -475,15 +442,19 @@ const personJsonLd = {
         <h2 class="section-title problema-title" data-reveal style="--delay:.06s">{problemHeadline}</h2>
         {problemParas.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
       </div>
-      <div class="problema-media" data-reveal style="--delay:.1s" role="img" aria-label="Diagrama: estrategia y operación conectadas por un sistema">
-        <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="40" cy="30" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
-          <circle cx="160" cy="30" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
-          <circle cx="100" cy="130" r="24" stroke="var(--ember)" stroke-width="2.5" fill="rgba(255,92,57,0.1)"></circle>
-          <line x1="46" y1="44" x2="90" y2="112" stroke="var(--border)" stroke-width="2"></line>
-          <line x1="154" y1="44" x2="110" y2="112" stroke="var(--border)" stroke-width="2"></line>
-          <line x1="56" y1="30" x2="144" y2="30" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 5"></line>
-        </svg>
+      <div class="problema-media" data-reveal style="--delay:.1s">
+        {problemaDiagramaReady ? (
+          <img src={problemaDiagramaSlot!.data.imageUrl} alt="Diagrama: estrategia y operación conectadas por un sistema" loading="lazy">
+        ) : (
+          <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama: estrategia y operación conectadas por un sistema">
+            <circle cx="40" cy="30" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
+            <circle cx="160" cy="30" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
+            <circle cx="100" cy="130" r="24" stroke="var(--ember)" stroke-width="2.5" fill="rgba(255,92,57,0.1)"></circle>
+            <line x1="46" y1="44" x2="90" y2="112" stroke="var(--border)" stroke-width="2"></line>
+            <line x1="154" y1="44" x2="110" y2="112" stroke="var(--border)" stroke-width="2"></line>
+            <line x1="56" y1="30" x2="144" y2="30" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 5"></line>
+          </svg>
+        )}
       </div>
     </div>
 
@@ -513,70 +484,40 @@ const personJsonLd = {
 <section class="section" id={SECTION_IDS.S4}>
   <div class="section-inner">
     <div class="section-label" data-reveal>{evidenceLabel}</div>
-    <h2 class="section-title" data-reveal style="--delay:.06s">{evidenceHeadline}</h2>
-    {evidenceIntro.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
+    {evidenceTitle && <h2 class="section-title" data-reveal style="--delay:.06s">{evidenceTitle}</h2>}
+    {evidenceIntroText && <p class="section-sub" data-reveal style="--delay:.1s">{evidenceIntroText}</p>}
 
-    {evidenceTable && (
-      <table class="cap-table" data-reveal style="--delay:.16s">
-        <thead>
-          <tr>{evidenceTable.header.map((cell) => <th>{cell}</th>)}</tr>
-        </thead>
-        <tbody>
-          {evidenceTable.rows.map((row) => (
-            <tr>{row.map((cell) => <td>{cell}</td>)}</tr>
+    {evidenceCenterNode && evidenceNodes.length > 0 && (
+      <div class="evidence-radial" data-reveal style="--delay:.18s" id="evidenceRadial">
+        <svg class="evidence-radial-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          {evidenceNodes.map((n) => (
+            <line class="evidence-line" data-field={n.key} x1="50" y1="50" x2={n.dot.x} y2={n.dot.y}></line>
           ))}
-        </tbody>
-      </table>
-    )}
-
-    {evidenceStatLine && <p class="section-sub" data-reveal style="--delay:.2s"><strong>{evidenceStatLine}</strong></p>}
-    <a class="btn-primary" href="/portfolio" data-reveal style="--delay:.22s; display:inline-flex; margin-bottom:44px;">{evidenceCtaLabel} →</a>
-
-    {evidenceCards.length > 0 && (
-      <>
-        <h3 class="section-title" data-reveal style="--delay:.24s; font-size: 1.4rem;">Casos destacados</h3>
-        <div class="ip-grid" data-reveal style="--delay:.28s">
-          {evidenceCards.map((card) => {
-            const { label, name } = splitIpTitle(card.title);
-            const logo = cardLogo(card.title);
-            const link = caseLink(card.title);
-            return (
-              <div class="ip">
-                {logo && <div class="ip-media"><img src={logo.src} alt={logo.alt} loading="lazy"></div>}
-                <div class="ip-row">
-                  <div>
-                    {label && <div class="ip-label">{label}</div>}
-                    <div class="ip-name">{name}</div>
-                  </div>
-                </div>
-                {card.situation && <><span class="ip-field-label">Situación</span><p class="ip-desc">{card.situation}</p></>}
-                {card.action && <><span class="ip-field-label">Acción</span><p class="ip-desc">{card.action}</p></>}
-                {card.results.length > 0 && (
-                  <>
-                    <span class="ip-field-label">Resultados</span>
-                    <ul class="svc-list">
-                      {card.results.map((result) => <li class="svc-item">{result}</li>)}
-                    </ul>
-                  </>
-                )}
-                {link && <a href={link} class="ip-case-btn">Ver caso completo →</a>}
-              </div>
-            );
-          })}
-        </div>
-      </>
-    )}
-
-    {evidenceStages.length > 0 && (
-      <div class="pipeline-creative" data-reveal style="--delay:.4s">
-        {evidenceStages.map((stage, i) => (
-          <div class={`pc-step${i === evidenceStages.length - 1 ? ' is-outcome' : ''}`}>
-            <div class="pc-bar" style={`height:${stageBarHeight(i, evidenceStages.length)}`}>{i + 1}</div>
-            <div class="pc-label">{stage}</div>
+          {evidenceNodes.map((n) => (
+            <circle class="evidence-dot" data-field={n.key} cx={n.dot.x} cy={n.dot.y} r="1.4"></circle>
+          ))}
+        </svg>
+        {evidenceCenterNode && (
+          <div class="evidence-radial-center">
+            <span>{evidenceCenterNode}</span>
           </div>
-        ))}
+        )}
+        <ul class="evidence-fields">
+          {evidenceNodes.map((n, i) => (
+            <li
+              class={`evidence-field evidence-field-${i}`}
+              style={`--fx:${n.node.x}%; --fy:${n.node.y}%`}
+              data-field={n.key}
+              tabindex="0"
+            >
+              {n.label}
+            </li>
+          ))}
+        </ul>
       </div>
     )}
+
+    {evidenceClosing && <p class="section-sub evidence-closing" data-reveal style="--delay:.3s">{evidenceClosing}</p>}
   </div>
 </section>
 
@@ -835,6 +776,35 @@ const personJsonLd = {
     }, { threshold: 0.5 });
 
     countEls.forEach((el) => counterObserver.observe(el));
+  }
+
+  // ── Diagrama radial "Evidencia" ──
+  const evidenceRadial = document.getElementById('evidenceRadial');
+  if (evidenceRadial) {
+    const fields = evidenceRadial.querySelectorAll('.evidence-field');
+    fields.forEach((field) => {
+      const key = (field as HTMLElement).dataset.field;
+      const line = key ? evidenceRadial.querySelector(`.evidence-line[data-field="${key}"]`) : null;
+      const dot = key ? evidenceRadial.querySelector(`.evidence-dot[data-field="${key}"]`) : null;
+
+      const activate = () => {
+        evidenceRadial.classList.add('has-active');
+        field.classList.add('is-active');
+        line?.classList.add('is-active');
+        dot?.classList.add('is-active');
+      };
+      const deactivate = () => {
+        evidenceRadial.classList.remove('has-active');
+        field.classList.remove('is-active');
+        line?.classList.remove('is-active');
+        dot?.classList.remove('is-active');
+      };
+
+      field.addEventListener('mouseenter', activate);
+      field.addEventListener('mouseleave', deactivate);
+      field.addEventListener('focus', activate);
+      field.addEventListener('blur', deactivate);
+    });
   }
 </script>
 <script is:inline>

@@ -104,6 +104,14 @@
   .about-bio strong { color: var(--t1); }
   @media (max-width: 960px) { .about-right { align-items: center; } .about-bio { text-align: center; } }
 
+  .about-intro-full {
+    grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px;
+    padding-top: 32px; border-top: 1px solid var(--border);
+  }
+  .about-intro-p { font-size: 14px; color: var(--t2); line-height: 1.7; max-width: none; }
+  .about-intro-p strong { color: var(--t1); }
+  @media (max-width: 960px) { .about-intro-full { text-align: center; } }
+
   /* ── PROBLEMA ── */
   .problema-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: start; margin-bottom: 40px; }
   .problema-copy .section-sub { margin-bottom: 20px; }
@@ -115,6 +123,7 @@
     padding: 32px; min-height: 340px;
   }
   .problema-media svg { width: 100%; max-width: 260px; }
+  .problema-media img { width: 100%; height: 100%; max-height: 340px; object-fit: cover; border-radius: 10px; }
   @media (max-width: 800px) { .problema-grid { grid-template-columns: 1fr; } .problema-media { min-height: 220px; } }
 
   .problem-flow { border: 1px solid var(--border); border-radius: 16px; background: var(--bg-2); padding: 36px 40px; margin-top: 32px; }
@@ -150,13 +159,81 @@
     font-size: clamp(1.15rem, 1rem + 1vw, 1.5rem); font-weight: 700; line-height: 1.4; color: var(--t1);
   }
 
-  /* ── TABLA DE CAPACIDADES ── */
-  .cap-table { width: 100%; border-collapse: collapse; margin: 28px 0; }
-  .cap-table th, .cap-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--t2); }
-  .cap-table th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3); font-weight: 500; }
-  .cap-table td:first-child { color: var(--t1); font-weight: 500; }
+  /* ── EVIDENCIA: DIAGRAMA RADIAL (hibrido D+C, decision 2026-08-12) ──
+     Centro = franja editorial dominante (doble regla ember). Conectores +
+     puntos terminales (SVG, 6 spokes, sin red entre nodos exteriores).
+     Campos = texto puro sin caja/borde/fondo — solo se subrayan en
+     hover/focus. Desktop: radial absoluto sobre contenedor cuadrado.
+     Tablet: mismo radial con radios reducidos (evita cruces/desborde).
+     Mobile: lista tipografica vertical, sin conectores. */
+  .evidence-radial { position: relative; margin: 56px auto 0; }
+  .evidence-radial-lines { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+  .evidence-line { stroke: var(--border); stroke-width: 0.5; vector-effect: non-scaling-stroke; transition: stroke 180ms, stroke-width 180ms; }
+  .evidence-line.is-active { stroke: var(--ember); stroke-width: 0.9; }
+  .evidence-radial.has-active .evidence-line:not(.is-active) { stroke-opacity: 0.4; }
+  .evidence-dot { fill: var(--border); transition: fill 180ms; }
+  .evidence-dot.is-active { fill: var(--ember); }
+  .evidence-radial.has-active .evidence-dot:not(.is-active) { fill-opacity: 0.4; }
 
-  /* ── IP CARDS (evidencia + sistemas propios) ── */
+  .evidence-radial-center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 2; max-width: 220px; text-align: center; padding: 18px 8px;
+    border-top: 2px solid var(--ember); border-bottom: 2px solid var(--ember);
+  }
+  .evidence-radial-center span {
+    font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--t1); line-height: 1.6;
+  }
+
+  .evidence-fields { list-style: none; margin: 0; padding: 0; }
+  .evidence-field {
+    font-size: 13.5px; font-weight: 500; color: var(--t2); line-height: 1.35;
+    cursor: default; transition: color 180ms, opacity 180ms;
+  }
+  .evidence-field.is-active { color: var(--t1); }
+  .evidence-radial.has-active .evidence-field:not(.is-active) { opacity: 0.5; }
+  .evidence-field:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; border-radius: 2px; }
+
+  @media (min-width: 961px) {
+    .evidence-radial { aspect-ratio: 1 / 1; max-width: 640px; }
+    .evidence-fields { position: static; }
+    .evidence-field {
+      position: absolute; left: var(--fx); top: var(--fy); transform: translate(-50%, -50%);
+      z-index: 3; width: 168px; text-align: center; padding: 4px 0;
+      border-bottom: 1px solid transparent;
+    }
+    .evidence-field:hover, .evidence-field:focus-visible { border-bottom-color: var(--ember); }
+  }
+
+  @media (min-width: 601px) and (max-width: 960px) {
+    .evidence-radial { aspect-ratio: 1 / 1; max-width: 420px; }
+    .evidence-fields { position: static; }
+    .evidence-field {
+      position: absolute; left: var(--fx); top: var(--fy); transform: translate(-50%, -50%);
+      z-index: 3; width: 128px; text-align: center; font-size: 12px; padding: 3px 0;
+      border-bottom: 1px solid transparent;
+    }
+    .evidence-field:hover, .evidence-field:focus-visible { border-bottom-color: var(--ember); }
+    .evidence-radial-center { max-width: 170px; padding: 14px 6px; }
+    .evidence-radial-center span { font-size: 9.5px; }
+  }
+
+  @media (max-width: 600px) {
+    .evidence-radial { display: flex; flex-direction: column; align-items: center; gap: 28px; }
+    .evidence-radial-lines { display: none; }
+    .evidence-radial-center { position: static; transform: none; }
+    .evidence-fields { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+    .evidence-field { text-align: center; padding-bottom: 6px; border-bottom: 1px solid transparent; }
+    .evidence-field:hover, .evidence-field:focus-visible { border-bottom-color: var(--ember); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .evidence-line, .evidence-dot, .evidence-field { transition: none; }
+  }
+
+  .evidence-closing { margin-top: 48px; }
+
+  /* ── IP CARDS (sistemas propios) ── */
   .ip-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
   @media (max-width: 900px) { .ip-grid { grid-template-columns: 1fr; } }
   .ip {
@@ -169,47 +246,13 @@
   .ip-media { margin: -28px -30px 20px; height: 140px; border-radius: 10px 10px 0 0; overflow: hidden; background: var(--bg); display: flex; align-items: center; justify-content: center; }
   .ip-media img { max-width: 70%; max-height: 70%; object-fit: contain; filter: grayscale(1) brightness(1.6); opacity: 0.9; }
   .ip-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
-  .ip-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); margin-bottom: 7px; }
   .ip-name { font-size: 1.1rem; font-weight: 700; color: var(--t1); }
-  .ip-badge {
-    font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
-    padding: 4px 9px; border-radius: 3px; border: 1px solid var(--border); color: var(--t3); flex-shrink: 0;
-  }
   .ip-desc { font-size: 13.5px; color: var(--t2); line-height: 1.6; margin-bottom: 12px; }
-  .ip-field-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3); display: block; margin-bottom: 4px; margin-top: 12px; }
-  .ip-field-label:first-of-type { margin-top: 0; }
-  .ip-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-top: 18px; margin-top: auto; border-top: 1px solid var(--border); }
-  .ip-stat-n { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ember); line-height: 1; }
-  .ip-stat-l { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--t3); margin-top: 5px; }
-  .svc-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; margin-top: auto; }
-  .svc-item { display: flex; gap: 10px; font-size: 12.5px; color: var(--t2); line-height: 1.4; }
-  .svc-item::before { content: '→'; font-family: var(--mono); font-size: 10px; color: var(--ember); flex-shrink: 0; padding-top: 1px; }
   .ip-case-link {
     display: inline-block; margin-top: 16px; font-family: var(--mono);
     font-size: 11px; font-weight: 500; letter-spacing: 0.04em; color: var(--ember); text-decoration: none;
   }
   .ip-case-link:hover { text-decoration: underline; }
-  .ip-case-btn {
-    display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
-    background: var(--ember-cta); color: #fff; font-family: var(--mono);
-    font-size: 10.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
-    padding: 10px 18px; border: none; border-radius: 6px; text-decoration: none;
-    transition: opacity 150ms, transform 150ms; align-self: flex-start;
-  }
-  .ip-case-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-
-  /* ── PIPELINE CREATIVO ASCENDENTE ── */
-  .pipeline-creative { display: flex; align-items: flex-end; gap: 10px; margin: 40px 0 12px; max-width: 780px; }
-  .pc-step { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 12px; }
-  .pc-bar {
-    width: 100%; border-radius: 10px 10px 3px 3px; background: var(--bg-2);
-    border: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: center;
-    padding-top: 10px; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--t2);
-  }
-  .pc-step.is-outcome .pc-bar { background: var(--ember); border-color: var(--ember); color: #fff; }
-  .pc-label { font-size: 11.5px; font-weight: 500; color: var(--t2); text-align: center; }
-  .pc-step.is-outcome .pc-label { color: var(--t1); }
-  @media (max-width: 680px) { .pipeline-creative { gap: 6px; } .pc-label { font-size: 10px; } }
 
   /* ── PATTERN ACCORDION (Como trabajo) ── */
   .accordion-wrap { display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }
