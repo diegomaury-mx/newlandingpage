@@ -1,23 +1,15 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Scaffold de migracion (subproyecto Diego CMS).
+// El sitio LIVE se construye con Astro (astro build) y se despliega via
+// Cloudflare Pages (Git integration, build automatico en cada push a
+// master). GitHub Actions/GitHub Pages fueron retirados el 2026-08-02.
 //
-// El sitio LIVE se sigue sirviendo del HTML estatico en la raiz del repo
-// (index.html, portfolio/, cases/, assets/, cv/) mediante GitHub Pages desde
-// master. Este proyecto Astro construye a dist/ y NO se despliega todavia:
-// GitHub Actions se conecta en la tarea "CMS: configurar GitHub Actions y
-// deploy automatico".
-//
-// @astrojs/sitemap genera sitemap-index.xml en dist/ (no toca el sitemap del
-// sitio LIVE en la raiz del repo, que sigue siendo estatico). Se excluye la
-// ruta raiz (placeholder de scaffold, no contenido real del CMS).
+// @astrojs/sitemap genera sitemap-index.xml (+ sitemap-0.xml) en dist/;
+// robots.txt apunta ahi (no a sitemap.xml, que no existe). Sin filtro: todas
+// las paginas Astro son contenido real del CMS, incluida la home.
 export default defineConfig({
   site: 'https://diegomaury.mx',
   output: 'static',
-  integrations: [
-    sitemap({
-      filter: (page) => page !== 'https://diegomaury.mx/',
-    }),
-  ],
+  integrations: [sitemap()],
 });
