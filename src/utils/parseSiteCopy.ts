@@ -282,7 +282,18 @@ export function testimonials(blocks: string[]): TestimonialCopy[] {
     // la anotacion de cursiva que lo envolvia en Notion, asi que sin este
     // chequeo ese texto se anida como si fuera una linea de rol/empresa del
     // ultimo testimonio leido.
-    if (block === '' || block === '---' || block.startsWith('#') || block.startsWith('*') || block.startsWith('[')) continue;
+    // El regex de UUID cubre bloques con un ID de Notion pegado suelto en el
+    // body (ej. el id de un bloque copiado por error junto al testimonio de
+    // Victor Calzadillas): sin este filtro, ese ID se renderiza como si fuera
+    // otra linea de rol/empresa.
+    if (
+      block === '' ||
+      block === '---' ||
+      block.startsWith('#') ||
+      block.startsWith('*') ||
+      block.startsWith('[') ||
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(block)
+    ) continue;
     if (!current.name) {
       current.name = block;
       continue;
