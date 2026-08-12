@@ -83,7 +83,7 @@ Tipografía: Plus Jakarta Sans (headlines, UI, body) + DM Mono (cifras, fechas, 
 
 Reglas duras (no negociables):
 1. Un solo acento ember por pieza. No cuentan como violación: logo del nav y section-labels/eyebrows (precedente aceptado).
-2. Sin gradientes, drop-shadows, blur ni glow decorativos. Excepciones aprobadas: overlays de imagen para legibilidad y `backdrop-filter: blur()` en nav sticky.
+2. Sin gradientes, drop-shadows, blur ni glow decorativos. Excepciones aprobadas: overlays de imagen para legibilidad, `backdrop-filter: blur()` en nav sticky, y `mask-image`/`-webkit-mask-image: linear-gradient(...)` para fundidos de borde (ej. marquesina de logos en `home.css`) — es una técnica de legibilidad de recorte, no un gradiente decorativo de fondo.
 3. Nunca `--dm-*` nuevos. Los `--dm-*` existentes en `assets/css/styles.css` son alias de compatibilidad que ya resuelven a los tokens V2 (`--dm-ink: var(--bg)`, etc.) — usados por las 4 páginas de caso legacy LIVE, no se retiran sin decisión aparte.
 4. `:focus-visible` en todo elemento interactivo: `outline: 2px solid var(--ember); outline-offset: 2px;`
 5. Logo de marca: `assets/img/isotipo-ember.svg` en todo nav/footer. `isotipodm.svg` solo como textura de fondo `.bg-pattern` (opacidad 0.02–0.03) — no modificar ese patrón.

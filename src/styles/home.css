@@ -118,7 +118,7 @@
   .flow-diagram { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; max-width: 780px; margin: 32px auto; }
   .flow-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 16px; padding: 20px 22px; flex: 1; min-width: 160px; }
   .flow-card-head {
-    font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+    font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--ember); margin-bottom: 16px; display: flex; align-items: center; gap: 9px;
   }
   .flow-card-head::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ember); flex-shrink: 0; }
@@ -127,7 +127,7 @@
   .flow-list li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 7px; height: 1px; background: var(--t3); }
   .flow-connector { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 18px; flex-shrink: 0; }
   .flow-connector-line { width: 20px; height: 1px; background: var(--border); }
-  .flow-connector-label { font-family: var(--mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3); }
+  .flow-connector-label { font-family: var(--mono); font-size: 9.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3); }
   .flow-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
   .flow-chip {
     font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--t1);
@@ -139,7 +139,7 @@
   .cap-table { width: 100%; border-collapse: collapse; margin: 28px 0; }
   .cap-table th, .cap-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--t2); }
   .cap-table th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3); font-weight: 500; }
-  .cap-table td:first-child { color: var(--t1); font-weight: 600; }
+  .cap-table td:first-child { color: var(--t1); font-weight: 500; }
 
   /* ── IP CARDS (evidencia + sistemas propios) ── */
   .ip-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
@@ -171,13 +171,13 @@
   .svc-item::before { content: '→'; font-family: var(--mono); font-size: 10px; color: var(--ember); flex-shrink: 0; padding-top: 1px; }
   .ip-case-link {
     display: inline-block; margin-top: 16px; font-family: var(--mono);
-    font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--ember); text-decoration: none;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.04em; color: var(--ember); text-decoration: none;
   }
   .ip-case-link:hover { text-decoration: underline; }
   .ip-case-btn {
     display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
     background: var(--ember-cta); color: #fff; font-family: var(--mono);
-    font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    font-size: 10.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
     padding: 10px 18px; border: none; border-radius: 6px; text-decoration: none;
     transition: opacity 150ms, transform 150ms; align-self: flex-start;
   }
@@ -192,7 +192,7 @@
     padding-top: 10px; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--t2);
   }
   .pc-step.is-outcome .pc-bar { background: var(--ember); border-color: var(--ember); color: #fff; }
-  .pc-label { font-size: 11.5px; font-weight: 600; color: var(--t2); text-align: center; }
+  .pc-label { font-size: 11.5px; font-weight: 500; color: var(--t2); text-align: center; }
   .pc-step.is-outcome .pc-label { color: var(--t1); }
   @media (max-width: 680px) { .pipeline-creative { gap: 6px; } .pc-label { font-size: 10px; } }
 
