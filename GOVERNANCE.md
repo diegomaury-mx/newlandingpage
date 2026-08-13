@@ -42,7 +42,7 @@ Community input is useful, especially for portfolio clarity and usability:
 
 ## Project Goals
 - Position NewLandingPage as Diego Maury's professional portfolio with clear positioning and measurable outcomes
-- Keep the site fast, portable, and simple to deploy on GitHub Pages
+- Keep the site fast, portable, and simple to deploy on Cloudflare Pages
 - Maintain high readability, responsive behavior, and strong content quality
 
 ## Workspace Alignment
