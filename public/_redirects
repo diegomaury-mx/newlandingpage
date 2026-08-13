@@ -8,3 +8,9 @@
 # URL pre-Astro sin prefijo /portfolio/, indexada en Search Console (baseline
 # 2026-08-03) y hoy 404 en el sitio live.
 /hacksureste /portfolio/hacksureste/ 301
+
+# ideaLab by HackSureste (ficha Soporte) se fusiono dentro de la ficha
+# HackSureste el 2026-08-13 (auditoria de contenido 2026-08-11, hallazgo 5):
+# no aportaba dato propio como pagina independiente. La ficha paso a
+# Estado publicacion=Archivado, asi que ya no genera pagina propia.
+/portfolio/idealab-by-hacksureste /portfolio/hacksureste/ 301

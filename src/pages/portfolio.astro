@@ -46,8 +46,12 @@ const insignia = published.filter((c) => c.data.layer === 'Insignia');
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
 const archivo = allCases.filter((c) => c.data.layer === 'Archivo');
 
-const featured = insignia[0];
-const restInsignia = insignia.slice(1);
+// El featured prioriza el primer caso con evidencia verificada (al menos un
+// ✔ en su tabla de Evidencia) en vez del primero por orden de Notion (no
+// determinista): abrir con un caso sin verificar delataba el hueco de
+// evidencia del portafolio antes de que el visitante viera nada probado.
+const featured = insignia.find(hasEvidence) ?? insignia[0];
+const restInsignia = insignia.filter((c) => c !== featured);
 
 const totalPublicadas = insignia.length + soporte.length;
 const conEvidencia = [...insignia, ...soporte].filter(hasEvidence).length;
