@@ -83,7 +83,7 @@ Reglas duras (no negociables):
 3. Nunca `--dm-*` nuevos. Los `--dm-*` existentes en `assets/css/styles.css` son alias de compatibilidad que ya resuelven a los tokens V2 (`--dm-ink: var(--bg)`, etc.) — usados por las 3 páginas de caso legacy LIVE (heineken, redux-incmty, innovation-systems), no se retiran sin decisión aparte.
 4. `:focus-visible` en todo elemento interactivo: `outline: 2px solid var(--ember); outline-offset: 2px;`
 5. Logo de marca: `assets/img/isotipo-ember.svg` en todo nav/footer. `isotipodm.svg` solo como textura de fondo `.bg-pattern` (opacidad 0.02–0.03) — no modificar ese patrón.
-6. Pesos tipográficos: solo {300, 400, 500, 700} (800 no existe en la escala del DS). Titulares con tamaño >48px (en su punto máximo del `clamp`) usan peso 300 (regla D4 del Manual de Marca); el resto de headlines usa máximo 700.
+6. Pesos tipográficos: solo {300, 400, 500, 700} (800 no existe en la escala del DS). Titulares con tamaño >48px (en su punto máximo del `clamp`) usan peso 300 (regla D4 del Manual de Marca); el resto de headlines usa máximo 700. **Excepción aprobada (2026-08-13):** el `<h1>` del hero de `index.astro` (`.hero-h1`, clamp hasta 4rem/64px) usa peso 500 — decisión explícita de Diego al revisar el mockup en Claude Design, no un error de build. No "corregirlo" a 300 esperando cumplir D4 al pie de la letra.
 7. Radios de borde en la escala {0, 3(XS, badges/tags), 6(SM, botones/inputs), 10(MD, cards/paneles), 16(LG, modales/hero cards)}px. Pills (chips totalmente redondeados) son la única excepción válida fuera de escala, con `border-radius: 999px`.
 
 Gotchas y excepciones del DS:

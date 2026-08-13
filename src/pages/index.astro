@@ -191,6 +191,12 @@ const EVIDENCE_FIELDS = evidenceFieldLabels.map((label, i) => ({ key: `field-${i
 // queda notoriamente mas corto que el radio del texto (EVIDENCE_NODE_RADIUS).
 const EVIDENCE_NODE_RADIUS = 40;
 const EVIDENCE_DOT_RADIUS = 31;
+// Medio ancho/alto (en el mismo sistema 0-100) de la caja del nodo central:
+// el punto de arranque de cada linea se recorta al borde de esa caja en vez
+// de partir del centro exacto (50,50), para que ninguna linea atraviese el
+// texto "La misma metodologia. Distintas industrias."
+const EVIDENCE_CENTER_HALF_WIDTH = 21;
+const EVIDENCE_CENTER_HALF_HEIGHT = 11;
 function evidencePoint(index: number, total: number, radius: number): { x: number; y: number } {
   const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
   return {
@@ -198,10 +204,24 @@ function evidencePoint(index: number, total: number, radius: number): { x: numbe
     y: Math.round((50 + radius * Math.sin(angle)) * 100) / 100,
   };
 }
+function evidenceLineStart(index: number, total: number): { x: number; y: number } {
+  const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  const t = Math.min(
+    Math.abs(c) > 1e-6 ? EVIDENCE_CENTER_HALF_WIDTH / Math.abs(c) : Infinity,
+    Math.abs(s) > 1e-6 ? EVIDENCE_CENTER_HALF_HEIGHT / Math.abs(s) : Infinity,
+  );
+  return {
+    x: Math.round((50 + t * c) * 100) / 100,
+    y: Math.round((50 + t * s) * 100) / 100,
+  };
+}
 const evidenceNodes = EVIDENCE_FIELDS.map((field, i) => ({
   ...field,
   node: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_NODE_RADIUS),
   dot: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_DOT_RADIUS),
+  lineStart: evidenceLineStart(i, EVIDENCE_FIELDS.length),
 }));
 
 // --- S5 · Como trabajo -----------------------------------------------------
@@ -490,7 +510,7 @@ const personJsonLd = {
       <div class="evidence-radial" data-reveal style="--delay:.18s" id="evidenceRadial">
         <svg class="evidence-radial-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           {evidenceNodes.map((n) => (
-            <line class="evidence-line" data-field={n.key} x1="50" y1="50" x2={n.dot.x} y2={n.dot.y}></line>
+            <line class="evidence-line" data-field={n.key} x1={n.lineStart.x} y1={n.lineStart.y} x2={n.dot.x} y2={n.dot.y}></line>
           ))}
           {evidenceNodes.map((n) => (
             <circle class="evidence-dot" data-field={n.key} cx={n.dot.x} cy={n.dot.y} r="1.4"></circle>
