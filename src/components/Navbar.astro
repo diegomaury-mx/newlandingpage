@@ -14,8 +14,8 @@ interface Props {
 const {
   heroName = site.brand.name,
   brandHref = "/",
-  ctaHref,
-  ctaLabel,
+  ctaHref = site.links.scheduling,
+  ctaLabel = "Hagamos que las cosas pasen",
   backHref,
   badge,
 }: Props = Astro.props;
@@ -28,20 +28,15 @@ const {
       class="nav-brand"
       aria-label={`${heroName}, Inicio`}
     >
-      <span class="nav-mark">
-        <img
-          src={site.brand.logo}
-          width="28"
-          height="28"
-          alt=""
-          loading="eager"
-          decoding="async"
-        />
-      </span>
-
-      <span class="nav-name">
-        {heroName}
-      </span>
+      <img
+        src={site.brand.logoHorizontal}
+        class="nav-logo"
+        width="161"
+        height="34"
+        alt={heroName}
+        loading="eager"
+        decoding="async"
+      />
     </a>
 
     <div class="nav__links">
@@ -75,6 +70,8 @@ const {
         <a
           class="nav-cta"
           href={ctaHref}
+          target={ctaHref.startsWith("http") ? "_blank" : undefined}
+          rel={ctaHref.startsWith("http") ? "noopener" : undefined}
         >
           {ctaLabel}
         </a>

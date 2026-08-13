@@ -402,28 +402,28 @@ const personJsonLd = {
 <!-- S2 QUIEN SOY -->
 <section class="about-section" id={SECTION_IDS.S2}>
   <div class="about-body">
-    <div class="about-left" data-reveal>
-      <div>
-        <div class="about-name">{heroName || 'Diego Maury'}</div>
-        {heroRole && <div class="about-title-txt">{heroRole}</div>}
-      </div>
+    <div class="about-header" data-reveal>
+      <div class="about-name">{heroName || 'Diego Maury'}</div>
+      {heroRole && <div class="about-title-txt">{heroRole}</div>}
       {aboutTagline && <p class="about-tagline">{aboutTagline}</p>}
-      {aboutIntro.length > 0 && (
-        <div class="about-intro-full" data-reveal style="--delay:.14s">
-          {aboutIntro.map((p) => <p class="about-intro-p">{p}</p>)}
-        </div>
-      )}
-      {aboutRoles.length > 0 && (
-        <div class="about-roles">
-          {aboutRoles.map((role) => (
-            <div class="about-role">
-              <div class="about-role-dot"></div>
-              <div class="about-role-txt">{role}</div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
+
+    {aboutIntro.length > 0 && (
+      <div class="about-intro-full" data-reveal style="--delay:.14s">
+        {aboutIntro.map((p) => <p class="about-intro-p">{p}</p>)}
+      </div>
+    )}
+
+    {aboutRoles.length > 0 && (
+      <div class="about-roles" data-reveal style="--delay:.18s">
+        {aboutRoles.map((role) => (
+          <div class="about-role">
+            <div class="about-role-dot"></div>
+            <div class="about-role-txt">{role}</div>
+          </div>
+        ))}
+      </div>
+    )}
 
     <div class="about-photo-wrap" data-reveal style="--delay:.1s">
       <div class="about-circle-bg"></div>
@@ -432,7 +432,7 @@ const personJsonLd = {
       </div>
     </div>
 
-    <div class="about-right" data-reveal style="--delay:.18s">
+    <div class="about-right" data-reveal style="--delay:.22s">
       {aboutBio && <p class="about-bio">{aboutBio}</p>}
       {aboutHeadline && <p class="about-bio">{aboutHeadline}</p>}
     </div>
@@ -502,41 +502,44 @@ const personJsonLd = {
 <!-- S4 EVIDENCIA -->
 <section class="section" id={SECTION_IDS.S4}>
   <div class="section-inner">
-    <div class="section-label" data-reveal>{evidenceLabel}</div>
-    {evidenceTitle && <h2 class="section-title" data-reveal style="--delay:.06s">{evidenceTitle}</h2>}
-    {evidenceIntroText && <p class="section-sub" data-reveal style="--delay:.1s">{evidenceIntroText}</p>}
-
-    {evidenceCenterNode && evidenceNodes.length > 0 && (
-      <div class="evidence-radial" data-reveal style="--delay:.18s" id="evidenceRadial">
-        <svg class="evidence-radial-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          {evidenceNodes.map((n) => (
-            <line class="evidence-line" data-field={n.key} x1={n.lineStart.x} y1={n.lineStart.y} x2={n.dot.x} y2={n.dot.y}></line>
-          ))}
-          {evidenceNodes.map((n) => (
-            <circle class="evidence-dot" data-field={n.key} cx={n.dot.x} cy={n.dot.y} r="1.4"></circle>
-          ))}
-        </svg>
-        {evidenceCenterNode && (
-          <div class="evidence-radial-center">
-            <span>{evidenceCenterNode}</span>
-          </div>
-        )}
-        <ul class="evidence-fields">
-          {evidenceNodes.map((n, i) => (
-            <li
-              class={`evidence-field evidence-field-${i}`}
-              style={`--fx:${n.node.x}%; --fy:${n.node.y}%`}
-              data-field={n.key}
-              tabindex="0"
-            >
-              {n.label}
-            </li>
-          ))}
-        </ul>
+    <div class="evidence-grid">
+      <div class="evidence-copy">
+        <div class="section-label" data-reveal>{evidenceLabel}</div>
+        {evidenceTitle && <h2 class="section-title" data-reveal style="--delay:.06s">{evidenceTitle}</h2>}
+        {evidenceIntroText && <p class="section-sub" data-reveal style="--delay:.1s">{evidenceIntroText}</p>}
+        {evidenceClosing && <p class="section-sub evidence-closing" data-reveal style="--delay:.3s">{evidenceClosing}</p>}
       </div>
-    )}
 
-    {evidenceClosing && <p class="section-sub evidence-closing" data-reveal style="--delay:.3s">{evidenceClosing}</p>}
+      {evidenceCenterNode && evidenceNodes.length > 0 && (
+        <div class="evidence-radial" data-reveal style="--delay:.18s" id="evidenceRadial">
+          <svg class="evidence-radial-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            {evidenceNodes.map((n) => (
+              <line class="evidence-line" data-field={n.key} x1={n.lineStart.x} y1={n.lineStart.y} x2={n.dot.x} y2={n.dot.y}></line>
+            ))}
+            {evidenceNodes.map((n) => (
+              <circle class="evidence-dot" data-field={n.key} cx={n.dot.x} cy={n.dot.y} r="1.4"></circle>
+            ))}
+          </svg>
+          {evidenceCenterNode && (
+            <div class="evidence-radial-center">
+              <span>{evidenceCenterNode}</span>
+            </div>
+          )}
+          <ul class="evidence-fields">
+            {evidenceNodes.map((n, i) => (
+              <li
+                class={`evidence-field evidence-field-${i}`}
+                style={`--fx:${n.node.x}%; --fy:${n.node.y}%`}
+                data-field={n.key}
+                tabindex="0"
+              >
+                {n.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   </div>
 </section>
 

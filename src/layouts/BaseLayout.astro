@@ -15,6 +15,8 @@ interface Props {
   ogImage?: string;
   jsonLd?: unknown;
   enableGtm?: boolean;
+  ctaHref?: string;
+  ctaLabel?: string;
 }
 
 const {
@@ -25,6 +27,8 @@ const {
   ogImage,
   jsonLd,
   enableGtm = false,
+  ctaHref = site.links.scheduling,
+  ctaLabel = "Hagamos que las cosas pasen",
 }: Props = Astro.props;
 ---
 
@@ -155,7 +159,7 @@ const {
   <body>
     {enableGtm && <script is:inline src="/js/gtm.js"></script>}
 
-    <Navbar />
+    <Navbar ctaHref={ctaHref} ctaLabel={ctaLabel} />
 
     <main>
       <slot />

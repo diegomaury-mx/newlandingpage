@@ -31,31 +31,13 @@
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
 }
 
-.nav-mark {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav-mark img {
-  width: 28px;
-  height: 28px;
+.nav-logo {
+  height: 34px;
+  width: auto;
   display: block;
-}
-
-.nav-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--t1);
-  letter-spacing: -0.01em;
 }
 
 .nav__links {
