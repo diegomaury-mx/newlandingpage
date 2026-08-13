@@ -40,6 +40,7 @@
 | `year` | select | `year` | — | usar `year`, no `[DEPRECADO] Año` |
 | `banner`, `logo` | file | `banner`, `logo` | `undefined` | assets |
 | `Contexto tarjeta` | text | `cardContext` | `''` | agregada 2026-07-23, no estaba en la propuesta original; frase corta (~160 car.) para tarjeta, separada de `Rol de Diego` para no truncar texto pensado para la página completa |
+| `Reflexión` | text | `reflection` | `''` | agregada 2026-08-11 (rediseño CAR, ver `docs/superpowers/specs/2026-08-11-case-template-car-redesign-design.md`); cierre editable sin tocar el `body`. Se renderiza como sección final de la página de caso solo si no está vacía |
 | Cuerpo de la página (contenido de la ficha) | rich text | `body` (Markdown, no MDX real) | `''` | fuente narrativa única: contexto, problema, sistema, autopsia y bloque de evidencia ✔/✖ viven aquí, no en propiedades. Implementado 2026-07-23 vía `blocksToMarkdown`; también alimenta `resultHeadline` (primer H1) y `hasVerifiedEvidence` (¿al menos un ✔ en la tabla de Evidencia?) |
 
 **No migrar:** las 5 propiedades `[DEPRECADO] *` (se eliminan al cerrar Fase B1, no se mapean a Zod).

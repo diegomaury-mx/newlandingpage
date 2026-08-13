@@ -72,6 +72,11 @@ const cases = defineCollection({
       // Cuerpo completo de la ficha (Contexto, Problema, Sistema, Evidencia,
       // etc.), aplanado a Markdown. Fuente narrativa para la pagina de caso.
       body: z.string().default(''),
+      // Reflexion de cierre, propiedad independiente del body (Notion:
+      // "Reflexión") para poder editarla sin tocar el resto de la narrativa.
+      // Vacia hasta que se llena; la seccion final de la pagina de caso no
+      // se renderiza si esta vacia (ver [slug].astro).
+      reflection: z.string().default(''),
       // draft = NOT (Estado publicación == "Publicado" AND Publicable == true)
       draft: z.boolean().default(true),
     })

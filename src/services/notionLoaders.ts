@@ -243,6 +243,7 @@ async function mapCase(page: PageObjectResponse): Promise<Record<string, unknown
     banner: getFileUrls(page, "banner")[0],
     logo: getFileUrls(page, "logo")[0],
     body: blocksToMarkdown(blocks),
+    reflection: getRichText(page, "Reflexión"),
     // draft = NOT (Publicado AND Publicable) — contrato, regla de publicacion.
     draft: !(publicationStatus === "Publicado" && publishable),
   };
