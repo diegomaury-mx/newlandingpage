@@ -11,6 +11,7 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { renderMarkdown, extractSections } from '../../utils/markdown.ts';
 import { slugify } from '../../utils/slug.ts';
+import { toEmbeddableVideoUrl } from '../../utils/embedVideo.ts';
 import '../../styles/case.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
@@ -88,24 +89,17 @@ const creativeWorkJsonLd = {
   {entry.data.banner && (
     <div class="case-hero">
       <img src={entry.data.banner} alt={entry.data.title} width="1600" height="320" />
-      {entry.data.logo && <img class="case-hero__logo" src={entry.data.logo} alt="" aria-hidden="true" width="56" height="56" />}
     </div>
   )}
 
   <div class="wrap-case">
     <div class="case-split">
       <aside class="case-rail">
+        {entry.data.logo && (
+          <img class="case-rail__logo" src={entry.data.logo} alt={entry.data.organization ?? entry.data.title} width="120" height="28" />
+        )}
         <div class="meta">{entry.data.organization ?? '—'} · {entry.data.year ?? '—'} · {entry.data.type ?? '—'}</div>
         <h1>{displayTitle}</h1>
-
-        <div class="rail-block">
-          <div class="label">Evidencia</div>
-          {entry.data.hasVerifiedEvidence ? (
-            <span class="badge--ok">✔ Verificada en este caso</span>
-          ) : (
-            <span class="badge--no">✖ Pendiente de verificar</span>
-          )}
-        </div>
 
         <div class="rail-block">
           <div class="label">Métrica ancla</div>
@@ -144,11 +138,25 @@ const creativeWorkJsonLd = {
         )}
         {entry.data.evidenceVideos.length > 0 && (
           <div class="evidence-video-list">
-            {entry.data.evidenceVideos.map((video) => (
-              <a class="evidence-video-link" href={video.url} target="_blank" rel="noopener">{video.label}</a>
-            ))}
+            {entry.data.evidenceVideos.map((video) => {
+              const embedSrc = toEmbeddableVideoUrl(video.url);
+              return embedSrc ? (
+                <div class="evidence-video-embed">
+                  <iframe src={embedSrc} title={video.label} loading="lazy" allowfullscreen></iframe>
+                </div>
+              ) : (
+                <a class="evidence-video-link" href={video.url} target="_blank" rel="noopener">{video.label}</a>
+              );
+            })}
           </div>
         )}
+      </section>
+    )}
+
+    {entry.data.reflection.trim() && (
+      <section class="case-reflection">
+        <div class="eyebrow">Reflexión</div>
+        <p>{entry.data.reflection}</p>
       </section>
     )}
 
