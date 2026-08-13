@@ -388,6 +388,11 @@ const personJsonLd = {
         {heroRole && <div class="about-title-txt">{heroRole}</div>}
       </div>
       {aboutTagline && <p class="about-tagline">{aboutTagline}</p>}
+      {aboutIntro.length > 0 && (
+        <div class="about-intro-full" data-reveal style="--delay:.14s">
+          {aboutIntro.map((p) => <p class="about-intro-p">{p}</p>)}
+        </div>
+      )}
       {aboutRoles.length > 0 && (
         <div class="about-roles">
           {aboutRoles.map((role) => (
@@ -411,12 +416,6 @@ const personJsonLd = {
       {aboutBio && <p class="about-bio">{aboutBio}</p>}
       {aboutHeadline && <p class="about-bio">{aboutHeadline}</p>}
     </div>
-
-    {aboutIntro.length > 0 && (
-      <div class="about-intro-full" data-reveal style="--delay:.14s">
-        {aboutIntro.map((p) => <p class="about-intro-p">{p}</p>)}
-      </div>
-    )}
   </div>
   {aboutStats.length > 0 && (
     <div style="max-width:1160px;margin:0 auto;padding:0 32px">

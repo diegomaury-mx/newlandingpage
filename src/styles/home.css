@@ -105,17 +105,15 @@
   @media (max-width: 960px) { .about-right { align-items: center; } .about-bio { text-align: center; } }
 
   .about-intro-full {
-    grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px;
-    padding-top: 32px; border-top: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 16px;
+    padding-top: 8px;
   }
-  .about-intro-p { font-size: 14px; color: var(--t2); line-height: 1.7; max-width: none; }
+  .about-intro-p { font-size: 14px; color: var(--t2); line-height: 1.7; max-width: 36ch; }
   .about-intro-p strong { color: var(--t1); }
   @media (max-width: 960px) {
-    .about-intro-full { text-align: center; }
-    .about-left { order: 1; }
-    .about-intro-full { order: 2; }
-    .about-photo-wrap { order: 3; }
-    .about-right { order: 4; }
+    .about-intro-p { max-width: none; }
+    .about-photo-wrap { order: 2; }
+    .about-right { order: 3; }
   }
 
   /* ── PROBLEMA ── */
