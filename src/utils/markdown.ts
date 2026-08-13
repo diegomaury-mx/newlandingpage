@@ -25,7 +25,7 @@ function renderInline(text: string): string {
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 }
 
-function renderTable(lines: string[]): string {
+function parseTableRows(lines: string[]): { header: string[]; body: string[][] } {
   const rows = lines.map((line) =>
     line
       .trim()
@@ -33,14 +33,54 @@ function renderTable(lines: string[]): string {
       .split("|")
       .map((cell) => cell.trim()),
   );
-  const [header, separator, ...body] = rows;
+  const [header, separator, ...rest] = rows;
   const isSeparator = separator?.every((cell) => /^-+$/.test(cell));
-  const bodyRows = isSeparator ? body : rows.slice(1);
+  const body = isSeparator ? rest : rows.slice(1);
+  return { header, body };
+}
+
+function renderTable(lines: string[]): string {
+  const { header, body } = parseTableRows(lines);
   const headHtml = header.map((cell) => `<th>${renderInline(cell)}</th>`).join("");
-  const bodyHtml = bodyRows
+  const bodyHtml = body
     .map((row) => `<tr>${row.map((cell) => `<td>${renderInline(cell)}</td>`).join("")}</tr>`)
     .join("");
   return `<div class="prose-table"><table><thead><tr>${headHtml}</tr></thead><tbody>${bodyHtml}</tbody></table></div>`;
+}
+
+const RESULT_SECTION_ID = "resultado";
+const RESULT_TABLE_HEADERS = ["Métrica", "Antes", "Después"];
+
+/** true solo si los encabezados coinciden exacto, en orden — el fallback (renderTable) cubre cualquier otro caso. */
+function isResultTableHeader(header: string[]): boolean {
+  if (header.length !== RESULT_TABLE_HEADERS.length) return false;
+  return header.every((cell, i) => cell === RESULT_TABLE_HEADERS[i]);
+}
+
+/** Separa "30 (+500%)" en { value: "30", delta: "+500%" }; sin paréntesis, delta es null. */
+function splitDelta(cell: string): { value: string; delta: string | null } {
+  const match = cell.trim().match(/^(.*?)\s*\(([+-][^)]+)\)$/);
+  if (!match) return { value: cell.trim(), delta: null };
+  return { value: match[1].trim(), delta: match[2].trim() };
+}
+
+function renderResultCards(bodyRows: string[][]): string {
+  const cards = bodyRows
+    .map(([metric = "", before = "", afterRaw = ""]) => {
+      const { value, delta } = splitDelta(afterRaw);
+      const beforeTrimmed = before.trim();
+      const showBefore = beforeTrimmed !== "" && beforeTrimmed !== "—" && beforeTrimmed !== "-";
+      const beforeHtml = showBefore
+        ? `<div class="rc-before">Antes: <s>${renderInline(beforeTrimmed)}</s></div>`
+        : "";
+      const deltaHtml = delta ? `<div class="rc-delta">${renderInline(delta)}</div>` : "";
+      return (
+        `<div class="result-card"><div class="rc-label">${renderInline(metric)}</div>` +
+        `<div class="rc-value">${renderInline(value)}</div>${beforeHtml}${deltaHtml}</div>`
+      );
+    })
+    .join("");
+  return `<div class="result-grid">${cards}</div>`;
 }
 
 /** Convierte el Markdown plano de un caso a HTML listo para `set:html`. */
@@ -48,6 +88,7 @@ export function renderMarkdown(markdown: string): string {
   if (!markdown.trim()) return "";
   const blocks = markdown.split(/\n{2,}/);
   const html: string[] = [];
+  let currentSectionId = "";
 
   for (const block of blocks) {
     const trimmed = block.trim();
@@ -57,12 +98,18 @@ export function renderMarkdown(markdown: string): string {
     if (trimmed === "---") {
       html.push("<hr />");
     } else if (lines.every((line) => line.trim().startsWith("|"))) {
-      html.push(renderTable(lines));
+      const { header, body } = parseTableRows(lines);
+      if (currentSectionId === RESULT_SECTION_ID && isResultTableHeader(header)) {
+        html.push(renderResultCards(body));
+      } else {
+        html.push(renderTable(lines));
+      }
     } else if (trimmed.startsWith("### ")) {
       html.push(`<h3>${renderInline(trimmed.slice(4))}</h3>`);
     } else if (trimmed.startsWith("## ")) {
       const heading = trimmed.slice(3);
-      html.push(`<h2 id="${slugify(heading)}">${renderInline(heading)}</h2>`);
+      currentSectionId = slugify(heading);
+      html.push(`<h2 id="${currentSectionId}">${renderInline(heading)}</h2>`);
     } else if (trimmed.startsWith("# ")) {
       html.push(`<h1>${renderInline(trimmed.slice(2))}</h1>`);
     } else if (lines.every((line) => line.trim().startsWith("- "))) {
