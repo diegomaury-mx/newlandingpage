@@ -93,18 +93,54 @@ const heroCtas = ctaLabels(s1);
 const heroLogosLine = heroParas[3] ?? '';
 const heroLogoNames = heroLogosLine.replace(/^Logos sugeridos:\s*/i, '').split('·').map((s) => s.trim()).filter(Boolean);
 
-const LOGO_MAP: Record<string, { src: string; alt: string }> = {
-  HEINEKEN: { src: slotSrc('logo-heineken', '/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png'), alt: 'HEINEKEN Mexico' },
-  'Tecnológico de Monterrey': { src: slotSrc('logo-tec-de-monterrey', '/cms-media/logos/tec%20de%20monterrey.png'), alt: 'Tecnológico de Monterrey' },
-  INCmty: { src: slotSrc('logo-incmty', '/cms-media/logos/incmty.png'), alt: 'INCmty' },
-  EBC: { src: slotSrc('logo-ebc', '/cms-media/logos/EBC.png'), alt: 'EBC' },
-  // FlipHouse deliberadamente fuera de este mapa (2026-08-11): es el cliente
-  // real y confidencial detras del caso SOFI/PropTech. Mostrar su logo en el
-  // trust bar del home desanonimiza el caso al instante. No reintroducir esta
-  // entrada aunque "FlipHouse" siga apareciendo en la linea "Logos sugeridos"
-  // de Notion S1 — ese texto tambien debe corregirse (ver CLAUDE.md).
+// Fallbacks hardcodeados solo para los 4 logos originales (pre-CMS dinamico).
+// Un logo nuevo agregado desde Notion no necesita fallback aqui: si su slot
+// no esta "Listo" en CMS Imagenes, simplemente no se renderiza (ver
+// resolveLogo) en vez de romper con una ruta que no existe.
+const LOGO_FALLBACKS: Record<string, string> = {
+  HEINEKEN: '/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png',
+  'Tecnológico de Monterrey': '/cms-media/logos/tec%20de%20monterrey.png',
+  INCmty: '/cms-media/logos/incmty.png',
+  EBC: '/cms-media/logos/EBC.png',
 };
-const heroLogos = heroLogoNames.map((name) => LOGO_MAP[name]).filter(Boolean);
+
+// FlipHouse deliberadamente bloqueado (2026-08-11): es el cliente real y
+// confidencial detras del caso SOFI/PropTech. Mostrar su logo en el trust bar
+// del home desanonimiza el caso al instante. No quitar este guardrail aunque
+// "FlipHouse" siga apareciendo en la linea "Logos sugeridos" de Notion S1 —
+// ese texto tambien debe corregirse (ver CLAUDE.md).
+const BLOCKED_LOGO_NAMES = new Set(['flipHouse'.toLowerCase()]);
+
+// El slot id de Notion es texto libre tecleado por Diego, no auto-generado —
+// "Tecnológico de Monterrey" ya vive como `logo-tec-de-monterrey` (abreviado),
+// no como el slug literal del nombre completo. Excepciones a la convencion
+// por defecto van aqui para no romper filas ya creadas en CMS Imagenes.
+const LOGO_SLOT_OVERRIDES: Record<string, string> = {
+  'Tecnológico de Monterrey': 'logo-tec-de-monterrey',
+};
+
+function slugifyLogoName(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-+|-+$)/g, '');
+}
+
+// Cinturon de logos 100% dinamico desde Notion (2026-08-13): agregar un logo
+// nuevo ya no requiere tocar este archivo — solo (1) sumar el nombre a la
+// linea "Logos sugeridos" en S1 y (2) crear su fila en CMS Imagenes con slot
+// `logo-<nombre-slugificado>` (o la excepcion de LOGO_SLOT_OVERRIDES) en
+// Estado "Listo". Un slot ausente o no listo se omite del cinturon en vez de
+// mostrar una imagen rota.
+function resolveLogo(name: string): { src: string; alt: string } | null {
+  if (BLOCKED_LOGO_NAMES.has(name.toLowerCase())) return null;
+  const slotId = LOGO_SLOT_OVERRIDES[name] ?? `logo-${slugifyLogoName(name)}`;
+  const src = slotSrc(slotId, LOGO_FALLBACKS[name] ?? '');
+  return src ? { src, alt: name } : null;
+}
+const heroLogos = heroLogoNames.map(resolveLogo).filter((logo): logo is { src: string; alt: string } => logo !== null);
 
 function systemsLogo(title: string): { src: string; alt: string } | null {
   const key = title.toLowerCase();
@@ -248,13 +284,15 @@ const systemsClosing = paragraphs(blocksAfterHeading(s6, '## El verdadero entreg
 
 // Los 3 sistemas propios (REDUX, HackSureste Ops, SOFI) enlazan a la pagina
 // de caso real cuando existe. SOFI vive en la coleccion `cases` de Astro;
-// REDUX y HackSureste Ops solo tienen ficha legacy estatica servida via
-// public/portfolio/redux-incmty.html (ver CLAUDE.md, "Decisiones cerradas":
-// portfolio/redux-incmty.html congelado por REM-005).
+// HackSureste Ops enlaza al caso real del CMS (/portfolio/hacksureste,
+// decision 2026-08-13 que reemplaza el mapping legacy congelado por REM-005,
+// obsoleto desde que ese caso se publico en el CMS). REDUX sigue sin ficha
+// propia en el CMS, solo la legacy estatica public/portfolio/redux-incmty.html.
 function systemsCaseLink(title: string): string | null {
   const key = title.toLowerCase();
   if (key.includes('sofi')) return '/portfolio/sofi';
-  if (key.includes('redux') || key.includes('hacksureste')) return '/portfolio/redux-incmty.html';
+  if (key.includes('hacksureste')) return '/portfolio/hacksureste';
+  if (key.includes('redux')) return '/portfolio/redux-incmty.html';
   return null;
 }
 
@@ -289,7 +327,7 @@ interface CtaTarget {
 
 function ctaTarget(label: string): CtaTarget {
   const l = label.toLowerCase();
-  if (l.includes('caso') || l.includes('portafolio')) return { href: `#${SECTION_IDS.S4}` };
+  if (l.includes('caso') || l.includes('portafolio')) return { href: '/portfolio' };
   if (l.includes('cv')) return { href: CV_HREF, download: true };
   if (l.includes('linkedin')) return { href: LINKEDIN_HREF, external: true };
   if (l.includes('correo')) return { href: MAIL_HREF };
