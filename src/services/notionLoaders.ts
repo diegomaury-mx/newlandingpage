@@ -286,6 +286,7 @@ export function mapImageSlot(page: PageObjectResponse): Record<string, unknown> 
     formatRequired: getSelect(page, "Formato requerido"),
     status: getStatus(page, "Estado"),
     description: getRichText(page, "Descripcion"),
+    nombre: getRichText(page, "Nombre"),
   };
 }
 

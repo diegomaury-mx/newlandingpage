@@ -170,6 +170,10 @@ const imageSlots = defineCollection({
     formatRequired: z.string().optional(),
     status: z.enum(['Sin empezar', 'En curso', 'Listo']).optional(),
     description: z.string().default(''),
+    // Nombre de display (con acentos/mayusculas correctas) para el alt de
+    // logos renderizados directo desde el CMS, sin pasar por copy de Notion
+    // S1 (ver cinturon de logos, 2026-08-14).
+    nombre: z.string().default(''),
   }),
 });
 

@@ -90,57 +90,28 @@ const heroParas = paragraphs(s1);
 const heroRole = heroParas[0] ?? '';
 const heroSub = heroParas[1] ?? '';
 const heroCtas = ctaLabels(s1);
-const heroLogosLine = heroParas[3] ?? '';
-const heroLogoNames = heroLogosLine.replace(/^Logos sugeridos:\s*/i, '').split('·').map((s) => s.trim()).filter(Boolean);
-
-// Fallbacks hardcodeados solo para los 4 logos originales (pre-CMS dinamico).
-// Un logo nuevo agregado desde Notion no necesita fallback aqui: si su slot
-// no esta "Listo" en CMS Imagenes, simplemente no se renderiza (ver
-// resolveLogo) en vez de romper con una ruta que no existe.
-const LOGO_FALLBACKS: Record<string, string> = {
-  HEINEKEN: '/cms-media/logos/heineken-mexico-logo-png_seeklogo-370450.png',
-  'Tecnológico de Monterrey': '/cms-media/logos/tec%20de%20monterrey.png',
-  INCmty: '/cms-media/logos/incmty.png',
-  EBC: '/cms-media/logos/EBC.png',
-};
 
 // FlipHouse deliberadamente bloqueado (2026-08-11): es el cliente real y
 // confidencial detras del caso SOFI/PropTech. Mostrar su logo en el trust bar
-// del home desanonimiza el caso al instante. No quitar este guardrail aunque
-// "FlipHouse" siga apareciendo en la linea "Logos sugeridos" de Notion S1 —
-// ese texto tambien debe corregirse (ver CLAUDE.md).
-const BLOCKED_LOGO_NAMES = new Set(['flipHouse'.toLowerCase()]);
+// del home desanonimiza el caso al instante. No quitar este guardrail.
+const BLOCKED_LOGO_NAMES = new Set(['fliphouse']);
 
-// El slot id de Notion es texto libre tecleado por Diego, no auto-generado —
-// "Tecnológico de Monterrey" ya vive como `logo-tec-de-monterrey` (abreviado),
-// no como el slug literal del nombre completo. Excepciones a la convencion
-// por defecto van aqui para no romper filas ya creadas en CMS Imagenes.
-const LOGO_SLOT_OVERRIDES: Record<string, string> = {
-  'Tecnológico de Monterrey': 'logo-tec-de-monterrey',
-};
-
-function slugifyLogoName(name: string): string {
-  return name
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-+|-+$)/g, '');
-}
-
-// Cinturon de logos 100% dinamico desde Notion (2026-08-13): agregar un logo
-// nuevo ya no requiere tocar este archivo — solo (1) sumar el nombre a la
-// linea "Logos sugeridos" en S1 y (2) crear su fila en CMS Imagenes con slot
-// `logo-<nombre-slugificado>` (o la excepcion de LOGO_SLOT_OVERRIDES) en
-// Estado "Listo". Un slot ausente o no listo se omite del cinturon en vez de
-// mostrar una imagen rota.
-function resolveLogo(name: string): { src: string; alt: string } | null {
-  if (BLOCKED_LOGO_NAMES.has(name.toLowerCase())) return null;
-  const slotId = LOGO_SLOT_OVERRIDES[name] ?? `logo-${slugifyLogoName(name)}`;
-  const src = slotSrc(slotId, LOGO_FALLBACKS[name] ?? '');
-  return src ? { src, alt: name } : null;
-}
-const heroLogos = heroLogoNames.map(resolveLogo).filter((logo): logo is { src: string; alt: string } => logo !== null);
+// Cinturon de logos 100% dinamico desde CMS Imagenes (2026-08-14): ya no
+// depende de una linea de texto "Logos sugeridos" en Notion S1 (esa doble
+// fuente de verdad causaba que logos nuevos con fila lista en CMS Imagenes
+// nunca aparecieran en LIVE hasta editar tambien el copy). Un logo nuevo
+// solo requiere una fila en CMS Imagenes con slot `logo-<algo>`, Estado
+// "Listo", imagen subida y el campo "Nombre" (alt text) lleno — no hace
+// falta tocar Notion S1 ni este archivo. `logo-*-evidencia` queda excluido
+// a proposito: son slots huerfanos del viejo diseno de S4 (tabla, pre
+// 2026-08-12), no pertenecen al cinturon del Hero. Orden: alfabetico por
+// Nombre (no hay campo de orden manual en el CMS hoy).
+const heroLogos = imageSlotEntries
+  .filter((e) => e.id.startsWith('logo-') && !e.id.endsWith('-evidencia'))
+  .filter((e) => e.data.status === 'Listo' && e.data.imageUrl && e.data.nombre)
+  .filter((e) => !BLOCKED_LOGO_NAMES.has(e.data.nombre.toLowerCase()))
+  .sort((a, b) => a.data.nombre.localeCompare(b.data.nombre, 'es'))
+  .map((e) => ({ src: e.data.imageUrl as string, alt: e.data.nombre }));
 
 function systemsLogo(title: string): { src: string; alt: string } | null {
   const key = title.toLowerCase();
