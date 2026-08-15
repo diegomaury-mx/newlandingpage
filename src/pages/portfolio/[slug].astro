@@ -66,6 +66,12 @@ const pageDescription =
     : rawDescription;
 const canonicalUrl = new URL(`/portfolio/${slugify(entry.data.title)}`, Astro.site).toString();
 
+// og:image siempre necesita una URL absoluta; si la ficha no tiene banner
+// propio (fichas Soporte/Draft aun sin foto), cae a la misma imagen generica
+// que usa /portfolio en vez de omitir la meta tag.
+const FALLBACK_OG_IMAGE = '/assets/img/diego-maury.png';
+const ogImage = new URL(entry.data.banner || FALLBACK_OG_IMAGE, Astro.site).toString();
+
 const creativeWorkJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
@@ -73,7 +79,11 @@ const creativeWorkJsonLd = {
   description: pageDescription,
   url: canonicalUrl,
   author: { '@type': 'Person', name: 'Diego Maury', url: 'https://diegomaury.mx' },
-  ...(entry.data.banner ? { image: entry.data.banner } : {}),
+  image: ogImage,
+  // El year del SSOT es el unico dato de fecha real de la ficha (no hay
+  // Fecha de publicacion propia en Notion) — se omite si la ficha no lo tiene
+  // en vez de inventar una fecha.
+  ...(entry.data.year ? { datePublished: entry.data.year } : {}),
 };
 ---
 
@@ -82,7 +92,7 @@ const creativeWorkJsonLd = {
   description={pageDescription}
   canonicalUrl={canonicalUrl}
   ogType="article"
-  ogImage={entry.data.banner}
+  ogImage={ogImage}
   jsonLd={creativeWorkJsonLd}
   enableGtm
 >
