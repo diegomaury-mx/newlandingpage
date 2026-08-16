@@ -168,3 +168,39 @@ Cero. No se agrega ningún heading `P<n>` nuevo, no se modifica `parseSiteCopySe
   debe superar los 3 filtros que la propia propuesta define en su sección 18 (¿aporta
   función narrativa distinta? ¿tiene fuente de verdad clara? ¿justifica modificar el
   contrato técnico?).
+
+## 9. Blocker encontrado en revisión: el gate de superficies no cubre `/portfolio`
+
+Verificado en código y por ejecución directa (no es una lectura de documentación estática):
+`tools/verify-metrics.cjs` falla en `exit 2` de entrada porque su precondición busca
+`index.html` en la raíz del repo, archivo eliminado el 2026-08-13 (limpieza de HTML muerto).
+El gate no corre — no valida nada, y lo hace sin ningún error visible salvo revisar el exit
+code a mano.
+
+Más grave incluso si se arreglara esa precondición: `verifyHtml()` solo sabe leer atributos
+`data-metric="slug"` en HTML estático (`index.html`, `cases/*.html`, `portfolio/*.html`).
+`src/pages/portfolio.astro` no usa ese patrón — renderiza `{m.data.value}` directo desde la
+colección `metrics` de Astro (`metricBySlug()`, filtrado solo por `buildable`, no por
+superficie). **El gate de "superficies permitidas" nunca ha cubierto el mecanismo real de
+`/portfolio` desde que existe (2026-08-16)**, con independencia de qué cifras haya en la
+franja hoy.
+
+Esto es un blocker para el §6 de este spec (swap de métricas ancla) y para cualquier cambio
+futuro que toque `metricBySlug`/`IMPACT_ANCHOR_SLUGS`/`IMPACT_SUPPORT_SLUGS`: antes de tocar
+esos arrays hace falta (a) confirmar contra Notion en vivo el estado y superficies reales de
+las 6 métricas ya renderizadas hoy en `/portfolio` (no del espejo `metrics.json`, que puede
+estar desincronizado — hallazgo pendiente de verificar, ver nota abajo) y (b) decidir si el
+gate se repara para cubrir Astro o si la verificación de superficie para `/portfolio` se hace
+manual hasta entonces.
+
+**Nota de verificación pendiente (bloqueada por caída del MCP de Notion, 2026-08-16):** una
+revisión externa del documento reportó que `heineken-proyectos-evaluados` (3,231) tiene en la
+base de Notion `estado: Condicionada` y superficies `["Caso de estudio","CV","LinkedIn",
+"llms.txt","Pitch deck"]` (sin "Sitio web"), y que el Diagnóstico de Portafolio D la declaró
+`Retirada` el 28 jul por fuente no reconciliable. El espejo local `assets/data/metrics.json`
+dice en cambio `estado: "Vigente"` y superficies `["Hero", "Sitio web", "llms.txt"]`. Son dos
+lecturas incompatibles del mismo dato. No se resuelve en este spec — requiere consultar Notion
+en vivo (MCP caído al momento de escribir esto) y, si el espejo está desactualizado,
+re-sincronizarlo antes de tocar la franja de métricas. Hasta resolver esto, `heineken-
+proyectos-evaluados` se trata como **no verificado para "Sitio web"**, aunque ya se esté
+renderizando hoy en `/portfolio` sin que ningún gate lo haya bloqueado.
