@@ -8,7 +8,7 @@
  * notion-copy-activo-ssot.
  */
 
-const SECTION_HEADING = /^# (S\d+b?|SEO) · (.+)$/;
+const SECTION_HEADING = /^# (S\d+b?|P\d+|SEO) · (.+)$/;
 
 export interface SiteCopySection {
   key: string;

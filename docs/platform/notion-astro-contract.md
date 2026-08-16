@@ -38,6 +38,7 @@
 | `Videos de evidencia` | text | `evidenceVideos` | `[]` | agregada 2026-08-11; texto libre, una URL por línea (formato opcional `Etiqueta \| URL`). **Regla dura: los videos son forzosamente un link externo (YouTube/Drive), nunca un archivo subido a Notion** — decisión explícita de Diego, evita romper el límite de tamaño de Cloudflare Pages con un video sin comprimir |
 | `Caso maestro` / `Ediciones` | relation (auto-relación) | `masterCase` / `editions` | `undefined` | agrupa ediciones bajo el maestro; capa Archivo solo se referencia desde aquí |
 | `year` | select | `year` | — | usar `year`, no `[DEPRECADO] Año` |
+| `Orden Insignia` | number | `insigniaOrder` | `undefined` | agregada 2026-08-16 (rediseño narrativo de /portfolio); orden manual de los 4 casos Insignia, sin valor va al final (fallback: year desc, luego título) |
 | `banner`, `logo` | file | `banner`, `logo` | `undefined` | assets |
 | `Contexto tarjeta` | text | `cardContext` | `''` | agregada 2026-07-23, no estaba en la propuesta original; frase corta (~160 car.) para tarjeta, separada de `Rol de Diego` para no truncar texto pensado para la página completa |
 | `Reflexión` | text | `reflection` | `''` | agregada 2026-08-11 (rediseño CAR, ver `docs/superpowers/specs/2026-08-11-case-template-car-redesign-design.md`); cierre editable sin tocar el `body`. Se renderiza como sección final de la página de caso solo si no está vacía |
@@ -92,6 +93,17 @@ const siteCopy = defineCollection({
 **Regla de publicación (copy):** no existe estado `Draft`/`Publicado` en esta página — es un documento vivo de una sola versión vigente. La "publicación" es el acto de sincronizar manualmente contra el HTML live (ver callout de la página, actualizado 2026-07-19). En Astro, todo el contenido de `siteCopy` se considera siempre publicable; no aplica el filtro `draft`.
 
 **Tratamiento de evidencia (copy):** no aplica directamente — el copy no lleva su propio bloque de evidencia. Cualquier cifra citada hereda el grado de evidencia de `Métricas oficiales` vía el slug referenciado.
+
+**Bloques `P1`-`P4` (agregados 2026-08-16, rediseño narrativo de `/portfolio`):** mismo mecanismo que `S1`-`S8`, mismo parser (`SECTION_HEADING` en `parseSiteCopy.ts` ahora acepta también el prefijo `P`). Viven en la misma página, columna Versión Actual.
+
+| Bloque | Contenido | Se lee con |
+|---|---|---|
+| `P1 · Hero portfolio` | `## <H1>` + primer párrafo (lede) | `heading2(p1)`, `paragraphs(p1)[0]` |
+| `P2 · Casos insignia` | el label del heading (`· <label>`) es el eyebrow; `## <H2>` es la transición narrativa | `.label` de la sección, `heading2(p2)` |
+| `P3 · Soporte` | igual patrón que P2 | `.label`, `heading2(p3)` |
+| `P4 · Archivo` | un solo párrafo (nota del acordeón) | `paragraphs(p4)[0]` |
+
+Si un bloque falta o está vacío, `portfolio.astro` cae a un copy por defecto (mismo texto que el borrador del spec) — nunca rompe el build ni deja una sección vacía.
 
 ---
 
