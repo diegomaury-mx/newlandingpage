@@ -92,7 +92,7 @@
 }
 .stat-anchor__n {
   font-family: var(--mono);
-  font-size: clamp(2.4rem, 4.6vw, 3.4rem);
+  font-size: clamp(2.4rem, 4.2vw, 2.9rem);
   font-weight: 500;
   color: var(--t1);
   line-height: 1;
