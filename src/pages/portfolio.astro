@@ -1,22 +1,20 @@
 ---
-// Home del portafolio (Fase 2 · Diego CMS): mismo diseño de
-// prototipo-portafolio.html, pero leyendo la coleccion `cases` real (Notion)
-// en vez de los datos hardcodeados. Ruta: /portfolio.
-// Solo se muestran fichas con draft=false (Estado publicacion=Publicado
-// AND Publicable=true) en las secciones Insignia/Soporte; el Archivo se lista
-// aparte y no filtra por draft porque nunca se publica como pagina propia.
-// Sigue construyendo a dist/, no toca el sitio LIVE (astro.config.mjs).
+// Home del portafolio (rediseño narrativo 2026-08-16, ver
+// docs/superpowers/specs/2026-08-16-portfolio-rediseno-narrativo-design.md):
+// sin indicador de evidencia en el listado (vive solo en cada caso), los 4
+// casos Insignia con el mismo tratamiento visual (sin "featured"), franja de
+// cifras de impacto antes de Insignia, y copy narrativo entre secciones
+// editable desde Notion (bloques P1-P4 en "Copy Oficial · diegomaury.mx
+// SSOT", mismo mecanismo que S1-S8 de index.astro).
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { slugify } from '../utils/slug.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { parseSiteCopySections, heading2, paragraphs } from '../utils/parseSiteCopy.ts';
 import '../styles/portfolio.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
-
-function hasEvidence(entry: CaseEntry): boolean {
-  return entry.data.hasVerifiedEvidence;
-}
+type MetricEntry = CollectionEntry<'metrics'>;
 
 // Titulo de tarjeta = resultado como afirmacion (H1 del caso), nunca el rol.
 // Cae al `title` de Notion solo si la ficha aun no tiene esa narrativa escrita.
@@ -26,21 +24,9 @@ function cardTitle(entry: CaseEntry): string {
 
 const CONTEXT_LINE_MAX = 160;
 
-// Linea de contexto de tarjeta: prioriza `Contexto tarjeta` (escrita a mano
-// para verse sola en una tarjeta). Si esta vacia (ficha aun no curada para
-// tarjeta), cae a `Rol de Diego` truncado como aproximacion temporal.
-function contextLine(entry: CaseEntry): string {
-  if (entry.data.cardContext) return entry.data.cardContext;
-  const role = entry.data.role;
-  if (!role) return '';
-  return role.length > CONTEXT_LINE_MAX
-    ? `${role.slice(0, CONTEXT_LINE_MAX)}…`
-    : role;
-}
-
 // Descripcion de tarjeta Soporte: prioriza `Contexto tarjeta`, cae a
 // Objetivo y despues a Resultados y acciones — mismo orden que usaba la
-// fila de tabla que esta tarjeta reemplaza.
+// fila de tabla que esta tarjeta reemplazo originalmente.
 function supportDescription(entry: CaseEntry): string {
   const text = entry.data.cardContext || entry.data.objective || entry.data.resultsAndActions;
   if (!text) return '';
@@ -49,35 +35,104 @@ function supportDescription(entry: CaseEntry): string {
     : text;
 }
 
-// Conteo real de artefactos adjuntos a la ficha (fotos + videos + link de
-// evidencia externo). No es una metrica del SSOT de Metricas — es solo el
-// tamano de los arreglos que ya vienen del CMS, nunca un numero inventado.
-function artifactCount(entry: CaseEntry): number {
-  return (
-    entry.data.evidenceMedia.length +
-    entry.data.evidenceVideos.length +
-    (entry.data.evidenceUrl ? 1 : 0)
-  );
-}
-
 const allCases = await getCollection('cases');
 const idToTitle = new Map(allCases.map((c) => [c.id, c.data.title]));
 
 const published = allCases.filter((c) => !c.data.draft);
-const insignia = published.filter((c) => c.data.layer === 'Insignia');
+
+// Orden manual via `insigniaOrder` (propiedad Notion "Orden Insignia"); sin
+// featured, los 4 casos Insignia pesan igual, asi que el orden ya no lo
+// decide "quien tiene mas evidencia verificada" sino Diego. Fallback
+// determinista si falta el campo en algun caso: year desc, luego title
+// (la API de Notion no garantiza orden estable de llegada).
+const insignia = [...published.filter((c) => c.data.layer === 'Insignia')].sort((a, b) => {
+  const orderA = a.data.insigniaOrder ?? Number.MAX_SAFE_INTEGER;
+  const orderB = b.data.insigniaOrder ?? Number.MAX_SAFE_INTEGER;
+  if (orderA !== orderB) return orderA - orderB;
+  const yearA = Number(a.data.year) || 0;
+  const yearB = Number(b.data.year) || 0;
+  if (yearA !== yearB) return yearB - yearA;
+  return a.data.title.localeCompare(b.data.title, 'es');
+});
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
 const archivo = allCases.filter((c) => c.data.layer === 'Archivo');
 
-// El featured prioriza el primer caso con evidencia verificada (al menos un
-// ✔ en su tabla de Evidencia) en vez del primero por orden de Notion (no
-// determinista): abrir con un caso sin verificar delataba el hueco de
-// evidencia del portafolio antes de que el visitante viera nada probado.
-const featured = insignia.find(hasEvidence) ?? insignia[0];
-const restInsignia = insignia.filter((c) => c !== featured);
+// --- Copy narrativo (Copy Oficial SSOT, bloques P1-P4) ------------------------
+// Mismo mecanismo que S1-S8 de index.astro. Si un bloque falta o esta vacio
+// (Diego aun no lo llena en Notion), cae al borrador del spec — nunca deja
+// una seccion vacia ni rompe el build.
+const siteCopyEntries = await getCollection('siteCopy');
+const siteCopyEntry = siteCopyEntries.find((entry) => entry.id === 'site');
+const copySections = siteCopyEntry
+  ? parseSiteCopySections(siteCopyEntry.data.markdown)
+  : new Map();
 
+const p1 = copySections.get('P1')?.blocks ?? [];
+const p2 = copySections.get('P2')?.blocks ?? [];
+const p3 = copySections.get('P3')?.blocks ?? [];
+const p4 = copySections.get('P4')?.blocks ?? [];
+
+const heroEyebrow = 'Strategic Program Director';
+const heroH1 =
+  heading2(p1) ||
+  'Encuentro el mecanismo que frena la ejecución de operaciones complejas, y lo convierto en sistemas medibles que el equipo sostiene.';
+const heroLede =
+  paragraphs(p1)[0] ||
+  'Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM. Este portafolio no publica lo que no puede probar, y lo dice en cada cifra.';
+
+const insigniaEyebrow = copySections.get('P2')?.label ?? 'Casos insignia';
+const insigniaHeadline =
+  heading2(p2) || 'No son los casos más grandes. Son los que puedo defender de principio a fin.';
+
+const soporteHeadline =
+  heading2(p3) || 'El resto del registro. Menos protagonismo, la misma disciplina.';
+
+const archiveNote =
+  paragraphs(p4)[0] ||
+  'Existen. No se exhiben. Ediciones y variantes de los casos anteriores, conservadas para trazabilidad.';
+
+// --- Franja "Por los números" --------------------------------------------------
+// Fila de catalogo: se calcula sola del contenido publicado, nunca se edita a
+// mano — si Diego publica un caso nuevo, estas cifras se recalculan solas.
 const totalPublicadas = insignia.length + soporte.length;
-const conEvidencia = [...insignia, ...soporte].filter(hasEvidence).length;
-const sinEvidencia = totalPublicadas - conEvidencia;
+const organizacionesUnicas = new Set(
+  [...insignia, ...soporte]
+    .map((c) => c.data.organization)
+    .filter((org): org is string => Boolean(org))
+).size;
+const camposUnicos = new Set(
+  [...insignia, ...soporte].flatMap((c) => c.data.capabilities)
+).size;
+// Reusa el mismo numero+calificacion que index.astro S2 (STAT_SUBLABELS[1]):
+// 7+ es especifico a innovacion/ecosistemas, no la trayectoria total (esa es
+// 10+, Copy LinkedIn SSOT) — ver correccion 2026-08-16 del spec tras revision.
+const ANOS_EXPERIENCIA = '7+';
+const ANOS_EXPERIENCIA_LABEL = 'años en innovación y ecosistemas';
+
+// Fila de impacto: SIEMPRE leida de la coleccion `metrics` por slug, nunca
+// tipeada a mano — si una metrica cambia de estado en Notion (ej. se retira),
+// se refleja sola. Cada cifra renderiza su `mandatoryQualifier` sin
+// excepcion (regla dura de la revision del spec: el caveat de RODI
+// "cost-avoidance modelado" no puede faltar en ningun tamano tipografico).
+const metricsEntries = await getCollection('metrics');
+function metricBySlug(slug: string): MetricEntry | undefined {
+  return metricsEntries.find((entry) => entry.data.slug === slug);
+}
+const IMPACT_ANCHOR_SLUGS = ['incmty-participantes-inscritos', 'rodi-sofi'];
+const IMPACT_SUPPORT_SLUGS = [
+  'heineken-proyectos-evaluados',
+  'hacksureste-participantes',
+  'heineken-crecimiento-regional',
+  'fliphouse-leads-crm',
+  'sofi-cobertura-automatica',
+  'fliphouse-speed-to-lead',
+];
+const impactAnchors = IMPACT_ANCHOR_SLUGS.map(metricBySlug).filter(
+  (m): m is MetricEntry => Boolean(m)
+);
+const impactSupport = IMPACT_SUPPORT_SLUGS.map(metricBySlug).filter(
+  (m): m is MetricEntry => Boolean(m)
+);
 
 const pageTitle = 'Portafolio · Diego Maury';
 const pageDescription =
@@ -108,90 +163,87 @@ const itemListJsonLd = {
   <div class="portfolio-page">
 <section class="section hero">
   <div class="wrap">
-    <div class="eyebrow">Strategic Program Director</div>
-    <h1>Encuentro el mecanismo que frena la ejecución de operaciones complejas, y lo convierto en sistemas medibles que el equipo sostiene.</h1>
-    <p>Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM. Este portafolio no publica lo que no puede probar, y lo dice en cada cifra.</p>
+    <div class="eyebrow">{heroEyebrow}</div>
+    <h1>{heroH1}</h1>
+    <p>{heroLede}</p>
   </div>
 </section>
 
-<section class="section counter">
+<section class="section stats">
   <div class="wrap">
-    <div class="eyebrow">Estado de evidencia · fichas publicadas</div>
-    <div class="counter__grid">
-      <div class="counter__cell">
-        <div class="counter__num counter__num--total">{totalPublicadas}</div>
-        <div class="counter__cap">fichas publicadas</div>
+    <div class="eyebrow eyebrow--plain">Por los números</div>
+
+    <div class="stats__catalog">
+      <div class="stat-cat">
+        <div class="stat-cat__n">{totalPublicadas}</div>
+        <div class="stat-cat__l">proyectos publicados</div>
       </div>
-      <div class="counter__cell">
-        <div class="counter__num counter__num--ok">✔ {conEvidencia}</div>
-        <div class="counter__cap">con al menos un artefacto verificado en su tabla de evidencia</div>
+      <div class="stat-cat">
+        <div class="stat-cat__n">{organizacionesUnicas}</div>
+        <div class="stat-cat__l">organizaciones distintas</div>
       </div>
-      <div class="counter__cell">
-        <div class="counter__num counter__num--no">✖ {sinEvidencia}</div>
-        <div class="counter__cap">sin artefacto verificado todavía, declarado y no escondido</div>
+      <div class="stat-cat">
+        <div class="stat-cat__n">{camposUnicos}</div>
+        <div class="stat-cat__l">campos de expertise</div>
+      </div>
+      <div class="stat-cat">
+        <div class="stat-cat__n">{ANOS_EXPERIENCIA}</div>
+        <div class="stat-cat__l">{ANOS_EXPERIENCIA_LABEL}</div>
       </div>
     </div>
-    <p class="counter__note">Ninguna ficha de este portafolio aparece sin su estado de evidencia. Un ✖ no es un error: es la marca que lo distingue de uno que solo publica lo que le conviene.</p>
+
+    {impactAnchors.length > 0 && (
+      <div class="label stats__impact-label">Impacto documentado</div>
+    )}
+
+    {impactAnchors.length > 0 && (
+      <div class="stats__anchors">
+        {impactAnchors.map((m) => (
+          <div class="stat-anchor">
+            <div class="stat-anchor__n">{m.data.value}</div>
+            <div class="stat-anchor__l">{m.data.metric}</div>
+            <div class="stat-anchor__q">{m.data.mandatoryQualifier}</div>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {impactSupport.length > 0 && (
+      <div class="stats__support">
+        {impactSupport.map((m) => (
+          <div class="stat-support">
+            <div class="stat-support__n">{m.data.value}</div>
+            <div class="stat-support__l">{m.data.metric}</div>
+            <div class="stat-support__q">{m.data.mandatoryQualifier}</div>
+          </div>
+        ))}
+      </div>
+    )}
   </div>
 </section>
 
 <section class="section gallery">
   <div class="wrap">
-    <div class="eyebrow">Casos insignia</div>
-    <h2>Cada caso, con su cuenta real de qué se puede probar.</h2>
+    <div class="eyebrow">{insigniaEyebrow}</div>
+    <h2>{insigniaHeadline}</h2>
     {insignia.length === 0 && (
       <p class="empty-note">Sin fichas Insignia publicadas todavía.</p>
     )}
-    {featured && (
-      <a class="card card--featured" href={`/portfolio/${slugify(featured.data.title)}`}>
-        <div class="card__split">
-          {featured.data.banner ? (
-            <div class="card__media">
-              <img src={featured.data.banner} alt={featured.data.title} loading="lazy" width="1200" height="600" />
-              {featured.data.logo && <img class="card__logo" src={featured.data.logo} alt="" aria-hidden="true" loading="lazy" width="40" height="40" />}
-            </div>
-          ) : (
-            <div class="media-void"><span>Sin imagen publicable</span></div>
-          )}
-          <div class="card__body">
-            <span class="meta">{featured.data.organization ?? '—'} · {featured.data.year ?? '—'}</span>
-            <h3 class="card__title">{cardTitle(featured)}</h3>
-            <div class="card__caps">
-              {featured.data.capabilities.slice(0, 3).map((cap) => <span class="cap">{cap}</span>)}
-            </div>
-            {contextLine(featured) && (
-              <div class="card__scale">{contextLine(featured)}</div>
-            )}
-          </div>
-          <div class="card__side">
-            <span class="meta">Métrica ancla</span>
-            <div class="card__metric">{featured.data.anchorMetric || 'Sin métrica ancla registrada'}</div>
-            <div class="tally">
-              {hasEvidence(featured) ? <span class="tally__ok">✔</span> : <span class="tally__no">✖</span>}
-              <span class="tally__cta">Ver caso →</span>
-            </div>
-          </div>
-        </div>
-      </a>
-    )}
-    {restInsignia.length > 0 && (
-      <div class="gallery__rest">
-        {restInsignia.map((c) => (
-          <a class="card card--small" href={`/portfolio/${slugify(c.data.title)}`}>
+    {insignia.length > 0 && (
+      <div class="gallery__grid">
+        {insignia.map((c) => (
+          <a class="card card--insignia" href={`/portfolio/${slugify(c.data.title)}`}>
             {c.data.banner ? (
               <div class="card__media">
-                <img src={c.data.banner} alt={c.data.title} loading="lazy" width="600" height="264" />
+                <img src={c.data.banner} alt={c.data.title} loading="lazy" width="800" height="500" />
                 {c.data.logo && <img class="card__logo" src={c.data.logo} alt="" aria-hidden="true" loading="lazy" width="40" height="40" />}
               </div>
             ) : (
               <div class="media-void"><span>Sin imagen publicable</span></div>
             )}
-            <span class="meta">{c.data.organization ?? '—'} · {c.data.year ?? '—'}</span>
-            <h3 class="card__title">{cardTitle(c)}</h3>
-            <div class="card__metric">{c.data.anchorMetric || 'Sin métrica ancla registrada'}</div>
-            <div class="tally">
-              {hasEvidence(c) ? <span class="tally__ok">✔</span> : <span class="tally__no">✖</span>}
-              <span class="tally__cta">→</span>
+            <div class="card__body">
+              <span class="meta">{c.data.organization ?? '—'} · {c.data.year ?? '—'}</span>
+              <h3 class="card__title">{cardTitle(c)}</h3>
             </div>
           </a>
         ))}
@@ -203,52 +255,36 @@ const itemListJsonLd = {
 <section class="section support">
   <div class="wrap">
     <div class="eyebrow eyebrow--plain">Soporte · {soporte.length} proyectos</div>
-    <h2>Programas y convocatorias que completan el registro operativo.</h2>
+    <h2>{soporteHeadline}</h2>
     {soporte.length === 0 ? (
       <p class="empty-note">Sin fichas Soporte publicadas todavía.</p>
     ) : (
       <div class="support-grid">
-        {soporte.map((c) => {
-          const count = artifactCount(c);
-          return (
-            <a class="card card--support" href={`/portfolio/${slugify(c.data.title)}`}>
-              <div class="support-card__head">
-                {c.data.logo ? (
-                  <img class="support-card__logo" src={c.data.logo} alt="" aria-hidden="true" loading="lazy" width="44" height="44" />
-                ) : (
-                  <div class="support-card__logo support-card__logo--fallback" aria-hidden="true">
-                    {(c.data.organization ?? c.data.title).slice(0, 1)}
-                  </div>
-                )}
-                <div class="support-card__meta">
-                  <span class="meta">{c.data.organization ?? '—'} · {c.data.year ?? '—'}</span>
-                  <h3 class="card__title">{c.data.title}</h3>
-                </div>
-              </div>
-              {supportDescription(c) && (
-                <p class="support-card__desc">{supportDescription(c)}</p>
-              )}
-              {c.data.capabilities.length > 0 && (
-                <div class="card__caps">
-                  {c.data.capabilities.slice(0, 3).map((cap) => <span class="cap">{cap}</span>)}
+        {soporte.map((c) => (
+          <a class="card card--support" href={`/portfolio/${slugify(c.data.title)}`}>
+            <div class="support-card__head">
+              {c.data.logo ? (
+                <img class="support-card__logo" src={c.data.logo} alt="" aria-hidden="true" loading="lazy" width="44" height="44" />
+              ) : (
+                <div class="support-card__logo support-card__logo--fallback" aria-hidden="true">
+                  {(c.data.organization ?? c.data.title).slice(0, 1)}
                 </div>
               )}
-              <div class="tally">
-                <div class="support-card__evidence">
-                  {hasEvidence(c) ? (
-                    <span class="tally__ok">✔ Evidencia verificada</span>
-                  ) : (
-                    <span class="tally__no">✖ Sin evidencia pública</span>
-                  )}
-                  {count > 0 && (
-                    <span class="support-card__artifacts">{count} artefacto{count === 1 ? '' : 's'} público{count === 1 ? '' : 's'}</span>
-                  )}
-                </div>
-                <span class="tally__cta">Ver caso →</span>
+              <div class="support-card__meta">
+                <span class="meta">{c.data.organization ?? '—'} · {c.data.year ?? '—'}</span>
+                <h3 class="card__title">{c.data.title}</h3>
               </div>
-            </a>
-          );
-        })}
+            </div>
+            {supportDescription(c) && (
+              <p class="support-card__desc">{supportDescription(c)}</p>
+            )}
+            {c.data.capabilities.length > 0 && (
+              <div class="card__caps">
+                {c.data.capabilities.slice(0, 3).map((cap) => <span class="cap">{cap}</span>)}
+              </div>
+            )}
+          </a>
+        ))}
       </div>
     )}
   </div>
@@ -260,7 +296,7 @@ const itemListJsonLd = {
       <span>Archivo · {archivo.length} fichas</span>
       <span class="archive__glyph" id="archiveGlyph">+</span>
     </button>
-    <p class="archive__note">Existen. No se exhiben. Ediciones y variantes de los casos anteriores, conservadas para trazabilidad.</p>
+    <p class="archive__note">{archiveNote}</p>
     {archivo.length > 0 && (
       <div class="archive__grid" id="archiveGrid" hidden>
         {archivo.map((c) => (
@@ -289,4 +325,3 @@ const itemListJsonLd = {
   }
 </script>
 </BaseLayout>
-
