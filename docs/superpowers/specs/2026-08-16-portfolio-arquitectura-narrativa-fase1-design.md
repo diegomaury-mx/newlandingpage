@@ -172,10 +172,18 @@ Cero. No se agrega ningún heading `P<n>` nuevo, no se modifica `parseSiteCopySe
 ## 9. Blocker encontrado en revisión: el gate de superficies no cubre `/portfolio`
 
 Verificado en código y por ejecución directa (no es una lectura de documentación estática):
-`tools/verify-metrics.cjs` falla en `exit 2` de entrada porque su precondición busca
+`tools/verify-metrics.cjs` fallaba en `exit 2` de entrada porque su precondición buscaba
 `index.html` en la raíz del repo, archivo eliminado el 2026-08-13 (limpieza de HTML muerto).
-El gate no corre — no valida nada, y lo hace sin ningún error visible salvo revisar el exit
-code a mano.
+El gate no corría — no validaba nada, y lo hacía sin ningún error visible salvo revisar el
+exit code a mano.
+
+**Corregido 2026-08-16:** la precondición ahora exige `public/` (donde vive el HTML estático
+real desde la limpieza del 2026-08-13: `404.html` + `cases/*.html` + `portfolio/*.html`), no
+`index.html` de raíz. `node tools/verify-metrics.cjs` corre limpio en el repo real: `exit 0`,
+0 errores, 12 advertencias (huérfanas legítimas en `llms-full.txt`, contenido de SOFI sin
+match en `metrics.json`). `node --test tools/verify-metrics.test.cjs` pasa 24/24 (test de
+precondición actualizado de "index.html no existe" a "public/ no existe", más un test nuevo
+de recorrido real de `public/`).
 
 Más grave incluso si se arreglara esa precondición: `verifyHtml()` solo sabe leer atributos
 `data-metric="slug"` en HTML estático (`index.html`, `cases/*.html`, `portfolio/*.html`).

@@ -170,10 +170,15 @@ test('verifyHtml acusa error si data-metric apunta a una metrica Retirada', () =
 
 const { run } = require('./verify-metrics.cjs');
 
-test('run devuelve 2 si index.html no existe en la raiz', () => {
-  // tools/fixtures como raiz: tiene el espejo pero no index.html
+test('run devuelve 2 si public/ no existe en la raiz', () => {
+  // tools/fixtures como raiz: tiene el espejo pero no carpeta public/
   const code = run(['--metrics', FIX('metrics-ok.json')], path.join(__dirname, 'fixtures'));
   assert.strictEqual(code, 2);
+});
+
+test('run recorre public/ (incluye cases/ y portfolio/) en vez de index.html de raiz', () => {
+  const code = run(['--metrics', FIX('metrics-ok.json')], FIX('raiz-public'));
+  assert.strictEqual(code, 0);
 });
 
 test('CLI: exit 2 si --metrics viene sin ruta', () => {

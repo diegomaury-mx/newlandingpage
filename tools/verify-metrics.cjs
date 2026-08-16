@@ -96,10 +96,11 @@ function verifyText(texto, fileRel, metrics) {
 }
 
 // Simplificacion piloto (ajuste 19 del spec): superficie a nivel archivo.
+// index.html de raiz se elimino 2026-08-13 (ver CLAUDE.md); el HTML estatico
+// que sobrevive vive en public/ (cases/ = stubs de redirect, portfolio/ = 3
+// casos legacy reales) y ya no incluye la superficie "Hero".
 function superficiesDe(fileRel) {
   const rel = fileRel.replace(/\\/g, '/');
-  if (rel === 'index.html') return ['Hero', 'Sitio web'];
-  if (rel === 'portfolio/index.html') return ['Sitio web'];
   if (rel.startsWith('cases/') || rel.startsWith('portfolio/')) return ['Caso de estudio'];
   return ['Sitio web'];
 }
@@ -177,15 +178,17 @@ function run(argv, raizOverride) {
     return 2;
   }
 
-  const indexAbs = path.join(raiz, 'index.html');
-  if (!fs.existsSync(indexAbs)) {
-    console.error(`[verify-metrics] ERROR: no existe ${indexAbs}; nada se verifica en silencio.`);
+  // El HTML estatico que el gate cubre vive en public/ desde 2026-08-13
+  // (index.html de raiz se elimino; public/ es lo que Astro copia a dist/).
+  const publicDir = path.join(raiz, 'public');
+  if (!fs.existsSync(publicDir)) {
+    console.error(`[verify-metrics] ERROR: no existe ${publicDir}; nada se verifica en silencio.`);
     return 2;
   }
 
-  const htmlFiles = ['index.html'];
+  const htmlFiles = fs.readdirSync(publicDir).filter((x) => x.endsWith('.html'));
   for (const dir of ['cases', 'portfolio']) {
-    const dirAbs = path.join(raiz, dir);
+    const dirAbs = path.join(publicDir, dir);
     if (fs.existsSync(dirAbs)) {
       for (const f of fs.readdirSync(dirAbs).filter((x) => x.endsWith('.html'))) {
         htmlFiles.push(`${dir}/${f}`);
@@ -198,7 +201,7 @@ function run(argv, raizOverride) {
   const warnings = [];
   try {
     for (const rel of htmlFiles) {
-      const r = verifyHtml(fs.readFileSync(path.join(raiz, rel), 'utf8'), rel, data.metrics);
+      const r = verifyHtml(fs.readFileSync(path.join(publicDir, rel), 'utf8'), rel, data.metrics);
       errors.push(...r.errors);
       warnings.push(...r.warnings);
     }
