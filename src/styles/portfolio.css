@@ -58,7 +58,7 @@
 }
 .hero p {
   margin-top: 24px;
-  font-size: clamp(1rem, 1.3vw, 1.13rem);
+  font-size: clamp(1.0625rem, 1.3vw, 1.19rem);
   color: var(--t2);
   max-width: 58ch;
   line-height: 1.7;
@@ -244,7 +244,7 @@
 }
 .support-card__meta { min-width: 0; }
 .card--support .card__title { font-size: 15px; font-weight: 700; line-height: 1.35; margin: 5px 0 0; letter-spacing: -0.01em; }
-.support-card__desc { font-size: 12.5px; color: var(--t2); line-height: 1.55; margin: 0 0 16px; flex: 1; }
+.support-card__desc { font-size: 13.5px; color: var(--t2); line-height: 1.55; margin: 0 0 16px; flex: 1; }
 .card--support .card__caps { margin-bottom: 0; }
 
 [hidden] { display: none !important; }
@@ -261,7 +261,7 @@
   margin: 0 auto 16px;
   max-width: 22ch;
 }
-.closing p { font-size: 1rem; color: var(--t2); line-height: 1.7; margin: 0 auto 32px; max-width: 46ch; }
+.closing p { font-size: 1.0625rem; color: var(--t2); line-height: 1.7; margin: 0 auto 32px; max-width: 46ch; }
 .closing__ctas { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
 
 @media (max-width: 900px) {
