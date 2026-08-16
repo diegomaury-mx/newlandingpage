@@ -116,7 +116,7 @@ const ANOS_EXPERIENCIA_LABEL = 'años en innovación y ecosistemas';
 // "cost-avoidance modelado" no puede faltar en ningun tamano tipografico).
 const metricsEntries = await getCollection('metrics');
 function metricBySlug(slug: string): MetricEntry | undefined {
-  return metricsEntries.find((entry) => entry.data.slug === slug);
+  return metricsEntries.find((entry) => entry.data.slug === slug && entry.data.buildable);
 }
 const IMPACT_ANCHOR_SLUGS = ['incmty-participantes-inscritos', 'rodi-sofi'];
 const IMPACT_SUPPORT_SLUGS = [
