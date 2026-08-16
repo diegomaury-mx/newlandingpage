@@ -4,8 +4,11 @@
 // sin indicador de evidencia en el listado (vive solo en cada caso), los 4
 // casos Insignia con el mismo tratamiento visual (sin "featured"), franja de
 // cifras de impacto antes de Insignia, y copy narrativo entre secciones
-// editable desde Notion (bloques P1-P4 en "Copy Oficial · diegomaury.mx
-// SSOT", mismo mecanismo que S1-S8 de index.astro).
+// editable desde Notion (bloques P1-P3+P5 en "Copy Oficial · diegomaury.mx
+// SSOT", mismo mecanismo que S1-S8 de index.astro). Seccion Archivo retirada
+// 2026-08-16: la capa `Archivo` de Notion sigue existiendo como estado de
+// datos (ediciones/variantes conservadas para trazabilidad), simplemente ya
+// no se expone en el listado publico.
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { slugify } from '../utils/slug.ts';
@@ -19,7 +22,7 @@ type MetricEntry = CollectionEntry<'metrics'>;
 // Titulo de tarjeta = resultado como afirmacion (H1 del caso), nunca el rol.
 // Cae al `title` de Notion solo si la ficha aun no tiene esa narrativa escrita.
 function cardTitle(entry: CaseEntry): string {
-  return entry.data.resultHeadline || entry.data.title;
+  return entry.data.cardHeadline || entry.data.resultHeadline || entry.data.title;
 }
 
 const CONTEXT_LINE_MAX = 160;
@@ -36,7 +39,6 @@ function supportDescription(entry: CaseEntry): string {
 }
 
 const allCases = await getCollection('cases');
-const idToTitle = new Map(allCases.map((c) => [c.id, c.data.title]));
 
 const published = allCases.filter((c) => !c.data.draft);
 
@@ -55,9 +57,8 @@ const insignia = [...published.filter((c) => c.data.layer === 'Insignia')].sort(
   return a.data.title.localeCompare(b.data.title, 'es');
 });
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
-const archivo = allCases.filter((c) => c.data.layer === 'Archivo');
 
-// --- Copy narrativo (Copy Oficial SSOT, bloques P1-P4) ------------------------
+// --- Copy narrativo (Copy Oficial SSOT, bloques P1-P3+P5) ------------------------
 // Mismo mecanismo que S1-S8 de index.astro. Si un bloque falta o esta vacio
 // (Diego aun no lo llena en Notion), cae al borrador del spec — nunca deja
 // una seccion vacia ni rompe el build.
@@ -70,7 +71,6 @@ const copySections = siteCopyEntry
 const p1 = copySections.get('P1')?.blocks ?? [];
 const p2 = copySections.get('P2')?.blocks ?? [];
 const p3 = copySections.get('P3')?.blocks ?? [];
-const p4 = copySections.get('P4')?.blocks ?? [];
 const p5 = copySections.get('P5')?.blocks ?? [];
 
 const heroEyebrow = 'Strategic Program Director';
@@ -88,14 +88,10 @@ const insigniaHeadline =
 const soporteHeadline =
   heading2(p3) || 'El resto del registro. Menos protagonismo, la misma disciplina.';
 
-const archiveNote =
-  paragraphs(p4)[0] ||
-  'Existen. No se exhiben. Ediciones y variantes de los casos anteriores, conservadas para trazabilidad.';
-
 // --- Cierre / CTA final ---------------------------------------------------
 // Sin este bloque no habia ningun CTA propio de /portfolio despues del
 // listado (solo el boton del navbar, facil de perder tras hacer scroll por
-// Insignia+Soporte+Archivo). Copy editable desde Notion (P5), mismo
+// Insignia+Soporte). Copy editable desde Notion (P5), mismo
 // mecanismo y mismo destino canonico que el CTA del navbar/S8 del home.
 const CALENDAR_HREF = 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun';
 const MAIL_HREF = 'mailto:dm@diegomaury.mx';
@@ -304,26 +300,6 @@ const itemListJsonLd = {
   </div>
 </section>
 
-<section class="section archive">
-  <div class="wrap">
-    <button class="archive__toggle" id="archiveToggle" aria-expanded="false" aria-controls="archiveGrid">
-      <span>Archivo · {archivo.length} fichas</span>
-      <span class="archive__glyph" id="archiveGlyph">+</span>
-    </button>
-    <p class="archive__note">{archiveNote}</p>
-    {archivo.length > 0 && (
-      <div class="archive__grid" id="archiveGrid" hidden>
-        {archivo.map((c) => (
-          <div class="archive__cell">
-            <strong>{c.data.title}</strong>
-            <span>{c.data.masterCase[0] ? (idToTitle.get(c.data.masterCase[0]) ?? '—') : '—'}</span>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-</section>
-
 <section class="section closing">
   <div class="wrap-narrow">
     <div class="eyebrow">{closingEyebrow}</div>
@@ -336,18 +312,4 @@ const itemListJsonLd = {
   </div>
 </section>
   </div>
-
-<script>
-  const btn = document.getElementById('archiveToggle');
-  const grid = document.getElementById('archiveGrid');
-  const glyph = document.getElementById('archiveGlyph');
-  if (btn && grid && glyph) {
-    btn.addEventListener('click', () => {
-      const open = grid.hasAttribute('hidden');
-      grid.toggleAttribute('hidden', !open);
-      btn.setAttribute('aria-expanded', String(open));
-      glyph.textContent = open ? '−' : '+';
-    });
-  }
-</script>
 </BaseLayout>

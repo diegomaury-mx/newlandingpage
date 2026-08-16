@@ -41,6 +41,7 @@
 | `Orden Insignia` | number | `insigniaOrder` | `undefined` | agregada 2026-08-16 (rediseño narrativo de /portfolio); orden manual de los 4 casos Insignia, sin valor va al final (fallback: year desc, luego título) |
 | `banner`, `logo` | file | `banner`, `logo` | `undefined` | assets |
 | `Contexto tarjeta` | text | `cardContext` | `''` | agregada 2026-07-23, no estaba en la propuesta original; frase corta (~160 car.) para tarjeta, separada de `Rol de Diego` para no truncar texto pensado para la página completa |
+| `Titular de tarjeta` | text | `cardHeadline` | `''` | agregada 2026-08-16; override manual del título de tarjeta/página/llms.txt, con prioridad sobre `resultHeadline`. Cadena de fallback completa: `cardHeadline` → `resultHeadline` (primer H1 del body) → `title` (nombre de la ficha). Vacía hasta que Diego migre una ficha puntual — no es obligatoria |
 | `Reflexión` | text | `reflection` | `''` | agregada 2026-08-11 (rediseño CAR, ver `docs/superpowers/specs/2026-08-11-case-template-car-redesign-design.md`); cierre editable sin tocar el `body`. Se renderiza como sección final de la página de caso solo si no está vacía |
 | Cuerpo de la página (contenido de la ficha) | rich text | `body` (Markdown, no MDX real) | `''` | fuente narrativa única: contexto, problema, sistema, autopsia y bloque de evidencia ✔/✖ viven aquí, no en propiedades. Implementado 2026-07-23 vía `blocksToMarkdown`; también alimenta `resultHeadline` (primer H1) y `hasVerifiedEvidence` (¿al menos un ✔ en la tabla de Evidencia?) |
 

@@ -33,7 +33,7 @@ interface Props {
 const { entry, allCases } = Astro.props as Props;
 const idToTitle = new Map(allCases.map((c) => [c.id, c.data.title]));
 
-const displayTitle = entry.data.resultHeadline || entry.data.title;
+const displayTitle = entry.data.cardHeadline || entry.data.resultHeadline || entry.data.title;
 
 // El <title> de pestana/SERP necesita ser corto (<=60 car., ver
 // docs/platform/seo-keyword-mapping-2026-08-03.md hallazgo tecnico 2): usar el

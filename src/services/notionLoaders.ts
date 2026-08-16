@@ -215,6 +215,7 @@ async function mapCase(page: PageObjectResponse): Promise<Record<string, unknown
   return {
     title: getTitle(page, "title"),
     resultHeadline: extractResultHeadline(blocks),
+    cardHeadline: getRichText(page, "Titular de tarjeta"),
     organization: getSelect(page, "Organización"),
     type: getSelect(page, "Tipo"),
     role: getRichText(page, "Rol de Diego"),

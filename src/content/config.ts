@@ -31,6 +31,12 @@ const cases = defineCollection({
       // ("Escale X y logre Y"). Vive en el body, no en una propiedad — vacio
       // si la ficha aun no tiene esa narrativa escrita.
       resultHeadline: z.string().default(''),
+      // Propiedad "Titular de tarjeta" (agregada 2026-08-16): override manual
+      // del titulo mostrado, con prioridad sobre resultHeadline. Vacio hasta
+      // que Diego migre una ficha; el fallback resultHeadline||title sigue
+      // vigente para no romper nada retroactivamente (ver cardTitle() en
+      // portfolio.astro, displayTitle en [slug].astro y llms.txt.ts).
+      cardHeadline: z.string().default(''),
       // 12/27 fichas reales no tienen Organización y 11/27 no tienen Tipo
       // (fichas Draft/Archivo aún sin curar) — opcionales para no bloquear
       // el build entero por contenido en progreso que no se va a publicar.

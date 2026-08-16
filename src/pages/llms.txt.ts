@@ -28,7 +28,7 @@ export const GET: APIRoute = async ({ site }) => {
     lines.push('Ninguna ficha publicada tiene el canal "llms.txt" habilitado todavia.');
   } else {
     for (const c of eligible) {
-      const title = c.data.resultHeadline || c.data.title;
+      const title = c.data.cardHeadline || c.data.resultHeadline || c.data.title;
       const url = new URL(`/portfolio/${slugify(c.data.title)}`, site).toString();
       lines.push(`### ${title}`);
       lines.push(`- Organización: ${c.data.organization ?? '—'} · ${c.data.year ?? '—'}`);
