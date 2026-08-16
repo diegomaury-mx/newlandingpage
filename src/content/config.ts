@@ -67,6 +67,13 @@ const cases = defineCollection({
       masterCase: z.array(z.string()).default([]),
       editions: z.array(z.string()).default([]),
       year: z.string().optional(),
+      // Orden manual de los casos Insignia en /portfolio (agregado 2026-08-16,
+      // rediseño narrativo): los 4 casos Insignia usan el mismo tratamiento
+      // visual (sin "featured"), asi que el orden ya no lo decide el codigo
+      // (antes: "primero con evidencia verificada") sino Diego, via esta
+      // propiedad numerica en Notion. Sin valor = va al final (ver fallback
+      // determinista en portfolio.astro: year desc, luego title).
+      insigniaOrder: z.number().optional(),
       banner: z.string().optional(),
       logo: z.string().optional(),
       // Cuerpo completo de la ficha (Contexto, Problema, Sistema, Evidencia,
