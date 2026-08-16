@@ -27,7 +27,9 @@ Se elimina el concepto de caso destacado (`featured`/`restInsignia`, y el criter
 
 Grid uniforme de 2 columnas (desktop), 1 columna (mobile).
 
-**Orden:** manual, vía nuevo campo en Notion (ver sección Notion abajo). Sin ese campo, orden estable por defecto (fallback: orden de llegada de Notion, no aleatorio).
+**Orden:** manual, vía nuevo campo en Notion (ver sección Notion abajo). Fallback si el campo falta en algún caso (revisión 2026-08-16, "orden de llegada de Notion" no es estable vía API): ordenar por `year` descendente y luego por `title` alfabético — determinista, sin depender del orden no garantizado que devuelve la API de Notion.
+
+**Pre-flight de banners (menor, revisión 2026-08-16):** las tarjetas Insignia dependen de `banner` para no quedar vacías (ya existe fallback `media-void` en el código actual, se conserva). Antes de publicar el rediseño, verificar que los 4 casos Insignia tengan banner cargado en Notion.
 
 ### 3. Franja "Por los números" antes de Insignia
 
@@ -37,7 +39,7 @@ Nueva sección, inmediatamente después del hero y antes de los casos Insignia. 
 - Proyectos publicados: `insignia.length + soporte.length`
 - Organizaciones distintas: tamaño del set de `organization` únicas entre casos publicados
 - Campos de expertise: tamaño del set de `capabilities` únicas entre casos publicados
-- Años de trayectoria: cifra fija reutilizada del copy de S2 del home (hoy "7+"), no nueva fuente
+- "7+ años en innovación y ecosistemas": reutiliza el mismo número y sublabel que `index.astro` (`STAT_SUBLABELS[1]`, "7+ en innovación y ecosistemas"). **Corrección tras revisión (2026-08-16): el label NO puede decir "años de trayectoria" a secas** — esa cifra canónica es 10+ (Copy LinkedIn SSOT); 7+ es específico a innovación/ecosistemas. El label debe incluir esa calificación completa, igual que en el home.
 
 **Fila de impacto** (del SSOT de Métricas — `metrics` collection, nunca tipeadas a mano en el `.astro`):
 - 2 cifras ancla, tipografía grande: `incmty-participantes-inscritos` (9,905) y `rodi-sofi` (+1,291%)
@@ -46,6 +48,10 @@ Nueva sección, inmediatamente después del hero y antes de los casos Insignia. 
 Todas las cifras se leen de `getCollection('metrics')` por `slug` (mismo patrón que `incmtyMetric` en `index.astro`), no como strings hardcodeados — si una métrica cambia de estado en Notion, se refleja sola.
 
 **Regla de color:** el acento ember se usa solo en el eyebrow "Por los números" (precedente ya aceptado para eyebrows). Los números van en `--t1`/`--t2`, no en ember — con 8 cifras, ponerlas todas en ember rompería la regla de "un solo acento ember por pieza".
+
+**Regla dura de caveat (bloqueante, revisión 2026-08-16):** cada cifra de la fila de impacto renderiza su `mandatoryQualifier`/calificador (texto pequeño bajo el número), sin excepción — no solo las 2 anclas. Es específicamente no negociable para `rodi-sofi`: el Copy LinkedIn SSOT prohíbe mostrar +1,291% sin la nota "cost-avoidance modelado" junto a la cifra, en cualquier tamaño tipográfico. Los mockups ya incluían esta nota como texto secundario bajo cada número — este párrafo lo deja como requisito explícito del spec, no solo del mockup.
+
+**Riesgo de suma implícita (menor):** 3,000+ (HackSureste) y 9,905 (INCmty) están documentados como no acumulables. Mostrarlas en la misma franja es aceptable siempre que cada una traiga su calificador visible (regla del párrafo anterior) — verificar en QA visual que ningún lector podría sumarlas sin ver el matiz.
 
 ### 4. Soporte: mismo criterio de siempre, sin evidencia
 
