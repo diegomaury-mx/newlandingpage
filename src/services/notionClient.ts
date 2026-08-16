@@ -143,6 +143,13 @@ export function getCheckbox(page: PageObjectResponse, name: string): boolean {
   return prop.checkbox;
 }
 
+/** number -> valor numerico o `undefined` (celda vacia o de otro tipo). */
+export function getNumber(page: PageObjectResponse, name: string): number | undefined {
+  const prop = getProp(page, name);
+  if (prop?.type !== "number") return undefined;
+  return prop.number ?? undefined;
+}
+
 /** url -> string o `undefined`. */
 export function getUrl(
   page: PageObjectResponse,
