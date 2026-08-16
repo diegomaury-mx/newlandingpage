@@ -71,6 +71,7 @@ const p1 = copySections.get('P1')?.blocks ?? [];
 const p2 = copySections.get('P2')?.blocks ?? [];
 const p3 = copySections.get('P3')?.blocks ?? [];
 const p4 = copySections.get('P4')?.blocks ?? [];
+const p5 = copySections.get('P5')?.blocks ?? [];
 
 const heroEyebrow = 'Strategic Program Director';
 const heroH1 =
@@ -90,6 +91,19 @@ const soporteHeadline =
 const archiveNote =
   paragraphs(p4)[0] ||
   'Existen. No se exhiben. Ediciones y variantes de los casos anteriores, conservadas para trazabilidad.';
+
+// --- Cierre / CTA final ---------------------------------------------------
+// Sin este bloque no habia ningun CTA propio de /portfolio despues del
+// listado (solo el boton del navbar, facil de perder tras hacer scroll por
+// Insignia+Soporte+Archivo). Copy editable desde Notion (P5), mismo
+// mecanismo y mismo destino canonico que el CTA del navbar/S8 del home.
+const CALENDAR_HREF = 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun';
+const MAIL_HREF = 'mailto:dm@diegomaury.mx';
+const closingEyebrow = copySections.get('P5')?.label ?? 'Siguiente paso';
+const closingHeadline = heading2(p5) || '¿Este registro resuelve lo que tienes enfrente?';
+const closingLede =
+  paragraphs(p5)[0] ||
+  'Hablemos de tu caso. Agenda una llamada o escríbeme directo.';
 
 // --- Franja "Por los números" --------------------------------------------------
 // Fila de catalogo: se calcula sola del contenido publicado, nunca se edita a
@@ -307,6 +321,18 @@ const itemListJsonLd = {
         ))}
       </div>
     )}
+  </div>
+</section>
+
+<section class="section closing">
+  <div class="wrap-narrow">
+    <div class="eyebrow">{closingEyebrow}</div>
+    <h2>{closingHeadline}</h2>
+    <p>{closingLede}</p>
+    <div class="closing__ctas">
+      <a class="btn-primary" href={CALENDAR_HREF} target="_blank" rel="noopener">Agendar una llamada</a>
+      <a class="btn-ghost" href={MAIL_HREF}>Escríbeme</a>
+    </div>
   </div>
 </section>
   </div>

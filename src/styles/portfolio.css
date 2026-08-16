@@ -282,6 +282,21 @@
 .archive__cell span { font-family: var(--mono); font-size: 9px; color: var(--t3); letter-spacing: 0.04em; display: block; margin-top: 5px; }
 [hidden] { display: none !important; }
 
+/* --- Cierre / CTA final ------------------------------------------------- */
+.closing { border-bottom: none; text-align: center; padding: clamp(64px, 7vw, 100px) 0 clamp(88px, 9vw, 128px); }
+.closing .eyebrow { justify-content: center; }
+.closing .eyebrow::before { display: none; }
+.closing h2 {
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 auto 16px;
+  max-width: 22ch;
+}
+.closing p { font-size: 1rem; color: var(--t2); line-height: 1.7; margin: 0 auto 32px; max-width: 46ch; }
+.closing__ctas { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
 @media (max-width: 900px) {
   .wrap, .wrap-narrow { padding: 0 20px; }
   .stats__catalog { grid-template-columns: repeat(2, 1fr); }
