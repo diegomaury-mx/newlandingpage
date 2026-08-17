@@ -303,7 +303,7 @@ export function mapImageSlot(page: PageObjectResponse): Record<string, unknown> 
 export async function translateFields(
   raw: Record<string, unknown>,
   fields: string[],
-  logger: LoaderContext["logger"],
+  logger: LoaderContext["logger"] | { warn: (message: string) => void },
 ): Promise<Record<string, string>> {
   const en: Record<string, string> = {};
   for (const field of fields) {
