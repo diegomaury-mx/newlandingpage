@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import type { BlockObjectResponse, PageObjectResponse } from "@notionhq/client";
-import { blocksToMarkdown, mapImageSlot } from "./notionLoaders.ts";
+import { blocksToMarkdown, mapImageSlot, translateFields } from "./notionLoaders.ts";
+
+function fakeLogger() {
+  const warnings: string[] = [];
+  return { warn: (msg: string) => warnings.push(msg), warnings };
+}
 
 function fakeBlock(type: string, richText: { plain_text: string }[]): BlockObjectResponse {
   return { type, [type]: { rich_text: richText } } as unknown as BlockObjectResponse;
@@ -73,4 +78,31 @@ test("blocksToMarkdown no fusiona una lista con la siguiente si hay un heading e
   const markdown = blocksToMarkdown(blocks);
 
   assert.equal(markdown, "- Antes\n\n## Siguiente sección\n\n- Después");
+});
+
+test("translateFields solo traduce los campos pedidos que son string no vacio", async () => {
+  const logger = fakeLogger();
+  const raw = { title: "Hola", organization: "", year: undefined, layer: 42 };
+
+  const en = await translateFields(raw, ["title", "organization", "year", "layer"], logger);
+
+  assert.deepEqual(Object.keys(en), ["title"]);
+});
+
+test("translateFields ignora campos ausentes en el objeto fuente", async () => {
+  const logger = fakeLogger();
+  const raw = { title: "Hola" };
+
+  const en = await translateFields(raw, ["title", "noExiste"], logger);
+
+  assert.deepEqual(Object.keys(en), ["title"]);
+});
+
+test("translateFields devuelve objeto vacio si la lista de campos esta vacia", async () => {
+  const logger = fakeLogger();
+  const raw = { title: "Hola" };
+
+  const en = await translateFields(raw, [], logger);
+
+  assert.deepEqual(en, {});
 });
