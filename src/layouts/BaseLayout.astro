@@ -27,6 +27,10 @@ interface Props {
   // versiones — sin esto, Google puede indexar /en/* y /* como contenido
   // duplicado en vez de reconocerlas como traducciones.
   alternateUrls?: AlternateUrl[];
+  // Ruta relativa de la version en el otro idioma, para el toggle del
+  // navbar. Se pasa por separado de alternateUrls (que llevan URL absoluta
+  // para hreflang) porque el toggle necesita una ruta navegable con <a href>.
+  otherLocaleHref?: string;
 }
 
 const {
@@ -40,6 +44,7 @@ const {
   ctaHref = site.links.scheduling,
   ctaLabel = "Hagamos que las cosas pasen",
   alternateUrls = [],
+  otherLocaleHref,
 }: Props = Astro.props;
 
 const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
@@ -180,7 +185,7 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
   <body>
     {enableGtm && <script is:inline src="/js/gtm.js"></script>}
 
-    <Navbar ctaHref={ctaHref} ctaLabel={ctaLabel} />
+    <Navbar ctaHref={ctaHref} ctaLabel={ctaLabel} otherLocaleHref={otherLocaleHref} />
 
     <main>
       <slot />

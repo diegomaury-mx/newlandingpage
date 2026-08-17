@@ -1,6 +1,7 @@
 ---
 import "../styles/navbar.css";
 import { site } from "../config/site";
+import { getLocaleFromPath } from "../utils/locale.ts";
 
 interface Props {
   heroName?: string;
@@ -9,6 +10,11 @@ interface Props {
   ctaLabel?: string;
   backHref?: string;
   badge?: string;
+  // Ruta de la version de esta misma pagina en el otro idioma. Solo se
+  // pasa desde paginas que de verdad tienen contraparte EN/ES (ver
+  // BaseLayout) — si falta, no se muestra ningun toggle, para no llevar a
+  // un 404 en paginas que aun no tienen traduccion.
+  otherLocaleHref?: string;
 }
 
 const {
@@ -18,7 +24,10 @@ const {
   ctaLabel = "Hagamos que las cosas pasen",
   backHref,
   badge,
+  otherLocaleHref,
 }: Props = Astro.props;
+
+const otherLocaleLabel = otherLocaleHref ? getLocaleFromPath(otherLocaleHref).toUpperCase() : undefined;
 ---
 
 <nav id="nav" class="nav" aria-label="Navegación principal">
@@ -63,6 +72,16 @@ const {
           href={backHref}
         >
           &larr; Portafolio
+        </a>
+      )}
+
+      {otherLocaleHref && (
+        <a
+          class="nav__lang-toggle"
+          href={otherLocaleHref}
+          aria-label={`Switch to ${otherLocaleLabel === "EN" ? "English" : "Español"}`}
+        >
+          {otherLocaleLabel}
         </a>
       )}
 

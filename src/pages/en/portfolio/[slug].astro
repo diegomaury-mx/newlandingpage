@@ -15,6 +15,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { renderMarkdown, extractSections } from '../../../utils/markdown.ts';
 import { slugify } from '../../../utils/slug.ts';
 import { toEmbeddableVideoUrl } from '../../../utils/embedVideo.ts';
+import { toLocalePath } from '../../../utils/locale.ts';
 import { uiEn } from '../../../i18n/ui.ts';
 import '../../../styles/case.css';
 
@@ -83,6 +84,7 @@ const creativeWorkJsonLd = {
   ogImage={ogImage}
   jsonLd={creativeWorkJsonLd}
   alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
+  otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
   enableGtm
 >
   {entry.data.banner && (

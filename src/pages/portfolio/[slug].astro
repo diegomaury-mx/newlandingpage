@@ -12,6 +12,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { renderMarkdown, extractSections } from '../../utils/markdown.ts';
 import { slugify } from '../../utils/slug.ts';
 import { toEmbeddableVideoUrl } from '../../utils/embedVideo.ts';
+import { toLocalePath } from '../../utils/locale.ts';
 import '../../styles/case.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
@@ -94,6 +95,7 @@ const creativeWorkJsonLd = {
   ogType="article"
   ogImage={ogImage}
   jsonLd={creativeWorkJsonLd}
+  otherLocaleHref={toLocalePath(Astro.url.pathname, 'en')}
   enableGtm
 >
   {entry.data.banner && (

@@ -12,6 +12,7 @@ import { slugify } from '../../utils/slug.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { parseSiteCopySections, heading2, paragraphs } from '../../utils/parseSiteCopy.ts';
 import { translateCached } from '../../services/deeplTranslationCache.ts';
+import { toLocalePath } from '../../utils/locale.ts';
 import { uiEn } from '../../i18n/ui.ts';
 import '../../styles/portfolio.css';
 
@@ -165,6 +166,7 @@ const itemListJsonLd = {
   jsonLd={itemListJsonLd}
   ogImage={ogImage}
   alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
+  otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
   ctaLabel={uiEn.nav.ctaLabel}
   enableGtm
 >
