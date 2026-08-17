@@ -1,0 +1,1 @@
+As a systems architect, I design how strategy, operations, and technology work together as a single system: the infrastructure that enables the execution of a strategy.

@@ -1,0 +1,1 @@
+I dive into operations that rely on a person’s memory, an Excel spreadsheet, or the team’s goodwill. I map out the actual process and design the system that replaces it. I don’t just hand over a report and walk away—I implement it with your team.

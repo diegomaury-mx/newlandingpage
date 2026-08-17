@@ -37,7 +37,17 @@ video-pitch-output/
 
 # Cache de imagenes de Notion (descargadas en cada build por los content
 # loaders, ver src/services/notionImageCache.ts): regenerable, no se versiona
-public/cms-media/notion/
+public/cms-media/notion/*
+!public/cms-media/notion/translations/
+
+# Cache de traducciones DeepL (ver deeplTranslationCache.ts) SI se versiona
+# (excepcion al patron de arriba): a diferencia de las imagenes, Cloudflare
+# Pages clona el repo limpio en cada build y NO persiste este cache entre
+# deploys — sin commitearlo, cada push re-traduce el sitio COMPLETO desde
+# cero (29 cuerpos de caso + home + portfolio), lo cual agoto la cuota
+# mensual gratuita de DeepL (500k caracteres) en una sola tarde de pruebas
+# (2026-08-17). Commitear estos .txt es la unica forma de que la traduccion
+# ya pagada sobreviva entre deploys con la arquitectura actual.
 
 # Playwright: artefactos de test run locales
 /test-results/
