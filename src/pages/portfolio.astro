@@ -149,6 +149,7 @@ const pageTitle = 'Portafolio · Diego Maury';
 const pageDescription =
   'Portafolio con evidencia verificable, caso por caso. Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM.';
 const canonicalUrl = new URL('/portfolio', Astro.site).toString();
+const enUrl = new URL('/en/portfolio', Astro.site).toString();
 const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
 
 const itemListJsonLd = {
@@ -169,6 +170,7 @@ const itemListJsonLd = {
   canonicalUrl={canonicalUrl}
   jsonLd={itemListJsonLd}
   ogImage={ogImage}
+  alternateUrls={[{ lang: 'es', url: canonicalUrl }, { lang: 'en', url: enUrl }]}
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'en')}
   enableGtm
 >

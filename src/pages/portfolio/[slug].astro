@@ -66,6 +66,7 @@ const pageDescription =
     ? `${rawDescription.slice(0, DESCRIPTION_MAX)}…`
     : rawDescription;
 const canonicalUrl = new URL(`/portfolio/${slugify(entry.data.title)}`, Astro.site).toString();
+const enUrl = new URL(`/en/portfolio/${slugify(entry.data.title)}`, Astro.site).toString();
 
 // og:image siempre necesita una URL absoluta; si la ficha no tiene banner
 // propio (fichas Soporte/Draft aun sin foto), cae a la misma imagen generica
@@ -95,6 +96,7 @@ const creativeWorkJsonLd = {
   ogType="article"
   ogImage={ogImage}
   jsonLd={creativeWorkJsonLd}
+  alternateUrls={[{ lang: 'es', url: canonicalUrl }, { lang: 'en', url: enUrl }]}
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'en')}
   enableGtm
 >

@@ -32,6 +32,7 @@ import {
   firstCodeBlock,
   parseFlowDiagram,
 } from '../utils/parseSiteCopy.ts';
+import { toLocalePath } from '../utils/locale.ts';
 
 const siteCopyEntries = await getCollection('siteCopy');
 const siteCopy = siteCopyEntries.find((entry) => entry.id === 'site');
@@ -336,6 +337,7 @@ const pageDescription =
   valueAfter(seo, 'Meta description') ||
   'Strategic Program Director y consultor de innovación: diseño programas y sistemas que convierten estrategia en ejecución.';
 const canonicalUrl = new URL('/', Astro.site).toString();
+const enUrl = new URL('/en', Astro.site).toString();
 const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
 const personJsonLd = {
   '@context': 'https://schema.org',
@@ -358,6 +360,8 @@ const personJsonLd = {
   title={pageTitle}
   description={pageDescription}
   ogImage={ogImage}
+  alternateUrls={[{ lang: 'es', url: canonicalUrl }, { lang: 'en', url: enUrl }]}
+  otherLocaleHref={toLocalePath(Astro.url.pathname, 'en')}
 >
 <!-- Google Tag Manager -->
 <script is:inline src="/js/gtm.js"></script>
