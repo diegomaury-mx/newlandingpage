@@ -73,6 +73,26 @@ test("llama a la API de DeepL con el texto, target_lang y auth header correctos"
   });
 });
 
+test("nunca manda tag_handling: 'xml' (nuestro texto es prosa/markdown, no XML valido — causo HTTP 400 en produccion el 2026-08-17)", async () => {
+  await withTempCacheDir(async (cacheDir) => {
+    const logger = fakeLogger();
+    let capturedInit: RequestInit | undefined;
+
+    const fetchImpl = (async (_url: string, init?: RequestInit) => {
+      capturedInit = init;
+      return new Response(
+        JSON.stringify({ translations: [{ text: "Hello world" }] }),
+        { status: 200, headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    await translateCached("Hola mundo", "EN-US", logger, { cacheDir, fetchImpl, apiKey: "fake-key" });
+
+    const body = JSON.parse(capturedInit?.body as string);
+    assert.equal(body.tag_handling, undefined);
+  });
+});
+
 test("cachea la traduccion en disco: la segunda llamada con el mismo texto no vuelve a pegarle a la API", async () => {
   await withTempCacheDir(async (cacheDir) => {
     const logger = fakeLogger();
