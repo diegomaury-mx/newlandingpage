@@ -25,6 +25,35 @@ export const uiEn = {
     emptyBody:
       "This case doesn't have its narrative body (Context, Action, Result) written yet.",
   },
+  footer: {
+    tagline: "Let's make things happen.",
+    exploreTitle: 'Explore',
+    contactTitle: 'Contact',
+    legalAriaLabel: 'Legal information',
+    location: 'Mexico City, Mexico',
+    copyright: `© ${new Date().getFullYear()} Diego Maury. All rights reserved.`,
+    // hrefs: /en para lo que SI tiene version EN real (home, portfolio);
+    // el resto (docencia, legales) apunta a la unica version que existe
+    // (espanol) — el label si va en ingles, la pagina destino no.
+    explore: [
+      { label: 'Portfolio', href: '/en/portfolio' },
+      { label: 'Teaching', href: '/docencia' },
+      { label: 'About me', href: '/en#s2-quien-soy' },
+      { label: 'Newsletter', href: 'https://diegomaury.substack.com' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/diegomaury/' },
+      { label: 'Instagram', href: 'https://www.instagram.com/diegomaury.mx' },
+    ],
+    contact: [
+      { label: 'Email', href: 'mailto:dm@diegomaury.mx' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/diegomaury/' },
+      { label: 'Schedule a call', href: 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun' },
+      { label: 'Download CV', href: '/cv/diego-maury-cv.pdf', download: true },
+    ],
+    legal: [
+      { label: 'Privacy policy', href: '/politicas-privacidad' },
+      { label: 'Terms and conditions', href: '/terminos-y-condiciones' },
+    ],
+  },
   home: {
     trustLabel: "I've worked with",
     deliverHeading: "What I deliver",

@@ -2,6 +2,7 @@
 import "../styles/navbar.css";
 import { site } from "../config/site";
 import { getLocaleFromPath } from "../utils/locale.ts";
+import { uiEn } from "../i18n/ui.ts";
 
 interface Props {
   heroName?: string;
@@ -28,9 +29,11 @@ const {
 }: Props = Astro.props;
 
 const otherLocaleLabel = otherLocaleHref ? getLocaleFromPath(otherLocaleHref).toUpperCase() : undefined;
+const isEn = Astro.currentLocale === "en";
+const navAriaLabel = isEn ? uiEn.nav.ariaLabel : "Navegación principal";
 ---
 
-<nav id="nav" class="nav" aria-label="Navegación principal">
+<nav id="nav" class="nav" aria-label={navAriaLabel}>
   <div class="nav-inner">
     <a
       href={brandHref}
@@ -100,8 +103,10 @@ const otherLocaleLabel = otherLocaleHref ? getLocaleFromPath(otherLocaleHref).to
     <button
       type="button"
       class="nav__burger"
-      aria-label="Abrir menú"
+      aria-label={isEn ? uiEn.nav.openMenu : "Abrir menú"}
       aria-expanded="false"
+      data-open-label={isEn ? uiEn.nav.openMenu : "Abrir menú"}
+      data-close-label={isEn ? uiEn.nav.closeMenu : "Cerrar menú"}
     >
       <svg
         width="22"
@@ -171,7 +176,9 @@ const otherLocaleLabel = otherLocaleHref ? getLocaleFromPath(otherLocaleHref).to
     burger.setAttribute("aria-expanded", String(isOpen));
     burger.setAttribute(
       "aria-label",
-      isOpen ? "Cerrar menú" : "Abrir menú"
+      isOpen
+        ? burger.dataset.closeLabel ?? "Cerrar menú"
+        : burger.dataset.openLabel ?? "Abrir menú"
     );
   });
 
