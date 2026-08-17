@@ -92,6 +92,24 @@ const cases = defineCollection({
       reflection: z.string().default(''),
       // draft = NOT (Estado publicación == "Publicado" AND Publicable == true)
       draft: z.boolean().default(true),
+      // Traduccion automatica a ingles (DeepL, cacheada en build, ver
+      // notionLoaders.ts translateFields) de los campos de prosa. Solo trae
+      // las claves que efectivamente se tradujeron — sin DEEPL_API_KEY
+      // configurado, viene vacio y la pagina /en/portfolio/[slug] cae al
+      // campo en espanol como fallback (ver [slug].astro).
+      en: z
+        .object({
+          title: z.string().optional(),
+          resultHeadline: z.string().optional(),
+          cardHeadline: z.string().optional(),
+          cardContext: z.string().optional(),
+          objective: z.string().optional(),
+          resultsAndActions: z.string().optional(),
+          anchorMetric: z.string().optional(),
+          body: z.string().optional(),
+          reflection: z.string().optional(),
+        })
+        .default({}),
     })
     .superRefine((data, ctx) => {
       // Regla transversal del contrato: capa Insignia no puede publicarse
@@ -152,6 +170,18 @@ const metrics = defineCollection({
     relatedCase: z.array(z.string()).default([]),
     // buildable = Estado == "Vigente" AND Publicabilidad IN [Pública, A solicitud]
     buildable: z.boolean(),
+    // Traduccion automatica a ingles (DeepL, cacheada), ver `en` en `cases`
+    // arriba. Nota: el gate de verify-metrics.cjs NO valida esta version —
+    // riesgo aceptado explicitamente (decision 2026-08-17), no reintroducir
+    // sin decision aparte.
+    en: z
+      .object({
+        metric: z.string().optional(),
+        canonicalClaim: z.string().optional(),
+        mandatoryQualifier: z.string().optional(),
+        usageNote: z.string().optional(),
+      })
+      .default({}),
   }),
 });
 

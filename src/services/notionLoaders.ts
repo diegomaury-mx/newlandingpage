@@ -39,6 +39,7 @@ import {
   hasNotionToken,
 } from "./notionClient.ts";
 import { cacheNotionImage } from "./notionImageCache.ts";
+import { translateCached } from "./deeplTranslationCache.ts";
 
 // --- Conversion de bloques a Markdown (para siteCopy) ------------------------
 
@@ -293,6 +294,27 @@ export function mapImageSlot(page: PageObjectResponse): Record<string, unknown> 
   };
 }
 
+/**
+ * Traduce a ingles (via DeepL, cacheado) los campos de `raw` listados en
+ * `fields` que sean string no vacio. Devuelve solo los campos efectivamente
+ * traducidos — se guarda como `raw.en` para la version /en/* del sitio, sin
+ * tocar los campos originales en espanol (fuente unica sigue siendo Notion).
+ */
+export async function translateFields(
+  raw: Record<string, unknown>,
+  fields: string[],
+  logger: LoaderContext["logger"],
+): Promise<Record<string, string>> {
+  const en: Record<string, string> = {};
+  for (const field of fields) {
+    const value = raw[field];
+    if (typeof value === "string" && value) {
+      en[field] = await translateCached(value, "EN-US", logger);
+    }
+  }
+  return en;
+}
+
 // --- Fabrica de loaders para data sources ------------------------------------
 
 function createDataSourceLoader(
@@ -305,6 +327,13 @@ function createDataSourceLoader(
   // de guardarse, para que el HTML de produccion nunca dependa de una firma
   // que puede expirar entre un build y la siguiente visita.
   imageFields: string[] = [],
+  // Campos de texto que se traducen a ingles (DeepL, cacheado) y se guardan
+  // en `raw.en`, para la version /en/* del sitio. Prosa simple unicamente —
+  // el singleton `siteCopy` (home S1-S8) NO pasa por aqui: su markdown tiene
+  // estructura que depende de matches literales en espanol (ver
+  // src/pages/index.astro), asi que su traduccion ocurre a nivel de hoja
+  // (strings ya parseados), no sobre el markdown crudo pre-parseo.
+  translatableFields: string[] = [],
 ): Loader {
   return {
     name,
@@ -342,6 +371,9 @@ function createDataSourceLoader(
             raw[field] = cached.filter((url): url is string => Boolean(url));
           }
         }
+        if (translatableFields.length > 0) {
+          raw.en = await translateFields(raw, translatableFields, logger);
+        }
         const data = await parseData({ id, data: raw });
         store.set({ id, data });
       }
@@ -357,6 +389,17 @@ export const casesLoader: Loader = createDataSourceLoader(
   mapCase,
   (page) => page.id,
   ["banner", "logo", "evidenceMedia"],
+  [
+    "title",
+    "resultHeadline",
+    "cardHeadline",
+    "cardContext",
+    "objective",
+    "resultsAndActions",
+    "anchorMetric",
+    "body",
+    "reflection",
+  ],
 );
 
 /** Coleccion `metrics`: id = slug (kebab-case, llave primaria de facto). */
@@ -365,6 +408,8 @@ export const metricsLoader: Loader = createDataSourceLoader(
   fetchMetrics,
   mapMetric,
   (_page, data) => String(data.slug ?? ""),
+  [],
+  ["metric", "canonicalClaim", "mandatoryQualifier", "usageNote"],
 );
 
 /** Coleccion `imageSlots`: id = Slot (title, llave tecnica unica del contrato). */
