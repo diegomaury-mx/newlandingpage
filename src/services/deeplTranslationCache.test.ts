@@ -119,6 +119,109 @@ test("degrada con gracia (texto original + warning) si la API de DeepL responde 
   });
 });
 
+test("reintenta cuando la API responde 429 y traduce exitosamente en el reintento", async () => {
+  await withTempCacheDir(async (cacheDir) => {
+    const logger = fakeLogger();
+    let fetchCalls = 0;
+    const fetchImpl = (async () => {
+      fetchCalls += 1;
+      if (fetchCalls === 1) return new Response("rate limited", { status: 429 });
+      return new Response(
+        JSON.stringify({ translations: [{ text: "Hello world" }] }),
+        { status: 200, headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    const result = await translateCached("Hola mundo", "EN-US", logger, {
+      cacheDir,
+      fetchImpl,
+      apiKey: "fake-key",
+      sleepImpl: async () => {},
+    });
+
+    assert.equal(result, "Hello world");
+    assert.equal(fetchCalls, 2);
+  });
+});
+
+test("respeta el header Retry-After (segundos) antes de reintentar tras un 429", async () => {
+  await withTempCacheDir(async (cacheDir) => {
+    const logger = fakeLogger();
+    let fetchCalls = 0;
+    const sleepCalls: number[] = [];
+    const fetchImpl = (async () => {
+      fetchCalls += 1;
+      if (fetchCalls === 1) {
+        return new Response("rate limited", { status: 429, headers: { "retry-after": "2" } });
+      }
+      return new Response(
+        JSON.stringify({ translations: [{ text: "Hello world" }] }),
+        { status: 200, headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    await translateCached("Hola mundo", "EN-US", logger, {
+      cacheDir,
+      fetchImpl,
+      apiKey: "fake-key",
+      sleepImpl: async (ms: number) => {
+        sleepCalls.push(ms);
+      },
+    });
+
+    assert.ok(sleepCalls.includes(2000), `esperaba un sleep de 2000ms, vi: ${sleepCalls.join(",")}`);
+  });
+});
+
+test("agota los reintentos en 429 continuos y degrada con gracia devolviendo el texto original", async () => {
+  await withTempCacheDir(async (cacheDir) => {
+    const logger = fakeLogger();
+    let fetchCalls = 0;
+    const fetchImpl = (async () => {
+      fetchCalls += 1;
+      return new Response("rate limited", { status: 429 });
+    }) as typeof fetch;
+
+    const result = await translateCached("Hola mundo", "EN-US", logger, {
+      cacheDir,
+      fetchImpl,
+      apiKey: "fake-key",
+      sleepImpl: async () => {},
+      maxRetries: 3,
+    });
+
+    assert.equal(result, "Hola mundo");
+    assert.equal(fetchCalls, 4);
+    assert.match(logger.warnings.at(-1) ?? "", /No se pudo traducir/);
+  });
+});
+
+test("serializa llamadas concurrentes a la API: nunca hay mas de una en vuelo a la vez", async () => {
+  await withTempCacheDir(async (cacheDir) => {
+    const logger = fakeLogger();
+    let inFlight = 0;
+    let maxInFlight = 0;
+    const fetchImpl = (async () => {
+      inFlight += 1;
+      maxInFlight = Math.max(maxInFlight, inFlight);
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      inFlight -= 1;
+      return new Response(
+        JSON.stringify({ translations: [{ text: "x" }] }),
+        { status: 200, headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    await Promise.all([
+      translateCached("uno", "EN-US", logger, { cacheDir, fetchImpl, apiKey: "k", sleepImpl: async () => {} }),
+      translateCached("dos", "EN-US", logger, { cacheDir, fetchImpl, apiKey: "k", sleepImpl: async () => {} }),
+      translateCached("tres", "EN-US", logger, { cacheDir, fetchImpl, apiKey: "k", sleepImpl: async () => {} }),
+    ]);
+
+    assert.equal(maxInFlight, 1);
+  });
+});
+
 test("devuelve el texto vacio tal cual sin llamar a la API", async () => {
   await withTempCacheDir(async (cacheDir) => {
     const logger = fakeLogger();
