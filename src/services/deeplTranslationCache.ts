@@ -77,11 +77,14 @@ async function fetchTranslation(
         Authorization: `DeepL-Auth-Key ${apiKey}`,
         "Content-Type": "application/json",
       },
+      // Sin tag_handling: nuestro texto es prosa/markdown plano, no XML/HTML
+      // valido. `tag_handling: "xml"` (ver historial) le pide a DeepL
+      // parsear el texto COMO XML — cualquier `<`, `>` o `&` suelto en el
+      // contenido real (markdown, nombres de organizaciones, etc.) lo vuelve
+      // XML mal formado y DeepL responde HTTP 400 sin reintento posible.
       body: JSON.stringify({
         text: [text],
         target_lang: targetLang,
-        tag_handling: "xml",
-        preserve_formatting: true,
       }),
     });
 
