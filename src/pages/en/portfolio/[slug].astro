@@ -1,0 +1,198 @@
+---
+// Version /en/portfolio/[slug] de la pagina de caso (src/pages/portfolio/[slug].astro).
+// Reusa la coleccion `cases` (misma fuente Notion): cada campo cae a
+// `entry.data.en.<campo> || entry.data.<campo>` (fallback a espanol si la
+// traduccion DeepL aun no corrio o el texto no era traducible, ver
+// notionLoaders.ts translateFields). El body/markdown se renderiza con el
+// mismo motor que la version ES — el unico riesgo conocido es que la tabla
+// "## Resultado" (Metrica | Antes | Despues) traducida a ingles no matchea
+// el header exacto que activa las tarjetas de resultado (ver markdown.ts
+// RESULT_TABLE_HEADERS): degrada con gracia a tabla simple, mismo fallback
+// ya usado para SOFI.
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { renderMarkdown, extractSections } from '../../../utils/markdown.ts';
+import { slugify } from '../../../utils/slug.ts';
+import { toEmbeddableVideoUrl } from '../../../utils/embedVideo.ts';
+import { uiEn } from '../../../i18n/ui.ts';
+import '../../../styles/case.css';
+
+type CaseEntry = CollectionEntry<'cases'>;
+
+export async function getStaticPaths() {
+  const allCases = await getCollection('cases');
+  const published = allCases.filter((c) => !c.data.draft);
+  return published.map((entry) => ({
+    params: { slug: slugify(entry.data.title) },
+    props: { entry, allCases },
+  }));
+}
+
+interface Props {
+  entry: CaseEntry;
+  allCases: CaseEntry[];
+}
+
+const { entry, allCases } = Astro.props as Props;
+const idToTitle = new Map(allCases.map((c) => [c.id, c.data.en.title || c.data.title]));
+
+const en = entry.data.en;
+const title = en.title || entry.data.title;
+const displayTitle = en.cardHeadline || en.resultHeadline || en.title || entry.data.cardHeadline || entry.data.resultHeadline || entry.data.title;
+const body = en.body || entry.data.body;
+const anchorMetric = en.anchorMetric || entry.data.anchorMetric;
+const reflection = en.reflection || entry.data.reflection;
+
+const bodyHtml = renderMarkdown(body);
+const sections = extractSections(body);
+const editionTitles = entry.data.editions
+  .map((id) => idToTitle.get(id))
+  .filter((t): t is string => Boolean(t));
+
+const DESCRIPTION_MAX = 155;
+const rawDescription = en.objective || entry.data.objective || entry.data.cardContext || entry.data.role;
+const pageDescription =
+  rawDescription.length > DESCRIPTION_MAX
+    ? `${rawDescription.slice(0, DESCRIPTION_MAX)}…`
+    : rawDescription;
+const canonicalUrl = new URL(`/en/portfolio/${slugify(entry.data.title)}`, Astro.site).toString();
+const esUrl = new URL(`/portfolio/${slugify(entry.data.title)}`, Astro.site).toString();
+
+const FALLBACK_OG_IMAGE = '/assets/img/diego-maury.png';
+const ogImage = new URL(entry.data.banner || FALLBACK_OG_IMAGE, Astro.site).toString();
+
+const creativeWorkJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: displayTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  author: { '@type': 'Person', name: 'Diego Maury', url: 'https://diegomaury.mx' },
+  image: ogImage,
+  inLanguage: 'en',
+  ...(entry.data.year ? { datePublished: entry.data.year } : {}),
+};
+---
+
+<BaseLayout
+  title={`${title} · Diego Maury`}
+  description={pageDescription}
+  canonicalUrl={canonicalUrl}
+  ogType="article"
+  ogImage={ogImage}
+  jsonLd={creativeWorkJsonLd}
+  alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
+  enableGtm
+>
+  {entry.data.banner && (
+    <div class="case-hero">
+      <img src={entry.data.banner} alt={title} width="1600" height="320" />
+    </div>
+  )}
+
+  <div class="wrap-case">
+    <div class="case-split">
+      <aside class="case-rail">
+        {entry.data.logo && (
+          <img class="case-rail__logo" src={entry.data.logo} alt={entry.data.organization ?? title} width="120" height="28" />
+        )}
+        <div class="meta">{entry.data.organization ?? '—'} · {entry.data.year ?? '—'} · {entry.data.type ?? '—'}</div>
+        <h1>{displayTitle}</h1>
+
+        <div class="rail-block">
+          <div class="label">{uiEn.case.anchorMetricLabel}</div>
+          <p>{anchorMetric || uiEn.case.anchorMetricEmpty}</p>
+        </div>
+
+        {sections.length > 0 && (
+          <nav class="rail-nav" aria-label={uiEn.case.sectionsAriaLabel}>
+            {sections.map((section) => (
+              <a href={`#${section.id}`} data-rail-link>{section.title}</a>
+            ))}
+          </nav>
+        )}
+      </aside>
+
+      <div class="case-prose">
+        {bodyHtml ? (
+          <div set:html={bodyHtml} />
+        ) : (
+          <p class="case-empty-note">{uiEn.case.emptyBody}</p>
+        )}
+      </div>
+    </div>
+
+    {(entry.data.evidenceMedia.length > 0 || entry.data.evidenceVideos.length > 0) && (
+      <section class="case-evidence-media">
+        <div class="eyebrow">{uiEn.case.visualEvidence}</div>
+        {entry.data.evidenceMedia.length > 0 && (
+          <div class="evidence-photo-grid">
+            {entry.data.evidenceMedia.map((src, i) => (
+              <a class="evidence-photo" href={src} target="_blank" rel="noopener" aria-label={uiEn.case.evidencePhotoAlt(i + 1)}>
+                <img src={src} alt="" loading="lazy" width="400" height="300" />
+              </a>
+            ))}
+          </div>
+        )}
+        {entry.data.evidenceVideos.length > 0 && (
+          <div class="evidence-video-list">
+            {entry.data.evidenceVideos.map((video) => {
+              const embedSrc = toEmbeddableVideoUrl(video.url);
+              return embedSrc ? (
+                <div class="evidence-video-embed">
+                  <iframe src={embedSrc} title={video.label} loading="lazy" allowfullscreen></iframe>
+                </div>
+              ) : (
+                <a class="evidence-video-link" href={video.url} target="_blank" rel="noopener">{video.label}</a>
+              );
+            })}
+          </div>
+        )}
+      </section>
+    )}
+
+    {reflection.trim() && (
+      <section class="case-reflection">
+        <div class="eyebrow">{uiEn.case.reflection}</div>
+        <p>{reflection}</p>
+      </section>
+    )}
+
+    {editionTitles.length > 0 && (
+      <section class="case-archive">
+        <div class="eyebrow">{uiEn.case.caseArchive}</div>
+        <div class="case-archive__row">
+          {editionTitles.map((t) => <span class="case-archive__chip">{t}</span>)}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>
+
+<script is:inline>
+(function () {
+  const links = document.querySelectorAll('[data-rail-link]');
+  if (!links.length) return;
+
+  const targets = [...links]
+    .map((link) => document.querySelector(link.getAttribute('href') ?? ''))
+    .filter(Boolean);
+
+  if (!targets.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        links.forEach((link) => {
+          link.classList.toggle('is-active', link.getAttribute('href') === `#${entry.target.id}`);
+        });
+      });
+    },
+    { rootMargin: '-20% 0px -70% 0px' }
+  );
+
+  targets.forEach((target) => observer.observe(target));
+})();
+</script>

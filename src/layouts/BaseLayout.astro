@@ -7,6 +7,11 @@ import "../styles/globals.css";
 
 import { site } from "../config/site";
 
+interface AlternateUrl {
+  lang: string;
+  url: string;
+}
+
 interface Props {
   title?: string;
   description?: string;
@@ -17,6 +22,11 @@ interface Props {
   enableGtm?: boolean;
   ctaHref?: string;
   ctaLabel?: string;
+  // hreflang: pares { lang, url } de las versiones ES/EN de esta misma
+  // pagina. Solo se declara en paginas que efectivamente tienen ambas
+  // versiones — sin esto, Google puede indexar /en/* y /* como contenido
+  // duplicado en vez de reconocerlas como traducciones.
+  alternateUrls?: AlternateUrl[];
 }
 
 const {
@@ -29,12 +39,15 @@ const {
   enableGtm = false,
   ctaHref = site.links.scheduling,
   ctaLabel = "Hagamos que las cosas pasen",
+  alternateUrls = [],
 }: Props = Astro.props;
+
+const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
 ---
 
 <!doctype html>
 
-<html lang={site.language}>
+<html lang={htmlLang}>
   <head>
     <meta charset="utf-8" />
 
@@ -85,6 +98,14 @@ const {
         href={canonicalUrl}
       />
     )}
+
+    {alternateUrls.map((alt) => (
+      <link
+        rel="alternate"
+        hreflang={alt.lang}
+        href={alt.url}
+      />
+    ))}
 
     <meta
       property="og:type"

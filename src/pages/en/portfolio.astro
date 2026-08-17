@@ -1,0 +1,321 @@
+---
+// Version /en/portfolio de src/pages/portfolio.astro. Misma coleccion
+// `cases`/`metrics` (title/headline/context caen a entry.data.en.* con
+// fallback a espanol). El copy narrativo P1-P3+P5 de `siteCopy` SI se
+// traduce aqui (a diferencia del home S1-S8 en index.astro): esta pagina
+// solo usa heading2()/paragraphs()/.label de parseSiteCopy.ts, que no
+// dependen de matches literales en espanol — a diferencia de index.astro,
+// que si tiene ese riesgo (ver blocksAfterHeading con headings literales).
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { slugify } from '../../utils/slug.ts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { parseSiteCopySections, heading2, paragraphs } from '../../utils/parseSiteCopy.ts';
+import { translateCached } from '../../services/deeplTranslationCache.ts';
+import { uiEn } from '../../i18n/ui.ts';
+import '../../styles/portfolio.css';
+
+type CaseEntry = CollectionEntry<'cases'>;
+type MetricEntry = CollectionEntry<'metrics'>;
+
+function cardTitle(entry: CaseEntry): string {
+  return entry.data.en.cardHeadline || entry.data.en.resultHeadline || entry.data.en.title
+    || entry.data.cardHeadline || entry.data.resultHeadline || entry.data.title;
+}
+
+const CONTEXT_LINE_MAX = 160;
+
+function supportDescription(entry: CaseEntry): string {
+  const text = entry.data.en.cardContext || entry.data.cardContext
+    || entry.data.en.objective || entry.data.objective
+    || entry.data.en.resultsAndActions || entry.data.resultsAndActions;
+  if (!text) return '';
+  return text.length > CONTEXT_LINE_MAX
+    ? `${text.slice(0, CONTEXT_LINE_MAX)}…`
+    : text;
+}
+
+const allCases = await getCollection('cases');
+const published = allCases.filter((c) => !c.data.draft);
+
+const insignia = [...published.filter((c) => c.data.layer === 'Insignia')].sort((a, b) => {
+  const orderA = a.data.insigniaOrder ?? Number.MAX_SAFE_INTEGER;
+  const orderB = b.data.insigniaOrder ?? Number.MAX_SAFE_INTEGER;
+  if (orderA !== orderB) return orderA - orderB;
+  const yearA = Number(a.data.year) || 0;
+  const yearB = Number(b.data.year) || 0;
+  if (yearA !== yearB) return yearB - yearA;
+  return a.data.title.localeCompare(b.data.title, 'en');
+});
+const soporte = published.filter((c) => c.data.layer === 'Soporte');
+
+// --- Copy narrativo (Copy Oficial SSOT, bloques P1-P3+P5), traducido a nivel de hoja ---
+const siteCopyEntries = await getCollection('siteCopy');
+const siteCopyEntry = siteCopyEntries.find((entry) => entry.id === 'site');
+const copySections = siteCopyEntry
+  ? parseSiteCopySections(siteCopyEntry.data.markdown)
+  : new Map();
+
+const p1 = copySections.get('P1')?.blocks ?? [];
+const p2 = copySections.get('P2')?.blocks ?? [];
+const p3 = copySections.get('P3')?.blocks ?? [];
+const p5 = copySections.get('P5')?.blocks ?? [];
+
+const heroEyebrow = 'Strategic Program Director';
+const heroH1 = await translateCached(
+  heading2(p1) ||
+    'Encuentro el mecanismo que frena la ejecución de operaciones complejas, y lo convierto en sistemas medibles que el equipo sostiene.',
+  'EN-US',
+  console,
+);
+const heroLede = await translateCached(
+  paragraphs(p1)[0] ||
+    'Programas de innovación, arquitecturas RevOps y ecosistemas de emprendimiento en LATAM. Este portafolio no publica lo que no puede probar, y lo dice en cada cifra.',
+  'EN-US',
+  console,
+);
+
+const insigniaEyebrow = await translateCached(copySections.get('P2')?.label ?? 'Casos insignia', 'EN-US', console);
+const insigniaHeadline = await translateCached(
+  heading2(p2) || 'No son los casos más grandes. Son los que puedo defender de principio a fin.',
+  'EN-US',
+  console,
+);
+
+const soporteHeadline = await translateCached(
+  heading2(p3) || 'El resto del registro. Menos protagonismo, la misma disciplina.',
+  'EN-US',
+  console,
+);
+
+const CALENDAR_HREF = 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun';
+const MAIL_HREF = 'mailto:dm@diegomaury.mx';
+const closingEyebrow = await translateCached(copySections.get('P5')?.label ?? 'Siguiente paso', 'EN-US', console);
+const closingHeadline = await translateCached(
+  heading2(p5) || '¿Este registro resuelve lo que tienes enfrente?',
+  'EN-US',
+  console,
+);
+const closingLede = await translateCached(
+  paragraphs(p5)[0] || 'Hablemos de tu caso. Agenda una llamada o escríbeme directo.',
+  'EN-US',
+  console,
+);
+
+const totalPublicadas = insignia.length + soporte.length;
+const organizacionesUnicas = new Set(
+  [...insignia, ...soporte]
+    .map((c) => c.data.organization)
+    .filter((org): org is string => Boolean(org))
+).size;
+const camposUnicos = new Set(
+  [...insignia, ...soporte].flatMap((c) => c.data.capabilities)
+).size;
+const ANOS_EXPERIENCIA = '7+';
+
+const metricsEntries = await getCollection('metrics');
+function metricBySlug(slug: string): MetricEntry | undefined {
+  return metricsEntries.find((entry) => entry.data.slug === slug && entry.data.buildable);
+}
+function metricLabel(m: MetricEntry): string {
+  return m.data.en.metric || m.data.metric;
+}
+function metricQualifier(m: MetricEntry): string {
+  return m.data.en.mandatoryQualifier || m.data.mandatoryQualifier;
+}
+const IMPACT_ANCHOR_SLUGS = ['incmty-participantes-inscritos', 'rodi-sofi'];
+const IMPACT_SUPPORT_SLUGS = [
+  'heineken-proyectos-evaluados',
+  'hacksureste-participantes',
+  'heineken-crecimiento-regional',
+  'fliphouse-leads-crm',
+  'sofi-cobertura-automatica',
+  'fliphouse-speed-to-lead',
+];
+const impactAnchors = IMPACT_ANCHOR_SLUGS.map(metricBySlug).filter(
+  (m): m is MetricEntry => Boolean(m)
+);
+const impactSupport = IMPACT_SUPPORT_SLUGS.map(metricBySlug).filter(
+  (m): m is MetricEntry => Boolean(m)
+);
+
+const pageTitle = 'Portfolio · Diego Maury';
+const pageDescription =
+  'Portfolio with verifiable evidence, case by case. Innovation programs, RevOps architectures, and entrepreneurship ecosystems across LATAM.';
+const canonicalUrl = new URL('/en/portfolio', Astro.site).toString();
+const esUrl = new URL('/portfolio', Astro.site).toString();
+const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
+
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: [...insignia, ...soporte].map((c, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    url: new URL(`/en/portfolio/${slugify(c.data.title)}`, Astro.site).toString(),
+    name: cardTitle(c),
+  })),
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl={canonicalUrl}
+  jsonLd={itemListJsonLd}
+  ogImage={ogImage}
+  alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
+  ctaLabel={uiEn.nav.ctaLabel}
+  enableGtm
+>
+  <div class="portfolio-page">
+<section class="section hero">
+  <div class="wrap">
+    <div class="eyebrow">{heroEyebrow}</div>
+    <h1>{heroH1}</h1>
+    <p>{heroLede}</p>
+  </div>
+</section>
+
+<section class="section stats">
+  <div class="wrap">
+    <div class="eyebrow eyebrow--plain">{uiEn.portfolio.byTheNumbers}</div>
+
+    <div class="stats__catalog">
+      <div class="stat-cat">
+        <div class="stat-cat__n">{totalPublicadas}</div>
+        <div class="stat-cat__l">{uiEn.portfolio.projectsPublished}</div>
+      </div>
+      <div class="stat-cat">
+        <div class="stat-cat__n">{organizacionesUnicas}</div>
+        <div class="stat-cat__l">{uiEn.portfolio.distinctOrganizations}</div>
+      </div>
+      <div class="stat-cat">
+        <div class="stat-cat__n">{camposUnicos}</div>
+        <div class="stat-cat__l">{uiEn.portfolio.expertiseFields}</div>
+      </div>
+      <div class="stat-cat">
+        <div class="stat-cat__n">{ANOS_EXPERIENCIA}</div>
+        <div class="stat-cat__l">{uiEn.portfolio.yearsExperienceLabel}</div>
+      </div>
+    </div>
+
+    {impactAnchors.length > 0 && (
+      <div class="label stats__impact-label">{uiEn.portfolio.impactDocumented}</div>
+    )}
+
+    {impactAnchors.length > 0 && (
+      <div class="stats__anchors">
+        {impactAnchors.map((m) => (
+          <div class="stat-anchor">
+            <div class="stat-anchor__n">{m.data.value}</div>
+            <div class="stat-anchor__l">{metricLabel(m)}</div>
+            <div class="stat-anchor__q">{metricQualifier(m)}</div>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {impactSupport.length > 0 && (
+      <div class="stats__support">
+        {impactSupport.map((m) => (
+          <div class="stat-support">
+            <div class="stat-support__n">{m.data.value}</div>
+            <div class="stat-support__l">{metricLabel(m)}</div>
+            <div class="stat-support__q">{metricQualifier(m)}</div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="section gallery">
+  <div class="wrap">
+    <div class="eyebrow">{insigniaEyebrow}</div>
+    <h2>{insigniaHeadline}</h2>
+    {insignia.length === 0 && (
+      <p class="empty-note">{uiEn.portfolio.emptyInsignia}</p>
+    )}
+    {insignia.length > 0 && (
+      <div class="gallery__grid">
+        {insignia.map((c) => (
+          <a class="card card--insignia" href={`/en/portfolio/${slugify(c.data.title)}`}>
+            {c.data.banner ? (
+              <div class="card__media">
+                <img src={c.data.banner} alt={c.data.en.title || c.data.title} loading="lazy" width="800" height="500" />
+                {c.data.logo && <img class="card__logo" src={c.data.logo} alt="" aria-hidden="true" loading="lazy" width="40" height="40" />}
+              </div>
+            ) : (
+              <div class="media-void"><span>{uiEn.portfolio.noPublishableImage}</span></div>
+            )}
+            <div class="card__body">
+              <span class="meta">{c.data.organization ?? '—'} · {c.data.year ?? '—'}</span>
+              <h3 class="card__title">{cardTitle(c)}</h3>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="section testimonials">
+  <div class="wrap-narrow">
+    <div class="eyebrow eyebrow--plain">Testimonials</div>
+    <script src="https://widget.senja.io/widget/43006bd7-ae94-43c7-845a-7bb612ede4a3/platform.js" type="text/javascript" async></script>
+    <div class="senja-embed" data-id="43006bd7-ae94-43c7-845a-7bb612ede4a3" data-mode="shadow" data-lazyload="false" style="display: block; width: 100%;"></div>
+  </div>
+</section>
+
+<section class="section support">
+  <div class="wrap">
+    <div class="eyebrow eyebrow--plain">{uiEn.portfolio.supportPrefix} · {soporte.length} {uiEn.portfolio.supportSuffix}</div>
+    <h2>{soporteHeadline}</h2>
+    {soporte.length === 0 ? (
+      <p class="empty-note">{uiEn.portfolio.emptySupport}</p>
+    ) : (
+      <div class="support-grid">
+        {soporte.map((c) => (
+          <a class="card card--support" href={`/en/portfolio/${slugify(c.data.title)}`}>
+            <div class="support-card__head">
+              {c.data.logo ? (
+                <img class="support-card__logo" src={c.data.logo} alt="" aria-hidden="true" loading="lazy" width="44" height="44" />
+              ) : (
+                <div class="support-card__logo support-card__logo--fallback" aria-hidden="true">
+                  {(c.data.organization ?? c.data.title).slice(0, 1)}
+                </div>
+              )}
+              <div class="support-card__meta">
+                <span class="meta">{c.data.organization ?? '—'} · {c.data.year ?? '—'}</span>
+                <h3 class="card__title">{c.data.en.title || c.data.title}</h3>
+              </div>
+            </div>
+            {supportDescription(c) && (
+              <p class="support-card__desc">{supportDescription(c)}</p>
+            )}
+            {c.data.capabilities.length > 0 && (
+              <div class="card__caps">
+                {c.data.capabilities.slice(0, 3).map((cap) => <span class="cap">{cap}</span>)}
+              </div>
+            )}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="section closing">
+  <div class="wrap-narrow">
+    <div class="eyebrow">{closingEyebrow}</div>
+    <h2>{closingHeadline}</h2>
+    <p>{closingLede}</p>
+    <div class="closing__ctas">
+      <a class="btn-primary" href={CALENDAR_HREF} target="_blank" rel="noopener">{uiEn.portfolio.scheduleCall}</a>
+      <a class="btn-ghost" href={MAIL_HREF}>{uiEn.portfolio.writeMe}</a>
+    </div>
+  </div>
+</section>
+  </div>
+</BaseLayout>
