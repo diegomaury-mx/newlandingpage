@@ -25,6 +25,23 @@ export const uiEn = {
     emptyBody:
       "This case doesn't have its narrative body (Context, Action, Result) written yet.",
   },
+  home: {
+    trustLabel: "I've worked with",
+    deliverHeading: "What I deliver",
+    viewFullCase: 'View full case →',
+    statAccumulatedTrajectory: 'Accumulated trajectory, own figure',
+    statInnovationEcosystems: '7+ in innovation and ecosystems',
+    fallbackTitle: 'Diego Maury · Strategic Program Director',
+    fallbackDescription:
+      'Strategic Program Director and innovation consultant: I design programs and systems that turn strategy into execution.',
+    knowsAbout: [
+      'Innovation program leadership',
+      'RevOps',
+      'Entrepreneurship ecosystems in LATAM',
+      'Innovation consulting',
+    ],
+    problemDiagramAlt: 'Diagram: strategy and operations connected by a system',
+  },
   portfolio: {
     byTheNumbers: "By the numbers",
     projectsPublished: "projects published",

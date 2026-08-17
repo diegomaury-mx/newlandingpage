@@ -1,0 +1,870 @@
+---
+// Version /en del home (src/pages/index.astro). El parseo del markdown de
+// Notion (lineas hasta el separador `---` de abajo) es una copia EXACTA,
+// SIN MODIFICAR, de la logica de index.astro: los matches literales en
+// espanol (`blocksAfterHeading(s5, '## Mi modelo de intervención')`,
+// `valueAfter(s4, 'Centro')`, etc.) siguen operando sobre el markdown
+// espanol crudo, tal cual sale de Notion — cero riesgo de romper el parseo.
+// La traduccion a ingles ocurre DESPUES, a nivel de hoja (cada string ya
+// extraido pasa por `t()`, que traduce via DeepL con cache), nunca sobre el
+// markdown crudo. Ver hallazgo documentado en la sesion 2026-08-17.
+//
+// Simplificaciones conocidas frente a la version ES (documentadas, no bugs):
+// - El acento ember sobre una frase especifica del H1 ("resultados
+//   tangibles") depende de un match literal en espanol; en EN se pierde el
+//   span de acento (el H1 se ve completo, sin subrayado de color).
+// - Los titulos de "Sistemas propios"/testimonios usan el titulo ORIGINAL en
+//   espanol (no el traducido) para resolver logo/link — nombres propios
+//   (REDUX, SOFI, HackSureste, nombres de personas) nunca se traducen.
+import { getCollection } from 'astro:content';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/home.css";
+import {
+  parseSiteCopySections,
+  heading1,
+  heading2,
+  paragraphs,
+  ctaLabels,
+  valueAfter,
+  blocksBeforeHeading,
+  blocksAfterHeading,
+  bulletItems,
+  headingCards,
+  testimonials,
+  firstCodeBlock,
+  parseFlowDiagram,
+} from '../../utils/parseSiteCopy.ts';
+import { translateCached } from '../../services/deeplTranslationCache.ts';
+import { toLocalePath } from '../../utils/locale.ts';
+import { uiEn } from '../../i18n/ui.ts';
+
+function t(text: string): Promise<string> {
+  return text.trim() ? translateCached(text, 'EN-US', console) : Promise.resolve(text);
+}
+async function tAll(items: string[]): Promise<string[]> {
+  return Promise.all(items.map(t));
+}
+
+const siteCopyEntries = await getCollection('siteCopy');
+const siteCopy = siteCopyEntries.find((entry) => entry.id === 'site');
+const sections = siteCopy ? parseSiteCopySections(siteCopy.data.markdown) : new Map();
+
+const metricsEntries = await getCollection('metrics');
+const incmtyMetric = metricsEntries.find((entry) => entry.id === 'incmty-participantes-inscritos');
+
+const imageSlotEntries = await getCollection('imageSlots');
+function slotSrc(slotId: string, fallback: string): string {
+  const entry = imageSlotEntries.find((e) => e.id === slotId);
+  return entry?.data.status === 'Listo' && entry.data.imageUrl ? entry.data.imageUrl : fallback;
+}
+
+const problemaDiagramaSlot = imageSlotEntries.find((e) => e.id === 'diagrama-problema');
+const problemaDiagramaReady = Boolean(problemaDiagramaSlot?.data.status === 'Listo' && problemaDiagramaSlot.data.imageUrl);
+
+const SECTION_IDS = {
+  S1: 's1-hero',
+  S2: 's2-quien-soy',
+  S3: 's3-problema',
+  S4: 's4-evidencia',
+  S5: 's5-como-trabajo',
+  S6: 's6-sistemas-propios',
+  S6b: 's6b-prueba-social',
+  S8: 's8-siguiente-paso',
+} as const;
+
+// --- S1 · Hero (parseo ES sin modificar) --------------------------------------
+const s1 = sections.get('S1')?.blocks ?? [];
+const heroName = heading1(s1);
+const heroHeadline =
+  heading2(s1) ||
+  `${heroName}. Diseño programas, procesos y sistemas para convertir la visión en resultados tangibles.`;
+const heroParas = paragraphs(s1);
+const heroRole = heroParas[0] ?? '';
+const heroSub = heroParas[1] ?? '';
+const heroCtas = ctaLabels(s1);
+
+const BLOCKED_LOGO_NAMES = new Set(['fliphouse']);
+const heroLogos = imageSlotEntries
+  .filter((e) => e.id.startsWith('logo-') && !e.id.endsWith('-evidencia'))
+  .filter((e) => e.data.status === 'Listo' && e.data.imageUrl && e.data.nombre)
+  .filter((e) => !BLOCKED_LOGO_NAMES.has(e.data.nombre.toLowerCase()))
+  .sort((a, b) => a.data.nombre.localeCompare(b.data.nombre, 'es'))
+  .map((e) => ({ src: e.data.imageUrl as string, alt: e.data.nombre }));
+
+function systemsLogo(title: string): { src: string; alt: string } | null {
+  const key = title.toLowerCase();
+  if (key.includes('redux')) return { src: slotSrc('ip-logo-redux','/assets/img/logos/redux.svg'), alt:'REDUX' };
+  if (key.includes('hacksureste')) return { src: slotSrc('ip-logo-hacksureste','/assets/img/logos/hacksureste.svg'), alt:'HackSureste' };
+  if (key.includes('sofi')) return { src: slotSrc('ip-logo-sofi','/assets/img/logos/sofi.svg'), alt:'SOFI' };
+  return null;
+}
+
+// --- S2 · Quien soy (parseo ES sin modificar) ---------------------------------
+const s2 = sections.get('S2')?.blocks ?? [];
+const aboutHeadline = heading2(s2);
+const aboutParas = paragraphs(s2);
+const aboutTagline = aboutParas[0] ?? '';
+const aboutIntro = aboutParas.slice(1, 4);
+const aboutRoles = aboutParas.slice(4, 7);
+const aboutBio = aboutParas[7] ?? '';
+const aboutStatsLine = aboutParas[8] ?? '';
+const aboutStatsRaw = aboutStatsLine.split('•').map((s) => s.trim()).filter(Boolean);
+const STAT_SUBLABELS_EN = [
+  uiEn.home.statAccumulatedTrajectory,
+  uiEn.home.statInnovationEcosystems,
+  incmtyMetric?.data.en.mandatoryQualifier || incmtyMetric?.data.mandatoryQualifier || 'Aggregate of INCmty programs (HGC included), estimated',
+];
+const aboutStatsRawEn = await tAll(aboutStatsRaw);
+const aboutStats = aboutStatsRawEn.map((raw, i) => {
+  const match = raw.match(/^([\d.,]+\+?)\s*(.+)$/);
+  const n = match ? match[1] : raw;
+  const l = match ? match[2] : '';
+  const countTo = i === 2 ? (incmtyMetric?.data.value ?? n).replace(/\D/g, '') : '';
+  return { n, l, s: STAT_SUBLABELS_EN[i] ?? '', countTo };
+});
+
+// --- S3 · El problema que resuelvo (parseo ES sin modificar) ------------------
+const s3 = sections.get('S3')?.blocks ?? [];
+const problemLabel = sections.get('S3')?.label ?? 'El problema que resuelvo';
+const problemHeadline = heading2(s3);
+const problemParas = paragraphs(s3).filter(
+  (p) => !p.includes('\n') && !p.startsWith('┌') && p !== p.toUpperCase(),
+);
+const problemQuote = s3.find((b: string) => b.trim().startsWith('>'))?.trim().slice(1).trim() ?? '';
+const problemDiagram = parseFlowDiagram(firstCodeBlock(s3));
+
+// --- S4 · Evidencia (parseo ES sin modificar) ---------------------------------
+const s4 = sections.get('S4')?.blocks ?? [];
+const evidenceLabel = sections.get('S4')?.label ?? 'Evidencia';
+const evidenceTitle = heading1(s4);
+const evidenceIntroText = paragraphs(blocksBeforeHeading(s4, ['Centro']))[0] ?? '';
+const evidenceCenterNode = valueAfter(s4, 'Centro');
+const evidenceFieldLabels = firstCodeBlock(s4)
+  .split('\n')
+  .map((line) => line.trim())
+  .filter(Boolean);
+const afterFieldsFence = blocksAfterHeading(blocksAfterHeading(s4, '```'), '```');
+const evidenceClosing = paragraphs(afterFieldsFence)[0] ?? '';
+const EVIDENCE_FIELDS = evidenceFieldLabels.map((label, i) => ({ key: `field-${i}`, label }));
+
+const EVIDENCE_NODE_RADIUS = 40;
+const EVIDENCE_DOT_RADIUS = 31;
+const EVIDENCE_CENTER_HALF_WIDTH = 21;
+const EVIDENCE_CENTER_HALF_HEIGHT = 11;
+function evidencePoint(index: number, total: number, radius: number): { x: number; y: number } {
+  const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
+  return {
+    x: Math.round((50 + radius * Math.cos(angle)) * 100) / 100,
+    y: Math.round((50 + radius * Math.sin(angle)) * 100) / 100,
+  };
+}
+function evidenceLineStart(index: number, total: number): { x: number; y: number } {
+  const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  const tVal = Math.min(
+    Math.abs(c) > 1e-6 ? EVIDENCE_CENTER_HALF_WIDTH / Math.abs(c) : Infinity,
+    Math.abs(s) > 1e-6 ? EVIDENCE_CENTER_HALF_HEIGHT / Math.abs(s) : Infinity,
+  );
+  return {
+    x: Math.round((50 + tVal * c) * 100) / 100,
+    y: Math.round((50 + tVal * s) * 100) / 100,
+  };
+}
+const evidenceNodesEs = EVIDENCE_FIELDS.map((field, i) => ({
+  ...field,
+  node: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_NODE_RADIUS),
+  dot: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_DOT_RADIUS),
+  lineStart: evidenceLineStart(i, EVIDENCE_FIELDS.length),
+}));
+
+// --- S5 · Como trabajo (parseo ES sin modificar) ------------------------------
+const s5 = sections.get('S5')?.blocks ?? [];
+const workLabel = sections.get('S5')?.label ?? 'Cómo trabajo';
+const workHeadline = heading1(s5);
+const workIntro = paragraphs(blocksBeforeHeading(s5, ['## Mi modelo de intervención']));
+const afterModel = blocksAfterHeading(s5, '## Mi modelo de intervención');
+const workSteps = headingCards(blocksBeforeHeading(afterModel, ['## Lo que entrego']), '### ');
+const afterDeliver = blocksAfterHeading(s5, '## Lo que entrego');
+const deliverIntro = paragraphs(afterDeliver);
+const deliverItems = bulletItems(afterDeliver);
+
+// --- S6 · Sistemas propios (parseo ES sin modificar) --------------------------
+const s6 = sections.get('S6')?.blocks ?? [];
+const systemsLabel = sections.get('S6')?.label ?? 'Sistemas propios';
+const systemsHeadline = heading1(s6);
+const systemsIntro = paragraphs(blocksBeforeHeading(s6, ['## REDUX']));
+const systemsCards = headingCards(blocksBeforeHeading(s6, ['## El verdadero entregable']), '## ');
+const systemsClosingHeading =
+  s6.find((b: string) => b.trim().startsWith('## El verdadero entregable'))?.trim().slice(3).trim() ??
+  'El verdadero entregable';
+const systemsClosing = paragraphs(blocksAfterHeading(s6, '## El verdadero entregable'));
+
+function systemsCaseLink(title: string): string | null {
+  const key = title.toLowerCase();
+  if (key.includes('sofi')) return '/en/portfolio/sofi';
+  if (key.includes('hacksureste')) return '/en/portfolio/hacksureste';
+  if (key.includes('redux')) return '/portfolio/redux-incmty.html';
+  return null;
+}
+
+// --- S6b · Prueba social (parseo ES sin modificar) ----------------------------
+const s6b = sections.get('S6b')?.blocks ?? [];
+const testimonialsLabel = sections.get('S6b')?.label ?? 'Prueba social';
+const testimonialsHeadline = heading1(s6b);
+const testimonialsIntro = paragraphs(blocksBeforeHeading(s6b, ['>']));
+const testimonialItems = testimonials(s6b);
+const moreExperiencesHeading =
+  s6b.find((b: string) => b.trim() === '## Más experiencias')
+    ?.replace(/^##\s*/, '') ?? '';
+const moreExperiences = blocksAfterHeading(s6b, '## Más experiencias');
+const senjaId = moreExperiences[0]?.trim();
+
+// --- Destinos de CTA (resueltos por la etiqueta ORIGINAL en espanol) ---------
+const CV_HREF = '/cv/diego-maury-cv.pdf';
+const LINKEDIN_HREF = 'https://www.linkedin.com/in/diegomaury';
+const MAIL_HREF = 'mailto:dm@diegomaury.mx';
+const CALENDAR_HREF = 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun';
+
+interface CtaTarget {
+  href: string;
+  download?: boolean;
+  external?: boolean;
+}
+
+function ctaTarget(originalLabel: string): CtaTarget {
+  const l = originalLabel.toLowerCase();
+  if (l.includes('caso') || l.includes('portafolio')) return { href: '/en/portfolio' };
+  if (l.includes('cv')) return { href: CV_HREF, download: true };
+  if (l.includes('linkedin')) return { href: LINKEDIN_HREF, external: true };
+  if (l.includes('correo')) return { href: MAIL_HREF };
+  return { href: CALENDAR_HREF, external: true };
+}
+
+// --- S8 · Siguiente paso (parseo ES sin modificar) ----------------------------
+const s8 = sections.get('S8')?.blocks ?? [];
+const finalLabel = sections.get('S8')?.label ?? 'Siguiente paso';
+const finalHeadline = heading2(s8);
+const finalIntro = paragraphs(blocksBeforeHeading(s8, ['### ']));
+const finalStepCards = headingCards(s8, '### ');
+const finalSteps = finalStepCards.map((card) => ({
+  title: card.title,
+  description: card.paragraphs[0] ?? '',
+  tag: card.paragraphs[1] ?? '',
+}));
+const afterSteps = finalStepCards.length
+  ? blocksAfterHeading(s8, `### ${finalStepCards[finalStepCards.length - 1].title}`)
+  : [];
+const finalCtas = ctaLabels(afterSteps);
+const finalTrustLine = afterSteps.find((b) => b.includes('·') && !ctaLabels([b]).length)?.trim() ?? '';
+const finalTrustParts = finalTrustLine.split('·').map((s) => s.trim()).filter(Boolean);
+
+// --- SEO (parseo ES sin modificar) --------------------------------------------
+const seo = sections.get('SEO')?.blocks ?? [];
+const seoTitleEs = valueAfter(seo, 'Title');
+const seoDescriptionEs = valueAfter(seo, 'Meta description');
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Traduccion a nivel de hoja (DeepL, cacheada) — todo lo de arriba es ES puro.
+// ═══════════════════════════════════════════════════════════════════════════
+
+const heroHeadlineEn = await t(heroHeadline);
+const heroRoleEn = await t(heroRole);
+const heroSubEn = await t(heroSub);
+const heroCtasEn = await tAll(heroCtas);
+
+const aboutHeadlineEn = await t(aboutHeadline);
+const aboutTaglineEn = await t(aboutTagline);
+const aboutIntroEn = await tAll(aboutIntro);
+const aboutRolesEn = await tAll(aboutRoles);
+const aboutBioEn = await t(aboutBio);
+
+const problemLabelEn = await t(problemLabel);
+const problemHeadlineEn = await t(problemHeadline);
+const problemParasEn = await tAll(problemParas);
+const problemQuoteEn = await t(problemQuote);
+const problemDiagramEn = problemDiagram && {
+  fromLabel: await t(problemDiagram.fromLabel),
+  connectorLabel: await t(problemDiagram.connectorLabel),
+  toLabel: await t(problemDiagram.toLabel),
+};
+
+const evidenceLabelEn = await t(evidenceLabel);
+const evidenceTitleEn = await t(evidenceTitle);
+const evidenceIntroTextEn = await t(evidenceIntroText);
+const evidenceCenterNodeEn = await t(evidenceCenterNode);
+const evidenceClosingEn = await t(evidenceClosing);
+const evidenceNodes = await Promise.all(
+  evidenceNodesEs.map(async (n) => ({ ...n, label: await t(n.label) })),
+);
+
+const workLabelEn = await t(workLabel);
+const workHeadlineEn = await t(workHeadline);
+const workIntroEn = await tAll(workIntro);
+const workStepsEn = await Promise.all(
+  workSteps.map(async (step) => {
+    const [n, ...titleParts] = step.title.split('·');
+    const titlePart = titleParts.join('·').trim() || step.title;
+    return {
+      n: n.trim(),
+      title: await t(titlePart),
+      paragraph: await t(step.paragraphs[0] ?? ''),
+    };
+  }),
+);
+const deliverIntroEn = await tAll(deliverIntro);
+const deliverItemsEn = await tAll(deliverItems);
+
+const systemsLabelEn = await t(systemsLabel);
+const systemsHeadlineEn = await t(systemsHeadline);
+const systemsIntroEn = await tAll(systemsIntro);
+const systemsCardsEn = await Promise.all(
+  systemsCards.map(async (card) => ({
+    originalTitle: card.title,
+    title: await t(card.title),
+    paragraphs: await tAll(card.paragraphs),
+  })),
+);
+const systemsClosingHeadingEn = await t(systemsClosingHeading);
+const systemsClosingEn = await tAll(systemsClosing);
+
+const testimonialsLabelEn = await t(testimonialsLabel);
+const testimonialsHeadlineEn = await t(testimonialsHeadline);
+const testimonialsIntroEn = await tAll(testimonialsIntro);
+const testimonialItemsEn = await Promise.all(
+  testimonialItems.map(async (item) => ({
+    quote: await t(item.quote),
+    name: item.name,
+    roleLines: item.roleLines,
+  })),
+);
+const moreExperiencesHeadingEn = await t(moreExperiencesHeading);
+
+const finalLabelEn = await t(finalLabel);
+const finalHeadlineEn = await t(finalHeadline);
+const finalIntroEn = await tAll(finalIntro);
+const finalStepsEn = await Promise.all(
+  finalSteps.map(async (step) => ({
+    title: await t(step.title),
+    description: await t(step.description),
+    tag: await t(step.tag),
+  })),
+);
+const finalCtasEn = await tAll(finalCtas);
+const finalTrustPartsEn = await tAll(finalTrustParts);
+
+const pageTitle = (seoTitleEs && (await t(seoTitleEs))) || uiEn.home.fallbackTitle;
+const pageDescription = (seoDescriptionEs && (await t(seoDescriptionEs))) || uiEn.home.fallbackDescription;
+const canonicalUrl = new URL('/en', Astro.site).toString();
+const esUrl = new URL('/', Astro.site).toString();
+const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Diego Maury',
+  url: 'https://diegomaury.mx',
+  jobTitle: 'Strategic Program Director',
+  sameAs: ['https://www.linkedin.com/in/diegomaury/'],
+  knowsAbout: uiEn.home.knowsAbout,
+};
+---
+<BaseLayout
+  canonicalUrl={canonicalUrl}
+  jsonLd={personJsonLd}
+  title={pageTitle}
+  description={pageDescription}
+  ogImage={ogImage}
+  alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
+  otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
+  ctaLabel={uiEn.nav.ctaLabel}
+>
+<!-- Google Tag Manager -->
+<script is:inline src="/js/gtm.js"></script>
+<!-- End Google Tag Manager -->
+
+<!-- S1 HERO -->
+<section class="section" id={SECTION_IDS.S1}>
+  <div class="section-inner">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-label" data-reveal>{heroRoleEn || 'Strategic Program Director'}</div>
+        <h1 class="hero-h1" data-reveal style="--delay:.08s">{heroHeadlineEn}</h1>
+        {heroSubEn && <p class="hero-sub" data-reveal style="--delay:.14s">{heroSubEn}</p>}
+        {heroCtas.length > 0 && (
+          <div class="hero-ctas" data-reveal style="--delay:.2s">
+            {heroCtas.map((originalLabel, i) => {
+              const target = ctaTarget(originalLabel);
+              return (
+                <a
+                  href={target.href}
+                  class={i === 0 ? 'btn-primary' : 'btn-ghost'}
+                  download={target.download}
+                  target={target.external ? '_blank' : undefined}
+                  rel={target.external ? 'noopener' : undefined}
+                >{heroCtasEn[i]}</a>
+              );
+            })}
+          </div>
+        )}
+      </div>
+      <div class="hero-media" data-reveal style="--delay:.1s">
+        <img src={slotSrc('foto-diego-hero', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="eager" fetchpriority="high" width="700" height="875">
+      </div>
+    </div>
+    {heroLogos.length > 0 && (
+      <div class="trust" data-reveal style="--delay:.32s">
+        <div class="trust-label">{uiEn.home.trustLabel}</div>
+        <div class="trust-track-wrap">
+          <div class="trust-track">
+            {heroLogos.map((logo) => <div class="trust-logo"><img src={logo.src} alt={logo.alt} loading="lazy"></div>)}
+            {heroLogos.map((logo) => <div class="trust-logo" aria-hidden="true"><img src={logo.src} alt="" loading="lazy"></div>)}
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<!-- S2 QUIEN SOY -->
+<section class="about-section" id={SECTION_IDS.S2}>
+  <div class="about-body">
+    <div class="about-header" data-reveal>
+      <div class="about-name">{heroName || 'Diego Maury'}</div>
+      {heroRoleEn && <div class="about-title-txt">{heroRoleEn}</div>}
+      {aboutTaglineEn && <p class="about-tagline">{aboutTaglineEn}</p>}
+    </div>
+
+    {aboutIntroEn.length > 0 && (
+      <div class="about-intro-full" data-reveal style="--delay:.14s">
+        {aboutIntroEn.map((p) => <p class="about-intro-p">{p}</p>)}
+      </div>
+    )}
+
+    {aboutRolesEn.length > 0 && (
+      <div class="about-roles" data-reveal style="--delay:.18s">
+        {aboutRolesEn.map((role) => (
+          <div class="about-role">
+            <div class="about-role-dot"></div>
+            <div class="about-role-txt">{role}</div>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div class="about-photo-wrap" data-reveal style="--delay:.1s">
+      <div class="about-circle-bg"></div>
+      <div class="about-photo-slot">
+        <img src={slotSrc('foto-diego-about', '/cms-media/diego/diegomaurypng.png')} width="700" height="700" alt={heroName || 'Diego Maury'} loading="lazy">
+      </div>
+    </div>
+
+    <div class="about-right" data-reveal style="--delay:.22s">
+      {aboutBioEn && <p class="about-bio">{aboutBioEn}</p>}
+      {aboutHeadlineEn && <p class="about-bio">{aboutHeadlineEn}</p>}
+    </div>
+  </div>
+  {aboutStats.length > 0 && (
+    <div style="max-width:1160px;margin:0 auto;padding:0 32px">
+      <div class="metrics" data-reveal style="--delay:.26s">
+        {aboutStats.map((stat) => (
+          <div class="metric">
+            <div class="metric-n" data-count={stat.countTo || undefined}>{stat.n}</div>
+            <div class="metric-l">{stat.l}</div>
+            {stat.s && <div class="metric-s">{stat.s}</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</section>
+
+<!-- S3 EL PROBLEMA QUE RESUELVO -->
+<section class="section" id={SECTION_IDS.S3}>
+  <div class="section-inner">
+    <div class="problema-grid">
+      <div class="problema-copy">
+        <div class="section-label" data-reveal>{problemLabelEn}</div>
+        <h2 class="section-title problema-title" data-reveal style="--delay:.06s">{problemHeadlineEn}</h2>
+        {problemParasEn.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
+      </div>
+      <div class="problema-media" data-reveal style="--delay:.1s">
+        {problemaDiagramaReady ? (
+          <img src={problemaDiagramaSlot!.data.imageUrl} alt={uiEn.home.problemDiagramAlt} loading="lazy">
+        ) : (
+          <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={uiEn.home.problemDiagramAlt}>
+            <circle cx="40" cy="30" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
+            <circle cx="160" cy="30" r="16" stroke="var(--border)" stroke-width="2" fill="var(--bg)"></circle>
+            <circle cx="100" cy="130" r="24" stroke="var(--ember)" stroke-width="2.5" fill="rgba(255,92,57,0.1)"></circle>
+            <line x1="46" y1="44" x2="90" y2="112" stroke="var(--border)" stroke-width="2"></line>
+            <line x1="154" y1="44" x2="110" y2="112" stroke="var(--border)" stroke-width="2"></line>
+            <line x1="56" y1="30" x2="144" y2="30" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 5"></line>
+          </svg>
+        )}
+      </div>
+    </div>
+
+    {problemDiagramEn && (
+      <div class="problem-flow" data-reveal style="--delay:.22s">
+        <div class="problem-flow-row">
+          <span class="problem-flow-line"></span>
+          <div class="problem-flow-node problem-flow-node-start">
+            <span class="problem-flow-dot"></span>{problemDiagramEn.fromLabel}
+          </div>
+          <div class="problem-flow-center">
+            <span class="problem-flow-center-label">{problemDiagramEn.connectorLabel}</span>
+            <span class="problem-flow-center-arrow">›</span>
+          </div>
+          <div class="problem-flow-node problem-flow-node-end">
+            <span class="problem-flow-dot"></span>{problemDiagramEn.toLabel}
+          </div>
+        </div>
+      </div>
+    )}
+
+    {problemQuoteEn && <p class="problema-quote" data-reveal style="--delay:.28s">{problemQuoteEn}</p>}
+  </div>
+</section>
+
+<!-- S4 EVIDENCIA -->
+<section class="section" id={SECTION_IDS.S4}>
+  <div class="section-inner">
+    <div class="evidence-grid">
+      <div class="evidence-copy">
+        <div class="section-label" data-reveal>{evidenceLabelEn}</div>
+        {evidenceTitleEn && <h2 class="section-title" data-reveal style="--delay:.06s">{evidenceTitleEn}</h2>}
+        {evidenceIntroTextEn && <p class="section-sub" data-reveal style="--delay:.1s">{evidenceIntroTextEn}</p>}
+        {evidenceClosingEn && <p class="section-sub evidence-closing" data-reveal style="--delay:.3s">{evidenceClosingEn}</p>}
+      </div>
+
+      {evidenceCenterNodeEn && evidenceNodes.length > 0 && (
+        <div class="evidence-radial" data-reveal style="--delay:.18s" id="evidenceRadial">
+          <svg class="evidence-radial-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            {evidenceNodes.map((n) => (
+              <line class="evidence-line" data-field={n.key} x1={n.lineStart.x} y1={n.lineStart.y} x2={n.dot.x} y2={n.dot.y}></line>
+            ))}
+            {evidenceNodes.map((n) => (
+              <circle class="evidence-dot" data-field={n.key} cx={n.dot.x} cy={n.dot.y} r="1.4"></circle>
+            ))}
+          </svg>
+          {evidenceCenterNodeEn && (
+            <div class="evidence-radial-center">
+              <span>{evidenceCenterNodeEn}</span>
+            </div>
+          )}
+          <ul class="evidence-fields">
+            {evidenceNodes.map((n, i) => (
+              <li
+                class={`evidence-field evidence-field-${i}`}
+                style={`--fx:${n.node.x}%; --fy:${n.node.y}%`}
+                data-field={n.key}
+                tabindex="0"
+              >
+                {n.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<!-- S5 CÓMO TRABAJO -->
+<section class="section" id={SECTION_IDS.S5}>
+  <div class="section-inner">
+    <div class="section-label" data-reveal>{workLabelEn}</div>
+    <h2 class="section-title" data-reveal style="--delay:.06s">{workHeadlineEn}</h2>
+    {workIntroEn.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
+
+    {workStepsEn.length > 0 && (
+      <div class="accordion-wrap" data-reveal style="--delay:.18s">
+        <div class="accordion-list" id="accList">
+          {workStepsEn.map((step, i) => (
+            <div class={`acc-item${i === 0 ? ' is-active' : ''}`} data-n={step.n} data-t={step.title}>
+              <button type="button" class="acc-item-head">
+                <span class="acc-item-n">{step.n}</span>
+                <span class="acc-item-t">{step.title}</span>
+              </button>
+              <div class="acc-detail">
+                <div class="acc-d">{step.paragraph}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="acc-panel" id="accPanel">
+          <div class="acc-panel-n">{workStepsEn[0]?.n}</div>
+          <div class="acc-panel-t">{workStepsEn[0]?.title}</div>
+          <div class="acc-panel-d">{workStepsEn[0]?.paragraph}</div>
+          <div class="acc-pips">
+            {workStepsEn.map((_, i) => <span class={`acc-pip${i === 0 ? ' is-active' : ''}`}></span>)}
+          </div>
+        </div>
+      </div>
+    )}
+
+    <h3 class="deliver-heading">{uiEn.home.deliverHeading}</h3>
+    {deliverIntroEn.map((p) => <p class="section-sub">{p}</p>)}
+    {deliverItemsEn.length > 0 && (
+      <div class="about-roles">
+        {deliverItemsEn.map((item) => (
+          <div class="about-role">
+            <div class="about-role-dot"></div>
+            <div class="about-role-txt">{item}</div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<!-- S6 SISTEMAS PROPIOS -->
+<section class="section" id={SECTION_IDS.S6}>
+  <div class="section-inner">
+    <div class="section-label" data-reveal>{systemsLabelEn}</div>
+    <h2 class="section-title" data-reveal style="--delay:.06s">{systemsHeadlineEn}</h2>
+    {systemsIntroEn.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
+
+    {systemsCardsEn.length > 0 && (
+      <div class="ip-grid" data-reveal style="--delay:.18s">
+        {systemsCardsEn.map((card) => {
+          const logo = systemsLogo(card.originalTitle);
+          const link = systemsCaseLink(card.originalTitle);
+          return (
+            <div class="ip">
+              {logo && <div class="ip-media"><img src={logo.src} alt={logo.alt} loading="lazy"></div>}
+              <div class="ip-row">
+                <div class="ip-name">{card.title}</div>
+              </div>
+              {card.paragraphs.map((p) => <p class="ip-desc">{p}</p>)}
+              {link && <a href={link} class="ip-case-link">{uiEn.home.viewFullCase}</a>}
+            </div>
+          );
+        })}
+      </div>
+    )}
+
+    <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--border)">
+      <h3 class="deliver-heading" style="margin-top:0">{systemsClosingHeadingEn}</h3>
+      {systemsClosingEn.map((p) => <p class="section-sub">{p}</p>)}
+    </div>
+  </div>
+</section>
+
+<!-- S6b PRUEBA SOCIAL -->
+<section class="section" id={SECTION_IDS.S6b}>
+  <div class="section-inner">
+    <div class="section-label" data-reveal>{testimonialsLabelEn}</div>
+    <h2 class="section-title" data-reveal style="--delay:.06s">{testimonialsHeadlineEn}</h2>
+
+    {testimonialsIntroEn.map((p) => (
+      <p class="section-sub" data-reveal>{p}</p>
+    ))}
+
+    {testimonialItemsEn.length > 0 && (
+      <>
+        <div class="testimonial-grid">
+          {testimonialItemsEn.map((item, i) => (
+            <blockquote
+              class="testimonial-card"
+              data-reveal
+              style={`--delay:${0.18 + i * 0.06}s`}
+            >
+              <p class="testimonial-quote">{item.quote}</p>
+
+              <footer class="testimonial-cite">
+                <span class="testimonial-name">{item.name}</span>
+
+                {item.roleLines.map((line) => (
+                  <span class="testimonial-role">{line}</span>
+                ))}
+              </footer>
+            </blockquote>
+          ))}
+        </div>
+
+        {senjaId && (
+          <>
+            <h3 class="deliver-heading">{moreExperiencesHeadingEn}</h3>
+
+            <div
+              class="senja-embed"
+              data-id={senjaId}
+              data-mode="shadow"
+              data-lazyload="false"
+              style="width:100%;margin-top:24px;"
+            ></div>
+          </>
+        )}
+      </>
+    )}
+  </div>
+</section>
+
+<!-- S8 SIGUIENTE PASO -->
+<section class="section cta-section" id={SECTION_IDS.S8}>
+    <div class="section-inner cta-inner">
+      <div class="cta-label-center" data-reveal>{finalLabelEn}</div>
+      <h2 class="cta-h" data-reveal style="--delay:.06s">{finalHeadlineEn}</h2>
+      {finalIntroEn.map((p) => <p class="cta-sub" data-reveal>{p}</p>)}
+
+      {finalStepsEn.length > 0 && (
+        <div class="cta-steps" data-reveal style="--delay:.18s">
+          {finalStepsEn.map((step) => (
+            <div class="cta-step">
+              <div class="cta-step-n">{step.title}</div>
+              {step.description && <div class="cta-step-d">{step.description}</div>}
+              {step.tag && <div class="cta-step-tag">{step.tag}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div class="cta-buttons" data-reveal style="--delay:.24s">
+        {finalCtas.length > 0 && (
+          <div class="hero-ctas" style="justify-content:center;margin-bottom:0">
+            {finalCtas.map((originalLabel, i) => {
+              const target = ctaTarget(originalLabel);
+              return (
+                <a
+                  href={target.href}
+                  class={i === 0 ? 'btn-primary' : 'btn-ghost'}
+                  download={target.download}
+                  target={target.external ? '_blank' : undefined}
+                  rel={target.external ? 'noopener' : undefined}
+                >{finalCtasEn[i]}</a>
+              );
+            })}
+          </div>
+        )}
+        {finalTrustPartsEn.length > 0 && (
+          <div class="cta-trust">
+            {finalTrustPartsEn.map((part, i) => (
+              <>
+                {i > 0 && <span class="dot"></span>}
+                <span>{part}</span>
+              </>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Scroll reveal ──
+  if (!prefersReduced) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -60px 0px', threshold: 0.08 });
+    document.querySelectorAll('[data-reveal]').forEach((el) => revealObserver.observe(el));
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('is-visible'));
+  }
+
+  // ── Acordeon "Como trabajo" ──
+  const accItems = document.querySelectorAll('.acc-item');
+  const accPanelN = document.getElementById('accPanel')?.querySelector('.acc-panel-n');
+  const accPanelT = document.getElementById('accPanel')?.querySelector('.acc-panel-t');
+  const accPanelD = document.getElementById('accPanel')?.querySelector('.acc-panel-d');
+  const accPips = document.querySelectorAll('.acc-pip');
+
+  accItems.forEach((item, idx) => {
+    const head = item.querySelector('.acc-item-head');
+    head?.addEventListener('click', () => {
+      accItems.forEach((other) => other.classList.remove('is-active'));
+      item.classList.add('is-active');
+
+      if (accPanelN) accPanelN.textContent = (item as HTMLElement).dataset.n ?? '';
+      if (accPanelT) accPanelT.textContent = (item as HTMLElement).dataset.t ?? '';
+      if (accPanelD) accPanelD.textContent = item.querySelector('.acc-d')?.textContent ?? '';
+      accPips.forEach((pip, pIdx) => pip.classList.toggle('is-active', pIdx === idx));
+    });
+  });
+
+  // ── Contadores de metricas ──
+  if (!prefersReduced) {
+    const countEls = document.querySelectorAll('[data-count]');
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    function animateCount(el: Element) {
+      const target = parseInt((el as HTMLElement).dataset.count ?? '0', 10);
+      const duration = 1400;
+      const start = performance.now();
+
+      function frame(now: number) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = Math.round(easeOut(progress) * target);
+        el.textContent = value.toLocaleString('en-US');
+        if (progress < 1) requestAnimationFrame(frame);
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    countEls.forEach((el) => counterObserver.observe(el));
+  }
+
+  // ── Diagrama radial "Evidencia" ──
+  const evidenceRadial = document.getElementById('evidenceRadial');
+  if (evidenceRadial) {
+    const fields = evidenceRadial.querySelectorAll('.evidence-field');
+    fields.forEach((field) => {
+      const key = (field as HTMLElement).dataset.field;
+      const line = key ? evidenceRadial.querySelector(`.evidence-line[data-field="${key}"]`) : null;
+      const dot = key ? evidenceRadial.querySelector(`.evidence-dot[data-field="${key}"]`) : null;
+
+      const activate = () => {
+        evidenceRadial.classList.add('has-active');
+        field.classList.add('is-active');
+        line?.classList.add('is-active');
+        dot?.classList.add('is-active');
+      };
+      const deactivate = () => {
+        evidenceRadial.classList.remove('has-active');
+        field.classList.remove('is-active');
+        line?.classList.remove('is-active');
+        dot?.classList.remove('is-active');
+      };
+
+      field.addEventListener('mouseenter', activate);
+      field.addEventListener('mouseleave', deactivate);
+      field.addEventListener('focus', activate);
+      field.addEventListener('blur', deactivate);
+    });
+  }
+</script>
+<script is:inline>
+  (() => {
+    const container = document.querySelector(".senja-embed");
+    if (!container) return;
+
+    const widgetId = container.getAttribute("data-id");
+    if (!widgetId) return;
+
+    if (!document.querySelector(`script[data-senja="${widgetId}"]`)) {
+      const script = document.createElement("script");
+      script.src = `https://widget.senja.io/widget/${widgetId}/platform.js`;
+      script.async = true;
+      script.dataset.senja = widgetId;
+      document.body.appendChild(script);
+    }
+  })();
+</script>
+</BaseLayout>
