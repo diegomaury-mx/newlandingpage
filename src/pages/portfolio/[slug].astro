@@ -55,6 +55,7 @@ function seoTitle(title: string): string {
 }
 const bodyHtml = renderMarkdown(entry.data.body);
 const sections = extractSections(entry.data.body);
+const hasGalleryPhotos = entry.data.evidenceMedia.length > 0;
 const editionTitles = entry.data.editions
   .map((id) => idToTitle.get(id))
   .filter((title): title is string => Boolean(title));
@@ -100,18 +101,16 @@ const creativeWorkJsonLd = {
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'en')}
   enableGtm
 >
-  {entry.data.banner && (
-    <div class="case-hero">
-      <img src={entry.data.banner} alt={entry.data.title} width="1600" height="320" />
-    </div>
-  )}
+  <div class="case-identity-strip">
+    {entry.data.logo && (
+      <img class="case-identity-strip__logo" src={entry.data.logo} alt={entry.data.organization ?? entry.data.title} width="24" height="24" />
+    )}
+    <span class="case-identity-strip__name">{entry.data.title}</span>
+  </div>
 
   <div class="wrap-case">
-    <div class="case-split">
+    <div class:list={['case-split', { 'case-split--3col': hasGalleryPhotos }]}>
       <aside class="case-rail">
-        {entry.data.logo && (
-          <img class="case-rail__logo" src={entry.data.logo} alt={entry.data.organization ?? entry.data.title} width="120" height="28" />
-        )}
         <div class="meta">{entry.data.organization ?? '—'} · {entry.data.year ?? '—'} · {entry.data.type ?? '—'}</div>
         <h1>{displayTitle}</h1>
 
@@ -136,20 +135,24 @@ const creativeWorkJsonLd = {
           <p class="case-empty-note">Esta ficha todavía no tiene el cuerpo narrativo (Contexto, Problema, Sistema, Evidencia) escrito en Notion.</p>
         )}
       </div>
-    </div>
 
-    {(entry.data.evidenceMedia.length > 0 || entry.data.evidenceVideos.length > 0) && (
-      <section class="case-evidence-media">
-        <div class="eyebrow">Evidencia visual</div>
-        {entry.data.evidenceMedia.length > 0 && (
-          <div class="evidence-photo-grid">
+      {hasGalleryPhotos && (
+        <aside class="case-gallery-col">
+          <div class="eyebrow">Evidencia visual</div>
+          <div class="evidence-photo-grid evidence-photo-grid--narrow">
             {entry.data.evidenceMedia.map((src, i) => (
               <a class="evidence-photo" href={src} target="_blank" rel="noopener" aria-label={`Ver foto ${i + 1} de evidencia`}>
-                <img src={src} alt="" loading="lazy" width="400" height="300" />
+                <img src={src} alt="" loading="lazy" width="300" height="225" />
               </a>
             ))}
           </div>
-        )}
+        </aside>
+      )}
+    </div>
+
+    {entry.data.evidenceVideos.length > 0 && (
+      <section class="case-evidence-media">
+        <div class="eyebrow">Videos de evidencia</div>
         {entry.data.evidenceVideos.length > 0 && (
           <div class="evidence-video-list">
             {entry.data.evidenceVideos.map((video) => {
