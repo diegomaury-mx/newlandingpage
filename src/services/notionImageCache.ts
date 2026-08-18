@@ -53,7 +53,7 @@ export async function cacheNotionImage(
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const contentType = response.headers.get("content-type")?.split(";")[0]?.trim() ?? "";
     let extension = EXTENSION_BY_CONTENT_TYPE[contentType] ?? extensionFromUrl(url) ?? "jpg";
-    let buffer = Buffer.from(await response.arrayBuffer());
+    let buffer: Buffer = Buffer.from(await response.arrayBuffer());
 
     if (RASTER_CONTENT_TYPES.has(contentType) || RASTER_EXTENSIONS.has(extension)) {
       try {
