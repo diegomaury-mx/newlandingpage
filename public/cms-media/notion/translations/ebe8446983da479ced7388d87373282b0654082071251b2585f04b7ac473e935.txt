@@ -1,0 +1,1 @@
+The channel is a business hypothesis. Not an architecture decision. If I did it again, I'd validate it before building everything around it.

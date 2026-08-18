@@ -1,0 +1,20 @@
+1. Header (10-second read)
+
+- Result-oriented title, not the event's name.
+- Anchor metric: a single number, with timeframe and caveat.
+- Role in one line (the detail lives in My responsibility).
+- Capabilities demonstrated: 3-4 maximum, taken from the shared taxonomy, never adjectives invented per case.
+- Context line: organization, period, scale.
+
+1. Context (2-3 lines): starting situation, scale, and constraints.
+1. Problem: what was broken and why it was systemic, not just operational.
+1. My responsibility: two explicit lists, "I was responsible for..." and "I was not responsible for...". Delimiting scope reduces the evaluator's uncertainty more than any other section.
+1. System built: decisions and system design, in first person, active verbs, short sentences. System includes programs, governance, processes, and partnerships, not just software or automation.
+
+- Architecture (optional subsection): only when there's an actual technical design to show.
+
+1. Trade-offs (optional): why this path and not another. 1-2 decisions maximum per case. Example: Voice AI → WhatsApp in SOFI.
+1. Results: 2-4 metrics, each with timeframe, caveat, and type label (business or operations). No rigid subsections: if a case has no business metric, none is forced.
+1. Evidence block (✔/✖): table with claim, status, and artifact (link, dashboard, diagram, or testimonial). If there's no artifact, explicit ✖; the row is never omitted.
+1. Autopsy (depth): what failed or what I'd do differently. The headline is the lesson, with no "autopsy" label. Closes with a transferability line: what part of this is repeatable in another organization.
+1. Archive: links to the original edition entries (Archive layer). History is preserved, not shown in the main read.

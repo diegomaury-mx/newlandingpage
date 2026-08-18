@@ -1,0 +1,99 @@
+# I scaled a national sustainability program and multiplied southeastern participation by 7
+
+Anchor metric: +600% growth in southeastern participation (2019-2021). Documented baseline: 35 proposals from the region the year before 2019. The final figure is an own operational estimate.
+
+Role: National Program Director, Innovation & Entrepreneurship.
+
+Demonstrated capabilities: program leadership · innovation program design · strategic alliances · regional scaling.
+
+Context: HEINEKEN México and INCmty · 4 editions (2019-2022) · national reach, 6 months of operation per edition.
+
+## Context
+
+The HEINEKEN Green Challenge brings together, recognizes, and strengthens sustainable projects in Mexico. When I joined, the program already had national traction and a 1,150,000-peso prize pool, but the southeast was dead territory: the entire region had submitted only 35 proposals the year before. That's where I'm from.
+
+The program didn't have an event-execution problem. It had a systems problem: outreach depended on manual effort edition after edition, the application process wasn't built to scale, and regions outside the center of the country had no way in.
+
+On top of that, in 2020 the entire program had to go virtual without losing sight of its registration targets.
+
+> Thirty-five proposals from the entire southeast isn't a lack of talent. It's a lack of a door.
+
+## Action
+
+I was responsible for:
+
+- Operating and executing the program nationally across all 4 editions.
+- Designing the open innovation process and virtualizing the application process.
+- Alliances between government, private sector, universities, and the entrepreneurial ecosystem.
+- Connecting participants with more than 100 mentors per edition.
+- Coordinating the logistics of each edition's six-month run.
+
+I was not responsible for:
+
+- HEINEKEN's brand budget or advertising investment.
+- The final selection of winning projects.
+- The company's corporate sustainability strategy.
+
+System built:
+
+1. I redesigned the application process using Lean methodology and user experience mapping, and virtualized it during the pandemic. It stopped being paperwork and became a measurable funnel.
+1. The national virtual bootcamp (2020-2022) was structured as a 5-day program, with 5 hours of activities per day per edition.
+1. I built the mentor network: more than 100 per edition, with assignment criteria based on project stage and vertical.
+1. I built alliances with government, universities, and the private sector to open regional entry points, instead of waiting for the national call to reach the southeast on its own.
+1. I designed REDUX as a pre-launch for the program: a bootcamp that built an innovation culture before asking people for projects. Tecnológico de Monterrey documented it as the largest of its kind in Latin America.
+
+Trade-offs: I prioritized regional depth over raw national volume. Investing in southeastern alliances produced far higher growth in that region, but it meant not chasing the maximum absolute registrations that focusing on the center of the country would have delivered. It was the right call for the impact goal, not necessarily for the vanity metric.
+
+## Result
+
+The program's figures are documented by edition in Tecnológico de Monterrey's annual reports. They aren't additive with each other and don't represent the program's total.
+
+| Metric | Value | Type | Caveat |
+| --- | --- | --- | --- |
+| Southeastern participation growth | +600% (2019-2021) | Operational | Baseline of 35 proposals documented in the press. Final figure: own operational estimate |
+| Circular economy edition | 3,975 entrepreneurs, 1,325 projects captured, 562 universities | Operational | Single-edition figures (Tec 2020 Annual Report, p.181) |
+| HGC average impact growth | +214% | Operational | Published by Tec in its 2020 Annual Report |
+| Sustainable agriculture edition | 2,400 entrepreneurs, 748 projects, 304 universities | Operational | Single-edition figures (Tec 2021 Annual Report, p.416) |
+| Mentors connected per edition | 100+ | Operational | Per edition, not additive. No artifact |
+
+### Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| Program impact figures (3,975 entrepreneurs, 562 universities, +214%) | ✔ | Tecnológico de Monterrey 2020 Annual Report, p.181 |
+| Sustainable agriculture edition figures (2,400 entrepreneurs, 304 universities) | ✔ | Tecnológico de Monterrey 2021 Annual Report, p.416 |
+| My involvement in the program in 2019 | ✔ | La Jornada Maya, 08/06/2019. Names and quotes me as INCmty ambassador for the southeast, a role prior to my appointment as National Program Director |
+| Southeast baseline: 35 proposals before 2019 | ✔ | La Jornada Maya, 08/06/2019 |
+| Program operations leadership | ✔ | Talent Land 2023 credits me as former Director of Operations of the HEINEKEN Green Challenge, consistent with the National Program Director role held during 2019-2022 |
+| Regional entry strategy (launches in the southeast, northeast, and northwest) | ✔ | HGC official channel playlist: 30 videos covering the regional launches by zone |
+| Application process virtualization | ✔ | HGC playlist: 2020 and 2021 registration guides, 2021 Bootcamp Discord experience guide, national virtual bootcamp aftermovies |
+| +600% growth in the southeast | ✖ | Own operational estimate. The baseline is documented; the final figure isn't |
+| 100+ mentors per edition | ✖ | No external artifact |
+
+### Archive
+
+Original edition entries (Archive layer):
+
+- HEINEKEN Green Challenge 2020
+- HEINEKEN Green Challenge 2021
+- HEINEKEN Green Challenge 2022
+
+---
+
+Consolidation notes (2026-07-11): the previous body claimed "5 years" and "close to 3,000 entrepreneurs," and the properties attributed the figure 9,905 to the program. Neither holds up: there are 4 editions, and 9,905 doesn't appear in any documentary source. The current figures come from Tecnológico de Monterrey's annual reports and are labeled by edition.
+
+Diego's clarification (2026-07-16): the National Program Director role for the HEINEKEN Green Challenge is confirmed and doesn't need further validation in future reviews. REDUX and HGC were operated through HackSureste because HackSureste was initially contracted as the vendor company running the program's operations; that contractual relationship explains why early public documents (La Jornada Maya 2019, Talent Land 2023) cite different roles (regional ambassador, Director of Operations) without contradicting the National Program Director title.
+
+### Linked multimedia evidence
+
+Primary source: HGC, official HEINEKEN Green Challenge channel. The playlist brings together 30 videos documenting the program's operating cycle.
+
+| Category | Linked assets | What it proves for this case |
+| --- | --- | --- |
+| Process | 2020 and 2021 registration guides, Discord experience, instructions for selected participants, evaluator welcome, and call-for-proposals materials | The application, selection, and enablement infrastructure for participants and evaluators |
+| Execution | Kick Off 2019, CDMX 2019 regional selection, 2021 regional selections, and 2020 Bootcamp | The execution of the program's in-person and virtual stages |
+| Content | 2020 HGC launches in the Northeast, Northwest, and Southeast, and 2019 participant presentation | The territorial activation and communication of the call for proposals |
+| Result | 2018 Demo Day, 2018-2021 recaps and aftermovies, National Bootcamp recap, and 2021 testimonials | The closings and audiovisual records of the documented editions |
+| Individual attribution | 2022 HGC presentation by Luis Azuara and sustainable agriculture INCTalk by Ana Lilia Hernández | The expert voices brought into the program experience |
+
+Strategic connection: the evidence shows the system I ran as National Program Director: outreach, registration, selection, bootcamp, digital coordination, regional activation, and closing. It connects to the HEINEKEN Green Challenge 2020, HEINEKEN Green Challenge 2021, and HEINEKEN Green Challenge 2022 edition entries.

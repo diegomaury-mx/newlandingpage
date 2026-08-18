@@ -1,0 +1,22 @@
+# I closed a partnership with Daikin and turned it into an open innovation challenge for LATAM
+
+Anchor metric: open innovation challenge with Daikin, closed as a partnership in 2021 and launched in 2022. Tec's 2021 Annual Report, p.416.
+
+Role: National Program Director, Innovation & Entrepreneurship.
+
+INCmty's open innovation challenges work like this: a large organization plants a real problem in the ecosystem, and the best solutions get selected to join the organization or the market. I brought in Daikin, the Japanese air conditioning company, and translated its industrial need into a call for LATAM startups in the HVAC industry and its supply chain. I covered general coordination, executive production, process design, and community and registration management.
+
+Main result: the Daikin partnership closed in 2021 and the challenge launched in 2022, targeting advanced-stage startups and projects across Latin America. Caveat: the record doesn't capture the number of projects sourced or the outcome of the call for applications.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| Daikin partnership closed in 2021 for the 2022 challenge | ✔ | Tecnológico de Monterrey 2021 Annual Report, p.416 |
+| My role in negotiating and designing the challenge | ✖ | No artifact |
+| Call for applications outcomes (projects, winners) | ✖ | No internal data on record |
+| The challenge ran in March 2022 | ✔ (own) | DisruptAir Challenge 2022 video recap and event asset folder, produced by RushFrame for client INCmty (RushFrame Portfolio 2022-2023) |
+
+---
+
+Master case: INCmty B-Challenge 2021.

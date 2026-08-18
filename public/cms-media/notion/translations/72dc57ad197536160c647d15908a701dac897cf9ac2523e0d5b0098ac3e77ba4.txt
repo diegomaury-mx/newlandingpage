@@ -1,0 +1,116 @@
+# I designed Latin America's largest circular economy bootcamp, and published its full methodology
+
+Anchor metric: 400+ university students and 111 innovative ideas across 4 regions of the country (2020 edition). Tecnológico de Monterrey documented it as the largest in Latin America in its category.
+
+Role: creator, methodology designer, and general coordinator.
+
+Capabilities demonstrated: innovation program design · executive training and facilitation · ecosystem development · regional scaling.
+
+Context: Tecnológico de Monterrey and INCmty, driven by HEINEKEN México · 5 editions (2020-2022) · 4 regions of the country.
+
+## Context
+
+The HEINEKEN Green Challenge opened its call and expected sustainable projects. The problem is that a competition doesn't build capacity: it harvests it. If people don't know how to structure a circular economy idea, the call receives intention, not projects.
+
+REDUX was born from that observation. I designed it from scratch as the HGC's pre-launch: build the innovation culture first, then ask for the projects.
+
+Calling for projects without training produces two failures at once. On one side, poorly built projects that don't survive the first evaluation. On the other, people who rule themselves out because they don't know where to start and never apply.
+
+And in 2020 the problem doubled: I had to train hundreds of people in circular economy, a topic almost no one understood, and do it without being able to bring them into a room.
+
+> The funnel breaks before it exists.
+
+## Action
+
+I was responsible for:
+
+- Conceiving the program and designing its full methodology, from scratch.
+- Aligning the content with the Sustainable Development Goals.
+- Adapting the methodology to the virtual format during the pandemic.
+- Coordinating operations across the 4 regions and partnerships with government, private sector, universities, and the ecosystem.
+- Establishing participation rules and inclusion conditions.
+
+I was not responsible for:
+
+- The HEINEKEN Green Challenge call itself, the program REDUX fed into.
+- Selecting the HGC's winning projects.
+- The subsequent incubation of finalists, which went to Tec Lean.
+
+System built:
+
+1. I designed an 8-activity sequence that takes a team from zero to a pitch deck: Impact Gaps Canvas, divergent idea generation, buyer persona and empathy map, value proposition, Business Model Canvas, business model, financial model, and pitch deck.
+1. I structured the program into 3 verticals, so the methodology would land on concrete problems: EcoDesign, SME Digitalization, and Environment and Primary Activities.
+1. I regionalized it into 4 zones (northwest, northeast, southeast, and west-central) with their own finalists, instead of a single national final that would have concentrated everything in the center of the country.
+1. I published the full curriculum in 34 open videos. The methodology doesn't live in an internal organizational PDF: anyone can run it.
+1. I versioned it by theme according to the HGC edition it fed: REDUX Agro for sustainable agriculture, REDUX Energy for energy efficiency.
+
+Trade-offs: I published the full methodology in the open instead of keeping it as the program's proprietary asset. I gave away the content's competitive advantage in exchange for reach: any university or government could run the activities without asking us for permission. It was the right decision for the objective (building capacity in the country) and the wrong one for capitalizing on the program as a product.
+
+## Result
+
+| Metric | Value | Type | Caveat |
+| --- | --- | --- | --- |
+| University students trained | 400+ | Operational | 2020 edition only, not the cumulative total across the 5 editions |
+| Innovative ideas generated | 111 | Operational | 2020 edition |
+| Regional coverage | 4 regions, 12 finalists to the Tec Lean Explora program | Operational | 2020 edition |
+| Positioning | The largest in Latin America in its category | Operational | Ranking published by the Tec, not an independent measurement |
+| Published curriculum | 34 videos, 8 activities | Operational | No caveat |
+| Estimated participations | 1,500+ across 5 editions, 2020 to 2022 | Operational estimate | Linear trend model based on 400+ university students in REDUX 2020 and 350+ participants in REDUX Agro 2021. Measures participations per edition, not unique people. Don't use as a public figure without this label |
+
+### Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| 400+ university students, 111 ideas, 4 regions, the largest in Latin America | ✔ | Tecnológico de Monterrey Annual Report 2020, p.176 and p.181 |
+| I designed the program's methodology (8 activities + training) | ✔ | "REDUX ARTIFACTS" playlist: 34 videos with the full curriculum, the 2020-2021 records, and the registration guide |
+| REDUX Agro as the pre-launch for the HGC's 2021 edition | ✔ | Tecnológico de Monterrey Annual Report 2021, p.416 |
+| REDUX driven by HEINEKEN México and INCmty | ✔ | "REDUX ARTIFACTS" playlist |
+| Methodology included in the Tec's directory | ✖ | No artifact. Pending: link or screenshot of the directory |
+| My operational role in the program | ✔ (own) | REDUX's official call explicitly lists me as Southeast Regional Lead ("REDUX Call" file, Evaluation and Retention Matrix — Drive Files, audited 07/28/2026) |
+| Authorship of the REDUX methodology | ✔ (own) | Presentación_REDUX21.pptx records ownership and authorship of the methodology under my name (same file matrix) |
+| The 4 regional editions of July 2020 and the evaluation platform | ✔ (own) | Service agreement with Blockchain Academy México (Blockdemy Hackathons platform) signed by Diego Raúl Maury Reveles on 05/25/2020: platform use for REDUX's 4 editions (July 3-5, 10-12, 17-19, and 26-28, 2020), for $20,000 MXN + VAT |
+| Prize payment for the 2020 edition | ✔ (own) | Santander transfer receipt for $10,000 MXN dated 07/14/2020, concept "REDUX digitalization prize payment," SuperNet reference 761950 |
+| 224 participant registrations from 6 states in REDUX Sureste | ✔ (own) | ListaAsistentes.xlsx, export from the Blockdemy platform: 224 registrations with state of origin (Veracruz 56, Yucatán 51, Quintana Roo 35, Campeche 27, Chiapas 20, Tabasco 6). Internal document with personal data: do not publish the file, only the figure |
+| Official evaluation rubric for judges | ✔ (own) | "How to Evaluate Projects in Blockdemy" manual (REDUX OCG): weighted criteria — Innovation and Creativity 30%, Business Model Viability 30%, Socio-Environmental Impact 30%, Pitch and Participation 10% |
+| Operated under HackSureste's infrastructure | ✔ (own) | Regional participant manuals (Northeast with Zona Ei, Northwest with Parque Tecnológico Orión, OCG call) with official contact redux@hacksureste.com; Itinerario Redux.xlsx logged as "HackSureste Redux 2020" (June 19-21) |
+
+### Formal reference (APA 7th edition)
+
+Reference:
+
+Tecnológico de Monterrey. (2020). Informe anual 2020. https://tec.mx/sites/default/files/inline-files/InformeAnual-2020.pdf
+
+Direct quote (APA):
+
+> "Central theme: circular economy, with a pre-launch through a major innovation-culture event in circular economy: REDUX, which became the largest in Latin America." (Tecnológico de Monterrey, 2020, p. 181).
+
+Narrative citation:
+
+Tecnológico de Monterrey (2020) notes that the HEINEKEN Green Challenge's central theme was circular economy and that its pre-launch was carried out through REDUX, described as "a major innovation-culture event in circular economy" that "became the largest in Latin America" (p. 181).
+
+Note: the page number corresponds to the PDF pagination of the 2020 Annual Report, Entrepreneurship section → INC Challenges → HEINEKEN Green Challenge.
+
+### Archive
+
+- REDUX Agro (Archive layer) — sustainable agriculture edition
+- REDUX Energy (Archive layer) — energy efficiency edition
+
+---
+
+Consolidation note (07/11/2026): the file claimed "200+ people trained" across five editions. Tecnológico de Monterrey's 2020 Annual Report documents more than 400 university students in the 2020 edition alone. The earlier figure undervalued the program and was corrected against the institutional source. Promoted from Support to Flagship on 07/11/2026: it's the portfolio's best-evidenced case.
+
+### Linked multimedia evidence
+
+Primary source: REDUX ARTIFACTS, REDUX Agro channel. The playlist brings together 34 videos and documents the program's public architecture.
+
+| Category | Linked assets | What it proves for this case |
+| --- | --- | --- |
+| Process | Registration guide, welcome to open training sessions, and presentation of REDUX Agro's three challenges | The program's entry, onboarding, and challenge-definition infrastructure |
+| Execution | REDUX Agro's eight activities and REDUX Energy's eight, from Impact Gaps Canvas to Pitch Deck | The modular methodology I designed and coordinated to take teams from diagnosis to project presentation |
+| Content | Agroindustry innovation panel and REDUX Agro presentation | The training layer and sector context that complemented the methodological path |
+| Result | REDUX Agro Norte Grand Final, REDUX Agro Norte 2021 recap, and REDUX 2020 recap | The closings and records of the documented editions |
+| Individual attribution | REDUX Agro Introduction and Project Generation in Ideatón, delivered by Diego Maury | My methodological leadership, facilitation, and direct mentoring in the program |
+
+Relation to editions: this evidence corresponds to the REDUX master case and its REDUX Agro and REDUX Energy editions. The process and execution videos prove the shared architecture; the sector content distinguishes each vertical.
+
+### Source artifacts (internal use, not published on the site)

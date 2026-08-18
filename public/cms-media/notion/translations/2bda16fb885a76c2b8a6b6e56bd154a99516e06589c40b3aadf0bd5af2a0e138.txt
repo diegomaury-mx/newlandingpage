@@ -1,0 +1,98 @@
+# I founded southeastern Mexico's leading hackathon from scratch
+
+Anchor metric: 3,000+ cumulative participants (2018-2020). Estimate, not additive with other portfolio metrics.
+
+Role: Founder & Innovation Program Director.
+
+Demonstrated capabilities: ecosystem development · innovation program design · strategic alliances · program leadership.
+
+Context: HackSureste, own initiative · since October 2018 · locations in Mérida and Ciudad del Carmen · participants from 6 states.
+
+## Context
+
+In 2018, southeastern Mexico had talent, but no clear door into the innovation ecosystem.
+
+Anyone who wanted to build something different usually had to leave the region to find community, methodology, and allies. The energy existed. What was missing was the system to focus it.
+
+I founded HackSureste with no sponsoring brand behind it, no inherited budget, and no prior format to copy. It had to be built from zero.
+
+Organizing a hackathon was the easy part. The hard part was making sure it didn't die after the first edition. The region needed more than a weekend event: it needed an innovation institution with repeatable methodology, active allies, and enough community to sustain itself between editions.
+
+Then 2020 arrived and the problem changed shape: an event designed to bring people together in a room had to keep existing in the middle of a pandemic. The challenge stopped being event production. It became operational continuity.
+
+> The region needed more than a weekend event: it needed an innovation institution.
+
+## Action
+
+I was responsible for:
+
+- Founding and directing the program from the first edition.
+- Designing the open innovation project strategy.
+- Building alliances with universities, government, and the private sector.
+- Designing and producing the virtual experiences from 2020 to 2022.
+- Facilitating the editions and hosting the sessions as master of ceremonies.
+
+I was not responsible for:
+
+- The technical development of participants' projects.
+- Investment or follow-on funding for the teams.
+- Judges' decisions.
+
+System built:
+
+1. I designed a repeatable format, not a one-off event. HackSureste was replicated in Mérida and Ciudad del Carmen with the same methodology.
+1. I built a regional network of allies with universities, government, and the private sector. That network sustained the program before, during, and after each edition.
+1. I adapted the program to digital formats once in-person delivery stopped being viable. HackSureste WIRE brought together 6 free conferences and workshops online between March and April 2020, in collaboration with RushFrame.
+1. I extended the program with ideaLab, a post-hackathon support space. A hackathon generates ideas in 48 hours; ideaLab existed for what happened after: training, validating, and connecting teams with industry experts.
+1. I attracted participation from 6 states, turning a local initiative into a regional platform.
+
+Trade-off: I kept HackSureste as an independent initiative instead of turning it into a single brand's asset. That made operations harder. The budget was tighter and every edition required re-coordinating resources, allies, and narrative from scratch. But that independence was also the reason the program could bring government, universities, companies, and the entrepreneurial community to the same table. A hackathon with a corporate owner doesn't get that table.
+
+## Result
+
+| Metric | Value | Type | Caveat |
+| --- | --- | --- | --- |
+| Cumulative participants | 3,000+ (2018-2020) | Operational | Estimate. Not additive with other portfolio metrics |
+| Participants per edition | ~250 (first edition) | Operational | Estimate |
+| Geographic reach | Participants from 6 states | Operational | No caveat |
+| WIRE spin-off program | 6 online conferences and workshops | Operational | March-April 2020, with RushFrame |
+
+### Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| In-person editions 2018 and 2019 (~250 participants per edition) | ✔ (own) | Group photo from HackSureste 2019 and "Day 1" and "Day 2" videos on my YouTube channel; 100+ original photos from the 2018 edition in the HackSureste Industria 4.0 entry |
+| HackSureste WIRE: 6 online conferences and workshops (March-April 2020) | ✔ (own) | Live Facebook stream and graphic pieces from the series in the HackSureste WIRE entry |
+| Network of allies and sponsors (universities, government, private sector) | ✔ (own) | Ally logos documented in the HackSureste 2019 and Industria 4.0 entries: IBM, Iktan, Bepensa, Grupo Gamma, COPARMEX, Universidad Modelo, CETIEM, among others |
+| My role as founder and program director | ✔ (own) | Videos from the editions on my channel where I appear hosting; Talent Land 2023 speaker page registered as the official evidence URL for this entry |
+| 3,000+ cumulative participants (2018-2020) | ✖ | Own operational estimate. No consolidated record by edition |
+| Participants from 6 states | ✖ | No artifact documenting origin by state |
+| ideaLab operated as an extension of the program (post-hackathon support) | ✔ (own) | IdeaLab.pptx and IdeaLabBooklet.pdf: objective, weekly agenda, deliverables (5-minute pitch video + Canvas model), and prizes ($2,000 / $1,000 / $500) |
+
+### Archive
+
+Edition entries and spin-off programs:
+
+- HackSureste 2019 (Archive layer)
+- HackSureste Industria 4.0 (Archive layer)
+- HackSureste WIRE (Archive layer)
+- HackSureste Ciudad del Carmen 2019 (Support layer)
+- ideaLab by HackSureste (Archive layer, merged into this case on 2026-08-13: it did not contribute independent data as a standalone entry)
+
+---
+
+Consolidation notes (2026-07-11): figures marked "[data to verify]" carried over from the edition entries were removed from the body: locations (4), startups (100+), programs (30+), startup mentoring, and number of open innovation programs. Not published until backed by evidence.
+
+### Linked multimedia evidence
+
+Own primary source: HackSureste / RushFrame, Diego Maury's channel. The playlist brings together 22 videos that function as an audiovisual archive of the ecosystem built from HackSureste.
+
+| Category | Linked assets | What it proves for this case |
+| --- | --- | --- |
+| Individual attribution | Diego Maury's official channel and curated archive of entrepreneurship and innovation initiatives | My role as founder, director, connector, and custodian of the ecosystem's audiovisual record |
+| Process and execution | WIIE Bootcamp, Freeland, and BrainCamp Experience | The operation of immersion and training experiences for entrepreneurship and innovation |
+| Result and record | HackSureste 2019 recap, BRAIN México 2020, BTEM 2022, B-Challenge 2021, Prototype 2021, INC Accelerator 2021, REDUX Agro Norte, and National Bootcamp 2021 | The continuity of HackSureste's activity and its connection with programs, allies, and ecosystem communities |
+
+Portfolio relationship: this playlist links the master case HackSureste to its HackSureste 2019, HackSureste Ciudad del Carmen 2019, HackSureste Industria 4.0, HackSureste WIRE, and ideaLab by HackSureste entries. It also preserves the record of REDUX and related INCmty initiatives.
+
+### Source artifacts (internal use, not published on the site)

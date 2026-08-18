@@ -1,0 +1,20 @@
+# I took HackSureste out of Mérida and brought it to Ciudad del Carmen
+
+Anchor metric: third edition of HackSureste, with ~250 participants from 6 states. Estimated.
+
+Role: Founder & Innovation Program Director.
+
+An event that only ever runs in its home city is a local event, no matter how well it goes. The Ciudad del Carmen edition proved that HackSureste's format was replicable outside Mérida without losing turnout or quality. I owned open innovation management, partnerships with government, universities, and the private sector, and the full organization of the event.
+
+Main result: the edition ran successfully in Ciudad del Carmen, Campeche, drawing participants from 6 states and cementing HackSureste as a regional program, not a local one. Caveat: participant count is estimated, not additive with the portfolio's other metrics.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| Ciudad del Carmen edition with participants from 6 states | ✖ | No artifact for the count. Pending: call for applications or regional press with the figure |
+| The Ciudad del Carmen edition happened | ✔ (own) | Public 3-part series on my Substack: "HackSureste Ciudad del Carmen – Part 1: A Golden Cage" (August 11, 2025), Part 2, and Part 3, at diegomaury.substack.com. The HackSureste Operations and Impact Master Report (2018-2023) and the Volunteering Report (SSOT) document the expansion into Campeche |
+
+---
+
+Master case: HackSureste.

@@ -1,0 +1,20 @@
+# FreeLand: a Tec entrepreneurship experience
+
+Anchor metric: no figures on record.
+
+Role: National Program Director, Innovation & Entrepreneurship.
+
+FreeLand was one of the programs I produced in 2022 within the national program operation: logistical production, methodology design, alliances, outreach, and in-room facilitation. It's documented on video as an entrepreneurship experience at Tecnológico de Monterrey.
+
+Main result: I don't have one. The entry doesn't record participants, projects, or program outcomes. Honest caveat: there's a record that the program happened and that I produced it, but not a single impact figure.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| The program ran in 2022 and I produced it | ✔ (own) | HackSureste / RushFrame playlist: "Freeland, a Tec Entrepreneurship Experience" videos. Own documentation, not third-party verification |
+| Program reach and impact | ✖ | No internal data or artifact |
+
+---
+
+Pending from Diego: contribute any figure from the program (participants, projects, outcome). Today this is the only Support case without a single metric.

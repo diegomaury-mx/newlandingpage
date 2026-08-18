@@ -1,0 +1,21 @@
+# INC Accelerator: 205 startups competing, and the winner raised a million dollars
+
+Anchor metric: 205 applicant startups in 2021, versus 152 in 2020. The 2021 winner received a $1 million seed round. Tec's 2021 Annual Report, p.415.
+
+Role: National Program Director, Innovation & Entrepreneurship.
+
+INC Accelerator is the call for applications at the mature end of INCmty's funnel: early-stage startups from across Latin America, not ideas. I directed and ran the call for applications, the strategic partnerships, and the evaluation and selection process for projects entering the acceleration program.
+
+Main result: the call for applications grew from 152 applicant startups in 2020 to 205 in 2021, a 35% increase, and that edition's winner closed a $1 million seed investment round. Caveat: the round is an achievement of the winning startup, not a return attributable to the program or to me. I cite it as a signal of pipeline quality, not as my own result.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| 152 startups (2020) and 205 (2021); $1M seed round for the 2021 winner | ✔ | Tecnológico de Monterrey 2020 (p.180) and 2021 (p.415) Annual Reports |
+| My role leading the call for applications | ✖ | No artifact. The reports document the program, not my title |
+| The 2021 edition took place | ✔ (own) | HackSureste / RushFrame playlist: INC Accelerator 2021 recap. Own documentation |
+
+---
+
+Master case: INCmty B-Challenge 2021.

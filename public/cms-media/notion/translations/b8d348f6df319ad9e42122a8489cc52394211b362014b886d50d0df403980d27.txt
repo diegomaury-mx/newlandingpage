@@ -1,0 +1,1 @@
+Verifier blocklist: pattern "200+ capacitados" (Spanish, "200+ trained").

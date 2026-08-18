@@ -1,0 +1,16 @@
+# I took 23 teams from an idea to a validated business model
+
+Anchor metric: 23 entrepreneurial teams at BrainCamp and 6 projects with specialized support in the acceleration stage (2020).
+
+Role: National Program Director, Innovation & Entrepreneurship.
+
+BRAiN México existed to turn innovative ideas into companies, not to award ideas. I designed and ran the program in three linked stages: the E-Brain training workshop, the BrainCamp intensive camp, and an acceleration phase where projects validated their business model, developed a prototype, and protected their intellectual property. I covered logistics planning, methodology, alliances, and facilitation.
+
+Main result: 23 entrepreneurial teams reached BrainCamp and 6 projects received full diagnostics and specialized support in the acceleration program. Caveat: the number of first-stage participants wasn't recorded. Self-reported figures.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| The program ran in 2020, including its BrainCamp stage | ✔ (own) | HackSureste / RushFrame playlist: #BRAiNMEXICO2020 recap and #BrainCamp experience video. Own documentation |
+| 23 teams at BrainCamp and 6 accelerated projects | ✖ | The figures aren't backed by evidence. The video documents the event, not the count |

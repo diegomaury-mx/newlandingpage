@@ -1,0 +1,23 @@
+# INC Prototype: the call for those who already built something
+
+Anchor metric: 197 university and research applicants in 2021, versus 156 in 2020. Tec's 2021 Annual Report, p.415.
+
+Role: National Program Director, Innovation & Entrepreneurship.
+
+INCmty's calls are segmented by maturity, and INC Prototype was the one for people who already had something built: university students and researchers with developments at TRL 3 to 8. I designed and ran the call, the partnerships, and the evaluation criteria by technological maturity level, with Tecnológico de Monterrey as a partner.
+
+Main result: the call grew from 156 applicants in 2020 to 197 in 2021, a 26% increase. Caveat: applicant figures, not selected-project figures.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| 156 applicants (2020) and 197 (2021) | ✔ | Tecnológico de Monterrey 2020 (p.180) and 2021 (p.415) Annual Reports |
+| My role leading the call | ✖ | No artifact. The reports document the program, not my position |
+| The 2021 edition took place | ✔ (own) | HackSureste / RushFrame playlist: Prototype 2021 recap. Own documentation |
+
+---
+
+Master case: INCmty B-Challenge 2021.
+
+Consolidation note (2026-07-11): removed the $120,000 in-kind prize pool claim, which was flagged "[figure pending verification]". Tec's reports don't confirm it.

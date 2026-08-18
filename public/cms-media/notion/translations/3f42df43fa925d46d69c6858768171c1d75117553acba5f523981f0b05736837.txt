@@ -1,0 +1,21 @@
+# Make It Happen: 49 posts and an uncomfortable lesson about distribution
+
+Anchor metric: 49 posts. My brand's main editorial vehicle.
+
+Role: author and editor.
+
+Haz que pase (Make It Happen) is my newsletter on Substack, and today it's the channel where I write what I think without intermediaries. It's the only project in the portfolio where I am the product.
+
+Main result: 49 posts. Most traffic arrives direct, but converts very little to subscription. Email campaigns attract users and don't convert. Social channels (LinkedIn, Facebook, Instagram) bring volume and almost no subscriptions. The only channel with a decent conversion rate is Substack itself, which brings the least traffic. Caveat: platform metrics, no absolute subscriber counts recorded in this file.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| The newsletter exists and is public | ✔ | diegomaury.substack.com: public archive of "Haz que pase," verified 08/13/2026 |
+| 49 posts | ✔ (own) | "Substack Blog Entries" base in this workspace and the public Substack archive |
+| Conversion behavior by channel | ✔ (own) | "Haz que pase" Substack Audit - Diagnosis and Growth System (07/15/2026), with data from the analytics panel. Internal document |
+
+---
+
+Note: this case is worth less for its result than for what it demonstrates: I measure my own channels with the same rigor I measure a client's, and I publish the diagnosis even when it's unfavorable.

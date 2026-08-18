@@ -1,0 +1,138 @@
+# I turned inefficient lead capture into a business operation that runs on its own.
+
+Lead capture went from taking 1 to 3 days to under 5 minutes. That's the change at the heart of this case.
+
+Capabilities demonstrated: RevOps and automation · AI-powered systems · Governance and processes · Program leadership.
+
+Context: PropTech (confidential) · Oct 2025 - Jun 2026 · fractional operations leadership covering strategy, RevOps, marketing, automation, and AI.
+
+---
+
+## The problem
+
+It wasn't a lack of hands. It was a lack of a system.
+
+Leads were coming in through multiple channels, Meta Lead Ads among them, with nothing and no one to receive them. A lead would arrive and no one would touch it for one to three days. By the time someone responded, the prospect was either completely cold or had already gone to a competitor.
+
+There was no system to automatically assign each lead. There were no clear criteria to decide who to attend to first. The CRM had no single source of truth: each area worked with its own version of the data.
+
+> You don't fix that by hiring someone to respond faster. You fix it by building the system.
+
+## The transformation
+
+| Before | After |
+| --- | --- |
+| Lead comes in through a channel | Automatic capture |
+| Falls into a manual inbox | Automatic assignment |
+| Wait of 1 to 3 days | Qualification in under 5 minutes |
+| Late human contact | Structured sales process in HubSpot |
+| Information scattered across teams | Measurable operation from a single place |
+
+## The intervention
+
+Four decisions changed the operation completely.
+
+### Decision 01: Make every lead land in the right place
+
+I connected the capture channels to HubSpot so every lead entered the sales process automatically, without depending on someone checking an inbox, using scenarios built in Make.com (formerly Integromat)
+
+Meta Lead Ads · Make · HubSpot
+
+### Decision 02: Put the data in order
+
+I organized HubSpot so everyone worked with the same information and the same rules. I defined the stages, the criteria for prioritizing leads, and the information that needed to be logged at each step.
+
+HubSpot · lifecycle · lead scoring · pipeline
+
+### Decision 03: Make first response stop depending on a person
+
+I built SOFI to receive and qualify leads automatically. That way, first response stopped depending on whether someone happened to be available at that moment.
+
+The system combines AI for conversation, reasoning, and transcription.
+
+### Decision 04: Leave the system documented
+
+I documented how the operation works and centralized the information in one place. Processes, reports, decisions, and follow-up stopped depending on information scattered across people and tools.
+
+Notion · processes · dashboards · reporting
+
+## The decision that changed the system
+
+### Technology had to give way to behavior.
+
+SOFI was born as a voice agent. The technology worked. But we discovered something more important: prospects didn't answer calls from unknown numbers, but they did use WhatsApp.
+
+I changed the primary channel and rebuilt the necessary part of the system to adapt it. The AI logic stayed the same.
+
+> The channel is a business hypothesis. Not an architecture decision.
+
+## The architecture
+
+> CAPTURE
+
+Meta · WhatsApp
+
+↓
+
+RECEIVE AND QUALIFY
+
+SOFI
+
+↓
+
+ORGANIZE
+
+HubSpot
+
+↓
+
+MEASURE AND IMPROVE
+
+Reporting · Notion
+
+Make connects the flow between the systems.
+
+## Results
+
+### Under 5 minutes
+
+Lead response time. Before: 1 to 3 days. After: under 5 minutes. Measured in the CRM, Oct 2025 - Jun 2026.
+
+### From 5 to 30 (+500%)
+
+Leads processed per week. After redesigning how leads were captured and assigned.
+
+### 3
+
+AI models working together. Conversation · reasoning · transcription.
+
+### +1,291%
+
+Modeled RODI. Base scenario, payback under 1 month. Cost-avoidance model, not realized savings. Revenue under NDA.
+
+## Evidence
+
+| Result | Evidence | Status |
+| --- | --- | --- |
+| Speed-to-lead under 5 minutes | HubSpot CRM | Under NDA |
+| 5 to 30 leads per week | HubSpot CRM | Under NDA |
+| Modeled RODI +1,291% | Proprietary financial model | Modeled |
+| SOFI operational | Architecture / demo | Publishability TBD |
+
+The original artifacts are subject to NDA. Evidence can be presented anonymized when possible.
+
+## Scope
+
+### What I led
+
+Strategy · RevOps · Automation · AI · Governance · Program leadership.
+
+### What I didn't lead
+
+Sales closing · investment decisions · real estate product outcomes.
+
+## Closing
+
+The goal wasn't to build an AI agent. It was to make sure a lead got attention within minutes, that the information stayed organized, and that the process could keep running without depending on someone watching over it.
+
+---

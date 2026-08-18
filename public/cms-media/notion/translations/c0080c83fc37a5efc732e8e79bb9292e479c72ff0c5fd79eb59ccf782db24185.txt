@@ -1,0 +1,23 @@
+# I prepared applicants for Tec's entrepreneurship scholarship
+
+Anchor metric: 516 candidates applied for the Entrepreneurial Talent Scholarship in 2020, and 33 received it. Tec's 2020 Annual Report, p.174.
+
+Role: National Program Director, Innovation & Entrepreneurship.
+
+The Eugenio Garza Lagüera Entrepreneurship Institute's Entrepreneurial Talent Scholarship funds students with entrepreneurial projects. The problem wasn't the scholarship itself: it was that applicants reached the process without knowing how to structure an idea. I designed and facilitated BTEM Training, a free prep workshop so candidates arrived ready for the call, covering technology-based projects at different maturity levels (TRL). It ran as StartUp Training and evolved into BTEM Training between 2021 and 2023.
+
+Main result: in 2020, 516 candidates applied for the scholarship, 60 advanced to the national bootcamp, and 33 were selected. Important caveat: these are the scholarship's numbers, not the workshop's. My responsibility was preparing applicants, not selection or awarding support. I don't claim the scholarship's outcome as my own.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| 2020 Entrepreneurial Talent Scholarship figures (516 candidates, 60 to bootcamp, 33 awarded) | ✔ | Tecnológico de Monterrey 2020 Annual Report, p.174 |
+| The 2022 BTEM edition took place | ✔ (own) | HackSureste / RushFrame playlist: BTEM 2022 recap. Own documentation |
+| My role as workshop designer and facilitator | ✖ | No artifact. Pending: workshop call materials or program documentation |
+
+## Archive
+
+- BTEM 2022 (Archive layer)
+- BTEM Training 2023 (Archive layer)
+- StartUp Training (Archive layer) — original program name

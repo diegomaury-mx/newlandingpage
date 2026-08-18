@@ -1,0 +1,32 @@
+# I ran INCmty's open calls, and they grew 32% in a year
+
+Anchor metric: 504 applicants to INC B-Challenge 2021, versus 383 in 2020. Tecnológico de Monterrey Annual Report 2021, p.415.
+
+Role: National Program Director, Innovation & Entrepreneurship (2019-2022).
+
+INCmty is the largest entrepreneurship festival in Latin America, and its open calls are the entry point to the ecosystem. I ran and operated all three (B-Challenge, Prototype, and Accelerator), designing each for a different stage of maturity: bootcamp for ideas, prototype for university students and researchers, acceleration for early-stage startups. Operations included partnerships with government, private sector, universities, and the ecosystem, plus project evaluation and selection.
+
+Main result: all three open calls grew between 2020 and 2021. B-Challenge went from 383 to 504 applicants, Prototype from 156 to 197, and Accelerator from 152 to 205 startups; the 2021 Accelerator winner raised a one-million-dollar seed round. Caveat: applicant figures, not selected-participant figures. The seed round amount belongs to the winning startup, not attributable to the program as a return.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| Applicant figures for the 3 calls (2020 and 2021) | ✔ | Tecnológico de Monterrey Annual Reports 2020 (p.180) and 2021 (p.415) |
+| The 3 calls and the 2021 national bootcamp took place | ✔ (own) | HackSureste / RushFrame playlist: recaps of B-Challenge 2021, Prototype 2021, INC Accelerator 2021, and National Bootcamp 2021. Own documentation |
+| My role as director of the open calls | ✖ | No artifact. The reports document the programs, not my position |
+| My operational role in B-Challenge | ✔ (own) | INC B-Challenge Facilitator Manual (October 23-24): I appear as the staff's direct point of contact. The manual defines the hour-by-hour agenda, mentor logistics on Discord, and the official rubric (Innovation 30%, Viability 30%, Problem Definition 30%, Pitch 10%) |
+| Event format: up to 70 teams of 2 to 5 people, 100% online | ✔ (own) | Open-call documents "What is B-Challenge" and "B-Challenge Discord Instructions" |
+
+## Archive
+
+- B-Challenge 2020 - INC Challenges (Archive layer)
+- INC Prototype 2021 (Support layer)
+- INCmty Accelerator 2021 (Support layer)
+- INCmty DisruptAir Challenge 2022 (Support layer)
+
+---
+
+Consolidation note (07/11/2026): figures were taken from the Tec's annual reports. Prize-pool amounts marked "[data to verify]" were removed ($80,000 in B-Challenge 2020 and $120,000 in INC Prototype): the reports don't confirm them.
+
+### Source artifacts (internal use, not published on the site)

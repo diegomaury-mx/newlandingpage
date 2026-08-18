@@ -1,0 +1,3 @@
+I never instrumented measurement for the program from day one. The +600% is a reconstructed estimate, not a figure that comes out of a dashboard, and today it's hard for me to prove it: I had to go dig up my own baseline from a 2019 newspaper article. A program that runs for four years and can't prove its own impact with source data has a governance gap, not an effort gap.
+
+Transferable: any open innovation program needs to define its three source metrics before opening the first call for proposals, not after the third one.
