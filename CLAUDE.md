@@ -171,6 +171,9 @@ Decisiones cerradas (no son pendientes; no recuestionar):
 ### Scoping de tareas Notion de este proyecto
 Filtrar SIEMPRE por relación a proyecto "Portafolio D" (`Proyectos, Ideas y Locuras de Diego`), nunca por palabra clave o tema. Bases relevantes: Changelog — Portafolio D, Tareas y Misiones, PRD - Portfolio (ver abajo).
 
+### Notion como fuente de verdad de pendientes/estado
+Antes de responder cualquier pregunta sobre qué está pendiente, en qué estado va el proyecto, o qué falta por hacer, consultar primero Tareas y Misiones / Changelog — Portafolio D en Notion. Nunca inferir esa respuesta solo de memoria (`~/.claude/projects/.../memory/`), del repo, o de un resumen de sesión previa — esas fuentes se desactualizan y ya causaron un caso real de reportar "nada pendiente" cuando había 33 tareas abiertas en Notion.
+
 ### Registro en Notion — Portafolio D (SSOT de cambios)
 El flujo de registro sigue estrictamente la guía canónica en Notion: **"🤖 Instrucciones para agentes de código (Claude Code · Codex) — Portafolio D (Notion MCP)"** (`8b47026a-4a82-43ba-9043-1c0424338d14`). Ante cualquier conflicto entre esa página y este resumen, manda la guía. No duplicar su contenido aquí — solo el mínimo para no tener que abrirla cada sesión:
 
