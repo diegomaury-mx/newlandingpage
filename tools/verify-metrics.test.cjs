@@ -189,3 +189,22 @@ test('CLI: exit 2 si --metrics viene sin ruta', () => {
     assert.strictEqual(err.status, 2);
   }
 });
+
+test('verifyHtml acepta calificadorClaves como raiz de palabra (substring, no palabra completa)', () => {
+  // calificadorClaves usa raiz ("estimad"), el chequeo es substring: debe
+  // aceptar variantes como "estimados"/"estimada" sin exigir "estimado" literal.
+  const metrics = [
+    {
+      slug: 'demo-raiz',
+      valor: '10',
+      estado: 'Vigente',
+      publicabilidad: 'Pública',
+      superficies: ['Sitio web'],
+      calificadorClaves: ['estimad'],
+      notaUso: '',
+    },
+  ];
+  const html = '<span data-metric="demo-raiz">10</span> datos estimados, 2026';
+  const r = verifyHtml(html, 'index.html', metrics);
+  assert.deepStrictEqual(r.errors, []);
+});
