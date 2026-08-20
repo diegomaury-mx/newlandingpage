@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import type { BlockObjectResponse, PageObjectResponse } from "@notionhq/client";
-import { blocksToMarkdown, mapImageSlot, translateFields } from "./notionLoaders.ts";
+import {
+  blocksToMarkdown,
+  extractResultHeadline,
+  hasVerifiedEvidenceRow,
+  mapImageSlot,
+  parseEvidenceVideos,
+  translateFields,
+} from "./notionLoaders.ts";
 
 function fakeLogger() {
   const warnings: string[] = [];
@@ -14,6 +21,13 @@ function fakeBlock(type: string, richText: { plain_text: string }[]): BlockObjec
 
 function fakePage(properties: PageObjectResponse["properties"]): PageObjectResponse {
   return { id: "page-id", properties } as PageObjectResponse;
+}
+
+function fakeTableRow(cells: string[]): BlockObjectResponse {
+  return {
+    type: "table_row",
+    table_row: { cells: cells.map((text) => [{ plain_text: text }]) },
+  } as unknown as BlockObjectResponse;
 }
 
 test("mapImageSlot lee un slot con imagen publicada", () => {
@@ -105,4 +119,66 @@ test("translateFields devuelve objeto vacio si la lista de campos esta vacia", a
   const en = await translateFields(raw, [], logger);
 
   assert.deepEqual(en, {});
+});
+
+test("extractResultHeadline devuelve el texto del primer heading_1 del cuerpo", () => {
+  const blocks = [
+    fakeBlock("heading_2", [{ plain_text: "No es H1" }]),
+    fakeBlock("heading_1", [{ plain_text: "Escale X y logre Y" }]),
+    fakeBlock("heading_1", [{ plain_text: "Segundo H1 ignorado" }]),
+  ];
+
+  assert.equal(extractResultHeadline(blocks), "Escale X y logre Y");
+});
+
+test("extractResultHeadline devuelve string vacio si la ficha no tiene heading_1", () => {
+  const blocks = [fakeBlock("heading_2", [{ plain_text: "Solo H2" }])];
+
+  assert.equal(extractResultHeadline(blocks), "");
+});
+
+test("hasVerifiedEvidenceRow es true si una fila de la tabla bajo '## Evidencia' trae ✔", () => {
+  const blocks = [
+    fakeBlock("heading_2", [{ plain_text: "Evidencia" }]),
+    fakeTableRow(["Afirmacion uno", "✔"]),
+  ];
+
+  assert.equal(hasVerifiedEvidenceRow(blocks), true);
+});
+
+test("hasVerifiedEvidenceRow es false si ninguna fila de Evidencia trae ✔", () => {
+  const blocks = [
+    fakeBlock("heading_2", [{ plain_text: "Evidencia" }]),
+    fakeTableRow(["Afirmacion uno", "✖"]),
+  ];
+
+  assert.equal(hasVerifiedEvidenceRow(blocks), false);
+});
+
+test("hasVerifiedEvidenceRow ignora tablas con ✔ fuera de la seccion Evidencia", () => {
+  const blocks = [
+    fakeBlock("heading_2", [{ plain_text: "Resultados" }]),
+    fakeTableRow(["Metrica", "✔"]),
+    fakeBlock("heading_2", [{ plain_text: "Evidencia" }]),
+    fakeTableRow(["Afirmacion", "✖"]),
+  ];
+
+  assert.equal(hasVerifiedEvidenceRow(blocks), false);
+});
+
+test("parseEvidenceVideos parsea una URL por linea y descarta lineas que no son http(s)", () => {
+  const raw = ["https://youtu.be/abc123", "no es una url", "Demo | https://drive.google.com/file/xyz"].join(
+    "\n",
+  );
+
+  const videos = parseEvidenceVideos(raw);
+
+  assert.deepEqual(videos, [
+    { label: "Ver video", url: "https://youtu.be/abc123" },
+    { label: "Demo", url: "https://drive.google.com/file/xyz" },
+  ]);
+});
+
+test("parseEvidenceVideos devuelve arreglo vacio para texto vacio", () => {
+  assert.deepEqual(parseEvidenceVideos(""), []);
 });

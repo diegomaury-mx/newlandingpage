@@ -167,7 +167,7 @@ export function blocksToMarkdown(blocks: BlockObjectResponse[]): string {
  * afirmacion ("Escale X y logre Y"), distinto de la propiedad `title` (que
  * solo lleva el nombre del programa/cliente). Vacio si la ficha no tiene H1.
  */
-function extractResultHeadline(blocks: BlockObjectResponse[]): string {
+export function extractResultHeadline(blocks: BlockObjectResponse[]): string {
   const heading = blocks.find((block) => block.type === "heading_1");
   return heading ? plain(blockRichText(heading)) : "";
 }
@@ -177,7 +177,7 @@ function extractResultHeadline(blocks: BlockObjectResponse[]): string {
  * cuerpo tiene un artefacto marcado (✔). El badge de evidencia de una ficha
  * se hereda de esta tabla, nunca se declara aparte.
  */
-function hasVerifiedEvidenceRow(blocks: BlockObjectResponse[]): boolean {
+export function hasVerifiedEvidenceRow(blocks: BlockObjectResponse[]): boolean {
   let inEvidenceSection = false;
   for (const block of blocks) {
     if (block.type === "heading_2") {
@@ -196,7 +196,7 @@ function hasVerifiedEvidenceRow(blocks: BlockObjectResponse[]): boolean {
  * opcional "Etiqueta | URL") a una lista de links externos. Los videos son
  * forzosamente un link, nunca un archivo subido a Notion (ver mapCase).
  */
-function parseEvidenceVideos(raw: string): { label: string; url: string }[] {
+export function parseEvidenceVideos(raw: string): { label: string; url: string }[] {
   return raw
     .split("\n")
     .map((line) => line.trim())
