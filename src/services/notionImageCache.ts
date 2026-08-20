@@ -34,12 +34,12 @@ const EXTENSION_BY_CONTENT_TYPE: Record<string, string> = {
   "image/svg+xml": "svg",
 };
 
-function extensionFromUrl(url: string): string | undefined {
+export function extensionFromUrl(url: string): string | undefined {
   const match = /\.([a-zA-Z0-9]+)$/.exec(new URL(url).pathname);
   return match?.[1]?.toLowerCase();
 }
 
-function sanitizeCacheKey(cacheKey: string): string {
+export function sanitizeCacheKey(cacheKey: string): string {
   return cacheKey.replace(/[^a-zA-Z0-9._-]/g, "-");
 }
 
