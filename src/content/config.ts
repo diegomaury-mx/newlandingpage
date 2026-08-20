@@ -1,11 +1,10 @@
 /**
  * Astro Content Collections — Schema Definitions
  *
- * `cases`, `metrics` y `siteCopy` son las 3 colecciones del CMS de Notion
- * (Diego CMS): cargan datos en build vía Content Layer API (`loader:`),
- * validadas contra el contrato real en `docs/platform/notion-astro-contract.md`.
- * `projects`, `playbooks`, `insights` y `services` son colecciones de archivo
- * local, fuera del alcance de Diego CMS — sin tocar aquí.
+ * `cases`, `metrics`, `siteCopy` e `imageSlots` son las 4 colecciones del CMS
+ * de Notion (Diego CMS): cargan datos en build vía Content Layer API
+ * (`loader:`), validadas contra el contrato real en
+ * `docs/platform/notion-astro-contract.md`.
  *
  * Requires: astro@^5.0.0 (Content Layer API estable)
  * All date fields use ISO 8601 string format (e.g. "2024-03-15").
@@ -220,128 +219,6 @@ const imageSlots = defineCollection({
   }),
 });
 
-// ─── Project ─────────────────────────────────────────────────────────────────
-
-const projects = defineCollection({
-  type: 'content',
-  schema: z.object({
-    name: z.string(),
-    purpose: z.string(),
-    description: z.string(),
-    status: z.enum(['active', 'completed', 'paused', 'archived']),
-    role: z.string(),
-    timeline: z.object({
-      start: z.string(),
-      end: z.string().optional(),
-    }),
-    impact: z.string(),
-    technologies: z.array(z.string()).optional(),
-    relatedInsights: z.array(z.string()).optional(),  // slugs
-    relatedPlaybooks: z.array(z.string()).optional(), // slugs
-    // SEO
-    seoTitle: z.string().optional(),
-    seoDescription: z.string().max(160).optional(),
-    ogImage: z.string().optional(),
-    // Publishing
-    publishedAt: z.string(),
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(true),
-  }),
-});
-
-// ─── Playbook ─────────────────────────────────────────────────────────────────
-
-const playbooks = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    problem: z.string(),
-    framework: z.string(),
-    steps: z.array(
-      z.object({
-        order: z.number(),
-        title: z.string(),
-        description: z.string(),
-      })
-    ).min(1),
-    resources: z.array(
-      z.object({
-        label: z.string(),
-        href: z.string(),
-        type: z.enum(['link', 'download', 'tool', 'template']),
-      })
-    ).optional(),
-    downloads: z.array(
-      z.object({
-        label: z.string(),
-        href: z.string(),
-        format: z.string(), // e.g. "PDF", "XLSX"
-      })
-    ).optional(),
-    relatedCaseStudies: z.array(z.string()).optional(), // slugs
-    // SEO
-    seoTitle: z.string().optional(),
-    seoDescription: z.string().max(160).optional(),
-    ogImage: z.string().optional(),
-    // Publishing
-    publishedAt: z.string(),
-    updatedAt: z.string().optional(),
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(true),
-  }),
-});
-
-// ─── Insight ─────────────────────────────────────────────────────────────────
-
-const insights = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    category: z.string(),
-    date: z.string(),
-    readingTime: z.number().positive(), // minutes
-    summary: z.string(),
-    tags: z.array(z.string()).min(1),
-    relatedTopics: z.array(z.string()).optional(),
-    cta: z.object({
-      label: z.string(),
-      href: z.string(),
-    }).optional(),
-    // SEO
-    seoTitle: z.string().optional(),
-    seoDescription: z.string().max(160).optional(),
-    ogImage: z.string().optional(),
-    // Publishing
-    publishedAt: z.string(),
-    updatedAt: z.string().optional(),
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(true),
-  }),
-});
-
-// ─── Service ─────────────────────────────────────────────────────────────────
-
-const services = defineCollection({
-  type: 'data', // structured data, not long-form MDX
-  schema: z.object({
-    name: z.string(),
-    slug: z.string().regex(/^[a-z0-9-]+$/),
-    tagline: z.string(),
-    description: z.string(),
-    deliverables: z.array(z.string()).min(1),
-    timeline: z.string(), // e.g. "4–6 semanas"
-    engagement: z.enum(['retainer', 'project', 'advisory']),
-    // SEO
-    seoTitle: z.string().optional(),
-    seoDescription: z.string().max(160).optional(),
-    // Ordering
-    order: z.number().int().nonnegative(),
-    featured: z.boolean().default(false),
-    active: z.boolean().default(true),
-  }),
-});
-
 // ─── Exports ─────────────────────────────────────────────────────────────────
 
 export const collections = {
@@ -349,8 +226,4 @@ export const collections = {
   metrics,
   siteCopy,
   imageSlots,
-  projects,
-  playbooks,
-  insights,
-  services,
 };
