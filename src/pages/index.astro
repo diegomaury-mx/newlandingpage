@@ -255,16 +255,14 @@ const systemsClosingHeading =
 const systemsClosing = paragraphs(blocksAfterHeading(s6, '## El verdadero entregable'));
 
 // Los 3 sistemas propios (REDUX, HackSureste Ops, SOFI) enlazan a la pagina
-// de caso real cuando existe. SOFI vive en la coleccion `cases` de Astro;
-// HackSureste Ops enlaza al caso real del CMS (/portfolio/hacksureste,
-// decision 2026-08-13 que reemplaza el mapping legacy congelado por REM-005,
-// obsoleto desde que ese caso se publico en el CMS). REDUX sigue sin ficha
-// propia en el CMS, solo la legacy estatica public/portfolio/redux-incmty.html.
+// de caso real del CMS (/portfolio/{slug}). REDUX ya tiene ficha propia
+// publicada (/portfolio/redux) desde el Sprint 1 de deuda tecnica 2026-08-19;
+// deja de apuntar a la legacy estatica public/portfolio/redux-incmty.html.
 function systemsCaseLink(title: string): string | null {
   const key = title.toLowerCase();
   if (key.includes('sofi')) return '/portfolio/sofi';
   if (key.includes('hacksureste')) return '/portfolio/hacksureste';
-  if (key.includes('redux')) return '/portfolio/redux-incmty.html';
+  if (key.includes('redux')) return '/portfolio/redux';
   return null;
 }
 
