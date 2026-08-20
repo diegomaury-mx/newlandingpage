@@ -1,0 +1,12 @@
+# Cloudflare Pages headers. El sitio es Astro SSG (build estatico, sin
+# request-time rendering), por lo que no hay forma de generar un nonce por
+# request para script-src — se usa 'unsafe-inline' de forma deliberada para
+# cubrir los scripts is:inline existentes (Navbar, GTM loader, Senja init).
+# Sigue bloqueando lo que de verdad importa: carga de scripts/objetos desde
+# origenes no confiables y framing del sitio (clickjacking).
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://widget.senja.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://widget.senja.io; frame-src https://www.youtube.com https://drive.google.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

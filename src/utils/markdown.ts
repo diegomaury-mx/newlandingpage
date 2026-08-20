@@ -17,12 +17,18 @@ function escapeHtml(text: string): string {
     .replace(/"/g, "&quot;");
 }
 
+const SAFE_LINK_SCHEME = /^(https?:|mailto:|tel:)/i;
+
 /** Aplica **negritas** y [links](url) sobre texto ya escapado. */
 function renderInline(text: string): string {
   const escaped = escapeHtml(text);
   return escaped
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, url) =>
+      SAFE_LINK_SCHEME.test(url) || url.startsWith("/") || url.startsWith("#")
+        ? `<a href="${url}" target="_blank" rel="noopener">${label}</a>`
+        : label,
+    );
 }
 
 function parseTableRows(lines: string[]): { header: string[]; body: string[][] } {
