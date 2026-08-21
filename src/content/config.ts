@@ -161,7 +161,7 @@ const metrics = defineCollection({
     publicability: z
       .enum(['Pública', 'Interna', 'A solicitud', 'No publicable'])
       .optional(),
-    evidenceGrade: z.enum(['published', 'own']).optional(),
+    evidenceGrade: z.enum(['published', 'own', 'belief']).optional(),
     reputationalRisk: z.enum(['Bajo', 'Medio', 'Alto']).optional(),
     evidenceUrl: z.string().url().optional(),
     source: z.string().optional(),
