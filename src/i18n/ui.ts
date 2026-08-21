@@ -19,6 +19,7 @@ export const uiEn = {
     anchorMetricEmpty: "No anchor metric on record",
     sectionsAriaLabel: "Case sections",
     visualEvidence: "Visual evidence",
+    videoEvidence: "Video evidence",
     evidencePhotoAlt: (index: number) => `View evidence photo ${index}`,
     reflection: "Reflection",
     caseArchive: "Archive for this case",

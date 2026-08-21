@@ -1,0 +1,186 @@
+---
+/**
+ * Markup compartido de la ficha de caso (rediseno de franja de identidad +
+ * galeria lateral, 2026-08-18). Antes de este componente, src/pages/portfolio/
+ * [slug].astro y src/pages/en/portfolio/[slug].astro duplicaban este bloque
+ * completo — el rediseno del 2026-08-18 solo se aplico a ES, dejando EN en el
+ * case-hero viejo (banner grande) sin que nadie lo notara. Toda diferencia
+ * ES/EN entra por props (labels ya traducidos, nunca strings hardcodeados
+ * aqui) para que ambos locales queden estructuralmente identicos por
+ * construccion.
+ */
+import { toEmbeddableVideoUrl } from '../../utils/embedVideo.ts';
+
+interface CaseSection {
+  id: string;
+  title: string;
+}
+
+interface CaseVideo {
+  url: string;
+  label: string;
+}
+
+interface Props {
+  entryTitle: string;
+  logo?: string;
+  organization?: string;
+  year?: string;
+  type?: string;
+  displayTitle: string;
+  anchorMetricLabel: string;
+  anchorMetric: string;
+  anchorMetricEmpty: string;
+  sections: CaseSection[];
+  sectionsAriaLabel: string;
+  bodyHtml: string;
+  emptyBodyMessage: string;
+  evidenceMedia: string[];
+  visualEvidenceLabel: string;
+  evidencePhotoAlt: (index: number) => string;
+  evidenceVideos: CaseVideo[];
+  videoEvidenceLabel: string;
+  reflection: string;
+  reflectionLabel: string;
+  editionTitles: string[];
+  caseArchiveLabel: string;
+}
+
+const {
+  entryTitle,
+  logo,
+  organization,
+  year,
+  type,
+  displayTitle,
+  anchorMetricLabel,
+  anchorMetric,
+  anchorMetricEmpty,
+  sections,
+  sectionsAriaLabel,
+  bodyHtml,
+  emptyBodyMessage,
+  evidenceMedia,
+  visualEvidenceLabel,
+  evidencePhotoAlt,
+  evidenceVideos,
+  videoEvidenceLabel,
+  reflection,
+  reflectionLabel,
+  editionTitles,
+  caseArchiveLabel,
+} = Astro.props as Props;
+
+const hasGalleryPhotos = evidenceMedia.length > 0;
+---
+
+<div class="case-identity-strip">
+  {logo && (
+    <img class="case-identity-strip__logo" src={logo} alt={organization ?? entryTitle} width="24" height="24" />
+  )}
+  <span class="case-identity-strip__name">{entryTitle}</span>
+</div>
+
+<div class="wrap-case">
+  <div class:list={['case-split', { 'case-split--3col': hasGalleryPhotos }]}>
+    <aside class="case-rail">
+      <div class="meta">{organization ?? '—'} · {year ?? '—'} · {type ?? '—'}</div>
+      <h1>{displayTitle}</h1>
+
+      <div class="rail-block">
+        <div class="label">{anchorMetricLabel}</div>
+        <p>{anchorMetric || anchorMetricEmpty}</p>
+      </div>
+
+      {sections.length > 0 && (
+        <nav class="rail-nav" aria-label={sectionsAriaLabel}>
+          {sections.map((section) => (
+            <a href={`#${section.id}`} data-rail-link>{section.title}</a>
+          ))}
+        </nav>
+      )}
+    </aside>
+
+    <div class="case-prose">
+      {bodyHtml ? (
+        <div set:html={bodyHtml} />
+      ) : (
+        <p class="case-empty-note">{emptyBodyMessage}</p>
+      )}
+    </div>
+
+    {hasGalleryPhotos && (
+      <aside class="case-gallery-col">
+        <div class="eyebrow">{visualEvidenceLabel}</div>
+        <div class="evidence-photo-grid evidence-photo-grid--narrow">
+          {evidenceMedia.map((src, i) => (
+            <a class="evidence-photo" href={src} target="_blank" rel="noopener" aria-label={evidencePhotoAlt(i + 1)}>
+              <img src={src} alt="" loading="lazy" width="300" height="225" />
+            </a>
+          ))}
+        </div>
+      </aside>
+    )}
+  </div>
+
+  {evidenceVideos.length > 0 && (
+    <section class="case-evidence-media">
+      <div class="eyebrow">{videoEvidenceLabel}</div>
+      <div class="evidence-video-list">
+        {evidenceVideos.map((video) => {
+          const embedSrc = toEmbeddableVideoUrl(video.url);
+          return embedSrc ? (
+            <div class="evidence-video-embed">
+              <iframe src={embedSrc} title={video.label} loading="lazy" allowfullscreen></iframe>
+            </div>
+          ) : (
+            <a class="evidence-video-link" href={video.url} target="_blank" rel="noopener">{video.label}</a>
+          );
+        })}
+      </div>
+    </section>
+  )}
+
+  {reflection.trim() && (
+    <section class="case-reflection">
+      <div class="eyebrow">{reflectionLabel}</div>
+      <p>{reflection}</p>
+    </section>
+  )}
+
+  {editionTitles.length > 0 && (
+    <section class="case-archive">
+      <div class="eyebrow">{caseArchiveLabel}</div>
+      <div class="case-archive__row">
+        {editionTitles.map((title) => <span class="case-archive__chip">{title}</span>)}
+      </div>
+    </section>
+  )}
+</div>
+
+<script is:inline>
+(function () {
+  const links = document.querySelectorAll('[data-rail-link]');
+  if (!links.length) return;
+
+  const targets = [...links]
+    .map((link) => document.querySelector(link.getAttribute('href') ?? ''))
+    .filter(Boolean);
+
+  if (!targets.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        links.forEach((link) => {
+          link.classList.toggle('is-active', link.getAttribute('href') === `#${entry.target.id}`);
+        });
+      });
+    },
+    { rootMargin: '-20% 0px -70% 0px' }
+  );
+
+  targets.forEach((target) => observer.observe(target));
+})();
+</script>

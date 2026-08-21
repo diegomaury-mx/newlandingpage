@@ -37,6 +37,14 @@ import {
 import { translateCached } from '../../services/deeplTranslationCache.ts';
 import { toLocalePath } from '../../utils/locale.ts';
 import { uiEn } from '../../i18n/ui.ts';
+import {
+  SECTION_IDS,
+  heroLogosFrom,
+  systemsLogo,
+  evidenceNodesFrom,
+  systemsCaseLink,
+  ctaTarget,
+} from '../../utils/homeContent.ts';
 
 function t(text: string): Promise<string> {
   return text.trim() ? translateCached(text, 'EN-US', console) : Promise.resolve(text);
@@ -61,17 +69,6 @@ function slotSrc(slotId: string, fallback: string): string {
 const problemaDiagramaSlot = imageSlotEntries.find((e) => e.id === 'diagrama-problema');
 const problemaDiagramaReady = Boolean(problemaDiagramaSlot?.data.status === 'Listo' && problemaDiagramaSlot.data.imageUrl);
 
-const SECTION_IDS = {
-  S1: 's1-hero',
-  S2: 's2-quien-soy',
-  S3: 's3-problema',
-  S4: 's4-evidencia',
-  S5: 's5-como-trabajo',
-  S6: 's6-sistemas-propios',
-  S6b: 's6b-prueba-social',
-  S8: 's8-siguiente-paso',
-} as const;
-
 // --- S1 · Hero (parseo ES sin modificar) --------------------------------------
 const s1 = sections.get('S1')?.blocks ?? [];
 const heroName = heading1(s1);
@@ -83,21 +80,7 @@ const heroRole = heroParas[0] ?? '';
 const heroSub = heroParas[1] ?? '';
 const heroCtas = ctaLabels(s1);
 
-const BLOCKED_LOGO_NAMES = new Set(['fliphouse']);
-const heroLogos = imageSlotEntries
-  .filter((e) => e.id.startsWith('logo-') && !e.id.endsWith('-evidencia'))
-  .filter((e) => e.data.status === 'Listo' && e.data.imageUrl && e.data.nombre)
-  .filter((e) => !BLOCKED_LOGO_NAMES.has(e.data.nombre.toLowerCase()))
-  .sort((a, b) => a.data.nombre.localeCompare(b.data.nombre, 'es'))
-  .map((e) => ({ src: e.data.imageUrl as string, alt: e.data.nombre }));
-
-function systemsLogo(title: string): { src: string; alt: string } | null {
-  const key = title.toLowerCase();
-  if (key.includes('redux')) return { src: slotSrc('ip-logo-redux','/assets/img/logos/redux.svg'), alt:'REDUX' };
-  if (key.includes('hacksureste')) return { src: slotSrc('ip-logo-hacksureste','/assets/img/logos/hacksureste.svg'), alt:'HackSureste' };
-  if (key.includes('sofi')) return { src: slotSrc('ip-logo-sofi','/assets/img/logos/sofi.svg'), alt:'SOFI' };
-  return null;
-}
+const heroLogos = heroLogosFrom(imageSlotEntries);
 
 // --- S2 · Quien soy (parseo ES sin modificar) ---------------------------------
 const s2 = sections.get('S2')?.blocks ?? [];
@@ -146,37 +129,7 @@ const evidenceFieldLabels = firstCodeBlock(s4)
 const afterFieldsFence = blocksAfterHeading(blocksAfterHeading(s4, '```'), '```');
 const evidenceClosing = paragraphs(afterFieldsFence)[0] ?? '';
 const EVIDENCE_FIELDS = evidenceFieldLabels.map((label, i) => ({ key: `field-${i}`, label }));
-
-const EVIDENCE_NODE_RADIUS = 40;
-const EVIDENCE_DOT_RADIUS = 31;
-const EVIDENCE_CENTER_HALF_WIDTH = 21;
-const EVIDENCE_CENTER_HALF_HEIGHT = 11;
-function evidencePoint(index: number, total: number, radius: number): { x: number; y: number } {
-  const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
-  return {
-    x: Math.round((50 + radius * Math.cos(angle)) * 100) / 100,
-    y: Math.round((50 + radius * Math.sin(angle)) * 100) / 100,
-  };
-}
-function evidenceLineStart(index: number, total: number): { x: number; y: number } {
-  const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
-  const c = Math.cos(angle);
-  const s = Math.sin(angle);
-  const tVal = Math.min(
-    Math.abs(c) > 1e-6 ? EVIDENCE_CENTER_HALF_WIDTH / Math.abs(c) : Infinity,
-    Math.abs(s) > 1e-6 ? EVIDENCE_CENTER_HALF_HEIGHT / Math.abs(s) : Infinity,
-  );
-  return {
-    x: Math.round((50 + tVal * c) * 100) / 100,
-    y: Math.round((50 + tVal * s) * 100) / 100,
-  };
-}
-const evidenceNodesEs = EVIDENCE_FIELDS.map((field, i) => ({
-  ...field,
-  node: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_NODE_RADIUS),
-  dot: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_DOT_RADIUS),
-  lineStart: evidenceLineStart(i, EVIDENCE_FIELDS.length),
-}));
+const evidenceNodesEs = evidenceNodesFrom(EVIDENCE_FIELDS);
 
 // --- S5 · Como trabajo (parseo ES sin modificar) ------------------------------
 const s5 = sections.get('S5')?.blocks ?? [];
@@ -200,14 +153,6 @@ const systemsClosingHeading =
   'El verdadero entregable';
 const systemsClosing = paragraphs(blocksAfterHeading(s6, '## El verdadero entregable'));
 
-function systemsCaseLink(title: string): string | null {
-  const key = title.toLowerCase();
-  if (key.includes('sofi')) return '/en/portfolio/sofi';
-  if (key.includes('hacksureste')) return '/en/portfolio/hacksureste';
-  if (key.includes('redux')) return '/en/portfolio/redux';
-  return null;
-}
-
 // --- S6b · Prueba social (parseo ES sin modificar) ----------------------------
 const s6b = sections.get('S6b')?.blocks ?? [];
 const testimonialsLabel = sections.get('S6b')?.label ?? 'Prueba social';
@@ -220,26 +165,7 @@ const moreExperiencesHeading =
 const moreExperiences = blocksAfterHeading(s6b, '## Más experiencias');
 const senjaId = moreExperiences[0]?.trim();
 
-// --- Destinos de CTA (resueltos por la etiqueta ORIGINAL en espanol) ---------
-const CV_HREF = '/cv/diego-maury-cv.pdf';
-const LINKEDIN_HREF = 'https://www.linkedin.com/in/diegomaury';
-const MAIL_HREF = 'mailto:dm@diegomaury.mx';
-const CALENDAR_HREF = 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun';
-
-interface CtaTarget {
-  href: string;
-  download?: boolean;
-  external?: boolean;
-}
-
-function ctaTarget(originalLabel: string): CtaTarget {
-  const l = originalLabel.toLowerCase();
-  if (l.includes('caso') || l.includes('portafolio')) return { href: '/en/portfolio' };
-  if (l.includes('cv')) return { href: CV_HREF, download: true };
-  if (l.includes('linkedin')) return { href: LINKEDIN_HREF, external: true };
-  if (l.includes('correo')) return { href: MAIL_HREF };
-  return { href: CALENDAR_HREF, external: true };
-}
+// --- Destinos de CTA (ver homeContent.ts, resueltos por la etiqueta ORIGINAL en espanol) ---
 
 // --- S8 · Siguiente paso (parseo ES sin modificar) ----------------------------
 const s8 = sections.get('S8')?.blocks ?? [];
@@ -393,7 +319,7 @@ const personJsonLd = {
         {heroCtas.length > 0 && (
           <div class="hero-ctas" data-reveal style="--delay:.2s">
             {heroCtas.map((originalLabel, i) => {
-              const target = ctaTarget(originalLabel);
+              const target = ctaTarget(originalLabel, '/en/portfolio');
               return (
                 <a
                   href={target.href}
@@ -627,8 +553,8 @@ const personJsonLd = {
     {systemsCardsEn.length > 0 && (
       <div class="ip-grid" data-reveal style="--delay:.18s">
         {systemsCardsEn.map((card) => {
-          const logo = systemsLogo(card.originalTitle);
-          const link = systemsCaseLink(card.originalTitle);
+          const logo = systemsLogo(imageSlotEntries, card.originalTitle);
+          const link = systemsCaseLink(card.originalTitle, '/en/portfolio');
           return (
             <div class="ip">
               {logo && <div class="ip-media"><img src={logo.src} alt={logo.alt} loading="lazy"></div>}
@@ -723,7 +649,7 @@ const personJsonLd = {
         {finalCtas.length > 0 && (
           <div class="hero-ctas" style="justify-content:center;margin-bottom:0">
             {finalCtas.map((originalLabel, i) => {
-              const target = ctaTarget(originalLabel);
+              const target = ctaTarget(originalLabel, '/en/portfolio');
               return (
                 <a
                   href={target.href}

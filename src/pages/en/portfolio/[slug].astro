@@ -14,9 +14,9 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { renderMarkdown, extractSections } from '../../../utils/markdown.ts';
 import { slugify } from '../../../utils/slug.ts';
-import { toEmbeddableVideoUrl } from '../../../utils/embedVideo.ts';
 import { toLocalePath } from '../../../utils/locale.ts';
 import { uiEn } from '../../../i18n/ui.ts';
+import CaseArticle from '../../../components/case/CaseArticle.astro';
 import '../../../styles/case.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
@@ -87,114 +87,28 @@ const creativeWorkJsonLd = {
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
   enableGtm
 >
-  {entry.data.banner && (
-    <div class="case-hero">
-      <img src={entry.data.banner} alt={title} width="1600" height="320" />
-    </div>
-  )}
-
-  <div class="wrap-case">
-    <div class="case-split">
-      <aside class="case-rail">
-        {entry.data.logo && (
-          <img class="case-rail__logo" src={entry.data.logo} alt={entry.data.organization ?? title} width="120" height="28" />
-        )}
-        <div class="meta">{entry.data.organization ?? '—'} · {entry.data.year ?? '—'} · {entry.data.type ?? '—'}</div>
-        <h1>{displayTitle}</h1>
-
-        <div class="rail-block">
-          <div class="label">{uiEn.case.anchorMetricLabel}</div>
-          <p>{anchorMetric || uiEn.case.anchorMetricEmpty}</p>
-        </div>
-
-        {sections.length > 0 && (
-          <nav class="rail-nav" aria-label={uiEn.case.sectionsAriaLabel}>
-            {sections.map((section) => (
-              <a href={`#${section.id}`} data-rail-link>{section.title}</a>
-            ))}
-          </nav>
-        )}
-      </aside>
-
-      <div class="case-prose">
-        {bodyHtml ? (
-          <div set:html={bodyHtml} />
-        ) : (
-          <p class="case-empty-note">{uiEn.case.emptyBody}</p>
-        )}
-      </div>
-    </div>
-
-    {(entry.data.evidenceMedia.length > 0 || entry.data.evidenceVideos.length > 0) && (
-      <section class="case-evidence-media">
-        <div class="eyebrow">{uiEn.case.visualEvidence}</div>
-        {entry.data.evidenceMedia.length > 0 && (
-          <div class="evidence-photo-grid">
-            {entry.data.evidenceMedia.map((src, i) => (
-              <a class="evidence-photo" href={src} target="_blank" rel="noopener" aria-label={uiEn.case.evidencePhotoAlt(i + 1)}>
-                <img src={src} alt="" loading="lazy" width="400" height="300" />
-              </a>
-            ))}
-          </div>
-        )}
-        {entry.data.evidenceVideos.length > 0 && (
-          <div class="evidence-video-list">
-            {entry.data.evidenceVideos.map((video) => {
-              const embedSrc = toEmbeddableVideoUrl(video.url);
-              return embedSrc ? (
-                <div class="evidence-video-embed">
-                  <iframe src={embedSrc} title={video.label} loading="lazy" allowfullscreen></iframe>
-                </div>
-              ) : (
-                <a class="evidence-video-link" href={video.url} target="_blank" rel="noopener">{video.label}</a>
-              );
-            })}
-          </div>
-        )}
-      </section>
-    )}
-
-    {reflection.trim() && (
-      <section class="case-reflection">
-        <div class="eyebrow">{uiEn.case.reflection}</div>
-        <p>{reflection}</p>
-      </section>
-    )}
-
-    {editionTitles.length > 0 && (
-      <section class="case-archive">
-        <div class="eyebrow">{uiEn.case.caseArchive}</div>
-        <div class="case-archive__row">
-          {editionTitles.map((t) => <span class="case-archive__chip">{t}</span>)}
-        </div>
-      </section>
-    )}
-  </div>
+  <CaseArticle
+    entryTitle={title}
+    logo={entry.data.logo}
+    organization={entry.data.organization}
+    year={entry.data.year}
+    type={entry.data.type}
+    displayTitle={displayTitle}
+    anchorMetricLabel={uiEn.case.anchorMetricLabel}
+    anchorMetric={anchorMetric}
+    anchorMetricEmpty={uiEn.case.anchorMetricEmpty}
+    sections={sections}
+    sectionsAriaLabel={uiEn.case.sectionsAriaLabel}
+    bodyHtml={bodyHtml}
+    emptyBodyMessage={uiEn.case.emptyBody}
+    evidenceMedia={entry.data.evidenceMedia}
+    visualEvidenceLabel={uiEn.case.visualEvidence}
+    evidencePhotoAlt={uiEn.case.evidencePhotoAlt}
+    evidenceVideos={entry.data.evidenceVideos}
+    videoEvidenceLabel={uiEn.case.videoEvidence}
+    reflection={reflection}
+    reflectionLabel={uiEn.case.reflection}
+    editionTitles={editionTitles}
+    caseArchiveLabel={uiEn.case.caseArchive}
+  />
 </BaseLayout>
-
-<script is:inline>
-(function () {
-  const links = document.querySelectorAll('[data-rail-link]');
-  if (!links.length) return;
-
-  const targets = [...links]
-    .map((link) => document.querySelector(link.getAttribute('href') ?? ''))
-    .filter(Boolean);
-
-  if (!targets.length) return;
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        links.forEach((link) => {
-          link.classList.toggle('is-active', link.getAttribute('href') === `#${entry.target.id}`);
-        });
-      });
-    },
-    { rootMargin: '-20% 0px -70% 0px' }
-  );
-
-  targets.forEach((target) => observer.observe(target));
-})();
-</script>

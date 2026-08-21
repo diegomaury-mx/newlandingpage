@@ -33,6 +33,14 @@ import {
   parseFlowDiagram,
 } from '../utils/parseSiteCopy.ts';
 import { toLocalePath } from '../utils/locale.ts';
+import {
+  SECTION_IDS,
+  heroLogosFrom,
+  systemsLogo,
+  evidenceNodesFrom,
+  systemsCaseLink,
+  ctaTarget,
+} from '../utils/homeContent.ts';
 
 const siteCopyEntries = await getCollection('siteCopy');
 const siteCopy = siteCopyEntries.find((entry) => entry.id === 'site');
@@ -58,23 +66,6 @@ function slotSrc(slotId: string, fallback: string): string {
 const problemaDiagramaSlot = imageSlotEntries.find((e) => e.id === 'diagrama-problema');
 const problemaDiagramaReady = Boolean(problemaDiagramaSlot?.data.status === 'Listo' && problemaDiagramaSlot.data.imageUrl);
 
-// --- Identidad interna de las secciones ---------------------------------------
-// Los ids/anclas usan el CODIGO INTERNO del SSOT (S1..S8), no el titulo
-// visible. Diego renombra secciones en Notion ("Hablemos" -> "Colaboremos" en
-// el pivote del 2026-07-24) y un ancla derivada del titulo se rompe en cada
-// renombre. El codigo interno es estable; la etiqueta visible del nav se lee
-// del SSOT en cada build.
-const SECTION_IDS = {
-  S1: 's1-hero',
-  S2: 's2-quien-soy',
-  S3: 's3-problema',
-  S4: 's4-evidencia',
-  S5: 's5-como-trabajo',
-  S6: 's6-sistemas-propios',
-  S6b: 's6b-prueba-social',
-  S8: 's8-siguiente-paso',
-} as const;
-
 // --- S1 · Hero ---------------------------------------------------------------
 const s1 = sections.get('S1')?.blocks ?? [];
 const heroName = heading1(s1);
@@ -92,35 +83,7 @@ const heroRole = heroParas[0] ?? '';
 const heroSub = heroParas[1] ?? '';
 const heroCtas = ctaLabels(s1);
 
-// FlipHouse deliberadamente bloqueado (2026-08-11): es el cliente real y
-// confidencial detras del caso SOFI/PropTech. Mostrar su logo en el trust bar
-// del home desanonimiza el caso al instante. No quitar este guardrail.
-const BLOCKED_LOGO_NAMES = new Set(['fliphouse']);
-
-// Cinturon de logos 100% dinamico desde CMS Imagenes (2026-08-14): ya no
-// depende de una linea de texto "Logos sugeridos" en Notion S1 (esa doble
-// fuente de verdad causaba que logos nuevos con fila lista en CMS Imagenes
-// nunca aparecieran en LIVE hasta editar tambien el copy). Un logo nuevo
-// solo requiere una fila en CMS Imagenes con slot `logo-<algo>`, Estado
-// "Listo", imagen subida y el campo "Nombre" (alt text) lleno — no hace
-// falta tocar Notion S1 ni este archivo. `logo-*-evidencia` queda excluido
-// a proposito: son slots huerfanos del viejo diseno de S4 (tabla, pre
-// 2026-08-12), no pertenecen al cinturon del Hero. Orden: alfabetico por
-// Nombre (no hay campo de orden manual en el CMS hoy).
-const heroLogos = imageSlotEntries
-  .filter((e) => e.id.startsWith('logo-') && !e.id.endsWith('-evidencia'))
-  .filter((e) => e.data.status === 'Listo' && e.data.imageUrl && e.data.nombre)
-  .filter((e) => !BLOCKED_LOGO_NAMES.has(e.data.nombre.toLowerCase()))
-  .sort((a, b) => a.data.nombre.localeCompare(b.data.nombre, 'es'))
-  .map((e) => ({ src: e.data.imageUrl as string, alt: e.data.nombre }));
-
-function systemsLogo(title: string): { src: string; alt: string } | null {
-  const key = title.toLowerCase();
-  if (key.includes('redux')) return { src: slotSrc('ip-logo-redux','/assets/img/logos/redux.svg'), alt:'REDUX' };
-  if (key.includes('hacksureste')) return { src: slotSrc('ip-logo-hacksureste','/assets/img/logos/hacksureste.svg'), alt:'HackSureste' };
-  if (key.includes('sofi')) return { src: slotSrc('ip-logo-sofi','/assets/img/logos/sofi.svg'), alt:'SOFI' };
-  return null;
-}
+const heroLogos = heroLogosFrom(imageSlotEntries);
 
 // --- S2 · Quien soy ------------------------------------------------------------
 const s2 = sections.get('S2')?.blocks ?? [];
@@ -188,49 +151,7 @@ const evidenceClosing = paragraphs(afterFieldsFence)[0] ?? '';
 // las tres variantes responsive. La key es solo un hook tecnico para
 // asociar cada campo con su linea/punto en el hover — no viene de Notion.
 const EVIDENCE_FIELDS = evidenceFieldLabels.map((label, i) => ({ key: `field-${i}`, label }));
-
-// Geometria del diagrama radial (solo desktop, >960px): nodos distribuidos
-// a partes iguales alrededor de 360°, empezando arriba (-90°), en un sistema
-// de coordenadas 0-100 que mapea 1:1 a porcentajes CSS sobre un contenedor
-// cuadrado (aspect-ratio:1). Hibrido D+C (decision 2026-08-12): los campos
-// son texto puro, sin caja ni fondo opaco, asi que a diferencia de la
-// primera version SI hace falta un gap real entre el final de la linea y el
-// texto — por eso el radio de la linea/punto terminal (EVIDENCE_DOT_RADIUS)
-// queda notoriamente mas corto que el radio del texto (EVIDENCE_NODE_RADIUS).
-const EVIDENCE_NODE_RADIUS = 40;
-const EVIDENCE_DOT_RADIUS = 31;
-// Medio ancho/alto (en el mismo sistema 0-100) de la caja del nodo central:
-// el punto de arranque de cada linea se recorta al borde de esa caja en vez
-// de partir del centro exacto (50,50), para que ninguna linea atraviese el
-// texto "La misma metodologia. Distintas industrias."
-const EVIDENCE_CENTER_HALF_WIDTH = 21;
-const EVIDENCE_CENTER_HALF_HEIGHT = 11;
-function evidencePoint(index: number, total: number, radius: number): { x: number; y: number } {
-  const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
-  return {
-    x: Math.round((50 + radius * Math.cos(angle)) * 100) / 100,
-    y: Math.round((50 + radius * Math.sin(angle)) * 100) / 100,
-  };
-}
-function evidenceLineStart(index: number, total: number): { x: number; y: number } {
-  const angle = ((-90 + index * (360 / total)) * Math.PI) / 180;
-  const c = Math.cos(angle);
-  const s = Math.sin(angle);
-  const t = Math.min(
-    Math.abs(c) > 1e-6 ? EVIDENCE_CENTER_HALF_WIDTH / Math.abs(c) : Infinity,
-    Math.abs(s) > 1e-6 ? EVIDENCE_CENTER_HALF_HEIGHT / Math.abs(s) : Infinity,
-  );
-  return {
-    x: Math.round((50 + t * c) * 100) / 100,
-    y: Math.round((50 + t * s) * 100) / 100,
-  };
-}
-const evidenceNodes = EVIDENCE_FIELDS.map((field, i) => ({
-  ...field,
-  node: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_NODE_RADIUS),
-  dot: evidencePoint(i, EVIDENCE_FIELDS.length, EVIDENCE_DOT_RADIUS),
-  lineStart: evidenceLineStart(i, EVIDENCE_FIELDS.length),
-}));
+const evidenceNodes = evidenceNodesFrom(EVIDENCE_FIELDS);
 
 // --- S5 · Como trabajo -----------------------------------------------------
 const s5 = sections.get('S5')?.blocks ?? [];
@@ -254,18 +175,6 @@ const systemsClosingHeading =
   'El verdadero entregable';
 const systemsClosing = paragraphs(blocksAfterHeading(s6, '## El verdadero entregable'));
 
-// Los 3 sistemas propios (REDUX, HackSureste Ops, SOFI) enlazan a la pagina
-// de caso real del CMS (/portfolio/{slug}). REDUX ya tiene ficha propia
-// publicada (/portfolio/redux) desde el Sprint 1 de deuda tecnica 2026-08-19;
-// deja de apuntar a la legacy estatica public/portfolio/redux-incmty.html.
-function systemsCaseLink(title: string): string | null {
-  const key = title.toLowerCase();
-  if (key.includes('sofi')) return '/portfolio/sofi';
-  if (key.includes('hacksureste')) return '/portfolio/hacksureste';
-  if (key.includes('redux')) return '/portfolio/redux';
-  return null;
-}
-
 // --- S6b · Prueba social ------------------------------------------------------
 const s6b = sections.get('S6b')?.blocks ?? [];
 const testimonialsLabel = sections.get('S6b')?.label ?? 'Prueba social';
@@ -279,30 +188,7 @@ const moreExperiencesHeading =
 const moreExperiences = blocksAfterHeading(s6b, '## Más experiencias');
 const senjaId = moreExperiences[0]?.trim();
 
-// --- Destinos de CTA ----------------------------------------------------------
-// Se resuelven por la ETIQUETA del boton, nunca por su posicion: el SSOT
-// reordena y renombra CTAs (el pivote del 2026-07-24 cambio el primario del
-// hero de "Agendar diagnostico" a "Ver casos de estudio") y un mapeo
-// posicional mandaria "Ver casos de estudio" a Calendly.
-const CV_HREF = '/cv/diego-maury-cv.pdf';
-const LINKEDIN_HREF = 'https://www.linkedin.com/in/diegomaury';
-const MAIL_HREF = 'mailto:dm@diegomaury.mx';
-const CALENDAR_HREF = 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun';
-
-interface CtaTarget {
-  href: string;
-  download?: boolean;
-  external?: boolean;
-}
-
-function ctaTarget(label: string): CtaTarget {
-  const l = label.toLowerCase();
-  if (l.includes('caso') || l.includes('portafolio')) return { href: '/portfolio' };
-  if (l.includes('cv')) return { href: CV_HREF, download: true };
-  if (l.includes('linkedin')) return { href: LINKEDIN_HREF, external: true };
-  if (l.includes('correo')) return { href: MAIL_HREF };
-  return { href: CALENDAR_HREF, external: true };
-}
+// --- Destinos de CTA (ver homeContent.ts) --------------------------------------
 
 // --- S8 · Siguiente paso -------------------------------------------------------
 // Recuperada 2026-07-24 (spec docs/superpowers/specs/2026-07-24-recuperar-s8-y-cifras-s6.md):
@@ -378,7 +264,7 @@ const personJsonLd = {
         {heroCtas.length > 0 && (
           <div class="hero-ctas" data-reveal style="--delay:.2s">
             {heroCtas.map((label, i) => {
-              const t = ctaTarget(label);
+              const t = ctaTarget(label, '/portfolio');
               return (
                 <a
                   href={t.href}
@@ -616,8 +502,8 @@ const personJsonLd = {
     {systemsCards.length > 0 && (
       <div class="ip-grid" data-reveal style="--delay:.18s">
         {systemsCards.map((card) => {
-          const logo = systemsLogo(card.title);
-          const link = systemsCaseLink(card.title);
+          const logo = systemsLogo(imageSlotEntries, card.title);
+          const link = systemsCaseLink(card.title, '/portfolio');
           return (
             <div class="ip">
               {logo && <div class="ip-media"><img src={logo.src} alt={logo.alt} loading="lazy"></div>}
@@ -712,7 +598,7 @@ const personJsonLd = {
         {finalCtas.length > 0 && (
           <div class="hero-ctas" style="justify-content:center;margin-bottom:0">
             {finalCtas.map((label, i) => {
-              const t = ctaTarget(label);
+              const t = ctaTarget(label, '/portfolio');
               return (
                 <a
                   href={t.href}

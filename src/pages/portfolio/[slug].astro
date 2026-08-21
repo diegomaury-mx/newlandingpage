@@ -11,8 +11,8 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { renderMarkdown, extractSections } from '../../utils/markdown.ts';
 import { slugify } from '../../utils/slug.ts';
-import { toEmbeddableVideoUrl } from '../../utils/embedVideo.ts';
 import { toLocalePath } from '../../utils/locale.ts';
+import CaseArticle from '../../components/case/CaseArticle.astro';
 import '../../styles/case.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
@@ -55,7 +55,6 @@ function seoTitle(title: string): string {
 }
 const bodyHtml = renderMarkdown(entry.data.body);
 const sections = extractSections(entry.data.body);
-const hasGalleryPhotos = entry.data.evidenceMedia.length > 0;
 const editionTitles = entry.data.editions
   .map((id) => idToTitle.get(id))
   .filter((title): title is string => Boolean(title));
@@ -101,116 +100,28 @@ const creativeWorkJsonLd = {
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'en')}
   enableGtm
 >
-  <div class="case-identity-strip">
-    {entry.data.logo && (
-      <img class="case-identity-strip__logo" src={entry.data.logo} alt={entry.data.organization ?? entry.data.title} width="24" height="24" />
-    )}
-    <span class="case-identity-strip__name">{entry.data.title}</span>
-  </div>
-
-  <div class="wrap-case">
-    <div class:list={['case-split', { 'case-split--3col': hasGalleryPhotos }]}>
-      <aside class="case-rail">
-        <div class="meta">{entry.data.organization ?? '—'} · {entry.data.year ?? '—'} · {entry.data.type ?? '—'}</div>
-        <h1>{displayTitle}</h1>
-
-        <div class="rail-block">
-          <div class="label">Métrica ancla</div>
-          <p>{entry.data.anchorMetric || 'Sin métrica ancla registrada'}</p>
-        </div>
-
-        {sections.length > 0 && (
-          <nav class="rail-nav" aria-label="Secciones del caso">
-            {sections.map((section) => (
-              <a href={`#${section.id}`} data-rail-link>{section.title}</a>
-            ))}
-          </nav>
-        )}
-      </aside>
-
-      <div class="case-prose">
-        {bodyHtml ? (
-          <div set:html={bodyHtml} />
-        ) : (
-          <p class="case-empty-note">Esta ficha todavía no tiene el cuerpo narrativo (Contexto, Problema, Sistema, Evidencia) escrito en Notion.</p>
-        )}
-      </div>
-
-      {hasGalleryPhotos && (
-        <aside class="case-gallery-col">
-          <div class="eyebrow">Evidencia visual</div>
-          <div class="evidence-photo-grid evidence-photo-grid--narrow">
-            {entry.data.evidenceMedia.map((src, i) => (
-              <a class="evidence-photo" href={src} target="_blank" rel="noopener" aria-label={`Ver foto ${i + 1} de evidencia`}>
-                <img src={src} alt="" loading="lazy" width="300" height="225" />
-              </a>
-            ))}
-          </div>
-        </aside>
-      )}
-    </div>
-
-    {entry.data.evidenceVideos.length > 0 && (
-      <section class="case-evidence-media">
-        <div class="eyebrow">Videos de evidencia</div>
-        {entry.data.evidenceVideos.length > 0 && (
-          <div class="evidence-video-list">
-            {entry.data.evidenceVideos.map((video) => {
-              const embedSrc = toEmbeddableVideoUrl(video.url);
-              return embedSrc ? (
-                <div class="evidence-video-embed">
-                  <iframe src={embedSrc} title={video.label} loading="lazy" allowfullscreen></iframe>
-                </div>
-              ) : (
-                <a class="evidence-video-link" href={video.url} target="_blank" rel="noopener">{video.label}</a>
-              );
-            })}
-          </div>
-        )}
-      </section>
-    )}
-
-    {entry.data.reflection.trim() && (
-      <section class="case-reflection">
-        <div class="eyebrow">Reflexión</div>
-        <p>{entry.data.reflection}</p>
-      </section>
-    )}
-
-    {editionTitles.length > 0 && (
-      <section class="case-archive">
-        <div class="eyebrow">Archivo de este caso</div>
-        <div class="case-archive__row">
-          {editionTitles.map((title) => <span class="case-archive__chip">{title}</span>)}
-        </div>
-      </section>
-    )}
-  </div>
+  <CaseArticle
+    entryTitle={entry.data.title}
+    logo={entry.data.logo}
+    organization={entry.data.organization}
+    year={entry.data.year}
+    type={entry.data.type}
+    displayTitle={displayTitle}
+    anchorMetricLabel="Métrica ancla"
+    anchorMetric={entry.data.anchorMetric}
+    anchorMetricEmpty="Sin métrica ancla registrada"
+    sections={sections}
+    sectionsAriaLabel="Secciones del caso"
+    bodyHtml={bodyHtml}
+    emptyBodyMessage="Esta ficha todavía no tiene el cuerpo narrativo (Contexto, Problema, Sistema, Evidencia) escrito en Notion."
+    evidenceMedia={entry.data.evidenceMedia}
+    visualEvidenceLabel="Evidencia visual"
+    evidencePhotoAlt={(i) => `Ver foto ${i} de evidencia`}
+    evidenceVideos={entry.data.evidenceVideos}
+    videoEvidenceLabel="Videos de evidencia"
+    reflection={entry.data.reflection}
+    reflectionLabel="Reflexión"
+    editionTitles={editionTitles}
+    caseArchiveLabel="Archivo de este caso"
+  />
 </BaseLayout>
-
-<script is:inline>
-(function () {
-  const links = document.querySelectorAll('[data-rail-link]');
-  if (!links.length) return;
-
-  const targets = [...links]
-    .map((link) => document.querySelector(link.getAttribute('href') ?? ''))
-    .filter(Boolean);
-
-  if (!targets.length) return;
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        links.forEach((link) => {
-          link.classList.toggle('is-active', link.getAttribute('href') === `#${entry.target.id}`);
-        });
-      });
-    },
-    { rootMargin: '-20% 0px -70% 0px' }
-  );
-
-  targets.forEach((target) => observer.observe(target));
-})();
-</script>
