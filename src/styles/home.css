@@ -15,6 +15,7 @@
   .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 60px; }
 
   /* ── METRICS ── */
+  .metrics-band { max-width: 1160px; margin: 0 auto; padding: 0 32px; }
   .metrics { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); }
   @media (max-width: 720px) { .metrics { grid-template-columns: 1fr; } }
   .metric { padding: 28px 28px 28px 24px; border-right: 1px solid var(--border); }
@@ -241,6 +242,8 @@
   .evidence-closing { margin-top: 48px; }
 
   /* ── IP CARDS (sistemas propios) ── */
+  .systems-closing { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .systems-closing .deliver-heading { margin-top: 0; }
   .ip-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
   @media (max-width: 900px) { .ip-grid { grid-template-columns: 1fr; } }
   .ip {
@@ -278,12 +281,15 @@
   .acc-item.is-active .acc-item-t { color: var(--t1); }
   .acc-item-head::after { content: '+'; margin-left: auto; font-family: var(--mono); font-size: 16px; color: var(--t3); }
   .acc-item.is-active .acc-item-head::after { content: '\2212'; color: var(--ember); }
-  .acc-detail { max-height: 0; overflow: hidden; transition: max-height 300ms var(--ease); }
+  /* grid-template-rows 0fr->1fr en vez de max-height con un valor fijo
+     adivinado (260px cortaba parrafos largos): se adapta a cualquier alto de
+     contenido sin JS que mida scrollHeight. No es transform/opacity puro,
+     pero es la tecnica estandar para reveals de alto variable sin animar una
+     propiedad de layout con un valor arbitrario. */
+  .acc-detail { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 300ms var(--ease), opacity 200ms var(--ease); }
+  .acc-detail > * { overflow: hidden; }
   .acc-d { font-size: 12.5px; color: var(--t2); line-height: 1.6; padding: 0 22px 20px 62px; }
-  /* Valor mayor al del componente de referencia (90px): el copy real de esta
-     pagina trae parrafos mas largos que el placeholder de index.html y con
-     90px se recortaba texto visible. */
-  .acc-item.is-active .acc-detail { max-height: 260px; }
+  .acc-item.is-active .acc-detail { grid-template-rows: 1fr; opacity: 1; }
   .acc-panel { position: sticky; top: 100px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-2); padding: 28px 26px; }
   @media (max-width: 760px) { .acc-panel { display: none; } }
   .acc-panel-n { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); margin-bottom: 14px; }
@@ -347,5 +353,7 @@
     border: 1px solid var(--border); border-radius: 3px; padding: 3px 7px; display: inline-block;
   }
   .cta-buttons { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .cta-buttons .hero-ctas { justify-content: center; margin-bottom: 0; }
+  .senja-embed--inline { width: 100%; margin-top: 24px; }
   .cta-trust { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
   .dot { width: 2px; height: 2px; border-radius: 50%; background: var(--border); }

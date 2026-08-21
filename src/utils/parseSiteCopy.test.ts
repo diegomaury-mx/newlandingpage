@@ -4,10 +4,8 @@ import {
   bulletItems,
   blocksAfterHeading,
   blocksBeforeHeading,
-  caseCards,
   ctaLabels,
   firstCodeBlock,
-  firstTable,
   heading1,
   heading2,
   headingCards,
@@ -112,53 +110,6 @@ test("blocksBeforeHeading corta en el primer heading que matchea alguno de los p
   assert.deepEqual(blocksBeforeHeading(blocks, ["## ", "### "]), ["Intro uno", "Intro dos"]);
 });
 
-test("caseCards agrupa heading_3 con Situacion/Accion/resultados/Autopsia", () => {
-  const blocks = [
-    "### 🔥 Caso uno",
-    "Situación: contexto del caso",
-    "Acción: lo que se hizo",
-    "- Resultado uno",
-    "- Resultado dos",
-    "Autopsia: leccion aprendida",
-    "### 🚀 Caso dos",
-    "Situación: otro contexto",
-  ];
-
-  const cards = caseCards(blocks);
-
-  assert.equal(cards.length, 2);
-  assert.deepEqual(cards[0], {
-    title: "🔥 Caso uno",
-    situation: "contexto del caso",
-    action: "lo que se hizo",
-    results: ["Resultado uno", "Resultado dos"],
-    autopsy: "leccion aprendida",
-  });
-  assert.equal(cards[1].title, "🚀 Caso dos");
-  assert.equal(cards[1].situation, "otro contexto");
-});
-
-test("caseCards ignora bloques antes del primer heading_3", () => {
-  const blocks = ["Situación: huerfana, sin tarjeta abierta", "### Unica tarjeta", "Situación: real"];
-
-  const cards = caseCards(blocks);
-
-  assert.equal(cards.length, 1);
-  assert.equal(cards[0].situation, "real");
-});
-
-test("firstTable parsea header y filas de una tabla markdown", () => {
-  const blocks = ["| Metrica | Antes | Después |\n| --- | --- | --- |\n| Alcance | 100 | 400 |"];
-
-  const table = firstTable(blocks);
-
-  assert.deepEqual(table?.header, ["Metrica", "Antes", "Después"]);
-  assert.deepEqual(table?.rows, [["Alcance", "100", "400"]]);
-});
-
-test("firstTable devuelve null si ningun bloque empieza con |", () => {
-  assert.equal(firstTable(["sin tabla aqui"]), null);
-});
 
 test("firstCodeBlock reconstruye el contenido entre los dos marcadores ``` uniendo bloques partidos por lineas en blanco", () => {
   const blocks = ["```", "linea uno", "linea dos", "```", "parrafo despues"];

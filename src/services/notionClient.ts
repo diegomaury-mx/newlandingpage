@@ -18,6 +18,7 @@ import type {
   BlockObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client";
+import { readEnvVar } from "../utils/env.ts";
 
 /**
  * IDs de las 3 fuentes editoriales canonicas del CMS.
@@ -34,23 +35,9 @@ export const NOTION_SOURCES = {
   imageSlots: "8dda9726-a42d-407d-ba84-334b4a1ef7a1",
 } as const;
 
-/**
- * Lee el token del entorno sin lanzar. Prefiere `import.meta.env` (Astro/Vite lo
- * inyecta en codigo server-side desde `.env`) y cae a `process.env` (scripts
- * standalone via `node --env-file` o CI).
- */
-function readNotionToken(): string | undefined {
-  const fromViteEnv =
-    typeof import.meta !== "undefined"
-      ? (import.meta as { env?: Record<string, string | undefined> }).env
-          ?.NOTION_TOKEN
-      : undefined;
-  return process.env.NOTION_TOKEN ?? fromViteEnv;
-}
-
 /** True si hay un NOTION_TOKEN disponible en el entorno (no valida que sea correcto). */
 export function hasNotionToken(): boolean {
-  return Boolean(readNotionToken());
+  return Boolean(readEnvVar("NOTION_TOKEN"));
 }
 
 /**
@@ -58,7 +45,7 @@ export function hasNotionToken(): boolean {
  * Falla fuerte si no existe: sin token no hay lectura de CMS posible.
  */
 function getNotionToken(): string {
-  const token = readNotionToken();
+  const token = readEnvVar("NOTION_TOKEN");
   if (!token) {
     throw new Error(
       "[notionClient] Falta NOTION_TOKEN. Define la variable de entorno antes del build " +
@@ -205,6 +192,15 @@ export function getFileUrls(page: PageObjectResponse, name: string): string[] {
  */
 const NON_BODY_BLOCK_TYPES = new Set(["child_page", "child_database"]);
 
+/**
+ * Descarta bloques `child_page`/`child_database` de una tanda de hijos ya
+ * paginada. Extraida como funcion pura para poder testear la regla que causo
+ * el incidente de paginas hermanas archivadas sin mockear la API de Notion.
+ */
+export function filterBodyBlocks(blocks: BlockObjectResponse[]): BlockObjectResponse[] {
+  return blocks.filter((block) => !NON_BODY_BLOCK_TYPES.has(block.type));
+}
+
 export async function fetchBlockChildren(
   blockId: string,
 ): Promise<BlockObjectResponse[]> {
@@ -213,9 +209,9 @@ export async function fetchBlockChildren(
     block_id: blockId,
   });
   const fullBlocks = children.filter(isFullBlock);
+  const bodyBlocks = filterBodyBlocks(fullBlocks);
   const result: BlockObjectResponse[] = [];
-  for (const block of fullBlocks) {
-    if (NON_BODY_BLOCK_TYPES.has(block.type)) continue;
+  for (const block of bodyBlocks) {
     result.push(block);
     if (block.has_children) {
       const nested = await fetchBlockChildren(block.id);

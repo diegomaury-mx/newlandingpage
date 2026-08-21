@@ -17,6 +17,7 @@ import { slugify } from '../../../utils/slug.ts';
 import { toLocalePath } from '../../../utils/locale.ts';
 import { uiEn } from '../../../i18n/ui.ts';
 import CaseArticle from '../../../components/case/CaseArticle.astro';
+import { caseDisplayTitleEn } from '../../../utils/caseTitle.ts';
 import '../../../styles/case.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
@@ -24,31 +25,35 @@ type CaseEntry = CollectionEntry<'cases'>;
 export async function getStaticPaths() {
   const allCases = await getCollection('cases');
   const published = allCases.filter((c) => !c.data.draft);
+  // Solo id->title EN (con fallback a ES) — no la coleccion completa con
+  // `body`/`banner`/etc. de las 27 fichas restantes por pagina.
+  const idToTitle = Object.fromEntries(
+    allCases.map((c) => [c.id, c.data.en.title || c.data.title]),
+  );
   return published.map((entry) => ({
     params: { slug: slugify(entry.data.title) },
-    props: { entry, allCases },
+    props: { entry, idToTitle },
   }));
 }
 
 interface Props {
   entry: CaseEntry;
-  allCases: CaseEntry[];
+  idToTitle: Record<string, string>;
 }
 
-const { entry, allCases } = Astro.props as Props;
-const idToTitle = new Map(allCases.map((c) => [c.id, c.data.en.title || c.data.title]));
+const { entry, idToTitle } = Astro.props as Props;
 
 const en = entry.data.en;
 const title = en.title || entry.data.title;
-const displayTitle = en.cardHeadline || en.resultHeadline || en.title || entry.data.cardHeadline || entry.data.resultHeadline || entry.data.title;
+const displayTitle = caseDisplayTitleEn(entry.data, en);
 const body = en.body || entry.data.body;
 const anchorMetric = en.anchorMetric || entry.data.anchorMetric;
 const reflection = en.reflection || entry.data.reflection;
 
-const bodyHtml = renderMarkdown(body);
+const bodyHtml = renderMarkdown(body, "en");
 const sections = extractSections(body);
 const editionTitles = entry.data.editions
-  .map((id) => idToTitle.get(id))
+  .map((id) => idToTitle[id])
   .filter((t): t is string => Boolean(t));
 
 const DESCRIPTION_MAX = 155;
@@ -85,6 +90,7 @@ const creativeWorkJsonLd = {
   jsonLd={creativeWorkJsonLd}
   alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
+  ctaLabel={uiEn.nav.ctaLabel}
   enableGtm
 >
   <CaseArticle

@@ -6,6 +6,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '../utils/slug.ts';
+import { caseDisplayTitle } from '../utils/caseTitle.ts';
 
 export const prerender = true;
 
@@ -28,7 +29,7 @@ export const GET: APIRoute = async ({ site }) => {
     lines.push('Ninguna ficha publicada tiene el canal "llms.txt" habilitado todavia.');
   } else {
     for (const c of eligible) {
-      const title = c.data.cardHeadline || c.data.resultHeadline || c.data.title;
+      const title = caseDisplayTitle(c.data);
       const url = new URL(`/portfolio/${slugify(c.data.title)}`, site).toString();
       lines.push(`### ${title}`);
       lines.push(`- Organización: ${c.data.organization ?? '—'} · ${c.data.year ?? '—'}`);

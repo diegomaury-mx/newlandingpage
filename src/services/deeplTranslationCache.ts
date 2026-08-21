@@ -19,6 +19,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import type { LoaderContext } from "astro/loaders";
+import { readEnvVar } from "../utils/env.ts";
 
 type Logger = LoaderContext["logger"] | { warn: (message: string) => void };
 
@@ -128,7 +129,7 @@ export async function translateCached(
     // cache miss, sigue al fetch
   }
 
-  const apiKey = options.apiKey ?? process.env.DEEPL_API_KEY;
+  const apiKey = options.apiKey ?? readEnvVar("DEEPL_API_KEY");
   if (!apiKey) {
     logger.warn(
       "[deepl-translation-cache] DEEPL_API_KEY no configurado, se omite traduccion (el texto se queda en espanol).",
