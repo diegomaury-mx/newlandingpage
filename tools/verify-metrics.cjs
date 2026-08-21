@@ -56,7 +56,12 @@ function buscarRetiradas(contenido, fileRel, metrics) {
   return errors;
 }
 
-const NUM_RE = /(\+?\$?\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\+?\d+(?:\.\d+)?%)/g;
+// Regex creada por llamada (no module-level compartida) para no depender de
+// resetear `.lastIndex` a mano en cada punto de uso — un olvido ahi arrastra
+// el cursor de una pasada anterior en silencio.
+function numeroMatches(texto) {
+  return texto.matchAll(/(\+?\$?\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\+?\d+(?:\.\d+)?%)/g);
+}
 
 function esAnio(numStr) {
   const soloDigitos = numStr.replace(/\D/g, '');
@@ -78,9 +83,7 @@ function huerfanasEnTexto(texto, fileRel, metrics) {
       .map((m) => normalizarCifra(m.valor))
   );
   const warnings = [];
-  let num;
-  NUM_RE.lastIndex = 0;
-  while ((num = NUM_RE.exec(texto)) !== null) {
+  for (const num of numeroMatches(texto)) {
     if (esAnio(num[1])) continue;
     if (conocidas.has(normalizarCifra(num[1]))) continue;
     warnings.push(`${fileRel}: posible cifra sin match en metrics.json: "${num[1]}"`);
@@ -150,9 +153,7 @@ function verifyHtml(html, fileRel, metrics) {
     .replace(/<script\b[\s\S]*?<\/script>/gi, ' ');
   const sinMarcadas = sinEstilos.replace(/<(\w+)[^>]*\bdata-metric="[^"]+"[^>]*>[^<]*<\/\1>/g, ' ');
   const soloTexto = sinMarcadas.replace(/<[^>]+>/g, ' ');
-  let num;
-  NUM_RE.lastIndex = 0;
-  while ((num = NUM_RE.exec(soloTexto)) !== null) {
+  for (const num of numeroMatches(soloTexto)) {
     if (esAnio(num[1])) continue;
     warnings.push(`${fileRel}: posible metrica sin data-metric: "${num[1]}"`);
   }

@@ -13,6 +13,14 @@ export const uiEn = {
     openMenu: "Open menu",
     closeMenu: "Close menu",
     toggleToLabel: "ES",
+    // Traduccion por href (no por label) del arreglo `site.navigation` — el
+    // href de Notion/config.ts es la llave estable, el label puede cambiar.
+    items: {
+      "/#s2-quien-soy": "About me",
+      "/portfolio": "Portfolio",
+      "/#s5-como-trabajo": "How I work",
+      "/#s8-siguiente-paso": "Contact",
+    } as Record<string, string>,
   },
   case: {
     anchorMetricLabel: "Anchor metric",

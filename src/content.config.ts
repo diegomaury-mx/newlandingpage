@@ -15,11 +15,28 @@
 
 import { defineCollection, z } from 'astro:content';
 import {
+  CASE_TRANSLATABLE_FIELDS,
+  METRIC_TRANSLATABLE_FIELDS,
   casesLoader,
   imageSlotsLoader,
   metricsLoader,
   siteCopyLoader,
 } from './services/notionLoaders.ts';
+
+/** Construye el schema Zod de `en` con las mismas claves que traduce el loader (una sola fuente, ver notionLoaders.ts). */
+function translatableEnSchema(fields: readonly string[]) {
+  return z
+    .object(Object.fromEntries(fields.map((field) => [field, z.string().optional()])))
+    .default({});
+}
+
+// `z.string().url()` acepta cualquier esquema valido de WHATWG URL, incluido
+// `javascript:` — el mapper de notionLoaders.ts ya filtra a https?:// en la
+// practica, pero el schema no lo exigia. Restringe explicitamente el esquema
+// como defensa en profundidad (ver TECHNICAL_DEBT.md, Seguridad #3).
+const httpUrl = z.string().url().refine((value) => /^https?:\/\//i.test(value), {
+  message: 'La URL debe usar esquema http:// o https://',
+});
 
 // ─── Case Study (fuente: SSOT - Portafolio Proyectos) ─────────────────────────
 
@@ -59,14 +76,14 @@ const cases = defineCollection({
       layer: z.enum(['Insignia', 'Soporte', 'Archivo']),
       channels: z.array(z.enum(['Sitio', 'LinkedIn', 'CV', 'llms.txt'])).default([]),
       capabilities: z.array(z.string()).default([]),
-      evidenceUrl: z.string().url().optional(),
+      evidenceUrl: httpUrl.optional(),
       // Fotos de evidencia subidas directo a Notion, cacheadas localmente en
       // build (ver notionImageCache.ts). Los videos NUNCA viven aqui: van
       // forzosamente en `evidenceVideos` como link externo, nunca como
       // archivo — evita romper el limite de tamano de assets de Cloudflare
       // Pages con un video sin comprimir.
       evidenceMedia: z.array(z.string()).default([]),
-      evidenceVideos: z.array(z.object({ label: z.string(), url: z.string().url() })).default([]),
+      evidenceVideos: z.array(z.object({ label: z.string(), url: httpUrl })).default([]),
       // Badge de evidencia de tarjeta: se hereda de si al menos una fila de
       // la tabla "## Evidencia" del cuerpo tiene un artefacto marcado (✔).
       // Nunca se declara aparte de esa tabla (ver notionLoaders.ts).
@@ -98,19 +115,7 @@ const cases = defineCollection({
       // las claves que efectivamente se tradujeron — sin DEEPL_API_KEY
       // configurado, viene vacio y la pagina /en/portfolio/[slug] cae al
       // campo en espanol como fallback (ver [slug].astro).
-      en: z
-        .object({
-          title: z.string().optional(),
-          resultHeadline: z.string().optional(),
-          cardHeadline: z.string().optional(),
-          cardContext: z.string().optional(),
-          objective: z.string().optional(),
-          resultsAndActions: z.string().optional(),
-          anchorMetric: z.string().optional(),
-          body: z.string().optional(),
-          reflection: z.string().optional(),
-        })
-        .default({}),
+      en: translatableEnSchema(CASE_TRANSLATABLE_FIELDS),
     })
     .superRefine((data, ctx) => {
       // Regla transversal del contrato: capa Insignia no puede publicarse
@@ -165,7 +170,7 @@ const metrics = defineCollection({
       .optional(),
     evidenceGrade: z.enum(['published', 'own', 'belief']).optional(),
     reputationalRisk: z.enum(['Bajo', 'Medio', 'Alto']).optional(),
-    evidenceUrl: z.string().url().optional(),
+    evidenceUrl: httpUrl.optional(),
     source: z.string().optional(),
     usageNote: z.string().optional(),
     relatedCase: z.array(z.string()).default([]),
@@ -175,14 +180,7 @@ const metrics = defineCollection({
     // arriba. Nota: el gate de verify-metrics.cjs NO valida esta version —
     // riesgo aceptado explicitamente (decision 2026-08-17), no reintroducir
     // sin decision aparte.
-    en: z
-      .object({
-        metric: z.string().optional(),
-        canonicalClaim: z.string().optional(),
-        mandatoryQualifier: z.string().optional(),
-        usageNote: z.string().optional(),
-      })
-      .default({}),
+    en: translatableEnSchema(METRIC_TRANSLATABLE_FIELDS),
   }),
 });
 

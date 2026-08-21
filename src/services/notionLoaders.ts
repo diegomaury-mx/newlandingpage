@@ -327,14 +327,20 @@ export async function translateFields(
   fields: string[],
   logger: LoaderContext["logger"] | { warn: (message: string) => void },
 ): Promise<Record<string, string>> {
-  const en: Record<string, string> = {};
-  for (const field of fields) {
-    const value = raw[field];
-    if (typeof value === "string" && value) {
-      en[field] = await translateCached(value, "EN-US", logger);
-    }
-  }
-  return en;
+  // Un cache-hit es solo una lectura de disco; solo las llamadas reales a la
+  // API de DeepL necesitan serializarse, y eso ya lo hace la cola
+  // modulo-level de deeplTranslationCache.ts sin importar cuantos campos
+  // pidan traduccion al mismo tiempo. Recorrer los campos en serie aqui solo
+  // frenaba el caso cache-hit (la mayoria de un build ya cacheado) sin
+  // ninguna ganancia de rate-limit.
+  const entries = await Promise.all(
+    fields.map(async (field) => {
+      const value = raw[field];
+      if (typeof value !== "string" || !value) return null;
+      return [field, await translateCached(value, "EN-US", logger)] as const;
+    }),
+  );
+  return Object.fromEntries(entries.filter((entry): entry is readonly [string, string] => entry !== null));
 }
 
 // --- Fabrica de loaders para data sources ------------------------------------
@@ -412,23 +418,35 @@ function createDataSourceLoader(
 }
 
 /** Coleccion `cases`: id = page.id de Notion (estable, unico). */
+// Fuente unica de que campos se traducen: content.config.ts construye el
+// schema Zod de `en` a partir de estos mismos arreglos (antes eran 2 listas
+// literales independientes, sin garantia de sincronia entre loader y schema).
+export const CASE_TRANSLATABLE_FIELDS = [
+  "title",
+  "resultHeadline",
+  "cardHeadline",
+  "cardContext",
+  "objective",
+  "resultsAndActions",
+  "anchorMetric",
+  "body",
+  "reflection",
+] as const;
+
+export const METRIC_TRANSLATABLE_FIELDS = [
+  "metric",
+  "canonicalClaim",
+  "mandatoryQualifier",
+  "usageNote",
+] as const;
+
 export const casesLoader: Loader = createDataSourceLoader(
   "notion-cases",
   fetchCases,
   mapCase,
   (page) => page.id,
   ["banner", "logo", "evidenceMedia"],
-  [
-    "title",
-    "resultHeadline",
-    "cardHeadline",
-    "cardContext",
-    "objective",
-    "resultsAndActions",
-    "anchorMetric",
-    "body",
-    "reflection",
-  ],
+  [...CASE_TRANSLATABLE_FIELDS],
 );
 
 /** Coleccion `metrics`: id = slug (kebab-case, llave primaria de facto). */
@@ -438,7 +456,7 @@ export const metricsLoader: Loader = createDataSourceLoader(
   mapMetric,
   (_page, data) => String(data.slug ?? ""),
   [],
-  ["metric", "canonicalClaim", "mandatoryQualifier", "usageNote"],
+  [...METRIC_TRANSLATABLE_FIELDS],
 );
 
 /** Coleccion `imageSlots`: id = Slot (title, llave tecnica unica del contrato). */

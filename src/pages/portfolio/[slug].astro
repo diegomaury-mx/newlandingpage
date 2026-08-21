@@ -13,6 +13,7 @@ import { renderMarkdown, extractSections } from '../../utils/markdown.ts';
 import { slugify } from '../../utils/slug.ts';
 import { toLocalePath } from '../../utils/locale.ts';
 import CaseArticle from '../../components/case/CaseArticle.astro';
+import { caseDisplayTitle } from '../../utils/caseTitle.ts';
 import '../../styles/case.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
@@ -20,21 +21,23 @@ type CaseEntry = CollectionEntry<'cases'>;
 export async function getStaticPaths() {
   const allCases = await getCollection('cases');
   const published = allCases.filter((c) => !c.data.draft);
+  // Solo id->title (no `body`/`banner`/etc. de las 27 fichas restantes) para
+  // resolver `editions` sin pasar la coleccion completa como prop por pagina.
+  const idToTitle = Object.fromEntries(allCases.map((c) => [c.id, c.data.title]));
   return published.map((entry) => ({
     params: { slug: slugify(entry.data.title) },
-    props: { entry, allCases },
+    props: { entry, idToTitle },
   }));
 }
 
 interface Props {
   entry: CaseEntry;
-  allCases: CaseEntry[];
+  idToTitle: Record<string, string>;
 }
 
-const { entry, allCases } = Astro.props as Props;
-const idToTitle = new Map(allCases.map((c) => [c.id, c.data.title]));
+const { entry, idToTitle } = Astro.props as Props;
 
-const displayTitle = entry.data.cardHeadline || entry.data.resultHeadline || entry.data.title;
+const displayTitle = caseDisplayTitle(entry.data);
 
 // El <title> de pestana/SERP necesita ser corto (<=60 car., ver
 // docs/platform/seo-keyword-mapping-2026-08-03.md hallazgo tecnico 2): usar el
@@ -56,7 +59,7 @@ function seoTitle(title: string): string {
 const bodyHtml = renderMarkdown(entry.data.body);
 const sections = extractSections(entry.data.body);
 const editionTitles = entry.data.editions
-  .map((id) => idToTitle.get(id))
+  .map((id) => idToTitle[id])
   .filter((title): title is string => Boolean(title));
 
 const DESCRIPTION_MAX = 155;

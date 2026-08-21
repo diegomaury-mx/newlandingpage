@@ -95,59 +95,6 @@ export function blocksBeforeHeading(blocks: string[], headingPrefixes: string[])
   return result;
 }
 
-export interface CaseCardCopy {
-  title: string;
-  situation: string;
-  action: string;
-  results: string[];
-  autopsy: string;
-}
-
-/**
- * Tarjetas de caso de S4 · Evidencia: cada heading_3 ("### <emoji> <titulo>")
- * abre una tarjeta; los campos Situacion/Accion/Autopsia llegan como texto
- * plano (sin "**", que es solo anotacion de negritas perdida por
- * blocksToMarkdown) prefijado por su nombre y dos puntos.
- */
-export function caseCards(blocks: string[]): CaseCardCopy[] {
-  const cards: CaseCardCopy[] = [];
-  let current: CaseCardCopy | null = null;
-  for (const raw of blocks) {
-    const block = raw.trim();
-    if (block.startsWith('### ')) {
-      if (current) cards.push(current);
-      current = { title: block.slice(4).trim(), situation: '', action: '', results: [], autopsy: '' };
-      continue;
-    }
-    if (!current) continue;
-    const situation = block.match(/^Situaci[oó]n:\s*(.+)$/i);
-    if (situation) { current.situation = situation[1].trim(); continue; }
-    const action = block.match(/^Acci[oó]n:\s*(.+)$/i);
-    if (action) { current.action = action[1].trim(); continue; }
-    if (block.startsWith('- ')) { current.results.push(block.slice(2).trim()); continue; }
-    const autopsy = block.match(/^Autopsia:\s*(.+)$/i);
-    if (autopsy) { current.autopsy = autopsy[1].trim(); continue; }
-  }
-  if (current) cards.push(current);
-  return cards;
-}
-
-export interface MarkdownTable {
-  header: string[];
-  rows: string[][];
-}
-
-/** Primera tabla markdown (bloque "| ... |\n| --- |\n..." generado por blocksToMarkdown para bloques `table`). */
-export function firstTable(blocks: string[]): MarkdownTable | null {
-  const block = blocks.find((b) => b.trim().startsWith('|'));
-  if (!block) return null;
-  const parseRow = (line: string): string[] =>
-    line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((cell) => cell.trim());
-  const [headerLine, , ...rowLines] = block.trim().split('\n').filter(Boolean);
-  if (!headerLine) return null;
-  return { header: parseRow(headerLine), rows: rowLines.map(parseRow) };
-}
-
 /**
  * Contenido del primer bloque de codigo (entre las dos entradas "```" que
  * blocksToMarkdown genera por separado). Si el texto del codigo trae lineas

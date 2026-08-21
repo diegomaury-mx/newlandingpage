@@ -14,40 +14,28 @@ import { parseSiteCopySections, heading2, paragraphs } from '../../utils/parseSi
 import { translateCached } from '../../services/deeplTranslationCache.ts';
 import { toLocalePath } from '../../utils/locale.ts';
 import { uiEn } from '../../i18n/ui.ts';
+import { caseDisplayTitleEn } from '../../utils/caseTitle.ts';
+import { sortInsignia, catalogCounts, impactMetrics, truncate } from '../../utils/portfolioData.ts';
 import '../../styles/portfolio.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
 type MetricEntry = CollectionEntry<'metrics'>;
 
 function cardTitle(entry: CaseEntry): string {
-  return entry.data.en.cardHeadline || entry.data.en.resultHeadline || entry.data.en.title
-    || entry.data.cardHeadline || entry.data.resultHeadline || entry.data.title;
+  return caseDisplayTitleEn(entry.data, entry.data.en);
 }
-
-const CONTEXT_LINE_MAX = 160;
 
 function supportDescription(entry: CaseEntry): string {
   const text = entry.data.en.cardContext || entry.data.cardContext
     || entry.data.en.objective || entry.data.objective
     || entry.data.en.resultsAndActions || entry.data.resultsAndActions;
-  if (!text) return '';
-  return text.length > CONTEXT_LINE_MAX
-    ? `${text.slice(0, CONTEXT_LINE_MAX)}…`
-    : text;
+  return truncate(text);
 }
 
 const allCases = await getCollection('cases');
 const published = allCases.filter((c) => !c.data.draft);
 
-const insignia = [...published.filter((c) => c.data.layer === 'Insignia')].sort((a, b) => {
-  const orderA = a.data.insigniaOrder ?? Number.MAX_SAFE_INTEGER;
-  const orderB = b.data.insigniaOrder ?? Number.MAX_SAFE_INTEGER;
-  if (orderA !== orderB) return orderA - orderB;
-  const yearA = Number(a.data.year) || 0;
-  const yearB = Number(b.data.year) || 0;
-  if (yearA !== yearB) return yearB - yearA;
-  return a.data.title.localeCompare(b.data.title, 'en');
-});
+const insignia = sortInsignia(published.filter((c) => c.data.layer === 'Insignia'), 'en');
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
 
 // --- Copy narrativo (Copy Oficial SSOT, bloques P1-P3+P5), traducido a nivel de hoja ---
@@ -103,42 +91,21 @@ const closingLede = await translateCached(
   console,
 );
 
-const totalPublicadas = insignia.length + soporte.length;
-const organizacionesUnicas = new Set(
-  [...insignia, ...soporte]
-    .map((c) => c.data.organization)
-    .filter((org): org is string => Boolean(org))
-).size;
-const camposUnicos = new Set(
-  [...insignia, ...soporte].flatMap((c) => c.data.capabilities)
-).size;
+const {
+  total: totalPublicadas,
+  organizations: organizacionesUnicas,
+  capabilities: camposUnicos,
+} = catalogCounts([...insignia, ...soporte]);
 const ANOS_EXPERIENCIA = '7+';
 
 const metricsEntries = await getCollection('metrics');
-function metricBySlug(slug: string): MetricEntry | undefined {
-  return metricsEntries.find((entry) => entry.data.slug === slug && entry.data.buildable);
-}
 function metricLabel(m: MetricEntry): string {
   return m.data.en.metric || m.data.metric;
 }
 function metricQualifier(m: MetricEntry): string {
   return m.data.en.mandatoryQualifier || m.data.mandatoryQualifier;
 }
-const IMPACT_ANCHOR_SLUGS = ['incmty-participantes-inscritos', 'rodi-sofi'];
-const IMPACT_SUPPORT_SLUGS = [
-  'heineken-proyectos-evaluados',
-  'hacksureste-participantes',
-  'heineken-crecimiento-regional',
-  'fliphouse-leads-crm',
-  'sofi-cobertura-automatica',
-  'fliphouse-speed-to-lead',
-];
-const impactAnchors = IMPACT_ANCHOR_SLUGS.map(metricBySlug).filter(
-  (m): m is MetricEntry => Boolean(m)
-);
-const impactSupport = IMPACT_SUPPORT_SLUGS.map(metricBySlug).filter(
-  (m): m is MetricEntry => Boolean(m)
-);
+const { anchors: impactAnchors, support: impactSupport } = impactMetrics(metricsEntries);
 
 const pageTitle = 'Portfolio · Diego Maury';
 const pageDescription =

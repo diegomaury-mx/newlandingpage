@@ -15,48 +15,30 @@ import { slugify } from '../utils/slug.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { parseSiteCopySections, heading2, paragraphs } from '../utils/parseSiteCopy.ts';
 import { toLocalePath } from '../utils/locale.ts';
+import { caseDisplayTitle } from '../utils/caseTitle.ts';
+import { sortInsignia, catalogCounts, impactMetrics, truncate } from '../utils/portfolioData.ts';
 import '../styles/portfolio.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
-type MetricEntry = CollectionEntry<'metrics'>;
 
 // Titulo de tarjeta = resultado como afirmacion (H1 del caso), nunca el rol.
 // Cae al `title` de Notion solo si la ficha aun no tiene esa narrativa escrita.
 function cardTitle(entry: CaseEntry): string {
-  return entry.data.cardHeadline || entry.data.resultHeadline || entry.data.title;
+  return caseDisplayTitle(entry.data);
 }
-
-const CONTEXT_LINE_MAX = 160;
 
 // Descripcion de tarjeta Soporte: prioriza `Contexto tarjeta`, cae a
 // Objetivo y despues a Resultados y acciones — mismo orden que usaba la
 // fila de tabla que esta tarjeta reemplazo originalmente.
 function supportDescription(entry: CaseEntry): string {
-  const text = entry.data.cardContext || entry.data.objective || entry.data.resultsAndActions;
-  if (!text) return '';
-  return text.length > CONTEXT_LINE_MAX
-    ? `${text.slice(0, CONTEXT_LINE_MAX)}…`
-    : text;
+  return truncate(entry.data.cardContext || entry.data.objective || entry.data.resultsAndActions);
 }
 
 const allCases = await getCollection('cases');
 
 const published = allCases.filter((c) => !c.data.draft);
 
-// Orden manual via `insigniaOrder` (propiedad Notion "Orden Insignia"); sin
-// featured, los 4 casos Insignia pesan igual, asi que el orden ya no lo
-// decide "quien tiene mas evidencia verificada" sino Diego. Fallback
-// determinista si falta el campo en algun caso: year desc, luego title
-// (la API de Notion no garantiza orden estable de llegada).
-const insignia = [...published.filter((c) => c.data.layer === 'Insignia')].sort((a, b) => {
-  const orderA = a.data.insigniaOrder ?? Number.MAX_SAFE_INTEGER;
-  const orderB = b.data.insigniaOrder ?? Number.MAX_SAFE_INTEGER;
-  if (orderA !== orderB) return orderA - orderB;
-  const yearA = Number(a.data.year) || 0;
-  const yearB = Number(b.data.year) || 0;
-  if (yearA !== yearB) return yearB - yearA;
-  return a.data.title.localeCompare(b.data.title, 'es');
-});
+const insignia = sortInsignia(published.filter((c) => c.data.layer === 'Insignia'), 'es');
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
 
 // --- Copy narrativo (Copy Oficial SSOT, bloques P1-P3+P5) ------------------------
@@ -105,15 +87,11 @@ const closingLede =
 // --- Franja "Por los números" --------------------------------------------------
 // Fila de catalogo: se calcula sola del contenido publicado, nunca se edita a
 // mano — si Diego publica un caso nuevo, estas cifras se recalculan solas.
-const totalPublicadas = insignia.length + soporte.length;
-const organizacionesUnicas = new Set(
-  [...insignia, ...soporte]
-    .map((c) => c.data.organization)
-    .filter((org): org is string => Boolean(org))
-).size;
-const camposUnicos = new Set(
-  [...insignia, ...soporte].flatMap((c) => c.data.capabilities)
-).size;
+const {
+  total: totalPublicadas,
+  organizations: organizacionesUnicas,
+  capabilities: camposUnicos,
+} = catalogCounts([...insignia, ...soporte]);
 // Reusa el mismo numero+calificacion que index.astro S2 (STAT_SUBLABELS[1]):
 // 7+ es especifico a innovacion/ecosistemas, no la trayectoria total (esa es
 // 10+, Copy LinkedIn SSOT) — ver correccion 2026-08-16 del spec tras revision.
@@ -126,24 +104,7 @@ const ANOS_EXPERIENCIA_LABEL = 'años en innovación y ecosistemas';
 // excepcion (regla dura de la revision del spec: el caveat de RODI
 // "cost-avoidance modelado" no puede faltar en ningun tamano tipografico).
 const metricsEntries = await getCollection('metrics');
-function metricBySlug(slug: string): MetricEntry | undefined {
-  return metricsEntries.find((entry) => entry.data.slug === slug && entry.data.buildable);
-}
-const IMPACT_ANCHOR_SLUGS = ['incmty-participantes-inscritos', 'rodi-sofi'];
-const IMPACT_SUPPORT_SLUGS = [
-  'heineken-proyectos-evaluados',
-  'hacksureste-participantes',
-  'heineken-crecimiento-regional',
-  'fliphouse-leads-crm',
-  'sofi-cobertura-automatica',
-  'fliphouse-speed-to-lead',
-];
-const impactAnchors = IMPACT_ANCHOR_SLUGS.map(metricBySlug).filter(
-  (m): m is MetricEntry => Boolean(m)
-);
-const impactSupport = IMPACT_SUPPORT_SLUGS.map(metricBySlug).filter(
-  (m): m is MetricEntry => Boolean(m)
-);
+const { anchors: impactAnchors, support: impactSupport } = impactMetrics(metricsEntries);
 
 const pageTitle = 'Portafolio · Diego Maury';
 const pageDescription =

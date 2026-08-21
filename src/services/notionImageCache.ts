@@ -34,6 +34,26 @@ const EXTENSION_BY_CONTENT_TYPE: Record<string, string> = {
   "image/svg+xml": "svg",
 };
 
+// Las URLs de imagen siempre vienen de la respuesta de la API de Notion (S3
+// firmado o notion-static), nunca de input de usuario final — pero como
+// trust model es single-editor, un allowlist de esquema/host es defensa en
+// profundidad barata contra SSRF (ver TECHNICAL_DEBT.md, Seguridad #5).
+const ALLOWED_IMAGE_HOST_SUFFIXES = [".amazonaws.com", ".notion-static.com", ".notion.so"];
+
+export function isAllowedImageUrl(url: string): boolean {
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return false;
+  }
+  if (parsed.protocol !== "https:") return false;
+  const hostname = parsed.hostname.toLowerCase();
+  return ALLOWED_IMAGE_HOST_SUFFIXES.some(
+    (suffix) => hostname === suffix.slice(1) || hostname.endsWith(suffix),
+  );
+}
+
 export function extensionFromUrl(url: string): string | undefined {
   const match = /\.([a-zA-Z0-9]+)$/.exec(new URL(url).pathname);
   return match?.[1]?.toLowerCase();
@@ -62,6 +82,11 @@ export async function cacheNotionImage(
 ): Promise<string | undefined> {
   const cached = await findCachedFile(cacheKey);
   if (cached) return cached;
+
+  if (!isAllowedImageUrl(url)) {
+    logger.warn(`[notion-image-cache] host no permitido, se omite: ${url}`);
+    return undefined;
+  }
 
   try {
     const response = await fetch(url);

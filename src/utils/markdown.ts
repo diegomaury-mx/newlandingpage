@@ -54,14 +54,25 @@ function renderTable(lines: string[]): string {
   return `<div class="prose-table"><table><thead><tr>${headHtml}</tr></thead><tbody>${bodyHtml}</tbody></table></div>`;
 }
 
-const RESULT_SECTION_ID = "resultado";
-const RESULT_TABLE_HEADERS = ["Métrica", "Antes", "Después"];
+// Encabezado exacto "## Resultado"/"## Result(s)" (ES/EN, la traduccion de
+// DeepL cae en uno de estos) determina el id de seccion; la tabla de 3
+// columnas debajo se detecta contra ambos juegos de headers conocidos. Otro
+// heading o header no listado degrada con gracia a `renderTable` (fallback
+// deliberado, ver CLAUDE.md — SOFI usa headers distintos a proposito).
+const RESULT_SECTION_IDS = new Set(["resultado", "result", "results"]);
+const RESULT_TABLE_HEADER_SETS: readonly string[][] = [
+  ["Métrica", "Antes", "Después"],
+  ["Metric", "Before", "After"],
+];
 
-/** true solo si los encabezados coinciden exacto, en orden — el fallback (renderTable) cubre cualquier otro caso. */
+/** true solo si los encabezados coinciden exacto, en orden, contra algun juego conocido. */
 function isResultTableHeader(header: string[]): boolean {
-  if (header.length !== RESULT_TABLE_HEADERS.length) return false;
-  return header.every((cell, i) => cell === RESULT_TABLE_HEADERS[i]);
+  return RESULT_TABLE_HEADER_SETS.some(
+    (headers) => header.length === headers.length && header.every((cell, i) => cell === headers[i]),
+  );
 }
+
+const BEFORE_LABEL: Record<"es" | "en", string> = { es: "Antes", en: "Before" };
 
 /** Separa "30 (+500%)" en { value: "30", delta: "+500%" }; sin paréntesis, delta es null. */
 function splitDelta(cell: string): { value: string; delta: string | null } {
@@ -70,14 +81,14 @@ function splitDelta(cell: string): { value: string; delta: string | null } {
   return { value: match[1].trim(), delta: match[2].trim() };
 }
 
-function renderResultCards(bodyRows: string[][]): string {
+function renderResultCards(bodyRows: string[][], locale: "es" | "en"): string {
   const cards = bodyRows
     .map(([metric = "", before = "", afterRaw = ""]) => {
       const { value, delta } = splitDelta(afterRaw);
       const beforeTrimmed = before.trim();
       const showBefore = beforeTrimmed !== "" && beforeTrimmed !== "—" && beforeTrimmed !== "-";
       const beforeHtml = showBefore
-        ? `<div class="rc-before">Antes: <s>${renderInline(beforeTrimmed)}</s></div>`
+        ? `<div class="rc-before">${BEFORE_LABEL[locale]}: <s>${renderInline(beforeTrimmed)}</s></div>`
         : "";
       const deltaHtml = delta ? `<div class="rc-delta">${renderInline(delta)}</div>` : "";
       return (
@@ -89,8 +100,8 @@ function renderResultCards(bodyRows: string[][]): string {
   return `<div class="result-grid">${cards}</div>`;
 }
 
-/** Convierte el Markdown plano de un caso a HTML listo para `set:html`. */
-export function renderMarkdown(markdown: string): string {
+/** Convierte el Markdown plano de un caso a HTML listo para `set:html`. `locale` solo afecta el label "Antes/Before" de las tarjetas de resultado. */
+export function renderMarkdown(markdown: string, locale: "es" | "en" = "es"): string {
   if (!markdown.trim()) return "";
   const blocks = markdown.split(/\n{2,}/);
   const html: string[] = [];
@@ -105,8 +116,8 @@ export function renderMarkdown(markdown: string): string {
       html.push("<hr />");
     } else if (lines.every((line) => line.trim().startsWith("|"))) {
       const { header, body } = parseTableRows(lines);
-      if (currentSectionId === RESULT_SECTION_ID && isResultTableHeader(header)) {
-        html.push(renderResultCards(body));
+      if (RESULT_SECTION_IDS.has(currentSectionId) && isResultTableHeader(header)) {
+        html.push(renderResultCards(body, locale));
       } else {
         html.push(renderTable(lines));
       }

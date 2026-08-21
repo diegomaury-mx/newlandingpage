@@ -38,6 +38,21 @@ test("la tabla Métrica|Antes|Después bajo ## Resultado se renderiza como tarje
   assert.doesNotMatch(html, /Antes: <s>—<\/s>/);
 });
 
+test("la tabla Metric|Before|After bajo ## Results (locale en) se renderiza como tarjetas con label Before", () => {
+  const md = [
+    "## Results",
+    "",
+    "| Metric | Before | After |",
+    "| --- | --- | --- |",
+    "| Speed-to-lead | 1–3 days | <5 minutes |",
+    "| Weekly leads | 5 | 30 (+500%) |",
+  ].join("\n");
+  const html = renderMarkdown(md, "en");
+  assert.match(html, /<div class="result-grid">/);
+  assert.doesNotMatch(html, /prose-table/);
+  assert.match(html, /Before: <s>1–3 days<\/s>/);
+});
+
 test("una tabla bajo ## Resultado con encabezados distintos degrada a prose-table (fallback)", () => {
   const md = [
     "## Resultado",

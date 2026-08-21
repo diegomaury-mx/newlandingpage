@@ -10,6 +10,8 @@
     "preview": "astro preview",
     "sync": "astro sync",
     "cms:smoke": "tsx scripts/notion-smoke.ts",
+    "test": "tsx --test src/**/*.test.ts && node --test tools/verify-metrics.test.cjs",
+    "check": "astro check",
     "lint": "htmlhint public/404.html",
     "test:a11y:astro": "playwright test --config=playwright.astro.config.ts tests/qa/a11y.astro.spec.ts",
     "verify:visual:astro": "playwright test --config=playwright.astro.config.ts tests/qa/visual.astro.spec.ts"

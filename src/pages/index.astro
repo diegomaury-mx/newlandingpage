@@ -335,7 +335,7 @@ const personJsonLd = {
     </div>
   </div>
   {aboutStats.length > 0 && (
-    <div style="max-width:1160px;margin:0 auto;padding:0 32px">
+    <div class="metrics-band">
       <div class="metrics" data-reveal style="--delay:.26s">
         {aboutStats.map((stat) => (
           <div class="metric">
@@ -518,8 +518,8 @@ const personJsonLd = {
       </div>
     )}
 
-    <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--border)">
-      <h3 class="deliver-heading" style="margin-top:0">{systemsClosingHeading}</h3>
+    <div class="systems-closing">
+      <h3 class="deliver-heading">{systemsClosingHeading}</h3>
       {systemsClosing.map((p) => <p class="section-sub">{p}</p>)}
     </div>
   </div>
@@ -562,11 +562,10 @@ const personJsonLd = {
             <h3 class="deliver-heading">{moreExperiencesHeading}</h3>
 
             <div
-              class="senja-embed"
+              class="senja-embed senja-embed--inline"
               data-id={senjaId}
               data-mode="shadow"
               data-lazyload="false"
-              style="width:100%;margin-top:24px;"
             ></div>
           </>
         )}
@@ -596,7 +595,7 @@ const personJsonLd = {
 
       <div class="cta-buttons" data-reveal style="--delay:.24s">
         {finalCtas.length > 0 && (
-          <div class="hero-ctas" style="justify-content:center;margin-bottom:0">
+          <div class="hero-ctas">
             {finalCtas.map((label, i) => {
               const t = ctaTarget(label, '/portfolio');
               return (

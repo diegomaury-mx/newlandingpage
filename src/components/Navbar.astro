@@ -1,7 +1,7 @@
 ---
 import "../styles/navbar.css";
 import { site } from "../config/site";
-import { getLocaleFromPath } from "../utils/locale.ts";
+import { getLocaleFromPath, toLocalePath } from "../utils/locale.ts";
 import { uiEn } from "../i18n/ui.ts";
 
 interface Props {
@@ -31,6 +31,12 @@ const {
 const otherLocaleLabel = otherLocaleHref ? getLocaleFromPath(otherLocaleHref).toUpperCase() : undefined;
 const isEn = Astro.currentLocale === "en";
 const navAriaLabel = isEn ? uiEn.nav.ariaLabel : "Navegación principal";
+// `site.navigation` es la fuente unica de hrefs (ES); en EN se traduce el
+// label por href y se reescribe el href al prefijo /en (toLocalePath).
+const navItems = site.navigation.map((item) => ({
+  href: isEn ? toLocalePath(item.href, "en") : item.href,
+  label: isEn ? (uiEn.nav.items[item.href] ?? item.label) : item.label,
+}));
 ---
 
 <nav id="nav" class="nav" aria-label={navAriaLabel}>
@@ -52,7 +58,7 @@ const navAriaLabel = isEn ? uiEn.nav.ariaLabel : "Navegación principal";
     </a>
 
     <div class="nav__links">
-      {site.navigation.map((item) => (
+      {navItems.map((item) => (
         <a
           href={item.href}
           class="nav__link"
