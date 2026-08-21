@@ -41,6 +41,28 @@ import {
 import { cacheNotionImage } from "./notionImageCache.ts";
 import { translateCached } from "./deeplTranslationCache.ts";
 
+// Tope de fichas procesadas en paralelo por loader (fetchBlockChildren +
+// cacheNotionImage). Acotado a proposito: la API de Notion no es infinita,
+// esto es rendimiento de build, no un ataque de fuerza bruta.
+const LOADER_CONCURRENCY = 6;
+
+/** Procesa `items` con un maximo de `limit` tareas en vuelo a la vez. */
+async function mapWithConcurrency<T>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<void>,
+): Promise<void> {
+  let cursor = 0;
+  async function worker(): Promise<void> {
+    while (cursor < items.length) {
+      const item = items[cursor];
+      cursor += 1;
+      await fn(item);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+}
+
 // --- Conversion de bloques a Markdown (para siteCopy) ------------------------
 
 /** Extrae el arreglo de rich text de cualquier bloque que lo tenga. */
@@ -353,7 +375,14 @@ function createDataSourceLoader(
         return;
       }
       const pages = await fetchFn();
-      for (const page of pages) {
+      // fetchBlockChildren (dentro de mapFn) y cacheNotionImage son I/O de red
+      // independientes por ficha: procesarlas 100% secuencial es la causa
+      // directa de los 90-115s de build con ~29 fichas. Concurrencia acotada
+      // (no ilimitada, para no saturar la API de Notion) recorta ese tiempo
+      // sin tocar la traduccion DeepL, que ya se serializa sola via la cola
+      // modulo-level de deeplTranslationCache.ts (enqueue) sin importar cuantas
+      // llamadas concurrentes le lleguen.
+      await mapWithConcurrency(pages, LOADER_CONCURRENCY, async (page) => {
         const raw = await mapFn(page);
         const id = idFn(page, raw);
         for (const field of imageFields) {
@@ -376,7 +405,7 @@ function createDataSourceLoader(
         }
         const data = await parseData({ id, data: raw });
         store.set({ id, data });
-      }
+      });
       logger.info(`[${name}] ${pages.length} entradas cargadas desde Notion.`);
     },
   };

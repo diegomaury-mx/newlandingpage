@@ -6,7 +6,7 @@
  * (no hay rebuild automatico diario), la firma expira antes de la siguiente
  * visita y la imagen se rompe en produccion aunque el sitio siga vivo.
  */
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import type { LoaderContext } from "astro/loaders";
@@ -43,11 +43,26 @@ export function sanitizeCacheKey(cacheKey: string): string {
   return cacheKey.replace(/[^a-zA-Z0-9._-]/g, "-");
 }
 
+/** Busca un archivo ya cacheado con este cacheKey (cualquier extension) sin pegarle a la red. */
+async function findCachedFile(cacheKey: string): Promise<string | undefined> {
+  const prefix = `${sanitizeCacheKey(cacheKey)}.`;
+  try {
+    const files = await readdir(CACHE_DIR);
+    const match = files.find((file) => file.startsWith(prefix));
+    return match ? `/cms-media/notion/${match}` : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function cacheNotionImage(
   url: string,
   cacheKey: string,
   logger: LoaderContext["logger"],
 ): Promise<string | undefined> {
+  const cached = await findCachedFile(cacheKey);
+  if (cached) return cached;
+
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);

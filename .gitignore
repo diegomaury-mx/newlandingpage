@@ -35,19 +35,16 @@ qa-output/screenshots-astro/
 # Salida del skill /video-pitch (Hyperframes): regenerable, no es codigo fuente del sitio
 video-pitch-output/
 
-# Cache de imagenes de Notion (descargadas en cada build por los content
-# loaders, ver src/services/notionImageCache.ts): regenerable, no se versiona
-public/cms-media/notion/*
-!public/cms-media/notion/translations/
-
-# Cache de traducciones DeepL (ver deeplTranslationCache.ts) SI se versiona
-# (excepcion al patron de arriba): a diferencia de las imagenes, Cloudflare
-# Pages clona el repo limpio en cada build y NO persiste este cache entre
-# deploys — sin commitearlo, cada push re-traduce el sitio COMPLETO desde
-# cero (29 cuerpos de caso + home + portfolio), lo cual agoto la cuota
-# mensual gratuita de DeepL (500k caracteres) en una sola tarde de pruebas
-# (2026-08-17). Commitear estos .txt es la unica forma de que la traduccion
-# ya pagada sobreviva entre deploys con la arquitectura actual.
+# Cache de imagenes de Notion (descargadas y recomprimidas en build por los
+# content loaders, ver src/services/notionImageCache.ts) y de traducciones
+# DeepL (deeplTranslationCache.ts) SI se versionan: Cloudflare Pages clona el
+# repo limpio en cada build y NO persiste nada fuera de git entre deploys —
+# sin commitear este cache, cada push recomprime/re-traduce TODO desde cero
+# (causa raiz del incidente de LCP 15.6s y de la cuota DeepL agotada el
+# 2026-08-17). Commitearlo es la unica forma de que el trabajo ya pagado
+# (fetch+sharp, o tokens de DeepL) sobreviva entre deploys con la
+# arquitectura actual (SSG sin build cache persistente en Cloudflare Pages).
+!public/cms-media/notion/
 
 # Playwright: artefactos de test run locales
 /test-results/
