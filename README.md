@@ -6,7 +6,7 @@ Sitio en **[diegomaury.mx](https://diegomaury.mx)** · construido con Astro y de
 
 ## Stack
 
-- Astro `^5.18.2` (Content Layer API), CSS y JS vanilla — sin framework de UI
+- Astro `^7.2.4` (Content Layer API), CSS y JS vanilla — sin framework de UI
 - Contenido (casos, métricas, copy del home, imágenes) leído en build time desde Notion vía `src/services/notionLoaders.ts` — ver sección **CMS** abajo
 - Sitio **bilingüe ES/EN**: ES es el locale default (`/`, `/portfolio`), EN vive bajo `/en/*`, traducido automáticamente vía DeepL API en build time
 - Deploy: **Cloudflare Pages** (Git integration directa con este repo, rama `master`) — cualquier `git push` a `master` dispara `astro build` y publica `dist/`. No hay GitHub Actions ni workflow manual.

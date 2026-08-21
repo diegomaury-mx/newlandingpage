@@ -6,7 +6,9 @@
  * (`loader:`), validadas contra el contrato real en
  * `docs/platform/notion-astro-contract.md`.
  *
- * Requires: astro@^5.0.0 (Content Layer API estable)
+ * Requires: astro@^7.0.0 (Content Layer API estable). Movido de
+ * src/content/config.ts a src/content.config.ts (2026-08-20): v6 elimino el
+ * soporte de "legacy content config" en la ubicacion anterior.
  * All date fields use ISO 8601 string format (e.g. "2024-03-15").
  * All slug references use kebab-case filenames without extension.
  */
@@ -17,7 +19,7 @@ import {
   imageSlotsLoader,
   metricsLoader,
   siteCopyLoader,
-} from '../services/notionLoaders.ts';
+} from './services/notionLoaders.ts';
 
 // ─── Case Study (fuente: SSOT - Portafolio Proyectos) ─────────────────────────
 
