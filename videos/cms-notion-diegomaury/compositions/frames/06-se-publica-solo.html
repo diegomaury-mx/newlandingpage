@@ -1,0 +1,381 @@
+<template>
+<style>
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("assets/fonts/DMMono-500.woff2") format("woff2");
+}
+
+#root {
+  position: absolute;
+  inset: 0;
+  width: 1080px;
+  height: 1920px;
+  container-type: size;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #FAF8FC;
+}
+
+.clip { position: absolute; inset: 0; }
+
+.f06-bg { background: #0A0612; /* {colors.bg} */ }
+
+.f06-headline {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 232px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.3em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; /* texto más grueso, a pedido del usuario */
+  font-size: 6.4cqw; /* ~69px @1080 — floor: display portante 64px */
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #FAF8FC;
+}
+
+.f06-brand {
+  position: absolute;
+  top: 100px;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+}
+
+.f06-brand-mark { width: 56px; height: 56px; flex: none; }
+.f06-brand-mark svg { display: block; width: 100%; height: 100%; }
+
+.f06-brand-rule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: #6A291B; /* {colors.border} — no es el acento ember, solo separador */
+}
+
+.f06-word { display: inline-block; opacity: 0; }
+
+.f06-line-svg { position: absolute; top: 0; left: 0; width: 1080px; height: 1920px; }
+.f06-line-svg path { fill: none; stroke: #6A291B; /* {colors.border} — connector, never ember */ stroke-width: 2; stroke-linecap: round; }
+
+.f06-row {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 26px;
+  background: #1A1128; /* {colors.bg-2} — card-hairline */
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 16px; /* radius-lg — v2-parity override */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  opacity: 0;
+}
+
+.f06-row--1 { top: 410px; }
+.f06-row--2 { top: 555px; }
+.f06-row--3 { top: 700px; }
+.f06-row--4 { top: 905px; }
+
+.f06-ember-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: #FF5C39; /* {colors.ember} — the ONE accent, one station at a time */
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+}
+
+.f06-icon { width: 44px; height: 44px; flex: 0 0 auto; }
+.f06-icon svg { width: 100%; height: 100%; fill: #FAF8FC; /* {colors.t1} — real Notion glyph */ }
+.f06-icon svg.f06-icon--stroke path,
+.f06-icon svg.f06-icon--stroke circle,
+.f06-icon svg.f06-icon--stroke line {
+  fill: none; stroke: #DDDBE0; /* {colors.t2} */ stroke-width: 5; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.f06-lockup { display: flex; align-items: center; gap: 14px; }
+.f06-lockup-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px, aplicado también al nombre de estación */
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #FAF8FC; /* {colors.t1} */
+  white-space: nowrap;
+}
+.f06-lockup-divider { width: 1px; height: 28px; background: #6A291B; flex: 0 0 auto; }
+.f06-lockup-role {
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 2.9cqw; /* ~31px @1080 — floor: mono de chrome 30px */
+  letter-spacing: 0.04em;
+  color: #DDDBE0; /* {colors.t2} — t3 falla contraste AA sobre bg-2 */
+  white-space: nowrap;
+}
+
+.f06-chips {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 840px;
+  display: flex;
+  gap: 12px;
+  opacity: 0;
+}
+
+.f06-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: #1A1128;
+  border: 1px solid #6A291B;
+  border-radius: 9999px;
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 2.9cqw; /* ~31px @1080 — floor: mono de chrome 30px */
+  letter-spacing: 0.04em;
+  color: #DDDBE0; /* {colors.t2} — t3 falla contraste AA sobre bg-2 */
+}
+
+.f06-closing {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 1050px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.3em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; /* texto más grueso, a pedido del usuario */
+  font-size: 6.4cqw;
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #FAF8FC;
+}
+
+.f06-cw { display: inline-block; opacity: 0; }
+
+.f06-evidence-row {
+  position: absolute;
+  left: 4.2cqw;
+  top: 1205px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0;
+}
+
+.f06-chip-time {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 20px;
+  background: #1A1128;
+  border: 1px solid #6A291B;
+  border-radius: 9999px;
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px */
+  color: #DDDBE0;
+}
+
+.f06-c10 {
+  width: 320px;
+  height: 180px;
+  border: 1px solid #6A291B;
+  border-radius: 16px; /* radius-lg — v2-parity override */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  overflow: hidden;
+}
+
+.f06-c10 img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+</style>
+
+<div id="root" data-composition-id="06-se-publica-solo" data-width="1080" data-height="1920">
+  <div class="clip f06-bg" data-start="0" data-duration="8" data-track-index="0"></div>
+
+  <div class="clip" id="f06-brand-track" data-start="0" data-duration="8" data-track-index="11">
+    <div class="f06-brand" id="f06-brand">
+      <span class="f06-brand-mark">
+        <svg viewBox="0 0 1007 1007" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+          <path d="M884.2,271.4l-355,307.2l355,-307.2Z" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M131.3,709.5l398,-130.8l-75.1,310" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M558.5,888.6l63.8,-280.4l260.9,-212.2" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M505.8,46.1l392,220l1.7,443l-390.3,223l-392,-220l-1.7,-443l390.3,-223Z" style="fill:none;stroke:#FAF8FC;stroke-width:41.9px;"></path>
+        </svg>
+      </span>
+      <span class="f06-brand-rule"></span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="1">
+    <div class="f06-headline" id="f06-headline">
+      <span class="f06-word">Solo</span><span class="f06-word">edito.</span><span class="f06-word">Guardo.</span><span class="f06-word">Y</span><span class="f06-word">listo.</span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="2">
+    <svg class="f06-line-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+      <path id="f06-line" d="M 540 540 L 540 1035" />
+    </svg>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="3">
+    <div class="f06-row f06-row--1" id="f06-row1">
+      <div class="f06-ember-bar" id="f06-eb1"></div>
+      <div class="f06-lockup">
+        <span class="f06-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z" />
+          </svg>
+        </span>
+        <span class="f06-lockup-name">Notion</span>
+        <span class="f06-lockup-divider"></span>
+        <span class="f06-lockup-role">fuente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="4">
+    <div class="f06-row f06-row--2" id="f06-row2">
+      <div class="f06-ember-bar" id="f06-eb2"></div>
+      <div class="f06-lockup">
+        <svg class="f06-icon f06-icon--stroke" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="70" cy="70" r="34" /><circle cx="70" cy="70" r="12" />
+          <line x1="70" y1="16" x2="70" y2="30" /><line x1="70" y1="110" x2="70" y2="124" />
+          <line x1="16" y1="70" x2="30" y2="70" /><line x1="110" y1="70" x2="124" y2="70" />
+        </svg>
+        <span class="f06-lockup-name">Webhook firmado</span>
+        <span class="f06-lockup-divider"></span>
+        <span class="f06-lockup-role">hmac</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="5">
+    <div class="f06-row f06-row--3" id="f06-row3">
+      <div class="f06-ember-bar" id="f06-eb3"></div>
+      <div class="f06-lockup">
+        <svg class="f06-icon f06-icon--stroke" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 38 88 A 20 20 0 0 1 42 48 A 26 26 0 0 1 92 42 A 18 18 0 0 1 102 88 Z" />
+        </svg>
+        <span class="f06-lockup-name">Build</span>
+        <span class="f06-lockup-divider"></span>
+        <span class="f06-lockup-role">astro</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="6">
+    <div class="f06-chips" id="f06-chips">
+      <span class="f06-chip">3 de 4 fuentes</span>
+      <span class="f06-chip">Astro</span>
+      <span class="f06-chip">Cloudflare</span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="7">
+    <div class="f06-row f06-row--4" id="f06-row4">
+      <div class="f06-ember-bar" id="f06-eb4"></div>
+      <div class="f06-lockup">
+        <svg class="f06-icon f06-icon--stroke" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 30 70 L 55 95 L 110 40" />
+        </svg>
+        <span class="f06-lockup-name">Sitio actualizado</span>
+        <span class="f06-lockup-divider"></span>
+        <span class="f06-lockup-role">resultado</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="8">
+    <div class="f06-closing" id="f06-closing">
+      <span class="f06-cw">El</span><span class="f06-cw">sitio</span><span class="f06-cw">se</span><span class="f06-cw">actualiza</span><span class="f06-cw">automáticamente.</span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="8" data-track-index="9">
+    <div class="f06-evidence-row" id="f06-evidence">
+      <span class="f06-chip-time">~2 min</span>
+      <div class="f06-c10"><img src="assets/img/cms-video/c10-deploys-list.png" alt="" /></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+(function () {
+  window.__timelines = window.__timelines || {};
+
+  var line = document.getElementById('f06-line');
+  var len = line.getTotalLength();
+  line.style.strokeDasharray = String(len);
+  line.style.strokeDashoffset = String(len);
+
+  var tl = gsap.timeline({ paused: true });
+
+  // Scene 0 (0.05-0.40s): lockup de marca (isotipo real + regla hairline), igual a Escena 1.
+  tl.fromTo('#f06-brand', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, 0.05);
+
+  function setActiveStation(id) {
+    ['#f06-eb1', '#f06-eb2', '#f06-eb3', '#f06-eb4'].forEach(function (sel) {
+      tl.to(sel, { scaleX: sel === id ? 1 : 0, duration: 0.3, ease: 'power2.out' }, '<');
+    });
+  }
+
+  // Beat 1 (0.0-2.5s): "Guardo. Nadie hace nada más." + estaciones NOTION y
+  // WEBHOOK FIRMADO.
+  var words = document.querySelectorAll('#f06-headline .f06-word');
+  words.forEach(function (w, i) {
+    tl.fromTo(w, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' }, 0.05 + i * 0.12);
+  });
+
+  tl.fromTo('#f06-row1', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }, 0.9);
+  tl.to(line, { strokeDashoffset: len * (1 - 1 / 3), duration: 0.35, ease: 'power2.out' }, 1.3);
+  tl.fromTo('#f06-row2', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }, 1.6);
+  tl.to('#f06-eb2', { scaleX: 1, duration: 0.3, ease: 'back.out(1.6)' }, 2.0);
+
+  // Beat 2 (2.5-5.5s): estación BUILD entra — el ember-bar pasa de WEBHOOK
+  // FIRMADO a BUILD (nunca ambas a la vez); chips de alcance en tamaño de
+  // chrome.
+  tl.to(line, { strokeDashoffset: len * (1 - 2 / 3), duration: 0.35, ease: 'power2.out' }, 2.6);
+  tl.fromTo('#f06-row3', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }, 2.9);
+  tl.to('#f06-eb2', { scaleX: 0, duration: 0.2, ease: 'power2.out' }, 3.3);
+  tl.to('#f06-eb3', { scaleX: 1, duration: 0.3, ease: 'back.out(1.6)' }, 3.55);
+  tl.fromTo('#f06-chips', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.6);
+
+  // Beat 3 (5.5-8.0s): estación SITIO ACTUALIZADO + evidencia real (C10).
+  tl.to(line, { strokeDashoffset: 0, duration: 0.35, ease: 'power2.out' }, 5.6);
+  tl.fromTo('#f06-row4', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }, 5.9);
+  tl.to('#f06-eb3', { scaleX: 0, duration: 0.2, ease: 'power2.out' }, 6.3);
+  tl.to('#f06-eb4', { scaleX: 1, duration: 0.3, ease: 'back.out(1.6)' }, 6.55);
+
+  var cwords = document.querySelectorAll('#f06-closing .f06-cw');
+  cwords.forEach(function (w, i) {
+    tl.fromTo(w, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' }, 6.5 + i * 0.1);
+  });
+
+  tl.fromTo('#f06-evidence', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 7.1);
+
+  window.__timelines['06-se-publica-solo'] = tl;
+})();
+</script>
+</template>

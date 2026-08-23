@@ -1,0 +1,52 @@
+<template>
+<style>
+#root {
+  position: absolute;
+  inset: 0;
+  width: 1080px;
+  height: 1920px;
+  container-type: size;
+  overflow: hidden;
+  background: #0A0612; /* {colors.bg} */
+}
+
+.clip { position: absolute; inset: 0; }
+
+.f08-logo-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 760px;
+}
+
+.f08-logo-inner { opacity: 0; }
+.f08-logo-inner img { display: block; width: 100%; height: auto; }
+</style>
+
+<div id="root" data-composition-id="08-cierre-marca" data-width="1080" data-height="1920" data-start="0">
+  <div class="clip" id="f08-logo-track" data-start="0" data-duration="3" data-track-index="0">
+    <div class="f08-logo-wrap">
+      <div class="f08-logo-inner" id="f08-logo">
+        <img src="public/brand/logo-vertical-tagline-dark.png" alt="Diego Maury — Strategic Program Director. Hagamos que las cosas pasen." />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+(function () {
+  window.__timelines = window.__timelines || {};
+
+  var tl = gsap.timeline({ paused: true });
+
+  // Scene 1 (0.1-0.7s): la marca completa entra centrada, cierre limpio del video.
+  tl.fromTo('#f08-logo', { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }, 0.1);
+
+  // Scene 2 (0.7-3.0s hold): se sostiene quieta.
+
+  window.__timelines['08-cierre-marca'] = tl;
+})();
+</script>
+</template>

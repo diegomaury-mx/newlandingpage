@@ -1,0 +1,259 @@
+<template>
+<style>
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("assets/fonts/DMMono-500.woff2") format("woff2");
+}
+
+#root {
+  position: absolute;
+  inset: 0;
+  width: 1080px;
+  height: 1920px;
+  container-type: size;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #FAF8FC;
+  background: #0A0612; /* {colors.bg} */
+}
+
+.clip { position: absolute; inset: 0; }
+
+.f01-brand {
+  position: absolute;
+  top: 100px;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+}
+
+.f01-brand-mark { width: 56px; height: 56px; flex: none; }
+.f01-brand-mark svg { display: block; width: 100%; height: 100%; }
+
+.f01-brand-rule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: #6A291B; /* {colors.border} — no es el acento ember, solo separador */
+}
+
+.f01-headline {
+  position: absolute;
+  top: 210px;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  column-gap: 0.3em;
+  row-gap: 0.05em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  font-size: 6.4cqw; /* ~69px @1080 — precedente del hero H1 real del sitio (peso 500, excepción D4 aprobada) */
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #FAF8FC; /* {colors.t1} */
+}
+
+.f01-headline-unit { display: inline-flex; }
+.f01-headline-ch { opacity: 0; }
+
+.f01-headline-caret {
+  display: inline-block;
+  width: 4px;
+  height: 0.85em;
+  margin-left: 4px;
+  background: #FAF8FC;
+  vertical-align: -0.1em;
+  opacity: 0;
+}
+
+.f01-word { display: inline-block; opacity: 0; }
+.f01-word--accent { color: #FF5C39; /* {colors.ember} — the ONE accent in this frame */ }
+
+/* Panel del "sitio en pantalla" — card-hairline real (bg-2 + hairline + radius-lg),
+   nunca un mockup de hardware inventado. */
+.f01-panel {
+  position: absolute;
+  top: 560px;
+  left: 5cqw;
+  right: 5cqw;
+  height: 860px;
+  border-radius: 16px; /* radius-lg */
+  overflow: hidden;
+  background: #1A1128; /* {colors.bg-2} */
+  border: 1px solid #6A291B; /* {colors.border} */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, ver frame.md */
+  opacity: 0;
+}
+
+.f01-panel-video {
+  position: absolute;
+  top: 561px;
+  left: calc(5cqw + 1px);
+  right: auto;
+  width: calc(90cqw - 2px);
+  height: 858px;
+  border-radius: 15px; /* 1px dentro del panel para no pisar el hairline border */
+  object-fit: cover;
+  object-position: top;
+}
+
+.f01-panel-badge {
+  position: absolute;
+  right: calc(5cqw + 20px);
+  bottom: 540px; /* dentro del panel (560-1420px), 40px sobre su borde inferior */
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(10, 6, 18, 0.72);
+  border-radius: 9999px;
+  opacity: 0;
+}
+
+.f01-panel-badge img { display: block; height: 22px; width: auto; }
+
+.f01-chip-row {
+  position: absolute;
+  bottom: 200px;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  display: flex;
+  justify-content: center;
+}
+
+.f01-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 22px;
+  background: #1A1128; /* {colors.bg-2} */
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 9999px; /* radius-pill */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override */
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px */
+  letter-spacing: 0.06em;
+  color: #DDDBE0; /* {colors.t2} */
+  opacity: 0;
+}
+
+.f01-chip-icon { width: 24px; height: 24px; flex: none; color: #A8A6AC; /* {colors.t3} via currentColor */ }
+</style>
+
+<div id="root" data-composition-id="01-protagonista" data-width="1080" data-height="1920" data-start="0">
+
+  <div class="clip" id="f01-brand-track" data-start="0" data-duration="5.5" data-track-index="4">
+    <div class="f01-brand" id="f01-brand">
+      <span class="f01-brand-mark">
+        <svg viewBox="0 0 1007 1007" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+          <path d="M884.2,271.4l-355,307.2l355,-307.2Z" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M131.3,709.5l398,-130.8l-75.1,310" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M558.5,888.6l63.8,-280.4l260.9,-212.2" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M505.8,46.1l392,220l1.7,443l-390.3,223l-392,-220l-1.7,-443l390.3,-223Z" style="fill:none;stroke:#FAF8FC;stroke-width:41.9px;"></path>
+        </svg>
+      </span>
+      <span class="f01-brand-rule"></span>
+    </div>
+  </div>
+
+  <div class="clip" id="f01-text-track" data-start="0" data-duration="5.5" data-track-index="5">
+    <div class="f01-headline" id="f01-headline">
+      <span class="f01-headline-unit"><span id="f01-headline-chars"><span class="f01-headline-ch">d</span><span class="f01-headline-ch">i</span><span class="f01-headline-ch">e</span><span class="f01-headline-ch">g</span><span class="f01-headline-ch">o</span><span class="f01-headline-ch">m</span><span class="f01-headline-ch">a</span><span class="f01-headline-ch">u</span><span class="f01-headline-ch">r</span><span class="f01-headline-ch">y</span><span class="f01-headline-ch">.</span><span class="f01-headline-ch">m</span><span class="f01-headline-ch">x</span></span><span class="f01-headline-caret" id="f01-headline-caret"></span></span><span class="f01-word">no</span><span class="f01-word">es</span><span class="f01-word">una</span><span class="f01-word">página.</span><span class="f01-word">Es</span><span class="f01-word f01-word--accent">Notion.</span>
+    </div>
+  </div>
+
+  <div class="clip" id="f01-panel-track" data-start="0" data-duration="5.5" data-track-index="0">
+    <div class="f01-panel" id="f01-panel"></div>
+  </div>
+
+  <video
+    id="f01-video"
+    class="clip f01-panel-video"
+    src="assets/video/c1-site-scroll.mp4"
+    data-start="2.0"
+    data-duration="3.5"
+    data-track-index="1"
+    muted
+    playsinline
+  ></video>
+
+  <div class="clip" id="f01-badge-track" data-start="0" data-duration="5.5" data-track-index="2">
+    <div class="f01-panel-badge" id="f01-panel-badge">
+      <img src="public/brand/notion-logo-white.png" alt="Notion" />
+    </div>
+  </div>
+
+  <div class="clip" id="f01-chip-track" data-start="0" data-duration="5.5" data-track-index="3">
+    <div class="f01-chip-row">
+      <div class="f01-chip" id="f01-chip">
+        <span class="f01-chip-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2" fill="none"></circle><line x1="15" y1="15" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line></svg>
+        </span>
+        diegomaury.mx
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+(function () {
+  window.__timelines = window.__timelines || {};
+
+  var tl = gsap.timeline({ paused: true });
+
+  // Scene 1 (0.05-0.40s): lockup de marca (isotipo real + regla hairline).
+  tl.fromTo('#f01-brand', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, 0.05);
+
+  // Scene 2 (0.30-0.78s): "diegomaury.mx" — animación de tecleo, caracter
+  // por caracter, con caret parpadeante.
+  tl.set('#f01-headline-caret', { opacity: 1 }, 0.3);
+  var headlineChars = document.querySelectorAll('#f01-headline-chars .f01-headline-ch');
+  headlineChars.forEach(function (ch, i) {
+    tl.set(ch, { opacity: 1 }, 0.3 + i * 0.037);
+  });
+  var typedEnd = 0.3 + headlineChars.length * 0.037;
+  tl.to('#f01-headline-caret', { opacity: 0, duration: 0.11, repeat: 3, yoyo: true }, typedEnd);
+
+  // Scene 3 (~0.85-1.9s): "no es una página. Es Notion." per-word staggered
+  // reveal — "Notion." lleva el único acento ember del frame.
+  var words = document.querySelectorAll('#f01-headline .f01-word');
+  words.forEach(function (w, i) {
+    tl.fromTo(w, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' }, 0.85 + i * 0.13);
+  });
+
+  // Scene 4 (1.9-2.35s): el panel (card-hairline real) se asienta con el
+  // sitio real adentro — más grande que en la versión anterior.
+  tl.fromTo('#f01-panel', { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out' }, 1.9);
+
+  // Scene 5 (2.0-5.5s): el video del sitio real (diegomaury.mx, grabación de
+  // pantalla) corre dentro del panel hasta el final del frame — sin freeze,
+  // el scroll real es la evidencia.
+
+  // Scene 6 (2.2-2.55s): badge del logo real de Notion (glifo + wordmark
+  // oficiales, nunca recoloreados) sobre la esquina del panel.
+  tl.fromTo('#f01-panel-badge', { opacity: 0, y: 8 }, { opacity: 0.95, y: 0, duration: 0.35, ease: 'power2.out' }, 2.2);
+
+  // Scene 7 (2.35-2.70s): chip "diegomaury.mx" con ícono de búsqueda se asienta.
+  tl.fromTo('#f01-chip', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power1.out' }, 2.35);
+
+  window.__timelines['01-protagonista'] = tl;
+})();
+</script>
+</template>

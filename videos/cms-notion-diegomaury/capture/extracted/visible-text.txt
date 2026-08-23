@@ -1,0 +1,21 @@
+CMS con Notion — diegomaury.mx (mecanismo real, verificado 21 ago 2026)
+
+diegomaury.mx es un sitio construido con Astro. Su contenido no vive en el código: vive en Notion. Cuatro fuentes reales de Notion alimentan el sitio:
+
+1. SSOT - Portafolio Proyectos (base de datos, data source 88257bc9-e575-45e8-90df-f851f96e92f2). 30 filas totales. Verificado por SQL en vivo el 21 ago 2026: las 30 filas tienen "Estado publicación = Publicado", y 27 de esas 30 tienen además el checkbox "Publicable" marcado. Alimenta la colección `cases` de Astro (casos de estudio del portafolio).
+
+2. Copy Oficial · diegomaury.mx (SSOT) — es una PÁGINA singleton, no una base de datos. Contiene el copy de secciones S1-S8 del home más bloques P1-P5 del listado de portafolio. Alimenta la colección `siteCopy`.
+
+3. Métricas oficiales — Portafolio D (base de datos). Alimenta la colección `metrics`. Espejo generado: assets/data/metrics.json.
+
+4. CMS Imágenes — Portafolio D (base de datos). Alimenta la colección `imageSlots`. Ejemplo real y visible: el cinturón de logos del hero del sitio (techstars, INC MTY, Platzi, HEINEKEN, EBC, etc.) se arma 100% dinámicamente desde esta base — no hay un mapa de logos fijo en el código.
+
+Regla de publicación (el gate real, en `src/services/notionLoaders.ts`):
+draft = NOT (Estado publicación == "Publicado" AND Publicable == true)
+Ninguna de las dos marcas basta por sí sola. Si la ficha es de capa "Insignia", además se exige Métrica ancla + Evidencia verificada, o el build falla a propósito.
+
+Cada build de Astro (`astro build`) corre el loader: lee las 4 fuentes de Notion vía API, valida los datos con Zod, y descarga + comprime cada imagen a una copia local (las URLs que entrega la API de Notion son firmas S3 que expiran en ~1 hora, así que no se pueden usar directo en producción).
+
+Auto-publish: un Cloudflare Worker llamado "notion-deploy-relay" escucha los webhooks nativos de Notion sobre 3 de las 4 fuentes (SSOT de casos, Copy Oficial, CMS Imágenes — la base de Métricas oficiales queda FUERA de esa suscripción). El Worker valida la firma HMAC del webhook y, si es válida, dispara el Deploy Hook de Cloudflare Pages, que reconstruye y despliega el sitio automáticamente. Un cambio hecho en Notion en esas 3 fuentes republica el sitio sin que nadie tenga que hacer push de código.
+
+Resumen: Notion es el CMS. Astro es el motor que lee ese contenido en build time y lo convierte en el sitio.

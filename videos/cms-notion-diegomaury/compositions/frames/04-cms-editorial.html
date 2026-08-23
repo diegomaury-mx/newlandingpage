@@ -1,0 +1,206 @@
+<template>
+<style>
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("assets/fonts/DMMono-500.woff2") format("woff2");
+}
+
+#root {
+  position: absolute;
+  inset: 0;
+  width: 1080px;
+  height: 1920px;
+  container-type: size;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #FAF8FC;
+}
+
+.clip { position: absolute; inset: 0; }
+
+.f04-bg { background: #0A0612; /* {colors.bg} */ }
+
+.f04-header {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 220px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  column-gap: 0.3em;
+  row-gap: 0.05em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  font-size: 6.4cqw; /* ~69px @1080 — floor: display portante 64px */
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #FAF8FC;
+}
+
+.f04-brand {
+  position: absolute;
+  top: 100px;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+}
+
+.f04-brand-mark { width: 56px; height: 56px; flex: none; }
+.f04-brand-mark svg { display: block; width: 100%; height: 100%; }
+
+.f04-brand-rule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: #6A291B; /* {colors.border} — no es el acento ember, solo separador */
+}
+
+.f04-word { display: inline-block; opacity: 0; }
+.f04-word--accent { color: #FF5C39; /* {colors.ember} — the ONE accent in this frame */ }
+
+.f04-cell {
+  position: absolute;
+  width: 460px;
+  height: 421px;
+  opacity: 0;
+}
+
+.f04-cell--tl { left: 60px; top: 520px; }
+.f04-cell--tr { left: 560px; top: 520px; }
+.f04-cell--bl { left: 60px; top: 1051px; }
+.f04-cell--br { left: 560px; top: 1051px; }
+
+.f04-frame {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 16px; /* radius-lg — v2-parity override */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  overflow: hidden;
+}
+
+.f04-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.f04-pair {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px */
+  letter-spacing: 0.01em;
+  color: #DDDBE0; /* {colors.t2} */
+  text-align: center;
+}
+
+.f04-pair-tag {
+  padding: 4px 12px;
+  background: #1A1128; /* {colors.bg-2} */
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 6px; /* radius-sm — tag de nombre de base de datos */
+  color: #FAF8FC; /* {colors.t1} */
+}
+</style>
+
+<div id="root" data-composition-id="04-cms-editorial" data-width="1080" data-height="1920">
+  <div class="clip f04-bg" data-start="0" data-duration="5" data-track-index="0"></div>
+
+  <div class="clip" id="f04-brand-track" data-start="0" data-duration="5" data-track-index="7">
+    <div class="f04-brand" id="f04-brand">
+      <span class="f04-brand-mark">
+        <svg viewBox="0 0 1007 1007" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+          <path d="M884.2,271.4l-355,307.2l355,-307.2Z" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M131.3,709.5l398,-130.8l-75.1,310" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M558.5,888.6l63.8,-280.4l260.9,-212.2" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M505.8,46.1l392,220l1.7,443l-390.3,223l-392,-220l-1.7,-443l390.3,-223Z" style="fill:none;stroke:#FAF8FC;stroke-width:41.9px;"></path>
+        </svg>
+      </span>
+      <span class="f04-brand-rule"></span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="5" data-track-index="1">
+    <div class="f04-header" id="f04-header">
+      <span class="f04-word">No</span><span class="f04-word">es</span><span class="f04-word">una</span><span class="f04-word">página</span><span class="f04-word">común.</span><span class="f04-word">Es</span><span class="f04-word">mi</span><span class="f04-word f04-word--accent">CMS</span><span class="f04-word">personalizado.</span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="5" data-track-index="2">
+    <div class="f04-cell f04-cell--tl" id="f04-cell1">
+      <div class="f04-frame"><img src="assets/img/cms-video/c4-ssot-rows.png" alt="" /></div>
+      <div class="f04-pair"><span class="f04-pair-tag">Casos</span> → Portfolio</div>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="5" data-track-index="3">
+    <div class="f04-cell f04-cell--tr" id="f04-cell2">
+      <div class="f04-frame"><img src="assets/img/cms-video/c5-copy-oficial.png" alt="" /></div>
+      <div class="f04-pair"><span class="f04-pair-tag">Copy</span> → Home</div>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="5" data-track-index="4">
+    <div class="f04-cell f04-cell--bl" id="f04-cell3">
+      <div class="f04-frame"><img src="assets/img/cms-video/c6-metricas.png" alt="" /></div>
+      <div class="f04-pair"><span class="f04-pair-tag">Métricas</span> → cifras</div>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="5" data-track-index="5">
+    <div class="f04-cell f04-cell--br" id="f04-cell4">
+      <div class="f04-frame"><img src="assets/img/cms-video/c7-cms-imagenes.png" alt="" /></div>
+      <div class="f04-pair"><span class="f04-pair-tag">Imágenes</span> → assets</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+(function () {
+  window.__timelines = window.__timelines || {};
+
+  var tl = gsap.timeline({ paused: true });
+
+  // Scene 0 (0.05-0.40s): lockup de marca (isotipo real + regla hairline), igual a Escena 1.
+  tl.fromTo('#f04-brand', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, 0.05);
+
+  // Scene 1 (0.05-1.15s): header per-word staggered reveal — "CMS" lleva el
+  // único acento ember del frame.
+  var words = document.querySelectorAll('#f04-header .f04-word');
+  words.forEach(function (w, i) {
+    tl.fromTo(w, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' }, 0.05 + i * 0.1);
+  });
+
+  // Scenes 2-5 (1.5-3.2s): los 4 pares se ensamblan en cascada de 0.3s.
+  tl.fromTo('#f04-cell1', { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 1.5);
+  tl.fromTo('#f04-cell2', { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 1.8);
+  tl.fromTo('#f04-cell3', { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 2.1);
+  tl.fromTo('#f04-cell4', { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 2.4);
+
+  window.__timelines['04-cms-editorial'] = tl;
+})();
+</script>
+</template>

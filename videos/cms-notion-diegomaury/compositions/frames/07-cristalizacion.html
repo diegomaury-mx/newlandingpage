@@ -1,0 +1,229 @@
+<template>
+<style>
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("assets/fonts/DMMono-500.woff2") format("woff2");
+}
+
+#root {
+  position: absolute;
+  inset: 0;
+  width: 1080px;
+  height: 1920px;
+  container-type: size;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #FAF8FC;
+}
+
+.clip { position: absolute; inset: 0; }
+
+.f07-bg { background: #0A0612; /* {colors.bg} */ }
+
+.f07-site-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.f07-site-bg img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.f07-site-dim {
+  position: absolute;
+  inset: 0;
+  background: #0A0612;
+  opacity: 0.9; /* fuerte: el copy real del sitio capturado no debe competir con el cierre */
+}
+
+.f07-tesis {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 700px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.3em;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; /* texto más grueso, a pedido del usuario */
+  font-size: 6.4cqw; /* ~69px @1080 — floor: display portante 64px */
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #FAF8FC;
+}
+
+.f07-tw { display: inline-block; opacity: 0; }
+
+.f07-brand {
+  position: absolute;
+  top: 100px;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+}
+
+.f07-brand-mark { width: 56px; height: 56px; flex: none; }
+.f07-brand-mark svg { display: block; width: 100%; height: 100%; }
+
+.f07-brand-rule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: #6A291B; /* {colors.border} — no es el acento ember, solo separador */
+}
+
+.f07-closing-title {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 760px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.3em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; /* texto más grueso, a pedido del usuario */
+  font-size: 6.4cqw;
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #FAF8FC;
+  opacity: 0;
+}
+
+.f07-closing-title .f07-accent { color: #FF5C39; /* {colors.ember} — the ONE accent in this frame */ }
+
+.f07-closing-sub {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 880px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  font-size: 6.4cqw;
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #DDDBE0; /* {colors.t2} */
+  opacity: 0;
+}
+
+.f07-cta {
+  position: absolute;
+  left: 4.2cqw;
+  top: 1230px;
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 24px;
+  background: #1A1128; /* {colors.bg-2} */
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 9999px;
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px */
+  letter-spacing: 0.02em;
+  color: #DDDBE0;
+  opacity: 0;
+}
+</style>
+
+<div id="root" data-composition-id="07-cristalizacion" data-width="1080" data-height="1920">
+  <div class="clip f07-bg" data-start="0" data-duration="6.5" data-track-index="0"></div>
+
+  <div class="clip f07-site-bg" data-start="0" data-duration="6.5" data-track-index="1">
+    <img id="f07-site-img" src="public/site-real-diegomaury-mx.jpg" alt="" />
+    <div class="f07-site-dim"></div>
+  </div>
+
+  <div class="clip" id="f07-brand-track" data-start="0" data-duration="6.5" data-track-index="7">
+    <div class="f07-brand" id="f07-brand">
+      <span class="f07-brand-mark">
+        <svg viewBox="0 0 1007 1007" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+          <path d="M884.2,271.4l-355,307.2l355,-307.2Z" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M131.3,709.5l398,-130.8l-75.1,310" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M558.5,888.6l63.8,-280.4l260.9,-212.2" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M505.8,46.1l392,220l1.7,443l-390.3,223l-392,-220l-1.7,-443l390.3,-223Z" style="fill:none;stroke:#FAF8FC;stroke-width:41.9px;"></path>
+        </svg>
+      </span>
+      <span class="f07-brand-rule"></span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6.5" data-track-index="2">
+    <div class="f07-tesis" id="f07-tesis">
+      <span class="f07-tw">Notion</span><span class="f07-tw">no</span><span class="f07-tw">documenta</span><span class="f07-tw">mi</span><span class="f07-tw">sitio.</span><span class="f07-tw">Lo</span><span class="f07-tw">administra.</span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6.5" data-track-index="3">
+    <div class="f07-closing-title" id="f07-closing-title">Notion es mi <span class="f07-accent">CMS.</span></div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6.5" data-track-index="4">
+    <div class="f07-closing-sub" id="f07-closing-sub">Contenido, reglas y publicación desde un solo lugar.</div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6.5" data-track-index="5">
+    <div class="f07-cta" id="f07-cta">comenta CMS</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+(function () {
+  window.__timelines = window.__timelines || {};
+
+  var tl = gsap.timeline({ paused: true });
+
+  // Scene 0 (0.05-0.40s): lockup de marca (isotipo real + regla hairline), igual a Escena 1.
+  tl.fromTo('#f07-brand', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, 0.05);
+
+  // Scene 1 (0.0-1.0s): campo bg puro, sin fondo del sitio todavía.
+
+  // Scene 2 (0.2-2.2s): la tesis entra con per-word staggered reveal.
+  var tw = document.querySelectorAll('#f07-tesis .f07-tw');
+  tw.forEach(function (w, i) {
+    tl.fromTo(w, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.36, ease: 'power2.out' }, 0.2 + i * 0.16);
+  });
+
+  // Scene 3 (2.2-2.8s): la tesis se sostiene, luego handoff (scale-swap).
+  tl.to('#f07-tesis', { opacity: 0, scale: 0.96, duration: 0.4, ease: 'power1.in' }, 2.6);
+
+  // Scene 4 (2.8-3.8s): "Notion es mi CMS." entra — "CMS" lleva el único
+  // acento ember; el fondo real del sitio se asienta atenuado.
+  tl.to('#f07-site-img', { opacity: 0.35, duration: 0.7, ease: 'power1.out' }, 2.8);
+  tl.fromTo('#f07-closing-title', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 2.9);
+
+  // Scene 5 (3.8-4.8s): subtítulo aterriza.
+  tl.fromTo('#f07-closing-sub', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 3.8);
+
+  // Scene 6 (4.8-5.5s): CTA final.
+  tl.fromTo('#f07-cta', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 4.8);
+
+  window.__timelines['07-cristalizacion'] = tl;
+})();
+</script>
+</template>

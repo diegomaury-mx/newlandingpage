@@ -1,0 +1,9 @@
+# Cache/estado local de HyperFrames — regenerable, no es fuente
+.hyperframes/
+.media/
+
+# Debug/QA de `npx hyperframes check`/`snapshot` — regenerable
+renders/qa-detail/
+renders/qa-detail2/
+renders/qa-detail3/
+renders/qa-snapshots/

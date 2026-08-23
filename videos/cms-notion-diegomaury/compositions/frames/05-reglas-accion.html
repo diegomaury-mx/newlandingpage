@@ -1,0 +1,334 @@
+<template>
+<style>
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("assets/fonts/DMMono-500.woff2") format("woff2");
+}
+
+#root {
+  position: absolute;
+  inset: 0;
+  width: 1080px;
+  height: 1920px;
+  container-type: size;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #FAF8FC;
+}
+
+.clip { position: absolute; inset: 0; }
+
+.f05-bg { background: #0A0612; /* {colors.bg} */ }
+
+.f05-display {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 240px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  column-gap: 0.3em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  font-size: 6.4cqw; /* ~69px @1080 — floor: display portante 64px */
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #FAF8FC;
+}
+
+.f05-word { display: inline-block; opacity: 0; }
+
+.f05-chips {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 352px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.f05-brand {
+  position: absolute;
+  top: 100px;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+}
+
+.f05-brand-mark { width: 56px; height: 56px; flex: none; }
+.f05-brand-mark svg { display: block; width: 100%; height: 100%; }
+
+.f05-brand-rule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: #6A291B; /* {colors.border} — no es el acento ember, solo separador */
+}
+
+.f05-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 22px;
+  background: #1A1128; /* {colors.bg-2} */
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 9999px;
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px */
+  letter-spacing: 0.01em;
+  color: #FAF8FC; /* {colors.t1} — chips reales de Notion, alto contraste */
+  opacity: 0;
+}
+
+.f05-video-wrap {
+  position: absolute;
+  left: 190px;
+  top: 440px;
+  width: 700px;
+  height: 394px;
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 16px; /* radius-lg — v2-parity override */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  overflow: hidden;
+  opacity: 0;
+}
+
+.f05-video-el,
+.f05-still-el {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.f05-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%) scale(0.85);
+  border: 2px solid #FF5C39; /* {colors.ember} — the ONE accent in this frame */
+  border-radius: 16px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.f05-chip-consequence-row {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 852px;
+  display: flex;
+  justify-content: center;
+}
+
+.f05-chip-consequence {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 20px;
+  background: #1A1128; /* {colors.bg-2} */
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 10px; /* radius-md */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px */
+  color: #DDDBE0; /* {colors.t2} */
+  opacity: 0;
+}
+
+.f05-evidence {
+  position: absolute;
+  left: 160px;
+  top: 924px;
+  width: 760px;
+  height: 428px;
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 16px; /* radius-lg — v2-parity override */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
+  overflow: hidden;
+  opacity: 0;
+}
+
+.f05-evidence img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.f05-code {
+  position: absolute;
+  left: 4.2cqw;
+  right: 4.2cqw;
+  top: 1370px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 2.9cqw; /* ~31px @1080 — floor: mono de chrome 30px; sello de rigor, nunca centro del frame */
+  letter-spacing: 0.01em;
+  color: #DDDBE0; /* {colors.t2} */
+  opacity: 0;
+}
+
+.f05-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #DDDBE0;
+  vertical-align: -0.12em;
+  opacity: 0;
+}
+</style>
+
+<div id="root" data-composition-id="05-reglas-accion" data-width="1080" data-height="1920">
+  <div class="clip f05-bg" data-start="0" data-duration="6" data-track-index="0"></div>
+
+  <div class="clip" id="f05-brand-track" data-start="0" data-duration="6" data-track-index="9">
+    <div class="f05-brand" id="f05-brand">
+      <span class="f05-brand-mark">
+        <svg viewBox="0 0 1007 1007" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+          <path d="M884.2,271.4l-355,307.2l355,-307.2Z" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M131.3,709.5l398,-130.8l-75.1,310" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M558.5,888.6l63.8,-280.4l260.9,-212.2" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M505.8,46.1l392,220l1.7,443l-390.3,223l-392,-220l-1.7,-443l390.3,-223Z" style="fill:none;stroke:#FAF8FC;stroke-width:41.9px;"></path>
+        </svg>
+      </span>
+      <span class="f05-brand-rule"></span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6" data-track-index="1">
+    <div class="f05-display" id="f05-display">
+      <span class="f05-word">Publicar</span><span class="f05-word">tiene</span><span class="f05-word">reglas.</span>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6" data-track-index="2">
+    <div class="f05-chips">
+      <span class="f05-chip" id="f05-chip1">Publicado ✓</span>
+      <span class="f05-chip" id="f05-chip2">Publicable ✓</span>
+    </div>
+  </div>
+
+  <div class="f05-video-wrap" id="f05-video-wrap">
+    <video
+      id="f05-video"
+      class="clip f05-video-el"
+      src="assets/video/c8-checkbox-toggle.mp4"
+      data-start="2.4"
+      data-media-start="1.0"
+      data-duration="1.2"
+      data-track-index="10"
+      muted
+      playsinline
+    ></video>
+    <img
+      id="f05-still"
+      class="clip f05-still-el"
+      src="assets/img/cms-video/c8-last-frame.png"
+      alt=""
+      data-start="3.6"
+      data-duration="2.4"
+      data-track-index="10"
+      style="position:absolute; inset:0;"
+    />
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6" data-track-index="4">
+    <div class="f05-ring" id="f05-ring"></div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6" data-track-index="5">
+    <div class="f05-chip-consequence-row">
+      <div class="f05-chip-consequence" id="f05-chip3">sin evidencia → no compila</div>
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6" data-track-index="6">
+    <div class="f05-evidence" id="f05-evidence">
+      <img src="assets/img/cms-video/c9-build-failure.png" alt="" />
+    </div>
+  </div>
+
+  <div class="clip" data-start="0" data-duration="6" data-track-index="7">
+    <div class="f05-code" id="f05-code">
+      <span id="f05-code-text"></span><span class="f05-caret" id="f05-caret"></span>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+(function () {
+  window.__timelines = window.__timelines || {};
+
+  var codeStr = 'draft = NOT (Publicado AND Publicable)';
+  var codeEl = document.getElementById('f05-code-text');
+
+  var tl = gsap.timeline({ paused: true });
+
+  // Scene 0 (0.05-0.40s): lockup de marca (isotipo real + regla hairline), igual a Escena 1.
+  tl.fromTo('#f05-brand', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, 0.05);
+
+  // Scene 1 (0.0-1.2s): "Publicar tiene reglas." per-word staggered reveal.
+  var words = document.querySelectorAll('#f05-display .f05-word');
+  words.forEach(function (w, i) {
+    tl.fromTo(w, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.36, ease: 'power2.out' }, 0.05 + i * 0.14);
+  });
+
+  // Scene 2 (1.2-2.4s): chips reales de Notion aterrizan.
+  tl.fromTo('#f05-chip1', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 1.2);
+  tl.fromTo('#f05-chip2', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 1.4);
+
+  // Scene 3 (2.4s): el panel de video se revela justo cuando arranca el
+  // segmento recortado del gesto (checkbox marcándose).
+  tl.fromTo('#f05-video-wrap', { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }, 2.2);
+
+  // Scene 4 (~3.6s): el gesto termina y el runtime cede al still de
+  // freeze/hold (checkbox marcado) por ventana de tiempo; el anillo ember
+  // pulsa una vez — único acento ember del frame.
+  tl.fromTo('#f05-ring', { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.35, ease: 'power2.out' }, 3.65);
+  tl.to('#f05-ring', { opacity: 0, duration: 0.4, ease: 'power1.in' }, 4.05);
+
+  // Scene 5 (3.5-4.3s): consecuencia + evidencia real del build detenido.
+  tl.fromTo('#f05-chip3', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.7);
+  tl.fromTo('#f05-evidence', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 4.0);
+
+  // Scene 6 (4.3-5.3s): el literal booleano se tipea con caret — sello de
+  // rigor, nunca ocupa el centro del frame.
+  tl.set('#f05-code', { opacity: 1 }, 4.5);
+  tl.set('#f05-caret', { opacity: 1 }, 4.5);
+  var typeState = { n: 0 };
+  tl.to(typeState, {
+    n: codeStr.length,
+    duration: 0.7,
+    ease: 'none',
+    onUpdate: function () {
+      codeEl.textContent = codeStr.slice(0, Math.round(typeState.n));
+    },
+  }, 4.5);
+  tl.to('#f05-caret', { opacity: 0, duration: 0.15, repeat: 5, yoyo: true }, 5.2);
+
+  window.__timelines['05-reglas-accion'] = tl;
+})();
+</script>
+</template>
