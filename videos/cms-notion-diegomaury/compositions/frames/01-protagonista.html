@@ -9,6 +9,30 @@
 }
 
 @font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-700.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("assets/fonts/DMMono-400.woff2") format("woff2");
+}
+
+@font-face {
   font-family: 'DM Mono';
   font-style: normal;
   font-weight: 500;
@@ -52,24 +76,23 @@
 
 .f01-headline {
   position: absolute;
-  top: 210px;
+  top: 400px; /* zona headline 20-38% (benchmark frame-04-at-31s) — aire real antes del panel */
   left: 4.2cqw;
   right: 4.2cqw;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
   column-gap: 0.3em;
   row-gap: 0.05em;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 500;
-  font-size: 6.4cqw; /* ~69px @1080 — precedente del hero H1 real del sitio (peso 500, excepción D4 aprobada) */
+  font-weight: 700;
+  font-size: 6.4cqw; /* ~69px @1080 — Display: Plus Jakarta Sans 700, sentence case (regla tipográfica 2026-08-31) */
   line-height: 1.16;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: #FAF8FC; /* {colors.t1} */
 }
 
-.f01-headline-unit { display: inline-flex; }
+/* Único ALL CAPS permitido: la marca DIEGOMAURY.MX */
+.f01-headline-unit { display: inline-flex; text-transform: uppercase; }
 .f01-headline-ch { opacity: 0; }
 
 .f01-headline-caret {
@@ -89,10 +112,10 @@
    nunca un mockup de hardware inventado. */
 .f01-panel {
   position: absolute;
-  top: 560px;
+  top: 660px;
   left: 5cqw;
   right: 5cqw;
-  height: 860px;
+  height: 720px; /* menos cuadrado -> el screenshot 16:9 recorta menos de lado */
   border-radius: 16px; /* radius-lg */
   overflow: hidden;
   background: #1A1128; /* {colors.bg-2} */
@@ -103,20 +126,20 @@
 
 .f01-panel-video {
   position: absolute;
-  top: 561px;
+  top: 661px;
   left: calc(5cqw + 1px);
   right: auto;
   width: calc(90cqw - 2px);
-  height: 858px;
+  height: 718px;
   border-radius: 15px; /* 1px dentro del panel para no pisar el hairline border */
   object-fit: cover;
-  object-position: top;
+  object-position: left top; /* alinea el borde izq. del sitio con el panel; el recorte cae solo en el contenido final (der.), nunca a media palabra */
 }
 
 .f01-panel-badge {
   position: absolute;
   right: calc(5cqw + 20px);
-  bottom: 540px; /* dentro del panel (560-1420px), 40px sobre su borde inferior */
+  bottom: 560px; /* dentro del panel (660-1380px), ~40px sobre su borde inferior */
   display: flex;
   align-items: center;
   padding: 10px 16px;
@@ -129,7 +152,7 @@
 
 .f01-chip-row {
   position: absolute;
-  bottom: 200px;
+  bottom: 460px; /* integrado justo bajo el panel, no suelto al fondo */
   left: 4.2cqw;
   right: 4.2cqw;
   display: flex;
@@ -157,6 +180,11 @@
 </style>
 
 <div id="root" data-composition-id="01-protagonista" data-width="1080" data-height="1920" data-start="0">
+  <!-- SFX (D-01 revocada 2026-08-31: sistema sonoro mínimo, §14) -->
+  <audio id="f-sfx-1" class="clip" src="assets/sfx/key-tick.wav" data-start="0.35" data-duration="0.25" data-track-index="30"></audio>
+  <audio id="f-sfx-2" class="clip" src="assets/sfx/key-tick.wav" data-start="0.6" data-duration="0.25" data-track-index="31"></audio>
+  <audio id="f-sfx-3" class="clip" src="assets/sfx/confirm-soft.wav" data-start="1.9" data-duration="0.2" data-track-index="32"></audio>
+
 
   <div class="clip" id="f01-brand-track" data-start="0" data-duration="5.5" data-track-index="4">
     <div class="f01-brand" id="f01-brand">
@@ -230,6 +258,7 @@
   });
   var typedEnd = 0.3 + headlineChars.length * 0.037;
   tl.to('#f01-headline-caret', { opacity: 0, duration: 0.11, repeat: 3, yoyo: true }, typedEnd);
+  tl.set('#f01-headline-caret', { opacity: 0 }, typedEnd + 0.6); // yoyo par termina en 1 — apagar el caret residual
 
   // Scene 3 (~0.85-1.9s): "no es una página. Es Notion." per-word staggered
   // reveal — "Notion." lleva el único acento ember del frame.

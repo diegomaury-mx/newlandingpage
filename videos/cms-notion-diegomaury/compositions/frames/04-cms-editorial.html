@@ -9,6 +9,30 @@
 }
 
 @font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-700.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("assets/fonts/DMMono-400.woff2") format("woff2");
+}
+
+@font-face {
   font-family: 'DM Mono';
   font-style: normal;
   font-weight: 500;
@@ -35,18 +59,16 @@
   position: absolute;
   left: 4.2cqw;
   right: 4.2cqw;
-  top: 220px;
+  top: 360px; /* zona headline 20-38% (benchmark frame-04-at-31s) — baja desde 220 */
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
   column-gap: 0.3em;
   row-gap: 0.05em;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 500;
-  font-size: 6.4cqw; /* ~69px @1080 — floor: display portante 64px */
+  font-weight: 700;
+  font-size: 6.4cqw; /* ~69px @1080 — Display: Plus Jakarta Sans 700, sentence case */
   line-height: 1.16;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: #FAF8FC;
 }
 
@@ -75,15 +97,17 @@
 
 .f04-cell {
   position: absolute;
-  width: 460px;
-  height: 421px;
+  width: 440px;
+  height: 400px;
   opacity: 0;
 }
 
-.f04-cell--tl { left: 60px; top: 520px; }
-.f04-cell--tr { left: 560px; top: 520px; }
-.f04-cell--bl { left: 60px; top: 1051px; }
-.f04-cell--br { left: 560px; top: 1051px; }
+/* Grid 2x2 simétrico (margenes 80px, gutter 40px). Los screenshots pueden
+   romper el eje editorial 4.2cqw del header — regla explícita de frame.md. */
+.f04-cell--tl { left: 80px; top: 580px; }
+.f04-cell--tr { left: 560px; top: 580px; }
+.f04-cell--bl { left: 80px; top: 1074px; }
+.f04-cell--br { left: 560px; top: 1074px; }
 
 .f04-frame {
   width: 100%;
@@ -106,14 +130,12 @@
   margin-top: 14px;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 10px;
   font-family: 'DM Mono', monospace;
   font-weight: 500;
-  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px */
+  font-size: 3.4cqw; /* ~37px — anotación técnica, no protagonista */
   letter-spacing: 0.01em;
-  color: #DDDBE0; /* {colors.t2} */
-  text-align: center;
+  color: #A8A6AC; /* {colors.t3} — annotation */
 }
 
 .f04-pair-tag {
@@ -121,11 +143,15 @@
   background: #1A1128; /* {colors.bg-2} */
   border: 1px solid #6A291B; /* {colors.border} */
   border-radius: 6px; /* radius-sm — tag de nombre de base de datos */
+  letter-spacing: 0.02em;
   color: #FAF8FC; /* {colors.t1} */
 }
 </style>
 
 <div id="root" data-composition-id="04-cms-editorial" data-width="1080" data-height="1920">
+  <!-- SFX (D-01 revocada 2026-08-31: sistema sonoro mínimo, §14) -->
+  <audio id="f-sfx-1" class="clip" src="assets/sfx/confirm-soft.wav" data-start="2.4" data-duration="0.2" data-track-index="36"></audio>
+
   <div class="clip f04-bg" data-start="0" data-duration="5" data-track-index="0"></div>
 
   <div class="clip" id="f04-brand-track" data-start="0" data-duration="5" data-track-index="7">

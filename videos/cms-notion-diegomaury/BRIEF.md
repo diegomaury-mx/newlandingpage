@@ -10,6 +10,8 @@ length: 40s
 angle: concept
 ---
 
+> **Nota (2026-08-23):** este brief captura la intención original (40s, 6 escenas). La versión final aprobada y renderizada — 41.5s, 8 frames, `02-contraste.html` con contraste+espejo fusionados, F8 de cierre de marca nuevo, sin barra de cadena — vive documentada en `STORYBOARD.md`, que es la fuente vigente. Este archivo se conserva como registro del intent original, no como spec actual.
+
 ## Intent
 
 Explicar a la Notion Community, con precisión técnica, cómo funciona el CMS de diegomaury.mx: el contenido vive en 4 fuentes reales de Notion (no en el código Astro), publicar exige un gate real de dos marcas (`Publicado` + `Publicable`), y un webhook firmado dispara el rebuild automático en Cloudflare Pages para 3 de esas 4 fuentes. Tono `technical`: la jerga (Astro, HMAC, Deploy Hook, Zod, la regla en mono) suma credibilidad para esta audiencia, no la resta. Sin voiceover — solo texto en pantalla. Sin venta, sin hype: es un mecanismo, no un producto que se promociona.

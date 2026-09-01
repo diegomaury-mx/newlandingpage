@@ -172,9 +172,22 @@ button-like element.
 Plus Jakarta Sans for everything read as prose/display (`body`, `lead`, `card-title`, `button`,
 `headline`, `display`). DM Mono for everything indexical (`label-mono` uppercase 0.16em tracking,
 `role-mono`, `code`, `number-unit`). Never swap these roles. Never introduce a third family.
-Sentence case for display text (not uppercase, not title case) — matches the real site's headline
-convention. Weight ceiling is 700 except at true hero display scale (>48px clamp max), which drops
-to weight 300 per the real site's D4 rule.
+
+**REGLA TIPOGRÁFICA 2026-08-31 (Diego, revisión de producción — reemplaza el intento
+previo de "700 UPPERCASE"): NO usar ALL CAPS en ninguna parte del reel, salvo la marca
+`DIEGOMAURY.MX`.** La jerarquía sale de tamaño, peso, tracking, posición, color y espacio
+negativo — no de la caja de mayúsculas. Convención: headlines y labels en sentence case;
+tecnología con capitalización natural (Astro, Cloudflare, Notion); nombre `Diego Maury`;
+tagline `Hagamos que las cosas pasen`. Los headlines grandes son Plus Jakarta Sans **700**,
+sentence case, tracking -0.02em. El `.f06-lockup-name` (nombres de estación) es peso 700
+sentence case. Esto supersede tanto la convención "sentence case" original como el canon
+"MAYÚSCULAS 700" del `Sistema Tipográfico v2.0`, SOLO para este video. No cambia el CSS del
+sitio en vivo.
+
+**Grid editorial 2026-08-31:** todos los headlines de frame comparten eje — margen izquierdo
+`4.2cqw`, misma columna, alineados a la izquierda, misma posición vertical (~220px bajo el
+lockup). Screenshots, cards, diagramas y el logo pueden romper ese eje. F2 (espejo) y F7
+(payoff) tienen tratamiento vertical propio.
 
 ## Depth & Surface
 
@@ -224,5 +237,9 @@ change the live site's CSS or any other HyperFrames project.
 
 ## Known Gaps
 
-- Font files: `assets/fonts/PlusJakartaSans-400.woff2` and `assets/fonts/DMMono-500.woff2` are staged as real local `.woff2` files (extracted from a prior build in this same project) — reference them via `@font-face` `src: url("assets/fonts/<file>.woff2") format("woff2")` in every frame, root-relative (not `../../`). Only weights 400 (sans) and 500 (mono) are available; do not request 300/700 unless additional font files are staged.
+- Font files (updated 2026-08-31): real WOFF2 (latin subset, @fontsource) staged in `assets/fonts/` —
+  Plus Jakarta Sans 400/500/700 and DM Mono 400/500. Reference via `@font-face`
+  `src: url("assets/fonts/<file>.woff2") format("woff2")`, root-relative (not `../../`), one
+  `@font-face` per weight. The earlier note that only 400/500 existed (and that they were
+  TTF misnamed `.woff2`, forcing faux-bold on 700) is obsolete.
 - This system's real "code surface" has no separate navy tone (unlike the prior code-editorial-derived frame.md) — any code/mono panel uses the same `{colors.bg-2}` as any other card, kept apart visually only by its hairline border and DM Mono content.

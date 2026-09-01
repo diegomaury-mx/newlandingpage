@@ -9,6 +9,30 @@
 }
 
 @font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("assets/fonts/PlusJakartaSans-700.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("assets/fonts/DMMono-400.woff2") format("woff2");
+}
+
+@font-face {
   font-family: 'DM Mono';
   font-style: normal;
   font-weight: 500;
@@ -35,17 +59,15 @@
   position: absolute;
   left: 4.2cqw;
   right: 4.2cqw;
-  top: 240px;
+  top: 400px; /* zona headline 20-38% (benchmark frame-04-at-31s) */
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
   column-gap: 0.3em;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 500;
-  font-size: 6.4cqw; /* ~69px @1080 — floor: display portante 64px */
+  font-weight: 700;
+  font-size: 6.4cqw; /* ~69px @1080 — Display: Plus Jakarta Sans 700, sentence case */
   line-height: 1.16;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: #FAF8FC;
 }
 
@@ -55,9 +77,8 @@
   position: absolute;
   left: 4.2cqw;
   right: 4.2cqw;
-  top: 352px;
+  top: 590px; /* condiciones: banda inmediatamente bajo el headline */
   display: flex;
-  justify-content: center;
   gap: 16px;
 }
 
@@ -100,7 +121,7 @@
 .f05-video-wrap {
   position: absolute;
   left: 190px;
-  top: 440px;
+  top: 700px; /* demostración: la captura como evidencia, bajo las condiciones */
   width: 700px;
   height: 394px;
   border: 1px solid #6A291B; /* {colors.border} */
@@ -131,56 +152,11 @@
   pointer-events: none;
 }
 
-.f05-chip-consequence-row {
-  position: absolute;
-  left: 4.2cqw;
-  right: 4.2cqw;
-  top: 852px;
-  display: flex;
-  justify-content: center;
-}
-
-.f05-chip-consequence {
-  display: inline-flex;
-  align-items: center;
-  padding: 12px 20px;
-  background: #1A1128; /* {colors.bg-2} */
-  border: 1px solid #6A291B; /* {colors.border} */
-  border-radius: 10px; /* radius-md */
-  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
-  font-family: 'DM Mono', monospace;
-  font-weight: 500;
-  font-size: 3.8cqw; /* ~41px @1080 — floor: mono portante 40px */
-  color: #DDDBE0; /* {colors.t2} */
-  opacity: 0;
-}
-
-.f05-evidence {
-  position: absolute;
-  left: 160px;
-  top: 924px;
-  width: 760px;
-  height: 428px;
-  border: 1px solid #6A291B; /* {colors.border} */
-  border-radius: 16px; /* radius-lg — v2-parity override */
-  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override, see frame.md */
-  overflow: hidden;
-  opacity: 0;
-}
-
-.f05-evidence img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-}
-
 .f05-code {
   position: absolute;
   left: 4.2cqw;
   right: 4.2cqw;
-  top: 1370px;
+  top: 1200px; /* detalle técnico opcional, en la banda baja — nunca el centro */
   font-family: 'DM Mono', monospace;
   font-weight: 500;
   font-size: 2.9cqw; /* ~31px @1080 — floor: mono de chrome 30px; sello de rigor, nunca centro del frame */
@@ -200,6 +176,11 @@
 </style>
 
 <div id="root" data-composition-id="05-reglas-accion" data-width="1080" data-height="1920">
+  <!-- SFX (D-01 revocada 2026-08-31: sistema sonoro mínimo, §14) -->
+  <audio id="f-sfx-1" class="clip" src="assets/sfx/confirm-soft.wav" data-start="1.2" data-duration="0.2" data-track-index="37"></audio>
+  <audio id="f-sfx-2" class="clip" src="assets/sfx/confirm-soft.wav" data-start="1.4" data-duration="0.2" data-track-index="38"></audio>
+  <audio id="f-sfx-3" class="clip" src="assets/sfx/lock-in.ogg" data-start="3.6" data-duration="0.5" data-track-index="39"></audio>
+
   <div class="clip f05-bg" data-start="0" data-duration="6" data-track-index="0"></div>
 
   <div class="clip" id="f05-brand-track" data-start="0" data-duration="6" data-track-index="9">
@@ -257,18 +238,6 @@
     <div class="f05-ring" id="f05-ring"></div>
   </div>
 
-  <div class="clip" data-start="0" data-duration="6" data-track-index="5">
-    <div class="f05-chip-consequence-row">
-      <div class="f05-chip-consequence" id="f05-chip3">sin evidencia → no compila</div>
-    </div>
-  </div>
-
-  <div class="clip" data-start="0" data-duration="6" data-track-index="6">
-    <div class="f05-evidence" id="f05-evidence">
-      <img src="assets/img/cms-video/c9-build-failure.png" alt="" />
-    </div>
-  </div>
-
   <div class="clip" data-start="0" data-duration="6" data-track-index="7">
     <div class="f05-code" id="f05-code">
       <span id="f05-code-text"></span><span class="f05-caret" id="f05-caret"></span>
@@ -309,12 +278,9 @@
   tl.fromTo('#f05-ring', { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.35, ease: 'power2.out' }, 3.65);
   tl.to('#f05-ring', { opacity: 0, duration: 0.4, ease: 'power1.in' }, 4.05);
 
-  // Scene 5 (3.5-4.3s): consecuencia + evidencia real del build detenido.
-  tl.fromTo('#f05-chip3', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.7);
-  tl.fromTo('#f05-evidence', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 4.0);
-
-  // Scene 6 (4.3-5.3s): el literal booleano se tipea con caret — sello de
-  // rigor, nunca ocupa el centro del frame.
+  // Scene 5 (4.3-5.3s): el literal booleano se tipea con caret — sello de
+  // rigor, nunca ocupa el centro del frame. (Se retiró el chip de consecuencia
+  // y la captura C9: segunda narrativa innecesaria para "existen reglas".)
   tl.set('#f05-code', { opacity: 1 }, 4.5);
   tl.set('#f05-caret', { opacity: 1 }, 4.5);
   var typeState = { n: 0 };
@@ -327,6 +293,7 @@
     },
   }, 4.5);
   tl.to('#f05-caret', { opacity: 0, duration: 0.15, repeat: 5, yoyo: true }, 5.2);
+  tl.set('#f05-caret', { opacity: 0 }, 6.0); // el yoyo termina en 1 — forzar apagado al cierre
 
   window.__timelines['05-reglas-accion'] = tl;
 })();

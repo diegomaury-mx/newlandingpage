@@ -14,7 +14,7 @@
 
 .f08-logo-wrap {
   position: absolute;
-  top: 50%;
+  top: 47%; /* centro óptico: el peso del lockup (isotipo arriba) pide subir ~55px */
   left: 50%;
   transform: translate(-50%, -50%);
   width: 760px;
@@ -25,6 +25,9 @@
 </style>
 
 <div id="root" data-composition-id="08-cierre-marca" data-width="1080" data-height="1920" data-start="0">
+  <!-- SFX (D-01 revocada 2026-08-31: sistema sonoro mínimo, §14) -->
+  <audio id="f-sfx-1" class="clip" src="assets/sfx/close-fade.wav" data-start="2.4" data-duration="0.6" data-track-index="43"></audio>
+
   <div class="clip" id="f08-logo-track" data-start="0" data-duration="3" data-track-index="0">
     <div class="f08-logo-wrap">
       <div class="f08-logo-inner" id="f08-logo">
@@ -44,7 +47,10 @@
   // Scene 1 (0.1-0.7s): la marca completa entra centrada, cierre limpio del video.
   tl.fromTo('#f08-logo', { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }, 0.1);
 
-  // Scene 2 (0.7-3.0s hold): se sostiene quieta.
+  // Scene 2 (0.7-2.5s hold): se sostiene quieta.
+
+  // Scene 3 (2.5-3.0s): fade out — cierre del video.
+  tl.to('#f08-logo', { opacity: 0, duration: 0.5, ease: 'power1.in' }, 2.5);
 
   window.__timelines['08-cierre-marca'] = tl;
 })();
