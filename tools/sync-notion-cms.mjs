@@ -10,7 +10,9 @@
 //
 //   --repo   Ruta al clon local de notion-cms (default: ../notion-cms)
 //   --ref    Commit-ish fuente; se lee con `git show <ref>:<path>` (default: HEAD)
-//   --check  No escribe nada. Sale 1 si regenerar cambiaria algo (deteccion de drift).
+//   --check  No escribe nada. Sale 1 solo si el CONTENIDO de reference-code/*
+//            divergio de la fuente. El bump de SHA/fecha en prosa y el MANIFEST
+//            son cosmeticos: los reporta pero sale 0.
 //
 // El Worker `notion-deploy-relay.worker.js` NO se toca: no vive en git, es un
 // snapshot de Cloudflare (`workers_get_worker_code`). Se refresca aparte.
@@ -107,7 +109,7 @@ function main() {
     }
     const dstPath = join(refDir, dst)
     const before = existsSync(dstPath) ? readFileSync(dstPath, 'utf8') : null
-    if (before !== content) planned.push({ path: dstPath, before, after: content })
+    if (before !== content) planned.push({ path: dstPath, before, after: content, kind: 'code' })
     manifestFiles.push({ dst: `reference-code/${dst}`, src, sha256: sha256(content) })
   }
 
@@ -123,7 +125,7 @@ function main() {
       let after = before
       if (prevSha !== sourceCommit) after = after.split(prevSha).join(sourceCommit)
       if (prevDate !== sourceCommitDate) after = after.split(prevDate).join(sourceCommitDate)
-      if (after !== before) planned.push({ path: p, before, after })
+      if (after !== before) planned.push({ path: p, before, after, kind: 'cosmetic' })
     }
   }
 
@@ -152,18 +154,29 @@ function main() {
   // Comparar ignorando generatedAt para que --check no marque drift solo por la fecha de hoy.
   const stripDate = (s) => (s ? s.replace(/"generatedAt": "[^"]*"/, '"generatedAt": "-"') : s)
   if (stripDate(manifestBefore) !== stripDate(manifestStr)) {
-    planned.push({ path: manifestPath, before: manifestBefore, after: manifestStr })
+    planned.push({ path: manifestPath, before: manifestBefore, after: manifestStr, kind: 'cosmetic' })
   }
 
   // --- Salida ---
+  const codeDrift = planned.filter((p) => p.kind === 'code')
+
   if (planned.length === 0) {
     console.log(`notion-cms en sync con newlandingpage@${sourceCommit}. Nada que hacer.`)
     return
   }
 
   if (args.check) {
-    console.error(`DRIFT: regenerar cambiaria ${planned.length} archivo(s):`)
-    for (const p of planned) console.error(`  ${p.before === null ? 'nuevo ' : 'modif '} ${p.path}`)
+    // --check falla SOLO si divergió el contenido de reference-code/*; el bump de
+    // SHA/fecha en prosa y el MANIFEST son cosméticos y no cuentan como drift.
+    if (codeDrift.length === 0) {
+      console.log(
+        `Sin drift de código. ${planned.length} archivo(s) con metadata desactualizada ` +
+          `(SHA/fecha) — corre el sync para refrescarla, no es urgente.`,
+      )
+      return
+    }
+    console.error(`DRIFT: ${codeDrift.length} archivo(s) de reference-code/ divergieron de la fuente:`)
+    for (const p of codeDrift) console.error(`  modif ${p.path}`)
     console.error(`\nCorre: node tools/sync-notion-cms.mjs --repo ${args.repo}`)
     process.exit(1)
   }
