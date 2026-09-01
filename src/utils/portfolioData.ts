@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import { slugify } from './slug.ts';
 
 type CaseEntry = CollectionEntry<'cases'>;
 type MetricEntry = CollectionEntry<'metrics'>;
@@ -47,7 +48,73 @@ export function catalogCounts(
   return { total: cases.length, organizations, capabilities };
 }
 
-export const IMPACT_ANCHOR_SLUGS = ['incmty-participantes-inscritos', 'rodi-sofi'];
+/** Iniciales de placeholder para el logo de una organizacion (3-4 chars). */
+export function orgInitials(org: string): string {
+  const words = org.split(/[\s/]+/).filter(Boolean);
+  if (words.length === 0) return '—';
+  if (words.length === 1) return words[0].slice(0, 4).toUpperCase();
+  return words
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 3)
+    .toUpperCase();
+}
+
+export interface ShowcaseProject {
+  id: string;
+  org: string;
+  year: number | null;
+  title: string;
+  desc: string;
+  logo: string | null;
+  initials: string;
+  tags: string[];
+}
+
+export interface CapabilityShowcase {
+  projects: ShowcaseProject[];
+  tags: string[];
+  total: number;
+  capabilityCount: number;
+}
+
+/**
+ * Arma el "Capability Showcase Grid" de la seccion Soporte: proyectos
+ * ordenados por año desc, encabezados por capacidad. `tags` son las
+ * capacidades unicas en orden de primera aparicion — alimentan los
+ * chips-filtro y el conteo del header, nunca se escriben a mano.
+ */
+export function capabilityShowcase(
+  soporte: CaseEntry[],
+  descOf: (c: CaseEntry) => string,
+  titleOf: (c: CaseEntry) => string,
+): CapabilityShowcase {
+  const sorted = [...soporte].sort(
+    (a, b) => (Number(b.data.year) || 0) - (Number(a.data.year) || 0),
+  );
+  const projects: ShowcaseProject[] = sorted.map((c) => {
+    const org = c.data.organization ?? '—';
+    return {
+      id: slugify(c.data.title),
+      org,
+      year: c.data.year ?? null,
+      title: titleOf(c),
+      desc: descOf(c),
+      logo: c.data.logo ?? null,
+      initials: orgInitials(org),
+      tags: c.data.capabilities,
+    };
+  });
+  const tags: string[] = [];
+  for (const project of projects) {
+    for (const tag of project.tags) {
+      if (!tags.includes(tag)) tags.push(tag);
+    }
+  }
+  return { projects, tags, total: projects.length, capabilityCount: tags.length };
+}
+
+export const IMPACT_ANCHOR_SLUGS =['incmty-participantes-inscritos', 'rodi-sofi'];
 export const IMPACT_SUPPORT_SLUGS = [
   'heineken-proyectos-evaluados',
   'hacksureste-participantes',

@@ -16,7 +16,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { parseSiteCopySections, heading2, paragraphs } from '../utils/parseSiteCopy.ts';
 import { toLocalePath } from '../utils/locale.ts';
 import { caseDisplayTitle } from '../utils/caseTitle.ts';
-import { sortInsignia, catalogCounts, impactMetrics, truncate } from '../utils/portfolioData.ts';
+import {
+  sortInsignia,
+  catalogCounts,
+  impactMetrics,
+  capabilityShowcase,
+} from '../utils/portfolioData.ts';
 import '../styles/portfolio.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
@@ -27,19 +32,21 @@ function cardTitle(entry: CaseEntry): string {
   return caseDisplayTitle(entry.data);
 }
 
-// Descripcion de tarjeta Soporte: prioriza `Contexto tarjeta`, cae a
-// Objetivo y despues a Resultados y acciones — mismo orden que usaba la
-// fila de tabla que esta tarjeta reemplazo originalmente.
-function supportDescription(entry: CaseEntry): string {
-  return truncate(entry.data.cardContext || entry.data.objective || entry.data.resultsAndActions);
-}
-
 const allCases = await getCollection('cases');
 
 const published = allCases.filter((c) => !c.data.draft);
 
 const insignia = sortInsignia(published.filter((c) => c.data.layer === 'Insignia'), 'es');
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
+
+// Capability Showcase Grid: proyectos Soporte encabezados por capacidad, con
+// filtro por chip y expansion in-line (ver design_handoff_capability_showcase_grid).
+const showcase = capabilityShowcase(
+  soporte,
+  (c) => c.data.cardContext || c.data.objective || c.data.resultsAndActions,
+  (c) => c.data.title,
+);
+const SHOWCASE_INITIAL = 9;
 
 // --- Copy narrativo (Copy Oficial SSOT, bloques P1-P3+P5) ------------------------
 // Mismo mecanismo que S1-S8 de index.astro. Si un bloque falta o esta vacio
@@ -237,41 +244,89 @@ const itemListJsonLd = {
 
 <section class="section support">
   <div class="wrap">
-    <div class="eyebrow eyebrow--plain">Soporte · {soporte.length} proyectos</div>
-    <h2>{soporteHeadline}</h2>
-    {soporte.length === 0 ? (
+    <div class="showcase-head">
+      <div>
+        <div class="eyebrow eyebrow--plain">Capacidades en operación</div>
+        <h2 class="showcase-title">Lo que sé hacer, y dónde lo hice.</h2>
+      </div>
+      <div class="showcase-count">
+        {showcase.total} proyectos<br />
+        {showcase.capabilityCount} {showcase.capabilityCount === 1 ? 'capacidad' : 'capacidades'}
+      </div>
+    </div>
+
+    {showcase.total === 0 ? (
       <p class="empty-note">Sin fichas Soporte publicadas todavía.</p>
     ) : (
-      <div class="support-grid">
-        {soporte.map((c) => (
-          <a class="card card--support" href={`/portfolio/${slugify(c.data.title)}`}>
-            <div class="support-card__head">
-              {c.data.logo ? (
-                <img class="support-card__logo" src={c.data.logo} alt="" aria-hidden="true" loading="lazy" width="44" height="44" />
+      <Fragment>
+        <div class="showcase-chips" role="group" aria-label="Filtrar por capacidad">
+          <button type="button" class="chip is-active" data-cap="" aria-pressed="true">Todos</button>
+          {showcase.tags.map((tag) => (
+            <button type="button" class="chip" data-cap={tag} aria-pressed="false">{tag}</button>
+          ))}
+        </div>
+
+        <div
+          class="showcase-grid"
+          data-initial={SHOWCASE_INITIAL}
+          data-cta-open="Cerrar"
+          data-cta-closed="Leer más +"
+        >
+          {showcase.projects.map((p) => (
+            <article
+              class="showcase-card"
+              role="button"
+              tabindex="0"
+              aria-expanded="false"
+              aria-controls={`showcase-desc-${p.id}`}
+              data-id={p.id}
+              data-caps={p.tags.join('|')}
+              data-default-lead={p.tags[0] ?? ''}
+            >
+              <div class="showcase-card__lead">{p.tags[0] ?? ''}</div>
+              {p.logo ? (
+                <img
+                  class="showcase-card__logo showcase-card__logo--img"
+                  src={p.logo}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  width="52"
+                  height="52"
+                />
               ) : (
-                <div class="support-card__logo support-card__logo--fallback" aria-hidden="true">
-                  {(c.data.organization ?? c.data.title).slice(0, 1)}
-                </div>
+                <div class="showcase-card__logo" aria-hidden="true">{p.initials}</div>
               )}
-              <div class="support-card__meta">
-                <span class="meta">{c.data.organization ?? '—'} · {c.data.year ?? '—'}</span>
-                <h3 class="card__title">{c.data.title}</h3>
+              <div>
+                <h3 class="showcase-card__title">{p.title}</h3>
+                <div class="showcase-card__meta">{p.org} · {p.year ?? '—'}</div>
               </div>
-            </div>
-            {supportDescription(c) && (
-              <p class="support-card__desc">{supportDescription(c)}</p>
-            )}
-            {c.data.capabilities.length > 0 && (
-              <div class="card__caps">
-                {c.data.capabilities.slice(0, 3).map((cap) => <span class="cap">{cap}</span>)}
+              <p class="showcase-card__desc" id={`showcase-desc-${p.id}`}>{p.desc}</p>
+              <div class="showcase-card__foot">
+                <span class="showcase-card__cta">Leer más +</span>
+                <span class="showcase-card__year">{p.year ?? ''}</span>
               </div>
-            )}
-          </a>
-        ))}
-      </div>
+              <a class="showcase-card__link" href={`/portfolio/${p.id}`}>Ver caso →</a>
+            </article>
+          ))}
+        </div>
+
+        {showcase.total > SHOWCASE_INITIAL && (
+          <div class="showcase-more-wrap">
+            <button type="button" class="showcase-more">
+              Ver los <span data-remaining>{showcase.total - SHOWCASE_INITIAL}</span> restantes
+            </button>
+          </div>
+        )}
+      </Fragment>
     )}
   </div>
 </section>
+
+<script>
+  import { initShowcase } from '../scripts/capabilityShowcase.ts';
+  initShowcase();
+</script>
 
 <section class="section closing">
   <div class="wrap-narrow">
