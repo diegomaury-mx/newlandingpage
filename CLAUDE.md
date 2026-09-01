@@ -217,6 +217,7 @@ El flujo de registro sigue estrictamente la guía canónica en Notion: **"🤖 I
 | Métricas | 📊 Métricas oficiales — Portafolio D (espejo: `assets/data/metrics.json`) |
 | Diseño | Tokens DS V2 "Ember on Ink" (`v2-tokens.css`) |
 | Historial de cambios | Changelog — Portafolio D (Notion); `CHANGELOG.md` = espejo técnico |
-| CMS y mapeo Notion↔Astro | `docs/platform/cms-notion.md` · `notion-astro-contract.md` |
+| CMS y mapeo Notion↔Astro | `docs/platform/notion-astro-contract.md` (contrato campo por campo, vigente) · `docs/platform/cms-architecture.md` (índice al repo público de arquitectura) |
+| Arquitectura técnica del CMS (vitrina) | Repo público `github.com/diegomaury-mx/notion-cms` — pipeline completo Notion→Astro→Cloudflare, cache de imágenes/traducción, gates, Worker `notion-deploy-relay`. Snapshot anclado a un commit; la fuente viva del código es este repo. Espejo navegable en la Diego Maury WIKI. |
 | Imágenes hardcodeadas del sitio (foto Diego, logos) | 🖼️ CMS Imágenes — Portafolio D (Notion) |
 | Invariantes de comportamiento | Este archivo |

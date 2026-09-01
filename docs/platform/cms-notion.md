@@ -1,5 +1,11 @@
 # CMS Notion del portafolio — estado y operación
 
+> ⚠️ **Documento histórico (fases A0/A1, julio 2026, pre-implementación del pipeline).**
+> Describe el diseño TO-BE cuando el sitio todavía era HTML a mano. El pipeline
+> ya está implementado y en producción. Estado vigente y arquitectura completa:
+> `docs/platform/cms-architecture.md` → repo `github.com/diegomaury-mx/notion-cms`.
+> El contrato de datos campo por campo sigue en `notion-astro-contract.md`.
+
 Fases **A0 (verificación de pipeline)** y **A1 (CMS)** cerradas el 2026-07-11.
 
 - **Spec:** `docs/superpowers/specs/2026-07-10-cms-notion-portafolio-design.md`

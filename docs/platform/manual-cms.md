@@ -1,5 +1,12 @@
 # Manual de uso — Diego CMS (cómo editar el sitio sin tocar código)
 
+> ⚠️ **La sección 4 (publicar los cambios) está desactualizada.** El deploy ya
+> NO es GitHub Actions / GitHub Pages: es Cloudflare Pages (Git integration) +
+> auto-publish desde Notion vía el Worker `notion-deploy-relay` — un cambio
+> hecho solo en Notion reconstruye el sitio solo. Ver
+> `docs/platform/cms-architecture.md` y el repo `github.com/diegomaury-mx/notion-cms`
+> (`06-auto-publish.md`). El resto del manual (secciones 1–3, 5) sigue vigente.
+
 Desde el 2026-07-25 `diegomaury.mx` se construye a partir de tres fuentes en Notion. Este documento es la guía práctica de "edito esto en Notion → así aparece en el sitio → así lo publico". Para el diseño técnico del schema ver `docs/platform/cms-notion.md` y `docs/platform/notion-astro-contract.md`.
 
 ## 1 · Las tres fuentes
