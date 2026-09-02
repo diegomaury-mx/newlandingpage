@@ -11,8 +11,8 @@
     --ember-cta: #BF452B; /* ember oscurecido: cumple AA 4.5:1 con texto blanco en botones */
     --accent-secondary:      var(--ember);
     --accent-secondary-text: var(--ember);
-    --sans:   'Plus Jakarta Sans', system-ui, sans-serif;
-    --mono:   'DM Mono', ui-monospace, monospace;
+    --sans:   'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', system-ui, sans-serif;
+    --mono:   'DM Mono', 'DM Mono Fallback', ui-monospace, monospace;
     --ease:   cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
   }

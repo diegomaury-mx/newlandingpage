@@ -6,6 +6,30 @@
    aqui sus unicode-range. No editar a mano los woff2. El navegador solo baja
    el subset que necesita (unicode-range por bloque). */
 
+/* Fallbacks con metricas ajustadas (F-07 / condicion CLS de SILVIA).
+   Hacen que el fallback (Arial / Courier New, la referencia universal que
+   usan next/font y fontaine) ocupe el mismo espacio que la fuente real, para
+   que el swap de font-display:swap no reflow-e la pagina (CLS 0).
+   Porcentajes calculados con las metricas de @capsizecss/metrics 4.2.0:
+   PJS 1000upm asc1038 desc-222 xAvg468 (latin) vs Arial 2048upm xAvg913;
+   DM Mono 1000upm asc992 desc-310 xAvg600 vs Courier New 2048upm xAvg1229. */
+@font-face {
+  font-family: 'Plus Jakarta Sans Fallback';
+  src: local('Arial');
+  size-adjust: 104.979%;
+  ascent-override: 98.877%;
+  descent-override: 21.147%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'DM Mono Fallback';
+  src: local('Courier New');
+  size-adjust: 99.984%;
+  ascent-override: 99.216%;
+  descent-override: 31.005%;
+  line-gap-override: 0%;
+}
+
 @font-face {
   font-family: 'Plus Jakarta Sans';
   font-style: normal;
