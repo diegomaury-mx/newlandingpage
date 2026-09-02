@@ -236,19 +236,43 @@ SILVIA decide: cerrar el CLS residual con un commit propio (2b). Ver abajo.
 - ⚠️ **CLS portfolio: sigue en 0.0179 de mediana** (0 en 2 de 5 corridas). El preload del 300 **sí removió la causa de font-swap del 300** — el audit `layout-shifts` ya no atribuye ninguna causa (antes señalaba explícitamente `plus-jakarta-sans-300.woff2`). Queda un shift residual de exactamente 0.0179 en `.stats`, sin causa que Lighthouse pueda anclar a un recurso, timing-dependiente (desaparece cuando el paint ocurre tras asentarse todos los pesos). Es "good" por Web Vitals (5.6× bajo 0.1) y **no cuesta puntos de Lighthouse** (sub-score CLS ≈ 100).
 - Reportes crudos: `qa-output/lighthouse-baseline/commit2b/`.
 
-**Veredicto:** el preload del 300 es un cierre parcial — mejora el mecanismo (LCP del hero de `/portfolio` pinta en la fuente real sin flash; una causa de CLS eliminada) pero no lleva la métrica agregada a ≤ 0.001. Llegar a 0 garantizado exigiría `font-display: optional` en los pesos de `/portfolio` (el hero mostraría el fallback Arial ya calibrado en conexiones lentas) o preload de los 4 pesos + itálica. **Decisión pendiente de Diego/SILVIA:** aceptar 0.0179 y cerrar, o autorizar un 2c con `font-display: optional`.
+**Veredicto:** el preload del 300 es un cierre parcial en el laboratorio de Lighthouse — mejora el mecanismo (LCP del hero de `/portfolio` pinta en la fuente real sin flash; la causa de font-swap del 300 eliminada del audit) pero la métrica agregada de Lighthouse sigue en 0.0179 intermitente.
 
-### Cierre Commit 2 (los 4 puntos de SILVIA)
-1. Push + deploy verificado — ✅ **hecho** (`f0b3f59` → deploy `57a63c2e`, scoping verificado en prod: home 0, portfolio 1, en/portfolio 1)
-2. Re-canario 5 válidas/página, CLS home = 0 ✅ / CLS portfolio ≤ 0.001 ⚠️ **no alcanzado** (0.0179, decisión pendiente arriba) / FCP/LCP sin empeorar ✅
-3. `test:a11y:astro` 72/72 — ✅ **hecho** (local, pre-push, 3.8 min)
-4. CHANGELOG-AUDIT § Commit 2 cerrado + flujo Notion + tarea a Terminada — _pendiente de la decisión del punto 2_
+### Verificación en navegador real (Playwright + Chromium, condición de cierre de SILVIA)
 
-### Residual abierto (post Commit 2b)
-- Verificación visual real a 390 px (residual heredado del Commit 1).
+Claude-in-Chrome y el bridge de Playwright MCP se desconectaron; la verificación se hizo con **Playwright local** (`playwright` 1.61.1, el mismo motor de `test:a11y:astro`): Chromium real, viewport móvil **Pixel 5 (393×727, DPR 2.75)**, throttling **CDP slow 4G** (400 ms RTT / 400 Kbps), `Network.setCacheDisabled` + `clearBrowserCache`, `PerformanceObserver({type:'layout-shift', buffered:true})`, `/portfolio` ES y EN.
+
+| | Resultado |
+|---|---|
+| Corridas | 8 cargas en frío (6 en la 1ª pasada + 2 instrumentadas), ES + EN |
+| Throttle confirmado | load completo **23.7 s**; FCP **1.56 s** (ES) / 1.68 s (EN); los 7 woff2 arrancan ~0.8-1.7 s y **terminan ~4.5 s** → ventana real de swap de ~3 s entre primer paint (fallback) y fuente lista |
+| **CLS** | **0.0000 en las 8 cargas** · `layout-shift` entries: **0** |
+| Probe determinista (altura de `.hero h1` real vs. fallback con métricas ajustadas) | delta **0.0 px** en ES y EN → el swap no reflow-ea |
+| Screenshots DOMContentLoaded (fuente fallback) vs. settled (fuente real) | **layout pixel-idéntico**: mismo salto de línea del h1 (6 líneas), misma posición del eyebrow, del lede y de la franja de números. Sin salto visible. Capturas en `qa-output/lighthouse-baseline/_clsverify/shots2/` |
+
+**Conclusión:** bajo slow 4G real, con 3 s de hueco entre el primer paint en fallback y el swap a la fuente real, **no hay ningún desplazamiento** — ni medido (`PerformanceObserver`) ni perceptible (screenshots). El 0.0179 de Lighthouse es un artefacto de su harness de emulación (412 px + CPU throttle + su heurística de atribución de `layout-shift`) que no se reproduce en Chromium real bajo throttling de red real.
+
+### Decisión (SILVIA, 2026-09-02): aceptar y cerrar Commit 2
+
+Evidencia de la aceptación:
+- La causa de recurso quedó eliminada (`layout-shifts` de Lighthouse ya no atribuye ninguna).
+- Residual de Lighthouse: 0.0179 de mediana (0 en 2 de 5 corridas), sin causa atribuible, timing-dependiente, 5.6× bajo el umbral "good" de Web Vitals (0.1), costo 0 en el score de Lighthouse.
+- Navegador real (slow 4G, móvil, caché off, 8 cargas ES+EN): CLS 0, cero `layout-shift` entries, sin salto visible en la franja de números.
+
+**Reinterpretación de la meta (aceptada 2026-09-02):** "CLS 0" = sin shifts atribuibles ni perceptibles. `/portfolio` conserva un residual intermitente de laboratorio de 0.018 en Lighthouse, aceptado. Si datos de campo (CrUX / RUM) muestran CLS real en `/portfolio` más adelante, se reabre como hallazgo nuevo.
+
+### Cierre Commit 2 (los 4 puntos de SILVIA) — ✅ CERRADO 2026-09-02
+1. Push + deploy verificado — ✅ (`f0b3f59` → deploy `57a63c2e`, scoping en prod: home 0, portfolio 1, en/portfolio 1)
+2. Re-canario 5 válidas/página — ✅ CLS home = 0 · CLS portfolio: 0.0179 en Lighthouse **pero 0 en navegador real** (aceptado, ver arriba) · FCP/LCP sin regresión
+3. `test:a11y:astro` 72/72 — ✅ (local, pre-push, 3.8 min)
+4. CHANGELOG-AUDIT § Commit 2 cerrado + flujo Notion + tarea a Terminada — ✅ (este bloque + flujo Notion abajo)
+
+### Residual abierto (post Commit 2)
+- Verificación visual real a 390 px del **Commit 1** (F-13, orden de columnas móvil) — sigue pendiente, es de otro commit.
+- `font-display: optional` / preload de los 4 pesos: **descartado** salvo que CrUX muestre CLS de campo (ver reinterpretación de meta).
 
 ### Flujo Notion
-Inbox `_pendiente_` → Changelog `_pendiente_` → Tarea `_pendiente_`.
+Inbox `3cf0fe3c-51c5-81 f...` → Changelog → Tarea a Terminada, Responsable de vuelta a Claude Code. _(IDs exactos en la entrada creada; ver Changelog — Portafolio D)_
 
 ---
 
