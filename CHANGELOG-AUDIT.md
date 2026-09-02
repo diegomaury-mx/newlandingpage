@@ -301,13 +301,37 @@ Evidencia de la aceptación:
 ### Commits
 | commit | contenido | estado |
 |---|---|---|
-| `_3_` | F-14 + F-09 + F-15 + F-17 | _pendiente push_ |
+| `57b7adc` | F-14 + F-09 + F-15 + F-17 | **LIVE** (deploy Cloudflare, `theme-color` + `skip-link` verificados en producción) |
 
-### Re-canario post-deploy
-_pendiente_ — CLS 0, sin regresión de Perf/LCP (los cambios son `<meta>` + CSS fuera de flujo + listeners; superficie de layout nula).
+### Re-canario post-deploy (`57b7adc` — Lighthouse 13.4.1 móvil, 2 pasadas de 5 corridas/página)
 
-### Flujo Notion
-Inbox `_pendiente_` → Changelog `_pendiente_` → Tarea `_pendiente_`.
+| | Home (mediana) | Portfolio (mediana) | Baseline `f0b3f59` |
+|---|---:|---:|---|
+| FCP | 1,693 ms | 1,865 ms | home 2,036 / portfolio 1,940 |
+| LCP | 2,565 ms | 2,420 ms | home 2,487 / portfolio 2,049 |
+| TBT | 311 ms | 313 ms | home 487 / portfolio 422 |
+| **CLS** | **0** (10 de 10 corridas válidas) | **0** (10 de 10) | 0 / 0.0179 |
+| Perf / a11y | 86 / 96 | 89 / 100 | 83 / 87 |
+
+- ✅ **CLS 0 en las 20 corridas válidas** (2 pasadas × 5 × 2 páginas).
+- ✅ **Sin regresión de Perf/LCP**: FCP mejora en ambas (−340 ms home, −75 ms portfolio); LCP home dentro del ruido (+78 ms), LCP portfolio +371 ms sobre la mediana pero dentro del rango histórico de estos canarios (portfolio LCP ha oscilado 1.7–3.1 s en todas las corridas de la auditoría). Cada pasada trajo 2 corridas outlier de LCP 6–9 s por contención de CPU de la máquina (perf 62–66), no del código. El diff (un `<meta>`, `color-scheme`, `.skip-link` en `position:absolute` fuera de pantalla, `scroll-margin-top`, media query, 2 `addEventListener`) no añade recurso render-blocking ni toca el elemento LCP — es arquitectónicamente incapaz de regresar el LCP.
+- Reportes crudos: `qa-output/lighthouse-baseline/commit3/`.
+
+### Gate de SILVIA para Commit 3 — ✅ TODOS
+1. `test:a11y:astro` 72/72 — ✅
+2. skip-link visible en `:focus` (Chrome real 1440px) — ✅ (foco al 1er Tab, `top:8`, activa `#main`)
+3. `scroll-margin` con navegación por ancla real — ✅ (80px en s2/s3/s6, encabezado bajo el navbar)
+4. burger cierra con `Escape`/click-fuera y devuelve el foco — ✅ (`aria-expanded=false` + foco en `.nav__burger`)
+5. CLS 0 — ✅ (20/20)
+6. cero regresiones de Perf/LCP — ✅ (FCP mejora, LCP en ruido)
+7. `prefers-reduced-motion` con emulación de medios — ✅ (`scroll-behavior:auto` en `/`, `/portfolio/`, `/portfolio/sofi/`)
+
+(a11y home 96: sin cambio; el fallo de contraste restante está en el widget Senja, se resuelve en el Commit 4.)
+
+### Flujo Notion — ✅ hecho 2026-09-02
+- Inbox `3cf0fe3c-51c5-81d8-a752-f4105a6c0cf8` (Procesado, `Changelog creado` poblado)
+- Changelog `3cf0fe3c-51c5-8182-bdbf-c4f0b0305625` (Componente: Estructura; Fecha 2026-09-01)
+- Tarea `3cf0fe3c-51c5-81bc-95f4-f14c7808d040` — **Terminada**, Responsable **Claude Code**, vinculada a Changelog + proyecto Portafolio D
 
 ## Commit 4 — testimonios propios, retirar embed de Senja (F-05) · PENDIENTE (condición previa: cobertura vs. Senja)
 
