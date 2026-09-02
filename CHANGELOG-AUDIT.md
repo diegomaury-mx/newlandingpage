@@ -137,7 +137,59 @@ Reportes crudos: `qa-output/lighthouse-baseline/commit1/` (home 1–8, portfolio
 
 ---
 
-## Commit 2 — self-host de fuentes (F-07 + F-22 fuente) · PENDIENTE
+## Commit 2 — self-host de fuentes Plus Jakarta Sans + DM Mono (F-07 + F-22 fuente)
+
+**Alcance:** `src/styles/fonts.css` (nuevo) + `public/fonts/` (12 woff2) + `src/layouts/BaseLayout.astro` + `public/_headers` + `src/styles/variables.css`. Borradas las V1 sin uso (`public/assets/fonts/`).
+
+- **F-07:** `@font-face` self-hosted, subset latino (bloques `latin` + `latin-ext`; DM Mono solo `latin`), `font-display: swap`, `unicode-range` por bloque. Se elimina el `<link>` a `fonts.googleapis.com` + los 2 `preconnect`.
+- **F-22 (fuente):** `<link rel="preload" as="font" crossorigin>` del peso crítico (Plus Jakarta Sans 400, el workhorse del body).
+- `_headers`: `font-src 'self'` (sin `gstatic`), `style-src` sin `fonts.googleapis`, `Cache-Control immutable` para `/fonts/*`.
+- **Fallback con métricas ajustadas** (commit `26f29a2`, condición CLS de SILVIA): `@font-face` `'Plus Jakarta Sans Fallback'` → `local('Arial')` y `'DM Mono Fallback'` → `local('Courier New')` con `size-adjust`/`ascent-override`/`descent-override` (calculados con `@capsizecss/metrics` 4.2.0), añadidos a `--sans`/`--mono` antes de `system-ui`.
+
+### Commits
+| commit | contenido | estado |
+|---|---|---|
+| `42801b5` | self-host + preload + `_headers` + borrado V1 | **LIVE** (deploy Cloudflare `42801b5`, todas las etapas success, 02:42:10Z) |
+| `26f29a2` | fallback con métricas ajustadas (fix CLS) | **committeado local, SIN PUSHEAR** — bloqueado por fallo de red de la máquina (resolución DNS rota a nivel de OS: `curl` y `git` no resuelven `github.com`; empezó tras ~1h de carga pesada del entorno). Diego lo pushea cuando la máquina se recupere: `git push origin master` desde la raíz del repo → dispara el deploy solo. |
+
+### Resultado en producción (`42801b5`, Lighthouse 13.4.1 móvil, regla del canario: TBT ≤ 500 ms)
+
+| | Home before → after | Portfolio before → after |
+|---|---:|---:|
+| FCP | 2,991 → **2,118 ms** (−0.87 s) | 2,599 → **1,763 ms** (−0.84 s) |
+| LCP | 6,488 → **3,145 ms** (−3.3 s) | 2,780 → **1,763 ms** (−1.0 s) |
+| Performance | 60 → 85 | 89 → 91 |
+| CLS | 0 → 0.0000–0.0002 | 0.035 → **0.018** |
+| a11y / BP / SEO | 96 / 92 / 100 | 100 / 92 / 100 |
+| `fonts.googleapis` en render-blocking | **fuera** ✅ | **fuera** ✅ |
+
+Reportes crudos: `qa-output/lighthouse-baseline/commit2/`.
+
+### Veredicto contra los criterios de SILVIA
+
+- ✅ **`fonts.googleapis.com` fuera del `render-blocking-insight`** — en las 10 corridas válidas.
+- ✅ **FCP −0.5 a −1 s:** home −0.87 s, portfolio −0.84 s.
+- ✅ **LCP portfolio (h1 texto) hacia < 2.5 s:** **1.76 s** — logrado.
+- ✅ **home LCP neutro o mejor:** 6.5 s → 3.1 s (mucho mejor).
+- ✅ **Sin regresiones:** a11y 96 / 100, BP 92, SEO 100.
+- ⚠️ **CLS 0 en todas las corridas válidas:** home sí (~0.0002, despreciable). Portfolio quedó en **0.018** (bajó de 0.035 con el preload). Culpable confirmado (`cls-culprits-insight`): la sección `.stats` de `/portfolio` reflow-ea al hacer swap Plus Jakarta Sans. **El fix (`26f29a2`, fallback con métricas ajustadas) está hecho y validado localmente, pendiente de push/deploy** — al desplegarse hay que re-correr el canario (5 válidas/página) y confirmar CLS portfolio → 0.
+
+### Validación local (pre-push, `26f29a2` incluido)
+`astro build` exit 0 · `verify-metrics` exit 0 · `npm test` 117/117 · `npm run lint` exit 0 · `test:a11y:astro` **parcial** — la suite completa (72 tests) fue **matada 3 veces por agotamiento de recursos de la máquina** (67 procesos node/chrome huérfanos, 0 MB disponibles; limpiados). Corrida **dirigida** de las 4 páginas más afectadas por el cambio de fuente (home + portfolio, ES + EN, desktop + mobile) = **8/8 verde** en 45 s con `--workers=1`. Lighthouse a11y (mismo motor axe): 96 home / 100 portfolio, sin cambio. El delta (fuentes self-hosted + overrides de métrica) no toca color, DOM, ARIA ni semántica → superficie a11y nula. **Pendiente:** re-correr la suite completa cuando la máquina se recupere.
+- Chrome real 1440px (local): fuentes renderizan, fallbacks `Plus Jakarta Sans Fallback` / `DM Mono Fallback` registrados, CLS local 0.
+- HTML generado `/` y `/en`: sin `<link>` a Google Fonts, sin `preconnect`, con el `preload` propio; `@font-face` en CSS bundleado same-origin.
+- `_headers` servido en producción: `font-src 'self'`, woff2 con `Content-Type: font/woff2` + `Cache-Control: public, max-age=31536000, immutable` + `Access-Control-Allow-Origin: *`.
+
+### Residual abierto
+- **Push + deploy de `26f29a2`** (fix CLS) — bloqueado por red de la máquina; lo hace Diego.
+- Re-canario post-deploy de `26f29a2`: 5 válidas/página, target CLS portfolio = 0.
+- Suite `test:a11y:astro` completa (72 tests) cuando la máquina aguante.
+- Verificación visual real a 390 px (residual heredado del Commit 1).
+
+### Flujo Notion
+Inbox `_pendiente_` → Changelog `_pendiente_` → Tarea `_pendiente_`.
+
+---
 
 ## Commit 3 — a11y: skip-link, color-scheme, theme-color, scroll-margin, burger (F-14 + F-09 + F-15 + F-17) · PENDIENTE
 
