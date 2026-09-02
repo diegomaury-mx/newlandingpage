@@ -78,29 +78,62 @@ Impacto conseguido: **Best Practices +19 puntos**, cero APIs deprecadas, dos scr
 
 ---
 
-## F-24 — fix de contraste de la chip-filtro activa de `/portfolio` (commit mínimo previo al Commit 1)
+## F-24 — fix de contraste de la chip-filtro activa de `/portfolio` (commit `238333b`, LIVE)
 
-- **Qué:** `src/styles/portfolio.css` — `.chip.is-active` pasa de `background: var(--ember)` (`#FF5C39`) a `background: var(--ember-cta)` (`#BF452B`); `border-color` idem.
-- **Por qué:** `--ember` puro sobre texto `--t1` (`#FAF8FC`) da **2.9:1** — falla WCAG AA (serious). `--ember-cta` da ~4.85:1 (pasa AA), y es la única forma válida de ember sólido con texto blanco per el DS V2.
-- **Evidencia:** `test:a11y:astro` fallaba 4/72 tras el build de Commit 1 — todos `/portfolio` (ES/EN × desktop/mobile), regla `color-contrast` sobre `<button class="chip is-active">`. Verificado presente en producción (`curl` + inspección del CSS servido). Regresión del commit del Capability Showcase Grid (`547d576`, 2026-09-01), **no** del audit ni del Commit 1.
-- **Alcance:** 1 línea de CSS. No toca `.chip` inactiva, `:hover` ni `:focus-visible`.
-- **Validación:** `test:a11y:astro` → **72/72 verde** (ver Commit 1).
-- **Impacto esperado:** elimina el único fallo `serious` de a11y de `/portfolio`; Lighthouse a11y de `/portfolio` se mantiene o sube de 96.
-- **Flujo Notion:** entrada propia (Inbox → Changelog → Tarea).
+- **Qué:** `src/styles/portfolio.css` — `.chip.is-active` pasa de `background: var(--ember)` (`#FF5C39`) a `background: var(--ember-cta)` (`#BF452B`); `border-color` idem. 1 línea (2 propiedades).
+- **Por qué:** `--ember` puro sobre texto `--t1` (`#FAF8FC`) da **2.9:1** — falla WCAG AA (serious). `--ember-cta` da ~4.85:1 (pasa AA), única forma válida de ember sólido con texto blanco per el DS V2.
+- **Evidencia:** `test:a11y:astro` fallaba 4/72 tras el build de Commit 1 — todos `/portfolio` (ES/EN × desktop/mobile), regla `color-contrast` sobre `<button class="chip is-active">`. Verificado en producción (CSS servido). Regresión del commit del Capability Showcase Grid (`547d576`), **no** del audit ni del Commit 1.
+- **Validación:** `test:a11y:astro` → **72/72 verde**. Lighthouse a11y de `/portfolio` **96 → 100** (mediana de 3+ corridas producción, post-deploy).
+- **Flujo Notion:** Inbox `3cf0fe3c…09b7` (Procesado) → Changelog `3cf0fe3c…d914` → Tarea `3cf0fe3c…27a7` (Terminada).
 
 ---
 
-## Commit 1 — hero above-the-fold sin gate de JS + preloads (F-01 + F-22 imagen + F-13) · PENDIENTE
+## Commit 1 — hero above-the-fold sin gate de JS + preload de imagen LCP (commit `0ec15d4`, LIVE 2026-09-02 01:50Z)
 
-**Alcance:** `src/pages/index.astro` + `src/pages/en/index.astro` (F-01 + F-22 imagen, hero idéntico en ambas) + `src/styles/home.css` (F-13, compartido ES/EN).
+**Alcance:** `src/pages/index.astro` + `src/pages/en/index.astro` (F-01 + F-22 imagen, hero idéntico) + `src/styles/home.css` (F-13, compartido ES/EN).
 
-- **F-01:** quitado `data-reveal` (+ `style="--delay"`) de los 6 elementos del hero (`hero-label`, `hero-h1`, `hero-sub`, `hero-ctas`, `hero-media`, `trust`) en ambas páginas. El resto de la página conserva el reveal (41 elementos aún gated en `/`).
-- **F-22 (imagen):** `<link slot="head" rel="preload" as="image" href={heroImgSrc} fetchpriority="high">` en el `<head>` de `/` y `/en`; const `heroImgSrc` resuelve la URL una sola vez, compartida por el `<link>` y el `<img>`.
-- **F-13:** `order: -1` quitado de `.hero-media` en el `@media (max-width: 900px)` de `home.css` → en móvil el H1 encabeza el viewport, la imagen va después.
+- **F-01:** quitado `data-reveal` (+ `style="--delay"`) de los 6 elementos del hero (`hero-label`, `hero-h1`, `hero-sub`, `hero-ctas`, `hero-media`, `trust`) en `/` y `/en`. El resto de la página conserva el reveal (41 elementos aún gated en `/`, verificado en producción).
+- **F-22 (imagen):** `<link slot="head" rel="preload" as="image" href={heroImgSrc} fetchpriority="high">` en el `<head>` de `/` y `/en`; const `heroImgSrc` comparte la URL entre `<link>` e `<img>`. Verificado en producción: `preload.href === img.src` en ambas.
+- **F-13:** `order: -1` quitado de `.hero-media` en el `@media (max-width: 900px)` de `home.css`. Verificado: `order:-1` ausente del CSS compilado servido.
 
-Objetivo: `elementRenderDelay` del hero ~0–300 ms · LCP móvil home mediana claramente < 8.9 s (meta final < 2.5 s) · sin regresiones (FCP ≥, CLS 0, a11y 96, BP ≥ 92, SEO 100).
+### Validación local (pre-push)
+`astro build` exit 0 · `verify-metrics.cjs` exit 0 (12 warnings pre-existentes) · `npm test` 117/117 · `npm run lint` exit 0 · `test:a11y:astro` **72/72** (con F-24) · Chrome real 1440px (`/` y `/en`): hero renderiza completo con `document.visibilityState:"hidden"` (la condición exacta que lo dejaba en blanco antes) — `heroH1` opacity 1, sin `data-reveal`, imagen LCP pintada.
 
-_(medianas de producción se llenan tras el deploy)_
+### Resultado en producción (Lighthouse 13.4.1 móvil)
+
+**Ruido de máquina significativo** (SILVIA lo pidió anotado): la máquina que corre Lighthouse estuvo cargada de forma variable — TBT osciló 356–910 ms entre corridas de la misma URL, y el score de portfolio saltó 42/90/90/86/81/88. Se reporta la mediana de todas las corridas y, aparte, la mediana del subconjunto "máquina libre" (TBT ≤ 450 ms), que es la señal limpia.
+
+| Home móvil | BEFORE (paso 0, n=6) | AFTER todas (n=8) | AFTER máquina libre (n=3) |
+|---|---:|---:|---:|
+| Performance | 53 | 60 | **74** |
+| **`elementRenderDelay` (hero img)** | **2,390 ms** (1,807–2,782) | 1,106 ms | **379 ms** (159 / 338 / 379) |
+| **LCP** | **8,917 ms** | 6,542 ms | **3,880 ms** (3.3–3.9 s) |
+| FCP | 3,012 ms | 3,009 ms | 2,954 ms |
+| CLS | 0 | 0 | 0 |
+| BP / a11y / SEO | 92 / 96 / 100 | 92 / 96 / 100 | 92 / 96 / 100 |
+
+| Portfolio móvil | BEFORE (n=3) | AFTER (n=6) |
+|---|---:|---:|
+| Performance | 84 | **87** |
+| LCP (elem = `<h1>` texto) | 2,829 ms | 2,780 ms |
+| **a11y** | 96 | **100** (F-24) |
+| BP / SEO | 92 / 100 | 92 / 100 |
+
+### Veredicto contra los criterios de SILVIA
+
+- ✅ **`elementRenderDelay` colapsa:** 2,390 → **379 ms** (máquina libre; corridas individuales 159 / 338 / 379). El gate del reveal era el 100% de esos ~2.4 s: sin `data-reveal` la imagen (ya descargada a ~0.5 s, con `fetchpriority=high`) pinta casi de inmediato. Justo en el borde de "~0–300 ms" — una corrida a 159, otra a 338.
+- ✅ **LCP home mediana claramente < 8.9 s:** 6.5 s con todas las corridas; **3.9 s** con la máquina libre (−4.9 s).
+- ✅ **Sin regresiones:** FCP igual (3.01 s), CLS 0, a11y 96 (portfolio **96 → 100**), BP 92, SEO 100.
+- ⚠️ **Meta final LCP < 2.5 s:** todavía no. El techo restante es render-blocking (`fonts.googleapis.com` CSS, ~1.1 s de bloqueo — `render-blocking-insight` score 0) + saturación de main-thread por terceros (TTI ~9 s). Eso es **F-07 = Commit 2** y **F-05/F-06 = Commits 3-4**. Commit 1 hizo lo suyo: `lcp-discovery-insight` pasa (fetchpriority + discoverable + no-lazy, los 3 verdes) y el gate del reveal ya no existe.
+
+### Residual abierto (SILVIA)
+
+Verificación **visual** real a 390 px post-deploy: Claude-in-Chrome no puede fijar un viewport <500 px en este entorno. F-13 verificado mecánicamente (sin `order:-1` en el CSS servido → móvil 1 columna + orden del DOM = H1 primero). Pendiente confirmación visual por Diego/SILVIA en un dispositivo o navegador real.
+
+### Flujo Notion
+Inbox `3cf0fe3c…8e…2455` (Procesado) → Changelog `3cf0fe3c…8167…253e` → Tarea `3cf0fe3c…8123…18ac` (Terminada).
+
+Reportes crudos: `qa-output/lighthouse-baseline/commit1/` (home 1–8, portfolio 1–6).
 
 ---
 
