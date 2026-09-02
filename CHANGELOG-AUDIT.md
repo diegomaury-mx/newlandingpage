@@ -278,7 +278,36 @@ Evidencia de la aceptación:
 
 ---
 
-## Commit 3 — a11y: skip-link, color-scheme, theme-color, scroll-margin, burger (F-14 + F-09 + F-15 + F-17) · PENDIENTE
+## Commit 3 — a11y: skip-link, color-scheme, theme-color, scroll-margin, burger (F-14 + F-09 + F-15 + F-17)
+
+**Alcance:** `src/layouts/BaseLayout.astro`, `src/styles/globals.css`, `src/components/Navbar.astro`. (F-24 ya iba LIVE en `238333b`, no entra aquí.)
+
+- **F-14** — `<meta name="theme-color" content="#0A0612">` en el `<head>`; `html { color-scheme: dark }` en `globals.css`; skip-link `<a class="skip-link" href="#main">` como primer hijo de `<body>`, oculto en `top:-100px` y visible en `:focus` (`top:8px`), + `<main id="main">`. Aplica a todo el sitio (todas las páginas usan `BaseLayout`).
+- **F-09** — `.section[id], .about-section[id] { scroll-margin-top: 80px }` en `globals.css` (navbar fixed = 64px).
+- **F-15** — `@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } }` en `globals.css` (antes solo vivía en `portfolio.css`, no cubría home ni casos).
+- **F-17** — burger de `Navbar.astro`: helper `setMenu(open, restoreFocus)`; `Escape` cierra y devuelve el foco al `.nav__burger`; click-fuera del `nav` cierra. Patrón *disclosure* de ARIA APG, **sin** focus trap.
+
+### Verificación local
+- `astro build` exit 0 (63 páginas). HTML: `skip-link`, `theme-color`, `id="main"` presentes en home, `/portfolio`, `/en`, casos, legales.
+- **`test:a11y:astro` 72/72** (5.5 min).
+- **Verificación en navegador real** (Playwright + Chromium, contra `astro preview` local, viewport desktop 1440 + móvil Pixel 5): **22/22 checks verde**
+  - skip-link: recibe foco al 1er `Tab`, transiciona a `top:8` (visible), activa `#main`.
+  - `scroll-margin-top: 80px` en `#s2-quien-soy`, `#s3-problema`, `#s6-sistemas-propios`; el encabezado destino queda por debajo del navbar (top ≥ altura del nav) en navegación por ancla real.
+  - burger: abre; `Escape` cierra + `aria-expanded=false` + foco de vuelta en `.nav__burger`; click-fuera cierra.
+  - `prefers-reduced-motion: reduce` → `scroll-behavior: auto` en `/`, `/portfolio/`, `/portfolio/sofi/` (emulación de medios).
+  - `color-scheme: dark`, `theme-color = #0A0612`.
+  - (Gotcha del test, no del código: medir el `top` del skip-link justo tras `Tab` lo captura a mitad de la transición de 150 ms → esperar ~300 ms antes de medir.)
+
+### Commits
+| commit | contenido | estado |
+|---|---|---|
+| `_3_` | F-14 + F-09 + F-15 + F-17 | _pendiente push_ |
+
+### Re-canario post-deploy
+_pendiente_ — CLS 0, sin regresión de Perf/LCP (los cambios son `<meta>` + CSS fuera de flujo + listeners; superficie de layout nula).
+
+### Flujo Notion
+Inbox `_pendiente_` → Changelog `_pendiente_` → Tarea `_pendiente_`.
 
 ## Commit 4 — testimonios propios, retirar embed de Senja (F-05) · PENDIENTE (condición previa: cobertura vs. Senja)
 

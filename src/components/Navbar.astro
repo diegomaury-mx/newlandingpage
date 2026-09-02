@@ -176,24 +176,33 @@ const navItems = site.navigation.map((item) => ({
     sections.forEach((section) => observer.observe(section));
   }
 
-  burger?.addEventListener("click", () => {
-    const isOpen = links?.classList.toggle("is-open") ?? false;
+  const OPEN_LABEL = burger?.dataset.openLabel ?? "Abrir menú";
+  const CLOSE_LABEL = burger?.dataset.closeLabel ?? "Cerrar menú";
 
-    burger.setAttribute("aria-expanded", String(isOpen));
-    burger.setAttribute(
-      "aria-label",
-      isOpen
-        ? burger.dataset.closeLabel ?? "Cerrar menú"
-        : burger.dataset.openLabel ?? "Abrir menú"
-    );
-  });
+  // Patrón disclosure de ARIA APG (menú de navegación no modal): Escape y
+  // click-fuera cierran; Escape devuelve el foco al disparador. SIN focus trap.
+  const setMenu = (open, restoreFocus) => {
+    if (!links || !burger) return;
+    links.classList.toggle("is-open", open);
+    burger.setAttribute("aria-expanded", String(open));
+    burger.setAttribute("aria-label", open ? CLOSE_LABEL : OPEN_LABEL);
+    if (!open && restoreFocus) burger.focus();
+  };
+
+  const isMenuOpen = () => links?.classList.contains("is-open") ?? false;
+
+  burger?.addEventListener("click", () => setMenu(!isMenuOpen()));
 
   links?.querySelectorAll(".nav__link").forEach((link) => {
-    link.addEventListener("click", () => {
-      links.classList.remove("is-open");
-      burger?.setAttribute("aria-expanded", "false");
-      burger?.setAttribute("aria-label", "Abrir menú");
-    });
+    link.addEventListener("click", () => setMenu(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && isMenuOpen()) setMenu(false, true);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (isMenuOpen() && !nav.contains(event.target)) setMenu(false);
   });
 })();
 </script>

@@ -69,6 +69,11 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
       content="width=device-width, initial-scale=1"
     />
 
+    <meta
+      name="theme-color"
+      content="#0A0612"
+    />
+
     <link
       rel="icon"
       href="/favicon.ico"
@@ -195,9 +200,11 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
   <body>
     {enableGtm && <script is:inline src="/js/gtm.js"></script>}
 
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
     <Navbar ctaHref={ctaHref} ctaLabel={ctaLabel} otherLocaleHref={otherLocaleHref} />
 
-    <main>
+    <main id="main">
       <slot />
     </main>
 

@@ -1,5 +1,8 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; color-scheme: dark; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
   body {
     font-family: var(--sans);
     background: var(--bg);
@@ -10,6 +13,33 @@
   a { color: var(--ember); }
   ::selection { background: var(--ember); color: var(--bg); }
   :focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+
+  /* Salto al contenido: oculto hasta recibir foco por teclado (F-14). */
+  .skip-link {
+    position: absolute;
+    left: 8px;
+    top: -100px;
+    z-index: 1000;
+    background: var(--bg-2);
+    color: var(--t1);
+    border: 1px solid var(--ember);
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: top var(--duration-fast, 150ms) var(--ease, ease);
+  }
+  .skip-link:focus { top: 8px; }
+  @media (prefers-reduced-motion: reduce) {
+    .skip-link { transition: none; }
+  }
+
+  /* El navbar fixed (64px) tapaba el encabezado destino al navegar por ancla (F-09). */
+  .section[id], .about-section[id] { scroll-margin-top: 80px; }
 
   /* ── SCROLL REVEAL ── */
   [data-reveal] {
