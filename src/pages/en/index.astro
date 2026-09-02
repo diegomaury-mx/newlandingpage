@@ -80,6 +80,11 @@ const heroRole = heroParas[0] ?? '';
 const heroSub = heroParas[1] ?? '';
 const heroCtas = ctaLabels(s1);
 
+// Imagen del hero: candidato LCP en movil. Se resuelve una sola vez para
+// usarla igual en el <img> y en el <link rel="preload"> del <head> (F-22).
+// Identica a la logica de index.astro (ES).
+const heroImgSrc = slotSrc('foto-diego-hero', '/cms-media/diego/diegomaurypng.png');
+
 const heroLogos = heroLogosFrom(imageSlotEntries);
 
 // --- S2 · Quien soy (parseo ES sin modificar) ---------------------------------
@@ -304,6 +309,8 @@ const personJsonLd = {
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
   ctaLabel={uiEn.nav.ctaLabel}
 >
+<link slot="head" rel="preload" as="image" href={heroImgSrc} fetchpriority="high" />
+
 <!-- Google Tag Manager -->
 <script is:inline src="/js/gtm.js"></script>
 <!-- End Google Tag Manager -->
@@ -313,11 +320,11 @@ const personJsonLd = {
   <div class="section-inner">
     <div class="hero-grid">
       <div>
-        <div class="hero-label" data-reveal>{heroRoleEn || 'Strategic Program Director'}</div>
-        <h1 class="hero-h1" data-reveal style="--delay:.08s">{heroHeadlineEn}</h1>
-        {heroSubEn && <p class="hero-sub" data-reveal style="--delay:.14s">{heroSubEn}</p>}
+        <div class="hero-label">{heroRoleEn || 'Strategic Program Director'}</div>
+        <h1 class="hero-h1">{heroHeadlineEn}</h1>
+        {heroSubEn && <p class="hero-sub">{heroSubEn}</p>}
         {heroCtas.length > 0 && (
-          <div class="hero-ctas" data-reveal style="--delay:.2s">
+          <div class="hero-ctas">
             {heroCtas.map((originalLabel, i) => {
               const target = ctaTarget(originalLabel, '/en/portfolio');
               return (
@@ -333,12 +340,12 @@ const personJsonLd = {
           </div>
         )}
       </div>
-      <div class="hero-media" data-reveal style="--delay:.1s">
-        <img src={slotSrc('foto-diego-hero', '/cms-media/diego/diegomaurypng.png')} alt={heroName || 'Diego Maury'} loading="eager" fetchpriority="high" width="700" height="875">
+      <div class="hero-media">
+        <img src={heroImgSrc} alt={heroName || 'Diego Maury'} loading="eager" fetchpriority="high" width="700" height="875">
       </div>
     </div>
     {heroLogos.length > 0 && (
-      <div class="trust" data-reveal style="--delay:.32s">
+      <div class="trust">
         <div class="trust-label">{uiEn.home.trustLabel}</div>
         <div class="trust-track-wrap">
           <div class="trust-track">
