@@ -32,6 +32,12 @@ interface Props {
   // navbar. Se pasa por separado de alternateUrls (que llevan URL absoluta
   // para hreflang) porque el toggle necesita una ruta navegable con <a href>.
   otherLocaleHref?: string;
+  // Preload del peso 300 de Plus Jakarta Sans (subset base latin). Default
+  // apagado: solo lo activan las paginas cuyo titular above-the-fold es peso
+  // 300 (hero de /portfolio y su /en). Sin esto, el swap del 300 al cargar
+  // reflow-ea la seccion siguiente (CLS ~0.018 en /portfolio, Commit 2b).
+  // Home NO lo recibe: su hero es peso 500.
+  preloadFont300?: boolean;
 }
 
 const {
@@ -46,6 +52,7 @@ const {
   ctaLabel = "Hagamos que las cosas pasen",
   alternateUrls = [],
   otherLocaleHref,
+  preloadFont300 = false,
 }: Props = Astro.props;
 
 const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
@@ -171,6 +178,16 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
       type="font/woff2"
       crossorigin
     />
+
+    {preloadFont300 && (
+      <link
+        rel="preload"
+        href="/fonts/plus-jakarta-sans-300.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin
+      />
+    )}
 
     <slot name="head" />
   </head>

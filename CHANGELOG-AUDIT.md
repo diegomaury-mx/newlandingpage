@@ -150,7 +150,8 @@ Reportes crudos: `qa-output/lighthouse-baseline/commit1/` (home 1–8, portfolio
 | commit | contenido | estado |
 |---|---|---|
 | `42801b5` | self-host + preload + `_headers` + borrado V1 | **LIVE** (deploy Cloudflare `42801b5`, todas las etapas success, 02:42:10Z) |
-| `26f29a2` | fallback con métricas ajustadas (fix CLS) | **committeado local, SIN PUSHEAR** — bloqueado por fallo de red de la máquina (resolución DNS rota a nivel de OS: `curl` y `git` no resuelven `github.com`; empezó tras ~1h de carga pesada del entorno). Diego lo pushea cuando la máquina se recupere: `git push origin master` desde la raíz del repo → dispara el deploy solo. |
+| `26f29a2` | fallback con métricas ajustadas (fix CLS) | **LIVE** (dentro de `8f2e54f`, deploy Cloudflare `730227b6`, todas las etapas success, 03:49:05Z) |
+| `_2b_` | `preloadFont300` en `BaseLayout` (default off) + activado en `/portfolio` ES/EN — cierra el CLS 0.0179 residual | ver § Commit 2b abajo |
 
 ### Resultado en producción (`42801b5`, Lighthouse 13.4.1 móvil, regla del canario: TBT ≤ 500 ms)
 
@@ -180,10 +181,55 @@ Reportes crudos: `qa-output/lighthouse-baseline/commit2/`.
 - HTML generado `/` y `/en`: sin `<link>` a Google Fonts, sin `preconnect`, con el `preload` propio; `@font-face` en CSS bundleado same-origin.
 - `_headers` servido en producción: `font-src 'self'`, woff2 con `Content-Type: font/woff2` + `Cache-Control: public, max-age=31536000, immutable` + `Access-Control-Allow-Origin: *`.
 
-### Residual abierto
-- **Push + deploy de `26f29a2`** (fix CLS) — bloqueado por red de la máquina; lo hace Diego.
-- Re-canario post-deploy de `26f29a2`: 5 válidas/página, target CLS portfolio = 0.
-- Suite `test:a11y:astro` completa (72 tests) cuando la máquina aguante.
+### Re-canario post-deploy (`8f2e54f`, incluye `26f29a2` — Lighthouse 13.4.1 móvil, regla TBT ≤ 500 ms)
+
+Deploy verificado: Cloudflare Pages `730227b6`, todas las etapas `success` (build 03:47→03:49Z). Producción sirve el fallback con métricas ajustadas (`local(Arial)` + `size-adjust:104.979%` en `BaseLayout.*.css`), sin `fonts.googleapis`, con el `preload` de PJS 400.
+
+| | Home (mediana de 4 válidas / 8) | Portfolio (mediana de 5 válidas / 8) |
+|---|---:|---:|
+| FCP | 1,839 ms | 1,883 ms |
+| LCP | 2,392 ms | 1,943 ms |
+| TBT | 494 ms | 422 ms |
+| CLS | **0** (0 en las 8 corridas) | **0.0179** (7 de 8 corridas; una en 0) |
+| Performance | 85 | 85 |
+| a11y / BP / SEO | 96 / 92 / 100 | 100 / 92 / 100 |
+
+- ✅ **LCP < 2.5 s en ambas páginas** — home 2.39 s (desde 6.5 s), portfolio 1.94 s.
+- ✅ **CLS home = 0** en las 8 corridas.
+- ⚠️ **CLS portfolio = 0.0179**, no 0. El fallback con métricas ajustadas bajó de 0.035 (baseline) → 0.018 (preload) → 0.0179 (fix). Neto: mejora, "good" por Web Vitals (5.6× bajo el umbral 0.1), **no cuesta puntos de Lighthouse** (sub-score CLS ≈ 100). Culpable exacto (`layout-shifts` audit): `<section class="stats">` de `/portfolio` se desplaza cuando carga `plus-jakarta-sans-300.woff2` — el único elemento peso 300 arriba de `.stats` es `.hero h1` (titular del hero de `/portfolio`, `clamp(2.2rem, 4.4vw, 3.6rem)`). El override de fallback es único por familia y no cierra la diferencia de wrapping del peso 300 a tamaño display.
+- Reportes crudos: `qa-output/lighthouse-baseline/commit2-final/`.
+
+SILVIA decide: cerrar el CLS residual con un commit propio (2b). Ver abajo.
+
+---
+
+## Commit 2b — `preloadFont300` por página, preload de PJS 300 en `/portfolio` ES/EN
+
+**Alcance (exacto, SILVIA):** prop `preloadFont300?: boolean` en `src/layouts/BaseLayout.astro` (default `false`); emite `<link rel="preload" href="/fonts/plus-jakarta-sans-300.woff2" as="font" crossorigin>` solo cuando se activa. Activado en `src/pages/portfolio.astro` y `src/pages/en/portfolio.astro`. **Home NO lo recibe** (su hero es peso 500). Ninguna página de caso lo recibe (fuera de alcance).
+
+- Motivo: el `<h1>` del hero de `/portfolio` es peso 300 y su swap tardío reflow-ea `.stats` (CLS 0.0179 en el re-canario de `8f2e54f`). El override de fallback por familia no cierra esa diferencia de wrapping a tamaño display; el preload elimina el swap.
+- `plus-jakarta-sans-300.woff2`: 27 KB, subset base latin (ya existía en `public/fonts/`, no se regeneró). El titular del hero solo usa ASCII + acentos españoles (U+0000–00FF) → no hace falta el bloque `-ext`.
+
+### Validación local
+- `astro build` exit 0 (63 páginas; 2º intento — el 1º abortó por timeout de la API de Notion, no por el cambio). HTML generado: `/portfolio` y `/en/portfolio` con ambos preloads (400 + 300); `/` (home) y páginas de caso solo con el 400.
+- `node tools/verify-metrics.cjs` exit 0.
+- **`test:a11y:astro` completa: 72/72 passed** (3.8 min, `--workers=1`). Cierra el pendiente heredado del bloqueo de recursos del Commit 2. (Gotcha: el `astro preview` de este repo corre como daemon desacoplado → hay que arrancarlo a mano antes de Playwright, que entonces lo reusa; el `webServer` de `playwright.astro.config.ts` no lo puede manejar solo.)
+
+### Commits
+| commit | contenido | estado |
+|---|---|---|
+| `_2b_` | `preloadFont300` + activación en `/portfolio` ES/EN | _pendiente push_ |
+
+### Re-canario post-deploy (`_2b_`)
+_pendiente_ — 5 corridas válidas/página, target CLS portfolio ≤ 0.001, home = 0, FCP/LCP sin empeorar vs. `8f2e54f`.
+
+### Cierre Commit 2 (los 4 puntos de SILVIA)
+1. Push + deploy verificado — _pendiente_
+2. Re-canario 5 válidas/página, CLS portfolio ≤ 0.001 / home = 0 — _pendiente_
+3. `test:a11y:astro` 72/72 — ✅ **hecho** (local, pre-push)
+4. CHANGELOG-AUDIT § Commit 2 cerrado + flujo Notion + tarea a Terminada — _pendiente_
+
+### Residual abierto (post Commit 2b)
 - Verificación visual real a 390 px (residual heredado del Commit 1).
 
 ### Flujo Notion
