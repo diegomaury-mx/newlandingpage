@@ -271,8 +271,10 @@ Evidencia de la aceptación:
 - Verificación visual real a 390 px del **Commit 1** (F-13, orden de columnas móvil) — sigue pendiente, es de otro commit.
 - `font-display: optional` / preload de los 4 pesos: **descartado** salvo que CrUX muestre CLS de campo (ver reinterpretación de meta).
 
-### Flujo Notion
-Inbox `3cf0fe3c-51c5-81 f...` → Changelog → Tarea a Terminada, Responsable de vuelta a Claude Code. _(IDs exactos en la entrada creada; ver Changelog — Portafolio D)_
+### Flujo Notion — ✅ hecho 2026-09-02
+- Inbox `3cf0fe3c-51c5-81f9-bcb2-ca7f73986f9b` (Procesado, `Changelog creado` poblado)
+- Changelog `3cf0fe3c-51c5-81aa-8a9d-e6bfd264cae4` (Componente: Infraestructura; Fecha 2026-09-01)
+- Tarea `3cf0fe3c-51c5-8182-871c-ebc26d691008` — **Terminada**, Responsable **Claude Code**, vinculada a Changelog + proyecto Portafolio D
 
 ---
 
