@@ -218,16 +218,31 @@ SILVIA decide: cerrar el CLS residual con un commit propio (2b). Ver abajo.
 ### Commits
 | commit | contenido | estado |
 |---|---|---|
-| `_2b_` | `preloadFont300` + activación en `/portfolio` ES/EN | _pendiente push_ |
+| `f0b3f59` | `preloadFont300` + activación en `/portfolio` ES/EN | **LIVE** (deploy Cloudflare `57a63c2e`, todas las etapas success, 04:21:55Z) |
 
-### Re-canario post-deploy (`_2b_`)
-_pendiente_ — 5 corridas válidas/página, target CLS portfolio ≤ 0.001, home = 0, FCP/LCP sin empeorar vs. `8f2e54f`.
+### Re-canario post-deploy (`f0b3f59` — Lighthouse 13.4.1 móvil, TBT ≤ 500 ms, 5 válidas/página)
+
+| | Home (mediana 5 válidas / 10) | Portfolio (mediana 5 válidas / 7) |
+|---|---:|---:|
+| FCP | 2,036 ms | 1,940 ms |
+| LCP | 2,487 ms | 2,049 ms |
+| TBT | 487 ms | 391 ms |
+| CLS | **0** (0 en las 5) | **0.0179** (0 en 2 de 5; 0.0179 en 3) |
+| Performance | 83 | 87 |
+| a11y | 96 | 100 |
+
+- ✅ **CLS home = 0** en todas las corridas válidas.
+- ✅ **FCP/LCP sin regresión real** vs. `8f2e54f` — home 2.04/2.49 s vs. 1.84/2.39 s, portfolio 1.94/2.05 s vs. 1.88/1.94 s: deltas de ~100-150 ms dentro del ruido de la máquina (más cargada en esta corrida; corridas limpias: home-10 FCP 1.72 s / LCP 2.17 s, portfolio-2 FCP 1.94 s / LCP 2.00 s perf 90).
+- ⚠️ **CLS portfolio: sigue en 0.0179 de mediana** (0 en 2 de 5 corridas). El preload del 300 **sí removió la causa de font-swap del 300** — el audit `layout-shifts` ya no atribuye ninguna causa (antes señalaba explícitamente `plus-jakarta-sans-300.woff2`). Queda un shift residual de exactamente 0.0179 en `.stats`, sin causa que Lighthouse pueda anclar a un recurso, timing-dependiente (desaparece cuando el paint ocurre tras asentarse todos los pesos). Es "good" por Web Vitals (5.6× bajo 0.1) y **no cuesta puntos de Lighthouse** (sub-score CLS ≈ 100).
+- Reportes crudos: `qa-output/lighthouse-baseline/commit2b/`.
+
+**Veredicto:** el preload del 300 es un cierre parcial — mejora el mecanismo (LCP del hero de `/portfolio` pinta en la fuente real sin flash; una causa de CLS eliminada) pero no lleva la métrica agregada a ≤ 0.001. Llegar a 0 garantizado exigiría `font-display: optional` en los pesos de `/portfolio` (el hero mostraría el fallback Arial ya calibrado en conexiones lentas) o preload de los 4 pesos + itálica. **Decisión pendiente de Diego/SILVIA:** aceptar 0.0179 y cerrar, o autorizar un 2c con `font-display: optional`.
 
 ### Cierre Commit 2 (los 4 puntos de SILVIA)
-1. Push + deploy verificado — _pendiente_
-2. Re-canario 5 válidas/página, CLS portfolio ≤ 0.001 / home = 0 — _pendiente_
-3. `test:a11y:astro` 72/72 — ✅ **hecho** (local, pre-push)
-4. CHANGELOG-AUDIT § Commit 2 cerrado + flujo Notion + tarea a Terminada — _pendiente_
+1. Push + deploy verificado — ✅ **hecho** (`f0b3f59` → deploy `57a63c2e`, scoping verificado en prod: home 0, portfolio 1, en/portfolio 1)
+2. Re-canario 5 válidas/página, CLS home = 0 ✅ / CLS portfolio ≤ 0.001 ⚠️ **no alcanzado** (0.0179, decisión pendiente arriba) / FCP/LCP sin empeorar ✅
+3. `test:a11y:astro` 72/72 — ✅ **hecho** (local, pre-push, 3.8 min)
+4. CHANGELOG-AUDIT § Commit 2 cerrado + flujo Notion + tarea a Terminada — _pendiente de la decisión del punto 2_
 
 ### Residual abierto (post Commit 2b)
 - Verificación visual real a 390 px (residual heredado del Commit 1).
