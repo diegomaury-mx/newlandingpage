@@ -32,6 +32,9 @@ _ds_import/
 qa-output/screenshots/
 qa-output/screenshots-astro/
 
+# Reportes crudos de Lighthouse (auditoria): regenerables con npx lighthouse
+qa-output/lighthouse-baseline/
+
 # Salida del skill /video-pitch (Hyperframes): regenerable, no es codigo fuente del sitio
 video-pitch-output/
 
