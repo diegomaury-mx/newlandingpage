@@ -227,6 +227,11 @@
   min-height: 92px;
   padding: 6px 8px;
   font-size: 11px;
+  /* min-width:0 — sin esto los <a> con white-space:nowrap y títulos largos
+     fijan un min-width intrínseco enorme y revientan las 7 columnas 1fr
+     (grid blowout); la cuadrícula colapsaba a ~3 columnas. */
+  min-width: 0;
+  overflow: hidden;
 }
 
 .events-cal-cell--pad {
