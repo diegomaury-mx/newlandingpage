@@ -19,7 +19,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Enlazada desde el footer (ES y EN) y el sitemap. Header pendiente de QA visual.
   - `src/pages/llms.txt.ts`: sección "Eventos (agenda pública)".
   - Contrato: `docs/platform/notion-astro-contract.md` sección 5.
-  - **Pendiente de Diego:** (1) compartir la base con la integración "Diego CMS"; (2) alta en la suscripción de webhooks de `notion-deploy-relay`; (3) enlace público real del formulario "Sugerir un evento". El build de producción falla hasta (1).
+  - CTA "Sugerir un evento" → `https://diegomaury.notion.site/8bc145de…` (Notion Site pública del formulario).
+  - **Pendiente de Diego:** (1) compartir la base con la integración "Diego CMS" — el build de producción falla hasta esto; (2) alta en la suscripción de webhooks de `notion-deploy-relay`.
 
 ## [v0.1.0] — 2026-06-27
 

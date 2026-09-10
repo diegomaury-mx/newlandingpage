@@ -208,4 +208,6 @@ Quinta fuente CMS: agenda pública de solo lectura en `/eventos` (+ `/en/events`
 
 **Fallbacks:** campos vacíos de la whitelist no rompen (default a `''`/`[]`/`null`). Cero eventos publicados = estado vacío con copy fijo, nunca build roto.
 
-**Pendiente de Diego (no bloquea el build):** (1) compartir la base con la integración privada de solo lectura si aún no lo está; (2) dar de alta la base en la suscripción de webhooks de `notion-deploy-relay` para rebuild automático al cambiar `Publicación`; (3) reemplazar `SUGGEST_EVENT_FORM_URL` (hoy la URL de la página de Notion) por el enlace público real del formulario "Sugerir un evento".
+El CTA "Sugerir un evento" apunta a `https://diegomaury.notion.site/8bc145de2ef046298ab63720d95787a4` (Notion Site pública del formulario, funciona sin cuenta); el sitio nunca recibe ni procesa envíos.
+
+**Pendiente de Diego:** (1) compartir la base con la integración `Diego CMS` (Connections → Diego CMS en el menú ••• de la base) — **bloquea el build de producción**; (2) dar de alta la base en la suscripción de webhooks de `notion-deploy-relay` para rebuild automático al cambiar `Publicación`.
