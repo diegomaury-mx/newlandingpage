@@ -252,6 +252,12 @@ const testimonials = defineCollection({
 
 const events = defineCollection({
   loader: eventsLoader,
+  // makeEventDataSchema es factory para recibir en runtime la instancia de Zod
+  // de Astro (ver notionEvents.ts). Astro 7 trae Zod v4 y el paquete `zod`
+  // directo resuelve a v3, asi que los tipos de ambas instancias no unifican
+  // aunque el schema es valido en runtime. El @ts-expect-error acota ese unico
+  // limite; los consumidores de la coleccion tipan con `EventData`.
+  // @ts-expect-error cross-Zod-instance (v3 factory vs v4 de Astro)
   schema: makeEventDataSchema(z),
 });
 

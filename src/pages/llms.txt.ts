@@ -7,6 +7,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '../utils/slug.ts';
 import { caseDisplayTitle } from '../utils/caseTitle.ts';
+import type { EventData } from '../services/notionEvents.ts';
 
 export const prerender = true;
 
@@ -44,7 +45,7 @@ export const GET: APIRoute = async ({ site }) => {
   // Agenda pública de eventos (quinta fuente CMS). Solo entran los ya
   // filtrados por el loader: Publicación = Publicado y fecha vigente.
   const events = [...(await getCollection('events'))]
-    .map((entry) => entry.data)
+    .map((entry) => entry.data as EventData)
     .sort((a, b) => a.start.localeCompare(b.start));
 
   lines.push('---', '', '## Eventos (agenda pública)', '', `Agenda: ${new URL('/eventos', site).toString()}`, '');

@@ -9,13 +9,14 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EventsAgenda from '../components/EventsAgenda.astro';
 import { site } from '../config/site';
+import type { EventData } from '../services/notionEvents.ts';
 
 // Enlace público del formulario "Sugerir un evento" (Notion Site, funciona sin
 // cuenta). Deposita en el Eventos Inbox; el sitio nunca recibe envíos.
 const SUGGEST_EVENT_FORM_URL =
   'https://diegomaury.notion.site/8bc145de2ef046298ab63720d95787a4';
 
-const events = (await getCollection('events')).map((entry) => entry.data);
+const events = (await getCollection('events')).map((entry) => entry.data as EventData);
 
 const canonicalUrl = new URL('/eventos', Astro.site).toString();
 const copy = {

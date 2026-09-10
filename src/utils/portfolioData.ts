@@ -63,7 +63,8 @@ export function orgInitials(org: string): string {
 export interface ShowcaseProject {
   id: string;
   org: string;
-  year: number | null;
+  /** El schema `cases` guarda `year` como string (`z.string().optional()`); aquí solo se muestra. */
+  year: string | null;
   title: string;
   desc: string;
   logo: string | null;
