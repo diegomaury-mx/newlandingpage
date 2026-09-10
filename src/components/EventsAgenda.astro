@@ -5,18 +5,20 @@
  * services/notionEvents.ts y en el loader; aquí solo se renderiza.
  *
  * Las 4 vistas v1 (Esta semana / Próximos 30 días / Calendario / Por
- * categoría) se resuelven en cliente con un `is:inline` (IIFE, ver gotcha
- * de scripts inline en CLAUDE.md): todos los eventos se renderizan una vez y
- * el JS solo alterna `hidden`.
+ * categoría) se resuelven en cliente con un `<script>` bundleado: todos los
+ * eventos se renderizan una vez y el JS solo alterna `hidden`.
+ *
+ * "Según pasan los días": el script recalcula `hoy` (America/Mexico_City) en
+ * cada carga con `eventDates.ts` (mismo módulo puro que el loader), oculta los
+ * eventos ya sucedidos y recalcula los flags de vista sin esperar un rebuild.
+ * El rebuild diario de Cloudflare mantiene además el HTML/SEO servido al día.
  */
+import { ticketLabel, type EventData } from '../services/notionEvents.ts';
 import {
-  isThisWeek,
-  isWithinDays,
-  ticketLabel,
+  eventViewFlags,
   toCalendarDay,
   todayInMexicoCity,
-  type EventData,
-} from '../services/notionEvents.ts';
+} from '../services/eventDates.ts';
 import '../styles/events.css';
 
 interface Copy {
@@ -142,12 +144,7 @@ function metaLine(ev: EventData): string {
 }
 
 function viewFlags(ev: EventData): string {
-  const dates = { start: ev.start, end: ev.end };
-  const flags: string[] = [];
-  if (isThisWeek(dates, today)) flags.push('week');
-  if (isWithinDays(dates, today, 30)) flags.push('next30');
-  if (isWithinDays(dates, today, 60)) flags.push('next60');
-  return flags.join(' ');
+  return eventViewFlags({ start: ev.start, end: ev.end }, today).join(' ');
 }
 
 const hasEvents = upcoming.length > 0;
@@ -206,6 +203,8 @@ const hasEvents = upcoming.length > 0;
                 data-event
                 data-views={viewFlags(ev)}
                 data-cats={ev.categories.join('|')}
+                data-start={toCalendarDay(ev.start)}
+                data-end={toCalendarDay(ev.end ?? ev.start)}
               >
                 <div class="events-card__date">
                   <b>{fmtDay(ev.start).d}</b>
@@ -242,7 +241,7 @@ const hasEvents = upcoming.length > 0;
     <section class="section events-calendar" data-calendar hidden>
       <div class="section-inner">
         {[...new Set(upcoming.map((e) => monthKey(e.start)))].map((key) => (
-          <div class="events-cal-month">
+          <div class="events-cal-month" data-cal-month={key}>
             <p class="events-month__label">{monthLabel(key)}</p>
             <div class="events-cal-grid">
               {weekdayNames.map((w) => (
@@ -258,6 +257,9 @@ const hasEvents = upcoming.length > 0;
                       {cell.events.map((e) => (
                         <a
                           class="events-cal-event"
+                          data-cal-event
+                          data-start={toCalendarDay(e.start)}
+                          data-end={toCalendarDay(e.end ?? e.start)}
                           href={e.officialUrl}
                           target="_blank"
                           rel="noopener"
@@ -273,6 +275,12 @@ const hasEvents = upcoming.length > 0;
             </div>
           </div>
         ))}
+      </div>
+    </section>
+
+    <section class="section events-empty" data-events-empty hidden>
+      <div class="section-inner">
+        <p>{copy.empty}</p>
       </div>
     </section>
   </>
@@ -295,52 +303,91 @@ const hasEvents = upcoming.length > 0;
   </div>
 </section>
 
-<script is:inline>
+<script>
+  import {
+    eventViewFlags,
+    isUpcoming,
+    todayInMexicoCity,
+  } from '../services/eventDates.ts';
+
   (function () {
-    var list = document.querySelector('[data-events-list]');
-    var calendar = document.querySelector('[data-calendar]');
+    const list = document.querySelector<HTMLElement>('[data-events-list]');
+    const calendar = document.querySelector<HTMLElement>('[data-calendar]');
     if (!list) return;
-    var viewBtns = Array.prototype.slice.call(document.querySelectorAll('[data-view]'));
-    var catBtns = Array.prototype.slice.call(document.querySelectorAll('[data-cat]'));
-    var cards = Array.prototype.slice.call(document.querySelectorAll('[data-event]'));
-    var view = 'next30';
-    var cat = '';
+    const emptyState = document.querySelector<HTMLElement>('[data-events-empty]');
+    const viewBtns = [...document.querySelectorAll<HTMLElement>('[data-view]')];
+    const catBtns = [...document.querySelectorAll<HTMLElement>('[data-cat]')];
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-event]')];
+    const calEvents = [
+      ...document.querySelectorAll<HTMLElement>('[data-cal-event]'),
+    ];
+    const calMonths = [
+      ...document.querySelectorAll<HTMLElement>('[data-cal-month]'),
+    ];
+    let view = 'next30';
+    let cat = '';
+
+    const datesOf = (el: HTMLElement) => ({
+      start: el.getAttribute('data-start') ?? '',
+      end: el.getAttribute('data-end') || null,
+    });
 
     function apply() {
-      var showCalendar = view === 'calendar';
-      list.hidden = showCalendar;
+      // "Hoy" se recalcula en cada render: el sitio es estático, pero la
+      // vigencia de los eventos no espera al siguiente build.
+      const today = todayInMexicoCity();
+      const showCalendar = view === 'calendar';
+      list!.hidden = showCalendar;
       if (calendar) calendar.hidden = !showCalendar;
-      if (!showCalendar) {
-        cards.forEach(function (card) {
-          var views = (card.getAttribute('data-views') || '').split(' ');
-          var cats = (card.getAttribute('data-cats') || '').split('|');
-          var okView = views.indexOf(view) !== -1;
-          var okCat = !cat || cats.indexOf(cat) !== -1;
-          card.hidden = !(okView && okCat);
+
+      let anyVisible = false;
+
+      if (showCalendar) {
+        calEvents.forEach((ev) => {
+          ev.hidden = !isUpcoming(datesOf(ev), today);
         });
-        document.querySelectorAll('[data-month]').forEach(function (m) {
-          var visible = Array.prototype.slice
-            .call(m.querySelectorAll('[data-event]'))
-            .some(function (c) { return !c.hidden; });
+        calMonths.forEach((m) => {
+          const visible = [
+            ...m.querySelectorAll<HTMLElement>('[data-cal-event]'),
+          ].some((e) => !e.hidden);
+          m.hidden = !visible;
+          if (visible) anyVisible = true;
+        });
+      } else {
+        cards.forEach((card) => {
+          const flags: string[] = eventViewFlags(datesOf(card), today);
+          card.setAttribute('data-views', flags.join(' '));
+          const cats = (card.getAttribute('data-cats') || '').split('|');
+          const okView = flags.indexOf(view) !== -1;
+          const okCat = !cat || cats.indexOf(cat) !== -1;
+          card.hidden = !(okView && okCat);
+          if (!card.hidden) anyVisible = true;
+        });
+        document.querySelectorAll<HTMLElement>('[data-month]').forEach((m) => {
+          const visible = [
+            ...m.querySelectorAll<HTMLElement>('[data-event]'),
+          ].some((c) => !c.hidden);
           m.hidden = !visible;
         });
       }
+
+      if (emptyState) emptyState.hidden = anyVisible;
     }
 
-    viewBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        view = btn.getAttribute('data-view');
-        viewBtns.forEach(function (b) {
+    viewBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        view = btn.getAttribute('data-view') ?? 'next30';
+        viewBtns.forEach((b) => {
           b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
         });
         apply();
       });
     });
 
-    catBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        cat = btn.getAttribute('data-cat');
-        catBtns.forEach(function (b) {
+    catBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        cat = btn.getAttribute('data-cat') ?? '';
+        catBtns.forEach((b) => {
           b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
         });
         apply();

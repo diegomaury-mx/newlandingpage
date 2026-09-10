@@ -186,6 +186,8 @@ Quinta fuente CMS: agenda pública de solo lectura en `/eventos` (+ `/en/events`
 
 **Filtro del loader (`eventsLoader` en `notionLoaders.ts`):** solo entran filas con `Publicación == "Publicado"` Y fecha de fin (o inicio si no hay fin) `>= hoy` en `America/Mexico_City`. Sin `Enlace Oficial` válido (`http(s)://`) no hay tarjeta. El loader NO lee el body de las páginas (los bloques `ai_block` de Notion no aplican).
 
+**Frescura entre builds (2026-09-10):** el filtro de vigencia es de build time, así que se refuerza en dos capas más. (1) El `<script>` de `EventsAgenda.astro` recalcula `hoy` (America/Mexico_City) en cada carga con `src/services/eventDates.ts` y oculta client-side los eventos ya sucedidos y recalcula los flags de vista, sin esperar un rebuild. (2) El Worker `notion-deploy-relay` tiene un Cron Trigger diario (`0 13 * * *`) que dispara el Deploy Hook, así el HTML/SEO servido también deja de listar eventos pasados aunque nadie edite Notion.
+
 **Whitelist de publicación (sección 8.2 del contrato). El schema (`eventDataSchema` en `src/services/notionEvents.ts`) es `.strict()`: una propiedad fuera de esta lista rompe el build a propósito.**
 
 | Propiedad Notion | Tipo | Campo Zod | Render |

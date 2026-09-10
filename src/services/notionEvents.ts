@@ -29,72 +29,23 @@ import {
   getUrl,
   getRelationIds,
 } from "./notionClient.ts";
+import { isUpcoming } from "./eventDates.ts";
 
-// --- Fechas -----------------------------------------------------------------
-
-/** Día natural (YYYY-MM-DD) de un valor de fecha de Notion, que puede ser
- * date (`2026-09-23`) o datetime (`2026-10-23T23:30:00.000Z`). */
-export function toCalendarDay(value: string): string {
-  return value.slice(0, 10);
-}
-
-/** Hoy en America/Mexico_City como YYYY-MM-DD. `now` inyectable para tests. */
-export function todayInMexicoCity(now: Date = new Date()): string {
-  // en-CA da el formato ISO YYYY-MM-DD directo.
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/Mexico_City",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(now);
-}
-
-export interface EventDates {
-  start: string;
-  end: string | null;
-}
-
-/**
- * Día contra el que se decide si el evento sigue vigente: el de fin si el
- * evento dura varios días, el de inicio si es de un solo día. Un evento cuyo
- * primer día ya pasó pero termina hoy o después sigue en cartelera.
- */
-export function relevanceDay(dates: EventDates): string {
-  return toCalendarDay(dates.end ?? dates.start);
-}
-
-/** True si el evento no ha terminado (fin, o inicio) antes de hoy en CDMX. */
-export function isUpcoming(dates: EventDates, todayMx: string): boolean {
-  return relevanceDay(dates) >= todayMx;
-}
-
-/** Época UTC (ms) de la medianoche de un día YYYY-MM-DD. */
-function dayEpoch(day: string): number {
-  const [y, m, d] = day.split("-").map(Number);
-  return Date.UTC(y, m - 1, d);
-}
-
-/** Diferencia en días naturales entre `day` (YYYY-MM-DD) y `todayMx`. */
-export function daysFromToday(day: string, todayMx: string): number {
-  return Math.round((dayEpoch(day) - dayEpoch(todayMx)) / 86_400_000);
-}
-
-/** "Esta semana": empieza entre hoy y hoy+6 (inclusive), y sigue vigente. */
-export function isThisWeek(dates: EventDates, todayMx: string): boolean {
-  if (!isUpcoming(dates, todayMx)) return false;
-  const startDelta = daysFromToday(toCalendarDay(dates.start), todayMx);
-  return startDelta <= 6;
-}
-
-/** "Próximos 30 días": empieza (o ya empezó y sigue) dentro de hoy..hoy+30. */
-export function isWithinDays(
-  dates: EventDates,
-  todayMx: string,
-  days: number,
-): boolean {
-  if (!isUpcoming(dates, todayMx)) return false;
-  return daysFromToday(toCalendarDay(dates.start), todayMx) <= days;
-}
+// --- Fechas ---------------------------------------------------------------
+// La lógica pura de fechas vive en `eventDates.ts` (client-safe, la comparte
+// el script de cliente de EventsAgenda). Se re-exporta aquí por back-compat.
+export {
+  toCalendarDay,
+  todayInMexicoCity,
+  relevanceDay,
+  isUpcoming,
+  daysFromToday,
+  isThisWeek,
+  isWithinDays,
+  eventViewFlags,
+  partitionEvents,
+} from "./eventDates.ts";
+export type { EventDates, EventViewFlag } from "./eventDates.ts";
 
 // --- Status de ticket (whitelist "Parcial") --------------------------------
 

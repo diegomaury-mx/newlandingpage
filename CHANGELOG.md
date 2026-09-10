@@ -6,6 +6,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Unreleased] — 2026-09-10
+
+### Changed
+
+- **`/eventos` (+ `/en/events`) se refresca sin esperar un rebuild.** La vigencia de los eventos y los flags de vista (Esta semana / Próximos 30 / Próximos 60) se calculaban solo en build time con `todayInMexicoCity()`; entre builds la agenda mostraba eventos ya sucedidos y "esta semana" apuntaba a la semana equivocada.
+  - Lógica pura de fechas extraída de `src/services/notionEvents.ts` a `src/services/eventDates.ts` (sin dependencias de Notion/Astro, client-safe). `notionEvents.ts` la re-exporta: cero cambios para sus consumidores. Nuevas funciones puras `eventViewFlags()` y `partitionEvents()` (vigentes ordenados por proximidad de inicio vs. pasados). 8 tests nuevos en `src/services/eventDates.test.ts`.
+  - `EventsAgenda.astro`: el `<script is:inline>` pasó a `<script>` bundleado que importa `eventDates.ts` y recalcula `hoy` (America/Mexico_City) en cada carga — oculta eventos ya sucedidos (lista y calendario), recalcula los flags de vista y muestra un estado vacío client-side cuando ninguna tarjeta queda visible. Cada tarjeta y evento de calendario lleva `data-start`/`data-end` crudos.
+- **Rebuild diario del sitio (Cloudflare Cron Trigger).** El Worker `notion-deploy-relay` ganó un handler `scheduled` que dispara el mismo Deploy Hook de Cloudflare Pages. Cron `0 13 * * *` (13:00 UTC ≈ 07:00–08:00 CDMX). Mantiene el HTML/SEO servido al día aunque nadie edite Notion ni haga push. Los 3 bindings del Worker (`DEPLOY_HOOK_URL`, `NOTION_WEBHOOK_SECRET`, `RELAY_KV`) se preservaron vía `keep_bindings`. La fuente del Worker vive fuera de este repo (snapshot manual en `notion-cms`).
+
 ## [Unreleased] — 2026-09-09
 
 ### Added
