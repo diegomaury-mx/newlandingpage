@@ -3,4 +3,12 @@ renders/qa-rev*/
 renders/qa-revision*/
 snapshots-rev*/
 snapshots/
+snapshots-landscape*/
+renders/qa-landscape/
+renders/qa-detail*/
+renders/qa-snapshots/
 qa-output/
+
+# Cachés de herramienta HyperFrames — regenerables
+.hyperframes/
+.media/

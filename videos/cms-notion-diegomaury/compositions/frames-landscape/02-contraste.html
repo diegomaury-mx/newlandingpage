@@ -1,0 +1,168 @@
+<template>
+<style>
+@font-face { font-family: 'Plus Jakarta Sans'; font-style: normal; font-weight: 400; font-display: block; src: url("assets/fonts/PlusJakartaSans-400.woff2") format("woff2"); }
+@font-face { font-family: 'Plus Jakarta Sans'; font-style: normal; font-weight: 500; font-display: block; src: url("assets/fonts/PlusJakartaSans-500.woff2") format("woff2"); }
+@font-face { font-family: 'Plus Jakarta Sans'; font-style: normal; font-weight: 700; font-display: block; src: url("assets/fonts/PlusJakartaSans-700.woff2") format("woff2"); }
+@font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 400; font-display: block; src: url("assets/fonts/DMMono-400.woff2") format("woff2"); }
+@font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 500; font-display: block; src: url("assets/fonts/DMMono-500.woff2") format("woff2"); }
+
+#root {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  container-type: size;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #FAF8FC;
+  background: #0A0612; /* {colors.bg} */
+}
+
+.clip { position: absolute; inset: 0; }
+
+.f02-brand { position: absolute; top: 60px; left: 100px; right: 100px; display: flex; align-items: center; gap: 22px; opacity: 0; }
+.f02-brand-mark { width: 52px; height: 52px; flex: none; }
+.f02-brand-mark svg { display: block; width: 100%; height: 100%; }
+.f02-brand-rule { flex: 1 1 auto; height: 1px; background: #6A291B; /* {colors.border} */ }
+
+/* Beat 1: contraste Antes/Ahora — centrado en el eje. */
+.f02-contrast {
+  position: absolute;
+  top: 330px;
+  left: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 72px;
+}
+.f02-row { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; opacity: 0; }
+.f02-tag {
+  font-family: 'DM Mono', monospace; font-weight: 500; font-size: 30px;
+  letter-spacing: 0.08em; color: #A8A6AC; /* {colors.t3} */
+}
+.f02-block {
+  display: inline-flex; align-items: center; gap: 14px; padding: 18px 26px;
+  background: #1A1128; /* {colors.bg-2} */
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 16px; /* radius-lg — v2-parity override */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override */
+  font-family: 'DM Mono', monospace; font-weight: 500; font-size: 46px;
+  letter-spacing: 0.01em; color: #FAF8FC; /* {colors.t1} */
+}
+.f02-block .f02-accent { color: #FF5C39; /* {colors.ember} — the ONE accent in this frame */ }
+
+/* Beat 2: el espejo — C2 (izq) / C3 (der) con línea de correspondencia horizontal. */
+.f02-mirror-text {
+  position: absolute;
+  width: 700px;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 58px;
+  line-height: 1.16; letter-spacing: -0.02em; color: #FAF8FC; opacity: 0;
+}
+.f02-mirror-text--top { left: 180px; top: 210px; }
+.f02-mirror-text--bottom { left: 1040px; top: 210px; }
+.f02-highlight { display: inline-block; padding: 0 8px; background: rgba(26, 17, 40, 0.55); border-radius: 6px; }
+
+.f02-frame {
+  position: absolute;
+  width: 700px; height: 400px;
+  border: 1px solid #6A291B; /* {colors.border} */
+  border-radius: 16px; /* radius-lg — v2-parity override */
+  box-shadow: 0 20px 50px -18px rgba(0,0,0,0.6); /* {shadows.elevated} — scoped v2-parity override */
+  overflow: hidden; opacity: 0;
+}
+.f02-frame--top { left: 180px; top: 360px; }
+.f02-frame--bottom { left: 1040px; top: 360px; }
+.f02-frame img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
+
+.f02-line-svg { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; }
+.f02-line-svg path { fill: none; stroke: #FF5C39; /* {colors.ember} — the ONE accent in this frame */ stroke-width: 3; stroke-linecap: round; }
+
+.f02-edit-cue {
+  position: absolute; left: 232px; top: 420px; width: 340px; height: 46px;
+  background: rgba(250, 248, 252, 0.12); /* {colors.t1} @12% */
+  border-right: 3px solid #FAF8FC; /* {colors.t1} — I-beam */
+  border-radius: 3px; transform: scaleX(0); transform-origin: 0% 50%; opacity: 0;
+}
+</style>
+
+<div id="root" data-composition-id="02-contraste" data-width="1920" data-height="1080">
+  <audio id="f-sfx-1" class="clip" src="assets/sfx/confirm-soft.wav" data-start="1.1" data-duration="0.2" data-track-index="33"></audio>
+  <audio id="f-sfx-2" class="clip" src="assets/sfx/key-tick.wav" data-start="3.85" data-duration="0.25" data-track-index="34"></audio>
+  <audio id="f-sfx-3" class="clip" src="assets/sfx/lock-in.ogg" data-start="5.0" data-duration="0.5" data-track-index="35"></audio>
+
+  <div class="clip" id="f02-brand-track" data-start="0" data-duration="7.5" data-track-index="0">
+    <div class="f02-brand" id="f02-brand">
+      <span class="f02-brand-mark">
+        <svg viewBox="0 0 1007 1007" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+          <path d="M884.2,271.4l-355,307.2l355,-307.2Z" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M131.3,709.5l398,-130.8l-75.1,310" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M558.5,888.6l63.8,-280.4l260.9,-212.2" style="fill:none;stroke:#FF5C39;stroke-width:41.9px;"></path>
+          <path d="M505.8,46.1l392,220l1.7,443l-390.3,223l-392,-220l-1.7,-443l390.3,-223Z" style="fill:none;stroke:#FAF8FC;stroke-width:41.9px;"></path>
+        </svg>
+      </span>
+      <span class="f02-brand-rule"></span>
+    </div>
+  </div>
+
+  <div class="clip" id="f02-contrast-track" data-start="0" data-duration="7.5" data-track-index="1">
+    <div class="f02-contrast" id="f02-contrast">
+      <div class="f02-row" id="f02-antes">
+        <span class="f02-tag">Antes</span>
+        <span class="f02-block">Código <span>→</span> Deploy</span>
+      </div>
+      <div class="f02-row" id="f02-ahora">
+        <span class="f02-tag">Ahora</span>
+        <span class="f02-block"><span class="f02-accent">Notion</span> <span>→</span> Publicar</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="clip" id="f02-mirror-track" data-start="0" data-duration="7.5" data-track-index="2">
+    <div class="f02-mirror-text f02-mirror-text--top" id="f02-text-top">Lo que <span class="f02-highlight">edito</span> aquí,</div>
+    <div class="f02-frame f02-frame--top" id="f02-frame-top">
+      <img src="assets/img/cms-video/c2-notion-heineken.png" alt="" />
+    </div>
+    <div class="f02-frame f02-frame--bottom" id="f02-frame-bottom">
+      <img src="assets/img/cms-video/c3-sitio-heineken.png" alt="" />
+    </div>
+    <div class="f02-mirror-text f02-mirror-text--bottom" id="f02-text-bottom"><span class="f02-highlight">aparece</span> aquí.</div>
+    <div class="f02-edit-cue" id="f02-edit-cue"></div>
+    <svg class="f02-line-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+      <path id="f02-line" d="M 880 560 L 1040 560" />
+    </svg>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+(function () {
+  window.__timelines = window.__timelines || {};
+
+  var line = document.getElementById('f02-line');
+  var len = line.getTotalLength();
+  line.style.strokeDasharray = String(len);
+  line.style.strokeDashoffset = String(len);
+
+  var tl = gsap.timeline({ paused: true });
+
+  tl.fromTo('#f02-brand', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, 0.05);
+
+  tl.fromTo('#f02-antes', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 0.1);
+  tl.fromTo('#f02-ahora', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.24, ease: 'power4.out' }, 1.1);
+  tl.to('#f02-contrast', { opacity: 0, duration: 0.4, ease: 'power1.in' }, 2.8);
+
+  tl.fromTo('#f02-frame-top', { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 3.1);
+  tl.fromTo('#f02-text-top', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 3.35);
+
+  tl.set('#f02-edit-cue', { opacity: 1 }, 3.85);
+  tl.fromTo('#f02-edit-cue', { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'steps(9)' }, 3.85);
+  tl.to('#f02-edit-cue', { opacity: 0, duration: 0.25, ease: 'power1.in' }, 4.55);
+
+  tl.fromTo('#f02-frame-bottom', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 4.55);
+  tl.fromTo('#f02-text-bottom', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 4.9);
+  tl.to(line, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out' }, 5.1);
+
+  window.__timelines['02-contraste'] = tl;
+})();
+</script>
+</template>

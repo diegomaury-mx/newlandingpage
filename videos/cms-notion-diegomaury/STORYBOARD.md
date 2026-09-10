@@ -8,6 +8,17 @@ mode: autonomous
 music: none, pero SFX sí — D-01 revocada 2026-08-31: sistema sonoro mínimo (click / confirm / trigger / build-pulse / success / fade), sin BGM ni voz
 ---
 
+## Corte landscape 16:9 (2026-09-01)
+
+Además del máster vertical, existe un corte **landscape 1920×1080** derivado de la revisión 4:
+root `index.landscape.html`, frames en `compositions/frames-landscape/*.html`, render en
+`renders/video-cms-notion-revision4-landscape.mp4`. Mismo guion, timings, assets y SFX; solo
+cambia la capa de layout — la pila vertical (headline → contenido → resultado) pasa a un split
+de dos columnas (argumento | evidencia; y proceso → resultado en el pipeline de F6). Aprobado
+por Diego contra los contact sheets de `snapshots-landscape/`. Microajustes aplicados: crop de
+`HEINEKEN` en F2 y bloque de F7 a center-left óptico. Mantener los dos cortes sincronizados ante
+cualquier cambio de copy o narrativa.
+
 ## Estado vigente (2026-09-01, revisión 4 — recomposición espacial)
 
 Este documento describe el video final tal como existe en `index.html` y `compositions/frames/`, y tal como quedó renderizado en `renders/video-cms-notion-revision4.mp4` (layout aprobado por el usuario 2026-09-01). Es **8 frames en 7 archivos** — `02-contraste.html` contiene dos beats (contraste + espejo) en un solo archivo; no existe `03-el-espejo.html` como archivo separado.

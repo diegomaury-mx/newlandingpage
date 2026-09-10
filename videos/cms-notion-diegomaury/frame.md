@@ -9,7 +9,7 @@ description: >
   two approved exceptions), Plus Jakarta Sans for all display/body + DM Mono for labels/code/units,
   the real radius scale (0/3/6/10/16/pill), the real spacing scale, and the real isotipo-ember
   brand mark. Composition is free; these atoms are sacred.
-unit: the frame — 1080×1920 primary (this project is vertical-only)
+unit: the frame — 1080×1920 primary; a scoped 1920×1080 landscape cut also exists (see The Frame)
 principle: atoms are sacred (site tokens) · composition is free · never invent a color/radius/font not listed here
 
 colors:
@@ -150,7 +150,15 @@ outside this scale.
 - **Type** — Plus Jakarta Sans for all reading/display text; DM Mono uppercase 0.16em for every
   label/kicker; DM Mono (non-upper) for code, units, and numeric figures.
 
-- **Canvas**: 1080×1920 (9:16) for this project — no other ratio needed.
+- **Canvas**: 1080×1920 (9:16) is the primary. **Scoped exception (2026-09-01, Diego):** a
+  landscape 1920×1080 (16:9) cut also exists — root `index.landscape.html` +
+  `compositions/frames-landscape/*.html`, rendered to
+  `renders/video-cms-notion-revision4-landscape.mp4`. Same script, timings, assets, SFX, and
+  atoms (colors/type/radius/one-ember/the v2-parity shadow override). Only the layout layer
+  differs: the vertical stack (headline → content → result) becomes a two-column split
+  (argument | evidence; and process → result for the F6 pipeline). Keep the two cuts in sync —
+  a narrative or copy change lands in both `compositions/frames/` and
+  `compositions/frames-landscape/`.
 - **Safe area**: `slide-pad` ~4.2cqw; content stays inside it. Caption band keep-out (bottom ~17%)
   still applies per the workflow's own rule even though captions are disabled — keep all content
   in the top ~83% for consistency.
