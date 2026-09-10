@@ -2,6 +2,14 @@
    DS V2 "Ember on Ink": un solo acento ember por pieza, sin gradientes ni
    sombras decorativas, radios en escala {3,6,10}. */
 
+/* El script de filtros alterna el atributo `hidden`; sin esto, las reglas
+   `display:grid|block` de author (`.events-card`, `.events-cal-grid`, etc.)
+   ganan al `[hidden]` del user-agent y los filtros no ocultan nada.
+   `portfolio.css` trae su propia copia de esta regla, pero no se carga aquí. */
+[hidden] {
+  display: none !important;
+}
+
 .events-hero .section-inner {
   max-width: 1160px;
 }

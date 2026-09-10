@@ -95,6 +95,8 @@ export const uiEn = {
       category: "By category",
     },
     allCategories: "All",
+    allTypes: "All",
+    onlyFree: "Free only",
     viewCase: "View event",
     free: "Free",
     checkLink: "Check the link",

@@ -28,6 +28,8 @@ interface Copy {
   suggestCta: string;
   views: { week: string; next30: string; next60: string; calendar: string; category: string };
   allCategories: string;
+  allTypes: string;
+  onlyFree: string;
   viewCase: string;
   free: string;
   checkLink: string;
@@ -108,6 +110,20 @@ const categories = [...new Set(upcoming.flatMap((e) => e.categories))].sort((a, 
   a.localeCompare(b, intlLocale),
 );
 
+// Tipos de evento presentes (Conferencia, Meetup, Hackathon…). La fila de
+// chips solo se muestra si hay al menos dos valores distintos: un filtro con
+// una sola opción no filtra nada.
+const eventTypes = [...new Set(upcoming.map((e) => e.type).filter((t): t is string => Boolean(t)))].sort(
+  (a, b) => a.localeCompare(b, intlLocale),
+);
+const showTypeFilter = eventTypes.length >= 2;
+
+function isFree(ev: EventData): boolean {
+  return ticketLabel(ev.ticketStatus) === 'Gratuito';
+}
+// El toggle "Solo gratuitos" solo aparece si hay eventos gratuitos que mostrar.
+const hasFreeEvents = upcoming.some(isFree);
+
 // Matriz de calendario por mes (solo meses con eventos, de hoy en adelante).
 const weekdayNames = (() => {
   const base = new Date('2024-01-01T00:00:00Z'); // lunes
@@ -186,6 +202,19 @@ const hasEvents = upcoming.length > 0;
           <button class="events-cat-chip" aria-pressed="false" data-cat={cat}>{cat}</button>
         ))}
       </div>
+      {showTypeFilter && (
+        <div class="events-cats" data-types aria-label={copy.views.category}>
+          <button class="events-cat-chip" aria-pressed="true" data-type-chip="">{copy.allTypes}</button>
+          {eventTypes.map((t) => (
+            <button class="events-cat-chip" aria-pressed="false" data-type-chip={t}>{t}</button>
+          ))}
+        </div>
+      )}
+      {hasFreeEvents && (
+        <div class="events-cats">
+          <button class="events-cat-chip" aria-pressed="false" data-free-toggle>{copy.onlyFree}</button>
+        </div>
+      )}
     </div>
   </div>
 )}
@@ -203,6 +232,8 @@ const hasEvents = upcoming.length > 0;
                 data-event
                 data-views={viewFlags(ev)}
                 data-cats={ev.categories.join('|')}
+                data-type={ev.type ?? ''}
+                data-free={isFree(ev) ? 'y' : 'n'}
                 data-start={toCalendarDay(ev.start)}
                 data-end={toCalendarDay(ev.end ?? ev.start)}
               >
@@ -317,6 +348,10 @@ const hasEvents = upcoming.length > 0;
     const emptyState = document.querySelector<HTMLElement>('[data-events-empty]');
     const viewBtns = [...document.querySelectorAll<HTMLElement>('[data-view]')];
     const catBtns = [...document.querySelectorAll<HTMLElement>('[data-cat]')];
+    const typeBtns = [
+      ...document.querySelectorAll<HTMLElement>('[data-type-chip]'),
+    ];
+    const freeToggle = document.querySelector<HTMLElement>('[data-free-toggle]');
     const cards = [...document.querySelectorAll<HTMLElement>('[data-event]')];
     const calEvents = [
       ...document.querySelectorAll<HTMLElement>('[data-cal-event]'),
@@ -326,6 +361,8 @@ const hasEvents = upcoming.length > 0;
     ];
     let view = 'next30';
     let cat = '';
+    let type = '';
+    let freeOnly = false;
 
     const datesOf = (el: HTMLElement) => ({
       start: el.getAttribute('data-start') ?? '',
@@ -360,7 +397,9 @@ const hasEvents = upcoming.length > 0;
           const cats = (card.getAttribute('data-cats') || '').split('|');
           const okView = flags.indexOf(view) !== -1;
           const okCat = !cat || cats.indexOf(cat) !== -1;
-          card.hidden = !(okView && okCat);
+          const okType = !type || (card.getAttribute('data-type') || '') === type;
+          const okFree = !freeOnly || card.getAttribute('data-free') === 'y';
+          card.hidden = !(okView && okCat && okType && okFree);
           if (!card.hidden) anyVisible = true;
         });
         document.querySelectorAll<HTMLElement>('[data-month]').forEach((m) => {
@@ -393,6 +432,24 @@ const hasEvents = upcoming.length > 0;
         apply();
       });
     });
+
+    typeBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        type = btn.getAttribute('data-type-chip') ?? '';
+        typeBtns.forEach((b) => {
+          b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        });
+        apply();
+      });
+    });
+
+    if (freeToggle) {
+      freeToggle.addEventListener('click', () => {
+        freeOnly = !freeOnly;
+        freeToggle.setAttribute('aria-pressed', freeOnly ? 'true' : 'false');
+        apply();
+      });
+    }
 
     apply();
   })();
