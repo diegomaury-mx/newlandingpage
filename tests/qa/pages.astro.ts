@@ -14,6 +14,13 @@ const ES_ONLY_PAGES = [
 // Paginas con version /en/* real (home, portfolio, casos del CMS — ver
 // sesion 2026-08-17, traduccion via DeepL con fallback a espanol). Docencia
 // y legales quedan fuera a proposito: no tienen contraparte EN todavia.
+// Pares ES/EN cuya ruta EN NO es /en + ruta ES (la agenda usa la palabra
+// inglesa: /eventos <-> /en/events). Van explícitos, no por enVariant().
+const CUSTOM_BILINGUAL_PAGES = [
+  { name: 'eventos', path: '/eventos/' },
+  { name: 'eventos-en', path: '/en/events/' },
+];
+
 const BILINGUAL_PAGES = [
   { name: 'home', path: '/' },
   { name: 'portfolio-index', path: '/portfolio/' },
@@ -43,5 +50,6 @@ function enVariant(page: { name: string; path: string }): { name: string; path: 
 export const ASTRO_QA_PAGES = [
   ...BILINGUAL_PAGES,
   ...BILINGUAL_PAGES.map(enVariant),
+  ...CUSTOM_BILINGUAL_PAGES,
   ...ES_ONLY_PAGES,
 ];

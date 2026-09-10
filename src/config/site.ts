@@ -80,6 +80,10 @@ export const site = {
 				href: "/portfolio",
 			},
 			{
+				label: "Eventos",
+				href: "/eventos",
+			},
+			{
 				label: "Docencia",
 				href: "/docencia",
 			},

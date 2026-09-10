@@ -1,0 +1,66 @@
+---
+/**
+ * /eventos — agenda pública (quinta fuente de Diego CMS).
+ * Fuente: colección `events` (loader en services/notionLoaders.ts, whitelist
+ * 8.2 del "Pipeline de Eventos · Data Contract v2"). Solo lectura: Notion
+ * define qué se publica, el código define cómo se muestra.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EventsAgenda from '../components/EventsAgenda.astro';
+import { site } from '../config/site';
+
+// Enlace público del formulario "Sugerir un evento" (deposita en el Eventos
+// Inbox, el sitio nunca recibe envíos). PENDIENTE: Diego debe reemplazarlo
+// por el enlace público real del menú Compartir del formulario de Notion.
+const SUGGEST_EVENT_FORM_URL =
+  'https://www.notion.so/8bc145de2ef046298ab63720d95787a4';
+
+const events = (await getCollection('events')).map((entry) => entry.data);
+
+const canonicalUrl = new URL('/eventos', Astro.site).toString();
+const copy = {
+  eyebrow: 'Agenda pública',
+  title: 'Eventos de tecnología e innovación en México',
+  lede:
+    'Una selección abierta de meetups, conferencias y summits del ecosistema tech y de innovación, sobre todo en Ciudad de México. Curada a mano; los datos y el enlace oficial vienen de cada organizador.',
+  suggestCta: 'Sugerir un evento',
+  views: {
+    week: 'Esta semana',
+    next30: 'Próximos 30 días',
+    calendar: 'Calendario',
+    category: 'Por categoría',
+  },
+  allCategories: 'Todas',
+  viewCase: 'Ver evento',
+  free: 'Gratuito',
+  checkLink: 'Consultar en el enlace',
+  partOf: 'Parte de',
+  empty: 'No hay eventos publicados en este momento. Vuelve pronto o sugiere uno.',
+  closingTitle: '¿Organizas algo que debería estar aquí?',
+  closingLede:
+    'Si conoces un evento del ecosistema que valga la pena, compártelo. Si quieres conversar sobre programas o alianzas, agenda una llamada.',
+  scheduleCta: 'Agendar una llamada',
+  writeCta: 'Escríbeme',
+};
+---
+<BaseLayout
+  title="Eventos · Diego Maury"
+  description={copy.lede}
+  canonicalUrl={canonicalUrl}
+  enableGtm
+  otherLocaleHref="/en/events"
+  alternateUrls={[
+    { lang: 'es', url: canonicalUrl },
+    { lang: 'en', url: new URL('/en/events', Astro.site).toString() },
+  ]}
+>
+  <EventsAgenda
+    locale="es"
+    events={events}
+    copy={copy}
+    suggestUrl={SUGGEST_EVENT_FORM_URL}
+    scheduleUrl={site.links.scheduling}
+    emailUrl={site.links.email}
+  />
+</BaseLayout>

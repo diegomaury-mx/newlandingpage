@@ -41,6 +41,29 @@ export const GET: APIRoute = async ({ site }) => {
     }
   }
 
+  // Agenda pública de eventos (quinta fuente CMS). Solo entran los ya
+  // filtrados por el loader: Publicación = Publicado y fecha vigente.
+  const events = [...(await getCollection('events'))]
+    .map((entry) => entry.data)
+    .sort((a, b) => a.start.localeCompare(b.start));
+
+  lines.push('---', '', '## Eventos (agenda pública)', '', `Agenda: ${new URL('/eventos', site).toString()}`, '');
+  if (events.length === 0) {
+    lines.push('No hay eventos publicados en este momento.');
+  } else {
+    for (const e of events) {
+      const range = e.end && e.end.slice(0, 10) !== e.start.slice(0, 10)
+        ? `${e.start.slice(0, 10)} a ${e.end.slice(0, 10)}`
+        : e.start.slice(0, 10);
+      lines.push(`### ${e.name}`);
+      lines.push(`- Fecha: ${range}`);
+      lines.push(`- Dónde: ${[e.city, e.modality].filter(Boolean).join(' · ') || '—'}`);
+      if (e.organizer) lines.push(`- Organiza: ${e.organizer}`);
+      lines.push(`- Enlace oficial: ${e.officialUrl}`);
+      lines.push('');
+    }
+  }
+
   return new Response(lines.join('\n'), {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
   });

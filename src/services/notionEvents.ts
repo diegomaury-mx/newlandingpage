@@ -113,46 +113,59 @@ export function ticketLabel(raw: string | undefined): string {
 /** Campos de prosa que se traducen a inglés (DeepL, cacheado) para `/en/events`. */
 export const EVENT_TRANSLATABLE_FIELDS = ["summary"] as const;
 
-const httpUrl = z
-  .string()
-  .url()
-  .refine((v) => /^https?:\/\//i.test(v), {
-    message: "La URL debe usar esquema http:// o https://",
-  });
-
 /**
- * Whitelist de publicación (Data Contract v2, sección 8.2). `.strict()`: si
- * el mapper deja pasar una propiedad que no está aquí, el build rompe.
+ * Whitelist de publicación (Data Contract v2, sección 8.2), como factory
+ * parametrizada por la instancia de Zod. `.strict()`: una propiedad fuera de
+ * la lista rompe el build a propósito.
+ *
+ * Es factory (no una constante) porque `content.config.ts` debe pasar el `z`
+ * de `astro:content` — Astro genera el JSON schema del editor con su propia
+ * copia de Zod y falla ("Cannot read properties of undefined") si recibe un
+ * schema construido con otra instancia. Los tests (que no pueden importar
+ * `astro:content`) pasan el `zod` del paquete directo.
  */
-export const eventDataSchema = z
-  .object({
-    name: z.string().min(1),
-    // Fecha del evento (inicio y fin). ISO date o datetime; `end` null si es
-    // de un solo día.
-    start: z.string().min(1),
-    end: z.string().nullable().default(null),
-    city: z.string().optional(),
-    modality: z.string().optional(),
-    type: z.string().optional(),
-    categories: z.array(z.string()).default([]),
-    organizer: z.string().default(""),
-    summary: z.string().default(""),
-    officialUrl: httpUrl,
-    // "Evento principal": solo el nombre del evento padre, nunca la relación
-    // completa ni un link a Notion.
-    parentName: z.string().default(""),
-    // "Status de Ticket": se guarda el valor crudo; ticketLabel() aplica la
-    // regla parcial al renderizar.
-    ticketStatus: z.string().optional(),
-    en: z
-      .object(
-        Object.fromEntries(
-          EVENT_TRANSLATABLE_FIELDS.map((f) => [f, z.string().optional()]),
-        ),
-      )
-      .default({}),
-  })
-  .strict();
+type ZodLike = typeof z;
+
+export function makeEventDataSchema(zod: ZodLike) {
+  const httpUrl = zod
+    .string()
+    .url()
+    .refine((v: string) => /^https?:\/\//i.test(v), {
+      message: "La URL debe usar esquema http:// o https://",
+    });
+  return zod
+    .object({
+      name: zod.string().min(1),
+      // Fecha del evento (inicio y fin). ISO date o datetime; `end` null si es
+      // de un solo día.
+      start: zod.string().min(1),
+      end: zod.string().nullable().default(null),
+      city: zod.string().optional(),
+      modality: zod.string().optional(),
+      type: zod.string().optional(),
+      categories: zod.array(zod.string()).default([]),
+      organizer: zod.string().default(""),
+      summary: zod.string().default(""),
+      officialUrl: httpUrl,
+      // "Evento principal": solo el nombre del evento padre, nunca la relación
+      // completa ni un link a Notion.
+      parentName: zod.string().default(""),
+      // "Status de Ticket": valor crudo; ticketLabel() aplica la regla parcial.
+      ticketStatus: zod.string().optional(),
+      en: zod
+        .object(
+          Object.fromEntries(
+            EVENT_TRANSLATABLE_FIELDS.map((f) => [f, zod.string().optional()]),
+          ),
+        )
+        .default({}),
+    })
+    .strict();
+}
+
+/** Schema construido con el Zod del paquete directo — para tests y para el
+ * tipo `EventData`. `content.config.ts` construye el suyo con el `z` de Astro. */
+export const eventDataSchema = makeEventDataSchema(z);
 
 export type EventData = z.infer<typeof eventDataSchema>;
 

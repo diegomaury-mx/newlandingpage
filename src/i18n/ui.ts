@@ -46,6 +46,7 @@ export const uiEn = {
     // (espanol) — el label si va en ingles, la pagina destino no.
     explore: [
       { label: 'Portfolio', href: '/en/portfolio' },
+      { label: 'Events', href: '/en/events' },
       { label: 'Teaching', href: '/docencia' },
       { label: 'About me', href: '/en#s2-quien-soy' },
       { label: 'Newsletter', href: 'https://diegomaury.substack.com' },
@@ -79,6 +80,30 @@ export const uiEn = {
       'Innovation consulting',
     ],
     problemDiagramAlt: 'Diagram: strategy and operations connected by a system',
+  },
+  events: {
+    eyebrow: "Public agenda",
+    title: "Tech and innovation events in Mexico",
+    lede:
+      "An open selection of meetups, conferences and summits from Mexico's tech and innovation ecosystem, mostly in Mexico City. Hand-curated; the details and official link come from each organizer.",
+    suggestCta: "Suggest an event",
+    views: {
+      week: "This week",
+      next30: "Next 30 days",
+      calendar: "Calendar",
+      category: "By category",
+    },
+    allCategories: "All",
+    viewCase: "View event",
+    free: "Free",
+    checkLink: "Check the link",
+    partOf: "Part of",
+    empty: "No events published right now. Check back soon or suggest one.",
+    closingTitle: "Running something that belongs here?",
+    closingLede:
+      "If you know an ecosystem event worth sharing, send it over. To talk about programs or partnerships, book a call.",
+    scheduleCta: "Book a call",
+    writeCta: "Write to me",
   },
   portfolio: {
     byTheNumbers: "By the numbers",

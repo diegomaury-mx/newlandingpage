@@ -1,0 +1,348 @@
+---
+/**
+ * Agenda pública de eventos — presentacional, sin acceso a datos.
+ * La lógica de datos (filtro de vigencia, whitelist) vive en
+ * services/notionEvents.ts y en el loader; aquí solo se renderiza.
+ *
+ * Las 4 vistas v1 (Esta semana / Próximos 30 días / Calendario / Por
+ * categoría) se resuelven en cliente con un `is:inline` (IIFE, ver gotcha
+ * de scripts inline en CLAUDE.md): todos los eventos se renderizan una vez y
+ * el JS solo alterna `hidden`.
+ */
+import {
+  isThisWeek,
+  isWithinDays,
+  ticketLabel,
+  toCalendarDay,
+  todayInMexicoCity,
+  type EventData,
+} from '../services/notionEvents.ts';
+import '../styles/events.css';
+
+interface Copy {
+  eyebrow: string;
+  title: string;
+  lede: string;
+  suggestCta: string;
+  views: { week: string; next30: string; calendar: string; category: string };
+  allCategories: string;
+  viewCase: string;
+  free: string;
+  checkLink: string;
+  partOf: string;
+  empty: string;
+  closingTitle: string;
+  closingLede: string;
+  scheduleCta: string;
+  writeCta: string;
+}
+
+interface Props {
+  locale: 'es' | 'en';
+  events: EventData[];
+  copy: Copy;
+  suggestUrl: string;
+  scheduleUrl: string;
+  emailUrl: string;
+}
+
+const { locale, events, copy, suggestUrl, scheduleUrl, emailUrl } = Astro.props;
+const intlLocale = locale === 'en' ? 'en-US' : 'es-MX';
+const today = todayInMexicoCity();
+
+const upcoming = [...events].sort((a, b) =>
+  toCalendarDay(a.start).localeCompare(toCalendarDay(b.start)),
+);
+
+function fmtDay(iso: string): { d: string; rest: string } {
+  const date = new Date(toCalendarDay(iso) + 'T00:00:00Z');
+  return {
+    d: date.toLocaleDateString(intlLocale, { day: 'numeric', timeZone: 'UTC' }),
+    rest: date.toLocaleDateString(intlLocale, {
+      weekday: 'short',
+      month: 'short',
+      timeZone: 'UTC',
+    }),
+  };
+}
+
+function dateRangeLabel(ev: EventData): string {
+  const start = fmtDay(ev.start);
+  if (!ev.end || toCalendarDay(ev.end) === toCalendarDay(ev.start)) {
+    return `${start.rest}`;
+  }
+  const end = new Date(toCalendarDay(ev.end) + 'T00:00:00Z');
+  return `${start.rest} – ${end.toLocaleDateString(intlLocale, { day: 'numeric', month: 'short', timeZone: 'UTC' })}`;
+}
+
+function monthKey(iso: string): string {
+  return toCalendarDay(iso).slice(0, 7);
+}
+
+function monthLabel(key: string): string {
+  const date = new Date(key + '-01T00:00:00Z');
+  const label = date.toLocaleDateString(intlLocale, {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+// Agrupación por mes para la vista de lista.
+const months: { key: string; label: string; events: EventData[] }[] = [];
+for (const ev of upcoming) {
+  const key = monthKey(ev.start);
+  let bucket = months.find((m) => m.key === key);
+  if (!bucket) {
+    bucket = { key, label: monthLabel(key), events: [] };
+    months.push(bucket);
+  }
+  bucket.events.push(ev);
+}
+
+// Categorías presentes en el contenido publicado (para los chips-filtro).
+const categories = [...new Set(upcoming.flatMap((e) => e.categories))].sort((a, b) =>
+  a.localeCompare(b, intlLocale),
+);
+
+// Matriz de calendario por mes (solo meses con eventos, de hoy en adelante).
+const weekdayNames = (() => {
+  const base = new Date('2024-01-01T00:00:00Z'); // lunes
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(base);
+    d.setUTCDate(base.getUTCDate() + i);
+    return d.toLocaleDateString(intlLocale, { weekday: 'short', timeZone: 'UTC' });
+  });
+})();
+
+function calendarCells(key: string) {
+  const [y, m] = key.split('-').map(Number);
+  const first = new Date(Date.UTC(y, m - 1, 1));
+  const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const leadPad = (first.getUTCDay() + 6) % 7; // lunes = 0
+  const cells: { day: number | null; iso: string; events: EventData[] }[] = [];
+  for (let i = 0; i < leadPad; i += 1) cells.push({ day: null, iso: '', events: [] });
+  for (let d = 1; d <= daysInMonth; d += 1) {
+    const iso = `${key}-${String(d).padStart(2, '0')}`;
+    cells.push({
+      day: d,
+      iso,
+      events: upcoming.filter(
+        (e) => iso >= toCalendarDay(e.start) && iso <= toCalendarDay(e.end ?? e.start),
+      ),
+    });
+  }
+  return cells;
+}
+
+function metaLine(ev: EventData): string {
+  const ticket = ticketLabel(ev.ticketStatus) === 'Gratuito' ? copy.free : copy.checkLink;
+  return [ev.organizer, ev.city, ev.modality, ev.type, ticket].filter(Boolean).join(' · ');
+}
+
+function viewFlags(ev: EventData): string {
+  const dates = { start: ev.start, end: ev.end };
+  const flags = ['all'];
+  if (isThisWeek(dates, today)) flags.push('week');
+  if (isWithinDays(dates, today, 30)) flags.push('next30');
+  return flags.join(' ');
+}
+
+const hasEvents = upcoming.length > 0;
+---
+
+<section class="section events-hero">
+  <div class="section-inner">
+    <p class="section-label">{copy.eyebrow}</p>
+    <h1 class="section-title">{copy.title}</h1>
+    <p class="events-hero__lede">{copy.lede}</p>
+    <div class="events-hero__actions">
+      <a class="btn-primary" href={suggestUrl} target="_blank" rel="noopener">
+        {copy.suggestCta}
+      </a>
+    </div>
+  </div>
+</section>
+
+{hasEvents && (
+  <div class="events-controls">
+    <div class="section-inner">
+      <div class="events-views" role="tablist" aria-label={copy.views.category}>
+        <button class="events-view-btn" role="tab" aria-selected="true" data-view="all">
+          {copy.views.next30}
+        </button>
+        <button class="events-view-btn" role="tab" aria-selected="false" data-view="week">
+          {copy.views.week}
+        </button>
+        <button class="events-view-btn" role="tab" aria-selected="false" data-view="calendar">
+          {copy.views.calendar}
+        </button>
+      </div>
+      <div class="events-cats" data-cats aria-label={copy.views.category}>
+        <button class="events-cat-chip" aria-pressed="true" data-cat="">{copy.allCategories}</button>
+        {categories.map((cat) => (
+          <button class="events-cat-chip" aria-pressed="false" data-cat={cat}>{cat}</button>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
+{hasEvents ? (
+  <>
+    <section class="section events-list" data-events-list>
+      <div class="section-inner">
+        {months.map((month) => (
+          <div class="events-month" data-month>
+            <p class="events-month__label">{month.label}</p>
+            {month.events.map((ev) => (
+              <article
+                class="events-card"
+                data-event
+                data-views={viewFlags(ev)}
+                data-cats={ev.categories.join('|')}
+              >
+                <div class="events-card__date">
+                  <b>{fmtDay(ev.start).d}</b>
+                  {dateRangeLabel(ev)}
+                </div>
+                <div class="events-card__body">
+                  <h2 class="events-card__title">{ev.name}</h2>
+                  <p class="events-card__meta">{metaLine(ev)}</p>
+                  {ev.summary && <p class="events-card__summary">{ev.summary}</p>}
+                  {ev.categories.length > 0 && (
+                    <div class="events-card__chips">
+                      {ev.categories.map((c) => <span class="events-chip">{c}</span>)}
+                    </div>
+                  )}
+                  {ev.parentName && (
+                    <p class="events-card__parent">{copy.partOf} {ev.parentName}</p>
+                  )}
+                </div>
+                <a
+                  class="btn-ghost events-card__cta"
+                  href={ev.officialUrl}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {copy.viewCase}
+                </a>
+              </article>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section events-calendar" data-calendar hidden>
+      <div class="section-inner">
+        {[...new Set(upcoming.map((e) => monthKey(e.start)))].map((key) => (
+          <div class="events-cal-month">
+            <p class="events-month__label">{monthLabel(key)}</p>
+            <div class="events-cal-grid">
+              {weekdayNames.map((w) => (
+                <div class="events-cal-cell events-cal-cell--pad">
+                  <span class="events-cal-cell__day">{w}</span>
+                </div>
+              ))}
+              {calendarCells(key).map((cell) => (
+                <div class:list={['events-cal-cell', { 'events-cal-cell--pad': cell.day === null }]}>
+                  {cell.day !== null && (
+                    <>
+                      <span class="events-cal-cell__day">{cell.day}</span>
+                      {cell.events.map((e) => (
+                        <a
+                          class="events-cal-event"
+                          href={e.officialUrl}
+                          target="_blank"
+                          rel="noopener"
+                          title={e.name}
+                        >
+                          {e.name}
+                        </a>
+                      ))}
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </>
+) : (
+  <section class="section events-empty">
+    <div class="section-inner">
+      <p>{copy.empty}</p>
+    </div>
+  </section>
+)}
+
+<section class="events-closing">
+  <div class="section-inner">
+    <h2 class="section-title">{copy.closingTitle}</h2>
+    <p class="section-sub">{copy.closingLede}</p>
+    <div class="events-closing__actions">
+      <a class="btn-primary" href={scheduleUrl} target="_blank" rel="noopener">{copy.scheduleCta}</a>
+      <a class="btn-ghost" href={emailUrl}>{copy.writeCta}</a>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var list = document.querySelector('[data-events-list]');
+    var calendar = document.querySelector('[data-calendar]');
+    if (!list) return;
+    var viewBtns = Array.prototype.slice.call(document.querySelectorAll('[data-view]'));
+    var catBtns = Array.prototype.slice.call(document.querySelectorAll('[data-cat]'));
+    var cards = Array.prototype.slice.call(document.querySelectorAll('[data-event]'));
+    var view = 'all';
+    var cat = '';
+
+    function apply() {
+      var showCalendar = view === 'calendar';
+      list.hidden = showCalendar;
+      if (calendar) calendar.hidden = !showCalendar;
+      if (!showCalendar) {
+        cards.forEach(function (card) {
+          var views = (card.getAttribute('data-views') || '').split(' ');
+          var cats = (card.getAttribute('data-cats') || '').split('|');
+          var okView = views.indexOf(view) !== -1;
+          var okCat = !cat || cats.indexOf(cat) !== -1;
+          card.hidden = !(okView && okCat);
+        });
+        document.querySelectorAll('[data-month]').forEach(function (m) {
+          var visible = Array.prototype.slice
+            .call(m.querySelectorAll('[data-event]'))
+            .some(function (c) { return !c.hidden; });
+          m.hidden = !visible;
+        });
+      }
+    }
+
+    viewBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        view = btn.getAttribute('data-view');
+        viewBtns.forEach(function (b) {
+          b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+        });
+        apply();
+      });
+    });
+
+    catBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        cat = btn.getAttribute('data-cat');
+        catBtns.forEach(function (b) {
+          b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        });
+        apply();
+      });
+    });
+
+    apply();
+  })();
+</script>

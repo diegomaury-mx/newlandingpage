@@ -177,3 +177,35 @@ usa imageUrl SOLO SI status == "Listo" AND imageUrl existe; si no, usa el fallba
 **Gotcha corregido (2026-08-03, no reintroducir):** `imageUrl` (y `banner`/`logo` de `cases`) NUNCA es la URL cruda de Notion en el dato ya cargado por el loader. La API de Notion devuelve una URL firmada de S3 (`prod-files-secure.s3...`) que expira en ~1h (`X-Amz-Expires=3600`); como Cloudflare Pages solo reconstruye en cada push (no hay rebuild diario), esa firma expiraba antes de la siguiente visita y la imagen se rompía en producción. `createDataSourceLoader` (`notionLoaders.ts`) descarga cada campo listado en `imageFields` con `cacheNotionImage` (`notionImageCache.ts`) y lo reemplaza por una copia local en `public/cms-media/notion/` (gitignored, se regenera en cada build) antes de guardarlo en el store. Si la descarga falla, el campo queda `undefined` y el fallback hardcodeado de `slotSrc`/las plantillas de caso se usa igual — no rompe el build.
 
 Slots dados de alta al crear la base (2026-07-25): `foto-diego`, `logo-heineken`, `logo-tec-de-monterrey`, `logo-incmty`, `logo-ebc`, `logo-fliphouse`. Todos en `Estado = Sin empezar` — el sitio sigue usando los paths hardcodeados hasta que Diego suba cada archivo y cambie el Estado a `Listo`.
+
+---
+
+## 5. `📆 Meetups y Eventos: Ecosistema Tech & Innovation` → `events` (agregada 2026-09-09)
+
+Quinta fuente CMS: agenda pública de solo lectura en `/eventos` (+ `/en/events`). Base `collection://7c2e4e81-be2f-428c-ad64-73c05beea6b5`, contrato maestro "📆 Pipeline de Eventos · Data Contract v2" (Notion), sección 8. Ante conflicto, gana el contrato de Notion.
+
+**Filtro del loader (`eventsLoader` en `notionLoaders.ts`):** solo entran filas con `Publicación == "Publicado"` Y fecha de fin (o inicio si no hay fin) `>= hoy` en `America/Mexico_City`. Sin `Enlace Oficial` válido (`http(s)://`) no hay tarjeta. El loader NO lee el body de las páginas (los bloques `ai_block` de Notion no aplican).
+
+**Whitelist de publicación (sección 8.2 del contrato). El schema (`eventDataSchema` en `src/services/notionEvents.ts`) es `.strict()`: una propiedad fuera de esta lista rompe el build a propósito.**
+
+| Propiedad Notion | Tipo | Campo Zod | Render |
+|---|---|---|---|
+| `Nombre` | title | `name` | Título de la tarjeta |
+| `Fecha del evento` | date (inicio, fin opcional) | `start` / `end` | Fecha o rango; agrupa por mes; alimenta la vista Calendario |
+| `Ciudad` | select | `city` | Chip / línea meta |
+| `Modalidad` | select | `modality` | Chip / línea meta |
+| `Tipo` | select | `type` | Chip / línea meta |
+| `Categorías` | multi_select | `categories` | Chips + filtro "Por categoría" |
+| `Organizador` | text | `organizer` | Línea meta |
+| `Resumen` | text | `summary` | Máx. 3 líneas (clamp CSS); único campo traducido a EN (DeepL, `en.summary`, fallback ES) |
+| `Enlace Oficial` | url | `officialUrl` | CTA "Ver evento" (`target=_blank rel=noopener`); obligatorio |
+| `Evento principal` | relation (self) | `parentName` | Solo el nombre del evento padre ("Parte de …"); el loader resuelve el id contra todas las filas |
+| `Status de Ticket` | select | `ticketStatus` | Parcial: `ticketLabel()` muestra "Gratuito" solo si ese es el valor exacto; cualquier otro valor o vacío → "Consultar en el enlace" |
+
+**No se leen ni se mapean:** Estado, Prioridad, AI Score, AI Evaluación, Notas, Mi Rol, Contacto, Email, Empresas de interés, Leads captados, Monto vendido, Seguimiento de venta, Vendedor asignado, Fotos, Fuente, Frecuencia, Días restantes, Última sincronización, Última actualización. `Publicación` se usa solo como filtro, no se renderiza.
+
+**`Sede` (tipo `place`): OMITIDA en v1.** La API de Notion no la expone de forma estable (`notAvailableInQuerySql`), y el contrato 8.3 autoriza omitirla si no está disponible. No está en el schema.
+
+**Fallbacks:** campos vacíos de la whitelist no rompen (default a `''`/`[]`/`null`). Cero eventos publicados = estado vacío con copy fijo, nunca build roto.
+
+**Pendiente de Diego (no bloquea el build):** (1) compartir la base con la integración privada de solo lectura si aún no lo está; (2) dar de alta la base en la suscripción de webhooks de `notion-deploy-relay` para rebuild automático al cambiar `Publicación`; (3) reemplazar `SUGGEST_EVENT_FORM_URL` (hoy la URL de la página de Notion) por el enlace público real del formulario "Sugerir un evento".

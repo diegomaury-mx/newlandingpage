@@ -1,0 +1,45 @@
+---
+/**
+ * /en/events — versión en inglés de la agenda pública.
+ * Los datos (nombre, ciudad, etc.) NO se traducen en v1 (decisión de Diego,
+ * spec sección "Decisiones abiertas"): solo el `Resumen` pasa por DeepL en el
+ * loader (entry.data.en.summary), con fallback al español. La UI fija viene
+ * de src/i18n/ui.ts.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EventsAgenda from '../../components/EventsAgenda.astro';
+import { uiEn } from '../../i18n/ui.ts';
+import { site } from '../../config/site';
+
+const SUGGEST_EVENT_FORM_URL =
+  'https://www.notion.so/8bc145de2ef046298ab63720d95787a4';
+
+const events = (await getCollection('events')).map((entry) => ({
+  ...entry.data,
+  summary: entry.data.en?.summary || entry.data.summary,
+}));
+
+const canonicalUrl = new URL('/en/events', Astro.site).toString();
+const copy = uiEn.events;
+---
+<BaseLayout
+  title="Events · Diego Maury"
+  description={copy.lede}
+  canonicalUrl={canonicalUrl}
+  enableGtm
+  otherLocaleHref="/eventos"
+  alternateUrls={[
+    { lang: 'es', url: new URL('/eventos', Astro.site).toString() },
+    { lang: 'en', url: canonicalUrl },
+  ]}
+>
+  <EventsAgenda
+    locale="en"
+    events={events}
+    copy={copy}
+    suggestUrl={SUGGEST_EVENT_FORM_URL}
+    scheduleUrl={site.links.scheduling}
+    emailUrl={site.links.email}
+  />
+</BaseLayout>
