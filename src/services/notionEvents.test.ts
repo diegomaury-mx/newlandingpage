@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import type { PageObjectResponse } from "@notionhq/client";
 import {
+  cleanSummary,
   daysFromToday,
   eventDataSchema,
   isPublishableEvent,
@@ -67,6 +68,13 @@ test("ticketLabel: solo 'Gratuito' pasa; el resto cae a 'Consultar en el enlace'
   assert.equal(ticketLabel("Gratuito"), "Gratuito");
   assert.equal(ticketLabel("Por Comprar"), "Consultar en el enlace");
   assert.equal(ticketLabel(undefined), "Consultar en el enlace");
+});
+
+test("cleanSummary aplana viñetas markdown y saltos de línea a una sola frase", () => {
+  const raw = "- Registro por aprobación para un meetup.\n- Evento en CDMX.\n";
+  assert.equal(cleanSummary(raw), "Registro por aprobación para un meetup. Evento en CDMX.");
+  assert.equal(cleanSummary("Texto simple."), "Texto simple.");
+  assert.equal(cleanSummary(""), "");
 });
 
 // --- mapEvent ---------------------------------------------------------------

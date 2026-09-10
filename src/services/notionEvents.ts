@@ -108,6 +108,23 @@ export function ticketLabel(raw: string | undefined): string {
   return raw === TICKET_FREE_VALUE ? TICKET_FREE_VALUE : "Consultar en el enlace";
 }
 
+// --- Resumen --------------------------------------------------------------
+
+/**
+ * Contrato 8.2: `Resumen` es texto plano de máx. 2 frases. La curaduría a
+ * veces deja viñetas markdown (`- `) o saltos de línea; aquí se aplana a una
+ * sola línea sin marcadores para renderizarlo limpio en la tarjeta.
+ */
+export function cleanSummary(raw: string): string {
+  return raw
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^\s*[-*•]\s+/, "").trim())
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 // --- Schema (whitelist 8.2, estricto) --------------------------------------
 
 /** Campos de prosa que se traducen a inglés (DeepL, cacheado) para `/en/events`. */
@@ -192,7 +209,7 @@ export function mapEvent(
     type: getSelect(page, "Tipo"),
     categories: getMultiSelect(page, "Categorías"),
     organizer: getRichText(page, "Organizador"),
-    summary: getRichText(page, "Resumen"),
+    summary: cleanSummary(getRichText(page, "Resumen")),
     officialUrl: getUrl(page, "Enlace Oficial"),
     parentName: (parentId && parentNameById.get(parentId)) || "",
     ticketStatus: getSelect(page, "Status de Ticket"),
