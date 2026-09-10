@@ -20,6 +20,9 @@ const events = (await getCollection('events')).map((entry) => entry.data as Even
 
 const canonicalUrl = new URL('/eventos', Astro.site).toString();
 const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
+// Descripción breve para SEO/social; el lede visible (copy.lede) es más largo.
+const metaDescription =
+  'Directorio curado de meetups, conferencias y summits de tecnología e innovación en México, con el enlace oficial de cada organizador. Actualizado continuamente.';
 const copy = {
   eyebrow: 'Agenda pública',
   title: 'Directorio de eventos tech y de innovación en México',
@@ -48,7 +51,7 @@ const copy = {
 ---
 <BaseLayout
   title="Directorio de Meetups y Eventos"
-  description={copy.lede}
+  description={metaDescription}
   canonicalUrl={canonicalUrl}
   ogImage={ogImage}
   enableGtm
