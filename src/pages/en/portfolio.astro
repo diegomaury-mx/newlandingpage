@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { slugify } from '../../utils/slug.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TestimonialMarquee from '../../components/TestimonialMarquee.astro';
 import { parseSiteCopySections, heading2, paragraphs } from '../../utils/parseSiteCopy.ts';
 import { translateCached } from '../../services/deeplTranslationCache.ts';
 import { toLocalePath } from '../../utils/locale.ts';
@@ -40,6 +41,17 @@ function showcaseDesc(entry: CaseEntry): string {
 
 const allCases = await getCollection('cases');
 const published = allCases.filter((c) => !c.data.draft);
+
+const testimonialCardsEn = (await getCollection('testimonials'))
+  .map((entry) => ({
+    name: entry.data.name,
+    role: entry.data.en.role || entry.data.role,
+    company: entry.data.company,
+    quote: entry.data.en.quote || entry.data.quote,
+    photo: entry.data.photo,
+    link: entry.data.link,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name, 'es'));
 
 const insignia = sortInsignia(published.filter((c) => c.data.layer === 'Insignia'), 'en');
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
@@ -246,8 +258,7 @@ const itemListJsonLd = {
 <section class="section testimonials">
   <div class="wrap-narrow">
     <div class="eyebrow eyebrow--plain">Testimonials</div>
-    <script src="https://widget.senja.io/widget/43006bd7-ae94-43c7-845a-7bb612ede4a3/platform.js" type="text/javascript" async></script>
-    <div class="senja-embed" data-id="43006bd7-ae94-43c7-845a-7bb612ede4a3" data-mode="shadow" data-lazyload="false" style="display: block; width: 100%;"></div>
+    <TestimonialMarquee items={testimonialCardsEn} />
   </div>
 </section>
 

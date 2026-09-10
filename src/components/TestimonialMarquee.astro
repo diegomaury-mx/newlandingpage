@@ -1,0 +1,201 @@
+---
+/**
+ * Marquesina de testimonios — reemplaza el embed de Senja (2026-09-09).
+ *
+ * Autoscroll horizontal continuo con fundido en los bordes (mismo patron
+ * `mask-image` que el cinturon de logos del hero). Se pausa al hacer hover y,
+ * con `prefers-reduced-motion`, se congela y queda como carrusel de scroll
+ * manual. Las tarjetas se duplican una vez para el loop sin costura.
+ *
+ * Sin soporte de video: ninguna fila de la base tiene archivo de video y un
+ * .mp4 subido a Notion necesita su propia ruta de cache (ver CLAUDE.md). Se
+ * agrega cuando exista el testimonio en video de Carlos Ortegon.
+ */
+interface TestimonialItem {
+  name: string;
+  role?: string;
+  company?: string;
+  quote: string;
+  photo?: string;
+  link?: string;
+}
+
+interface Props {
+  items: TestimonialItem[];
+}
+
+const { items } = Astro.props;
+
+/** Iniciales para el avatar cuando no hay foto (2 primeras palabras del nombre). */
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
+}
+
+// Duracion proporcional al numero de tarjetas para mantener una velocidad de
+// desplazamiento constante sin importar cuantos testimonios haya.
+const durationSeconds = Math.max(40, items.length * 7);
+const loop = [...items, ...items];
+---
+
+{items.length > 0 && (
+  <div class="tm" aria-label="Testimonios">
+    <div class="tm-track" style={`--tm-duration:${durationSeconds}s`}>
+      {loop.map((item, i) => {
+        const isClone = i >= items.length;
+        const Tag = item.link ? 'a' : 'blockquote';
+        const props = item.link
+          ? {
+              href: item.link,
+              target: '_blank',
+              rel: 'noopener',
+              tabindex: isClone ? -1 : undefined,
+            }
+          : {};
+        return (
+          <Tag
+            class="tm-card"
+            aria-hidden={isClone ? 'true' : undefined}
+            {...props}
+          >
+            <p class="tm-quote">{item.quote}</p>
+            <span class="tm-cite">
+              <span class="tm-avatar" aria-hidden="true">
+                {item.photo
+                  ? <img src={item.photo} alt="" loading="lazy" width="40" height="40" />
+                  : <span class="tm-initials">{initials(item.name)}</span>}
+              </span>
+              <span class="tm-id">
+                <span class="tm-name">{item.name}</span>
+                {(() => {
+                  const parts = [item.role, item.company]
+                    .map((p) => p?.trim())
+                    .filter((p, i, arr): p is string => Boolean(p) && arr.indexOf(p) === i);
+                  return parts.length > 0 && <span class="tm-role">{parts.join(' · ')}</span>;
+                })()}
+              </span>
+            </span>
+          </Tag>
+        );
+      })}
+    </div>
+  </div>
+)}
+
+<style>
+  .tm {
+    margin-top: 8px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .tm-track {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: tm-scroll var(--tm-duration, 60s) linear infinite;
+  }
+
+  .tm:hover .tm-track,
+  .tm-track:focus-within {
+    animation-play-state: paused;
+  }
+
+  @keyframes tm-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 8px)); }
+  }
+
+  .tm-card {
+    flex: 0 0 320px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 24px 22px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 200ms ease;
+  }
+
+  a.tm-card:hover { border-color: var(--t3); }
+
+  a.tm-card:focus-visible {
+    outline: 2px solid var(--ember);
+    outline-offset: 2px;
+  }
+
+  .tm-quote {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--t2);
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+
+  .tm-cite {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .tm-avatar {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+  }
+
+  .tm-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  .tm-initials {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--t3);
+  }
+
+  .tm-id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+  .tm-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--t1);
+  }
+
+  .tm-role {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    color: var(--t3);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tm { overflow-x: auto; }
+    .tm-track { animation: none; }
+  }
+</style>

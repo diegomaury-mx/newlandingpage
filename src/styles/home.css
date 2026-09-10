@@ -299,18 +299,8 @@
   .acc-pip { width: 20px; height: 3px; border-radius: 2px; background: var(--border); transition: background 200ms; }
   .acc-pip.is-active { background: var(--ember); }
 
-  /* ── PRUEBA SOCIAL ── */
-  .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
-  @media (max-width: 900px) { .testimonial-grid { grid-template-columns: 1fr; } }
-  .testimonial-card {
-    background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 26px 26px 24px;
-    display: flex; flex-direction: column; gap: 18px; transition: border-color 200ms, transform 250ms var(--ease);
-  }
-  .testimonial-card:hover { border-color: var(--t3); transform: translateY(-3px); }
-  .testimonial-quote { font-size: 13.5px; line-height: 1.65; color: var(--t2); flex-grow: 1; }
-  .testimonial-cite { display: flex; flex-direction: column; gap: 2px; padding-top: 14px; border-top: 1px solid var(--border); }
-  .testimonial-name { font-size: 13px; font-weight: 700; color: var(--t1); }
-  .testimonial-role { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--t3); }
+  /* Prueba social: la marquesina de testimonios trae su CSS scoped en
+     src/components/TestimonialMarquee.astro */
 
   /* ── COLABOREMOS ── */
   .conversemos-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; margin-bottom: 44px; }
@@ -354,6 +344,5 @@
   }
   .cta-buttons { display: flex; flex-direction: column; align-items: center; gap: 16px; }
   .cta-buttons .hero-ctas { justify-content: center; margin-bottom: 0; }
-  .senja-embed--inline { width: 100%; margin-top: 24px; }
   .cta-trust { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
   .dot { width: 2px; height: 2px; border-radius: 50%; background: var(--border); }

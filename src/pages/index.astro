@@ -10,12 +10,13 @@
 // Notion. index.html queda como referencia muerta para LIVE (ver CLAUDE.md);
 // esta pagina es ahora la unica fuente de verdad visual + de contenido.
 // S7 Colaboremos se retiro (2026-07-31): su contenido quedo absorbido por S6b
-// (testimonios + widget Senja, ya activado via script al final del archivo) y
-// S8 (CTA final). El nav "Contacto" apunta a S8, no a un ancla S7.
+// (testimonios, ahora la marquesina propia TestimonialMarquee) y S8 (CTA
+// final). El nav "Contacto" apunta a S8, no a un ancla S7.
 //
 // Sigue construyendo a dist/, no toca el sitio LIVE (astro.config.mjs).
 import { getCollection } from 'astro:content';
 import BaseLayout from "../layouts/BaseLayout.astro";
+import TestimonialMarquee from "../components/TestimonialMarquee.astro";
 import "../styles/home.css";
 import {
   parseSiteCopySections,
@@ -28,7 +29,6 @@ import {
   blocksAfterHeading,
   bulletItems,
   headingCards,
-  testimonials,
   firstCodeBlock,
   parseFlowDiagram,
 } from '../utils/parseSiteCopy.ts';
@@ -184,13 +184,13 @@ const s6b = sections.get('S6b')?.blocks ?? [];
 const testimonialsLabel = sections.get('S6b')?.label ?? 'Prueba social';
 const testimonialsHeadline = heading1(s6b);
 const testimonialsIntro = paragraphs(blocksBeforeHeading(s6b, ['>']));
-const testimonialItems = testimonials(s6b);
-const moreExperiencesHeading =
-  s6b.find((b: string) => b.trim() === '## Más experiencias')
-    ?.replace(/^##\s*/, '') ?? '';
 
-const moreExperiences = blocksAfterHeading(s6b, '## Más experiencias');
-const senjaId = moreExperiences[0]?.trim();
+// Testimonios propios desde la base "⭐ Testimonios Diego - Typedream"
+// (reemplazo del embed de Senja, 2026-09-09). Solo red profesional; el loader
+// ya filtra el feedback de taller Wella. Orden alfabetico para un build estable.
+const testimonialCards = (await getCollection('testimonials'))
+  .map((entry) => entry.data)
+  .sort((a, b) => a.name.localeCompare(b.name, 'es'));
 
 // --- Destinos de CTA (ver homeContent.ts) --------------------------------------
 
@@ -541,42 +541,7 @@ const personJsonLd = {
       <p class="section-sub" data-reveal>{p}</p>
     ))}
 
-    {testimonialItems.length > 0 && (
-      <>
-        <div class="testimonial-grid">
-          {testimonialItems.map((item, i) => (
-            <blockquote
-              class="testimonial-card"
-              data-reveal
-              style={`--delay:${0.18 + i * 0.06}s`}
-            >
-              <p class="testimonial-quote">{item.quote}</p>
-
-              <footer class="testimonial-cite">
-                <span class="testimonial-name">{item.name}</span>
-
-                {item.roleLines.map((line) => (
-                  <span class="testimonial-role">{line}</span>
-                ))}
-              </footer>
-            </blockquote>
-          ))}
-        </div>
-
-        {senjaId && (
-          <>
-            <h3 class="deliver-heading">{moreExperiencesHeading}</h3>
-
-            <div
-              class="senja-embed senja-embed--inline"
-              data-id={senjaId}
-              data-mode="shadow"
-              data-lazyload="false"
-            ></div>
-          </>
-        )}
-      </>
-    )}
+    <TestimonialMarquee items={testimonialCards} />
   </div>
 </section>
 
@@ -730,23 +695,6 @@ const personJsonLd = {
       field.addEventListener('blur', deactivate);
     });
   }
-</script>
-<script is:inline>
-  (() => {
-    const container = document.querySelector(".senja-embed");
-    if (!container) return;
-
-    const widgetId = container.getAttribute("data-id");
-    if (!widgetId) return;
-
-    if (!document.querySelector(`script[data-senja="${widgetId}"]`)) {
-      const script = document.createElement("script");
-      script.src = `https://widget.senja.io/widget/${widgetId}/platform.js`;
-      script.async = true;
-      script.dataset.senja = widgetId;
-      document.body.appendChild(script);
-    }
-  })();
 </script>
 </BaseLayout>
 

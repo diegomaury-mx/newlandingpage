@@ -18,6 +18,7 @@
 //   (REDUX, SOFI, HackSureste, nombres de personas) nunca se traducen.
 import { getCollection } from 'astro:content';
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import TestimonialMarquee from "../../components/TestimonialMarquee.astro";
 import "../../styles/home.css";
 import {
   parseSiteCopySections,
@@ -30,7 +31,6 @@ import {
   blocksAfterHeading,
   bulletItems,
   headingCards,
-  testimonials,
   firstCodeBlock,
   parseFlowDiagram,
 } from '../../utils/parseSiteCopy.ts';
@@ -163,12 +163,19 @@ const s6b = sections.get('S6b')?.blocks ?? [];
 const testimonialsLabel = sections.get('S6b')?.label ?? 'Prueba social';
 const testimonialsHeadline = heading1(s6b);
 const testimonialsIntro = paragraphs(blocksBeforeHeading(s6b, ['>']));
-const testimonialItems = testimonials(s6b);
-const moreExperiencesHeading =
-  s6b.find((b: string) => b.trim() === '## Más experiencias')
-    ?.replace(/^##\s*/, '') ?? '';
-const moreExperiences = blocksAfterHeading(s6b, '## Más experiencias');
-const senjaId = moreExperiences[0]?.trim();
+
+// Testimonios desde la base Notion (reemplazo de Senja). Se usa la traduccion
+// DeepL ya cacheada por el loader (entry.data.en.*), con fallback al ES.
+const testimonialCardsEn = (await getCollection('testimonials'))
+  .map((entry) => ({
+    name: entry.data.name,
+    role: entry.data.en.role || entry.data.role,
+    company: entry.data.company,
+    quote: entry.data.en.quote || entry.data.quote,
+    photo: entry.data.photo,
+    link: entry.data.link,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name, 'es'));
 
 // --- Destinos de CTA (ver homeContent.ts, resueltos por la etiqueta ORIGINAL en espanol) ---
 
@@ -262,14 +269,6 @@ const systemsClosingEn = await tAll(systemsClosing);
 const testimonialsLabelEn = await t(testimonialsLabel);
 const testimonialsHeadlineEn = await t(testimonialsHeadline);
 const testimonialsIntroEn = await tAll(testimonialsIntro);
-const testimonialItemsEn = await Promise.all(
-  testimonialItems.map(async (item) => ({
-    quote: await t(item.quote),
-    name: item.name,
-    roleLines: item.roleLines,
-  })),
-);
-const moreExperiencesHeadingEn = await t(moreExperiencesHeading);
 
 const finalLabelEn = await t(finalLabel);
 const finalHeadlineEn = await t(finalHeadline);
@@ -593,42 +592,7 @@ const personJsonLd = {
       <p class="section-sub" data-reveal>{p}</p>
     ))}
 
-    {testimonialItemsEn.length > 0 && (
-      <>
-        <div class="testimonial-grid">
-          {testimonialItemsEn.map((item, i) => (
-            <blockquote
-              class="testimonial-card"
-              data-reveal
-              style={`--delay:${0.18 + i * 0.06}s`}
-            >
-              <p class="testimonial-quote">{item.quote}</p>
-
-              <footer class="testimonial-cite">
-                <span class="testimonial-name">{item.name}</span>
-
-                {item.roleLines.map((line) => (
-                  <span class="testimonial-role">{line}</span>
-                ))}
-              </footer>
-            </blockquote>
-          ))}
-        </div>
-
-        {senjaId && (
-          <>
-            <h3 class="deliver-heading">{moreExperiencesHeadingEn}</h3>
-
-            <div
-              class="senja-embed senja-embed--inline"
-              data-id={senjaId}
-              data-mode="shadow"
-              data-lazyload="false"
-            ></div>
-          </>
-        )}
-      </>
-    )}
+    <TestimonialMarquee items={testimonialCardsEn} />
   </div>
 </section>
 
@@ -781,22 +745,5 @@ const personJsonLd = {
       field.addEventListener('blur', deactivate);
     });
   }
-</script>
-<script is:inline>
-  (() => {
-    const container = document.querySelector(".senja-embed");
-    if (!container) return;
-
-    const widgetId = container.getAttribute("data-id");
-    if (!widgetId) return;
-
-    if (!document.querySelector(`script[data-senja="${widgetId}"]`)) {
-      const script = document.createElement("script");
-      script.src = `https://widget.senja.io/widget/${widgetId}/platform.js`;
-      script.async = true;
-      script.dataset.senja = widgetId;
-      document.body.appendChild(script);
-    }
-  })();
 </script>
 </BaseLayout>

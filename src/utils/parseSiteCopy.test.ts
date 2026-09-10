@@ -12,7 +12,6 @@ import {
   paragraphs,
   parseFlowDiagram,
   parseSiteCopySections,
-  testimonials,
   valueAfter,
 } from "./parseSiteCopy.ts";
 
@@ -171,26 +170,4 @@ test("parseFlowDiagram devuelve null si reconoce menos de 3 encabezados", () => 
   const raw = ["│ SOLO UNO │", "• item"].join("\n");
 
   assert.equal(parseFlowDiagram(raw), null);
-});
-
-test("testimonials agrupa cita, nombre y lineas de rol, filtrando placeholders y UUIDs sueltos", () => {
-  const blocks = [
-    "> Cita del primer testimonio",
-    "Nombre Apellido",
-    "Rol · Empresa",
-    "[Widget de Senja]",
-    "550e8400-e29b-41d4-a716-446655440000",
-    "> Segunda cita",
-    "Otro Nombre",
-  ];
-
-  const items = testimonials(blocks);
-
-  assert.equal(items.length, 2);
-  assert.deepEqual(items[0], {
-    quote: "Cita del primer testimonio",
-    name: "Nombre Apellido",
-    roleLines: ["Rol · Empresa"],
-  });
-  assert.equal(items[1].name, "Otro Nombre");
 });
