@@ -186,8 +186,8 @@
 }
 
 .docencia-cta__button--primary {
-  background: var(--ember-cta);
-  color: #fff;
+  background: var(--ember);
+  color: var(--bg);
 }
 
 .docencia-cta__button--secondary {

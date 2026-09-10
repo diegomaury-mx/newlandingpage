@@ -272,9 +272,9 @@
 }
 .chip:hover { border-color: var(--t3); color: var(--t2); }
 .chip.is-active {
-  background: var(--ember-cta);
-  border-color: var(--ember-cta);
-  color: var(--t1);
+  background: var(--ember);
+  border-color: var(--ember);
+  color: var(--bg);
 }
 .chip:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
 

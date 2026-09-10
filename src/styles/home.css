@@ -10,7 +10,7 @@
   }
   .hero-label::before { content: ''; width: 18px; height: 1px; background: var(--ember); }
   .hero-h1 { font-size: clamp(2.4rem, 4.6vw, 4rem); font-weight: 500; letter-spacing: -0.032em; line-height: 1.05; max-width: 20ch; margin-bottom: 22px; }
-  .hero-h1 .accent { color: var(--ember); }
+  .hero-h1 .accent { color: var(--t1); }
   .hero-sub { font-size: clamp(1rem, 1.3vw, 1.13rem); color: var(--t2); line-height: 1.7; max-width: 56ch; margin-bottom: 36px; }
   .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 60px; }
 
@@ -25,29 +25,21 @@
     .metric { border-right: none; padding-right: 0; padding-left: 0; }
     .metric:not(:first-child) { border-top: 1px solid var(--border); padding-top: 22px; }
   }
-  .metric-n { font-size: clamp(1.7rem, 2.5vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--ember); font-variant-numeric: tabular-nums; }
+  .metric-n { font-size: clamp(1.7rem, 2.5vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--t1); font-variant-numeric: tabular-nums; }
   .metric-l { font-size: 13px; font-weight: 500; color: var(--t1); margin-top: 8px; line-height: 1.3; }
   .metric-s { font-family: var(--mono); font-size: 9px; color: var(--t3); margin-top: 4px; letter-spacing: 0.08em; text-transform: uppercase; }
 
-  /* ── TRUST MARQUEE ── */
+  /* ── TRUST GRID ── */
   .trust { margin-top: 44px; }
   .trust-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--t3); margin-bottom: 12px; }
-  .trust-track-wrap {
-    overflow: hidden; position: relative;
-    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-  }
-  .trust-track { display: flex; width: max-content; animation: marquee 24s linear infinite; }
-  .trust-track:hover { animation-play-state: paused; }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .trust-track-wrap { position: relative; }
+  .trust-track { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
   .trust-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 180px;
+  width: 100%;
   height: 72px;
-  margin: 0 8px;
-  flex-shrink: 0;
   background: rgba(250,248,252,.04);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -64,7 +56,6 @@
 }
   .trust-logo:hover { background: rgba(250,248,252,0.08); border-color: var(--t3); }
   .trust-logo:hover img { opacity: 1; }
-  @media (prefers-reduced-motion: reduce) { .trust-track { animation: none; } }
 
   /* ── ABOUT ── */
   .about-section { padding: 0; border-bottom: 1px solid var(--border); overflow: hidden; }
@@ -90,7 +81,7 @@
   .about-roles { display: flex; flex-direction: column; gap: 9px; padding-bottom: 56px; }
   .about-role { display: flex; align-items: flex-start; gap: 10px; }
   @media (max-width: 960px) { .about-role { justify-content: center; } }
-  .about-role-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); flex-shrink: 0; margin-top: 8px; }
+  .about-role-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--t3); flex-shrink: 0; margin-top: 8px; }
   .about-role-txt { font-size: 13px; color: var(--t2); line-height: 1.5; }
   .about-role-txt strong { color: var(--t1); }
 

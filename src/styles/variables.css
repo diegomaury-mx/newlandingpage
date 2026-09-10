@@ -8,7 +8,6 @@
     --t2:     #DDDBE0;
     --t3:     #A8A6AC;
     --ember:  #FF5C39;
-    --ember-cta: #BF452B; /* ember oscurecido: cumple AA 4.5:1 con texto blanco en botones */
     --accent-secondary:      var(--ember);
     --accent-secondary-text: var(--ember);
     --sans:   'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', system-ui, sans-serif;

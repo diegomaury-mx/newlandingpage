@@ -108,8 +108,8 @@
   border: none;
   border-radius: 6px;
 
-  background: var(--ember-cta);
-  color: #fff;
+  background: var(--ember);
+  color: var(--bg);
 
   cursor: pointer;
   text-decoration: none;

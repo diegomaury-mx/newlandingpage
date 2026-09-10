@@ -72,7 +72,7 @@
   /* ── BUTTONS ── */
   .btn-primary {
     display: inline-flex; align-items: center; gap: 8px;
-    background: var(--ember-cta); color: #fff; font-family: var(--mono);
+    background: var(--ember); color: var(--bg); font-family: var(--mono);
     font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
     padding: 14px 26px; border-radius: 6px; border: none; cursor: pointer;
     text-decoration: none; transition: opacity 150ms, transform 150ms;
