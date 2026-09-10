@@ -73,7 +73,7 @@ Carpetas locales no versionadas (`_ds_import/`, `.claude-design/lab/`, `.playwri
 
 ### Design system — V2 "Ember on Ink" (único nombre vigente; no usar numeraciones v2/v3 cruzadas)
 
-Regla irrompible: todo el sitio comparte un solo design system. Fuente de verdad: proyecto Claude Design "Diego Maury Design System V 2" (`019dd0ff-c961-76e9-9815-68e47ca79ab8`, vía DesignSync), archivo `v2-tokens.css`.
+Regla irrompible: todo el sitio comparte un solo design system. Fuente de verdad: proyecto Claude Design "Diego Maury Design System V 2" (`019dd0ff-c961-76e9-9815-68e47ca79ab8`, vía DesignSync), archivo `v2-tokens.css`. **La copia local `_ds_import/diego-maury-design-system-v-2/` es un snapshot viejo (paleta pre-v2.2) — nunca editarla; para tocar el DS, trabajar contra el proyecto real vía el tool DesignSync (pull → edit local → `finalize_plan` → `write_files`). `_ds_manifest.json` y `.bundles/*` de ese proyecto son generados (self-check de la app), no editarlos: las fuentes son `v2-tokens.css`, `styles.css`, `_adherence.oxlintrc.json`, `README.md` y el `@dsCard` de cada pieza.** Auditoría v2.3 (2026-09-10) y decisiones D-A/D-D/D-P3: memoria [[ds-audit-v2.3-decisiones-arte-2026-09-10]].
 
 | Token | Hex | Uso |
 |---|---|---|
