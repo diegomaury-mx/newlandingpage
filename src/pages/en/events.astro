@@ -22,12 +22,14 @@ const events = (await getCollection('events')).map((entry) => {
 });
 
 const canonicalUrl = new URL('/en/events', Astro.site).toString();
+const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
 const copy = uiEn.events;
 ---
 <BaseLayout
   title="Events · Diego Maury"
   description={copy.lede}
   canonicalUrl={canonicalUrl}
+  ogImage={ogImage}
   enableGtm
   otherLocaleHref="/eventos"
   alternateUrls={[

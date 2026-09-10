@@ -19,6 +19,7 @@ const SUGGEST_EVENT_FORM_URL =
 const events = (await getCollection('events')).map((entry) => entry.data as EventData);
 
 const canonicalUrl = new URL('/eventos', Astro.site).toString();
+const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
 const copy = {
   eyebrow: 'Agenda pública',
   title: 'Eventos de tecnología e innovación en México',
@@ -49,6 +50,7 @@ const copy = {
   title="Eventos · Diego Maury"
   description={copy.lede}
   canonicalUrl={canonicalUrl}
+  ogImage={ogImage}
   enableGtm
   otherLocaleHref="/en/events"
   alternateUrls={[
