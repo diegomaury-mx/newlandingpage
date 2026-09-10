@@ -4,9 +4,10 @@
  * La lógica de datos (filtro de vigencia, whitelist) vive en
  * services/notionEvents.ts y en el loader; aquí solo se renderiza.
  *
- * Las 4 vistas v1 (Esta semana / Próximos 30 días / Calendario / Por
- * categoría) se resuelven en cliente con un `<script>` bundleado: todos los
- * eventos se renderizan una vez y el JS solo alterna `hidden`.
+ * Las vistas (Todos / un botón por mes con eventos / Calendario) se resuelven
+ * en cliente con un `<script>` bundleado: todos los eventos se renderizan una
+ * vez y el JS solo alterna `hidden`. El valor de `data-view` es `all`,
+ * `calendar` o `month:<YYYY-MM>`.
  *
  * "Según pasan los días": el script recalcula `hoy` (America/Mexico_City) en
  * cada carga con `eventDates.ts` (mismo módulo puro que el loader), oculta los
@@ -26,7 +27,14 @@ interface Copy {
   title: string;
   lede: string;
   suggestCta: string;
-  views: { week: string; next30: string; next60: string; calendar: string; category: string };
+  views: {
+    all: string;
+    week: string;
+    next30: string;
+    next60: string;
+    calendar: string;
+    category: string;
+  };
   allCategories: string;
   allTypes: string;
   onlyFree: string;
@@ -183,15 +191,19 @@ const hasEvents = upcoming.length > 0;
   <div class="events-controls">
     <div class="section-inner">
       <div class="events-views" role="tablist" aria-label={copy.views.category}>
-        <button class="events-view-btn" role="tab" aria-selected="false" data-view="week">
-          {copy.views.week}
+        <button class="events-view-btn" role="tab" aria-selected="true" data-view="all">
+          {copy.views.all}
         </button>
-        <button class="events-view-btn" role="tab" aria-selected="true" data-view="next30">
-          {copy.views.next30}
-        </button>
-        <button class="events-view-btn" role="tab" aria-selected="false" data-view="next60">
-          {copy.views.next60}
-        </button>
+        {months.map((month) => (
+          <button
+            class="events-view-btn"
+            role="tab"
+            aria-selected="false"
+            data-view={`month:${month.key}`}
+          >
+            {month.label}
+          </button>
+        ))}
         <button class="events-view-btn" role="tab" aria-selected="false" data-view="calendar">
           {copy.views.calendar}
         </button>
@@ -231,6 +243,7 @@ const hasEvents = upcoming.length > 0;
                 class="events-card"
                 data-event
                 data-views={viewFlags(ev)}
+                data-emonth={monthKey(ev.start)}
                 data-cats={ev.categories.join('|')}
                 data-type={ev.type ?? ''}
                 data-free={isFree(ev) ? 'y' : 'n'}
@@ -359,7 +372,7 @@ const hasEvents = upcoming.length > 0;
     const calMonths = [
       ...document.querySelectorAll<HTMLElement>('[data-cal-month]'),
     ];
-    let view = 'next30';
+    let view = 'all';
     let cat = '';
     let type = '';
     let freeOnly = false;
@@ -395,7 +408,13 @@ const hasEvents = upcoming.length > 0;
           const flags: string[] = eventViewFlags(datesOf(card), today);
           card.setAttribute('data-views', flags.join(' '));
           const cats = (card.getAttribute('data-cats') || '').split('|');
-          const okView = flags.indexOf(view) !== -1;
+          const isUp = isUpcoming(datesOf(card), today);
+          const okView =
+            view === 'all'
+              ? isUp
+              : view.indexOf('month:') === 0
+                ? isUp && card.getAttribute('data-emonth') === view.slice(6)
+                : flags.indexOf(view) !== -1;
           const okCat = !cat || cats.indexOf(cat) !== -1;
           const okType = !type || (card.getAttribute('data-type') || '') === type;
           const okFree = !freeOnly || card.getAttribute('data-free') === 'y';
@@ -415,7 +434,7 @@ const hasEvents = upcoming.length > 0;
 
     viewBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
-        view = btn.getAttribute('data-view') ?? 'next30';
+        view = btn.getAttribute('data-view') ?? 'all';
         viewBtns.forEach((b) => {
           b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
         });

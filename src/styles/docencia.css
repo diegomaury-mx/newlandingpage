@@ -5,7 +5,7 @@
 
 .docencia-hero__eyebrow {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ember);
@@ -33,7 +33,7 @@
 }
 
 .docencia-hero__lede {
-  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
   line-height: 1.7;
   color: var(--t2);
   max-width: 62ch;
@@ -53,10 +53,20 @@
   margin-bottom: 24px;
 }
 
+.docencia-areas-table-wrap {
+  overflow-x: auto;
+}
+
 .docencia-areas-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 15px;
+}
+
+@media (max-width: 640px) {
+  .docencia-areas-table {
+    min-width: 560px;
+  }
 }
 
 .docencia-areas-table th,
@@ -69,7 +79,7 @@
 
 .docencia-areas-table th {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--t3);
@@ -104,7 +114,7 @@
 
 .docencia-case__type {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--t3);
@@ -117,7 +127,7 @@
 }
 
 .docencia-case__body p {
-  font-size: 13.5px;
+  font-size: 15px;
   line-height: 1.7;
   color: var(--t2);
   margin: 0 0 10px;
@@ -142,7 +152,7 @@
 }
 
 .docencia-diff li {
-  font-size: 14.5px;
+  font-size: 15.5px;
   line-height: 1.7;
   color: var(--t2);
   padding-left: 22px;
@@ -173,7 +183,7 @@
 }
 
 .docencia-cta__button {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   padding: 14px 28px;
   border-radius: 6px;
@@ -202,7 +212,7 @@
 
 .docencia-case__evidence-link,
 .docencia-case__evidence-note {
-  font-size: 12px;
+  font-size: 14px;
   margin-top: auto;
   padding-top: 4px;
 }

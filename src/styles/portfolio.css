@@ -14,7 +14,7 @@
 
 .eyebrow {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -25,11 +25,11 @@
   margin-bottom: 18px;
 }
 .eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--ember); }
-.eyebrow--plain { color: var(--t3); letter-spacing: 0.16em; font-size: 9px; }
+.eyebrow--plain { color: var(--t3); letter-spacing: 0.16em; font-size: 12px; }
 .eyebrow--plain::before { display: none; }
 .label {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ember);
@@ -81,7 +81,7 @@
   color: var(--t1);
   line-height: 1;
 }
-.stat-cat__l { font-size: 12px; color: var(--t3); margin-top: 6px; }
+.stat-cat__l { font-size: 15px; color: var(--t3); margin-top: 6px; }
 
 .stats__impact-label { margin-bottom: 18px; display: block; }
 
@@ -98,8 +98,8 @@
   color: var(--t1);
   line-height: 1;
 }
-.stat-anchor__l { font-size: 13.5px; color: var(--t2); margin-top: 10px; }
-.stat-anchor__q { font-family: var(--mono); font-size: 10px; color: var(--t3); margin-top: 5px; letter-spacing: 0.03em; }
+.stat-anchor__l { font-size: 15px; color: var(--t2); margin-top: 10px; }
+.stat-anchor__q { font-family: var(--mono); font-size: 12px; color: var(--t3); margin-top: 5px; letter-spacing: 0.03em; }
 
 .stats__support {
   display: grid;
@@ -108,8 +108,8 @@
 }
 .stat-support { border-left: 1px solid var(--border); padding-left: 14px; }
 .stat-support__n { font-family: var(--mono); font-size: 1.2rem; font-weight: 500; color: var(--t2); line-height: 1; }
-.stat-support__l { font-size: 11px; color: var(--t3); margin-top: 5px; line-height: 1.35; }
-.stat-support__q { font-family: var(--mono); font-size: 8.5px; color: var(--t3); margin-top: 3px; opacity: 0.75; }
+.stat-support__l { font-size: 13px; color: var(--t3); margin-top: 5px; line-height: 1.35; }
+.stat-support__q { font-family: var(--mono); font-size: 11px; color: var(--t3); margin-top: 3px; opacity: 0.75; }
 
 .gallery h2, .support h2 {
   font-size: clamp(1.4rem, 2.4vw, 2rem);
@@ -118,7 +118,7 @@
   margin: 0 0 40px;
   max-width: 44ch;
 }
-.empty-note { font-size: 13px; color: var(--t3); margin-top: 8px; }
+.empty-note { font-size: 15px; color: var(--t3); margin-top: 8px; }
 .card {
   display: block;
   text-decoration: none;
@@ -146,7 +146,7 @@
 .card__caps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
 .cap {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--t3);
@@ -211,7 +211,7 @@
   background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(139, 124, 158, 0.05) 8px 9px);
   border-bottom: 1px solid var(--border);
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--t3);
@@ -239,7 +239,7 @@
 }
 .showcase-count {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -258,7 +258,7 @@
 }
 .chip {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -294,7 +294,7 @@
 .showcase-card:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
 .showcase-card__lead {
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: 0.11em;
@@ -313,7 +313,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--t3);
   flex-shrink: 0;
@@ -334,7 +334,7 @@
 }
 .showcase-card__meta {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -342,7 +342,7 @@
   margin-top: 7px;
 }
 .showcase-card__desc {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--t2);
   margin: 0;
@@ -358,7 +358,7 @@
 }
 .showcase-card__cta {
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -375,7 +375,7 @@
 .showcase-card__link {
   align-self: flex-start;
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -388,7 +388,7 @@
 .showcase-more-wrap { margin-top: 30px; display: flex; justify-content: center; }
 .showcase-more {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;

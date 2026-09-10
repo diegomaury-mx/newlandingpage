@@ -7,7 +7,7 @@
 }
 .legal-page .legal-updated {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.04em;
   color: var(--t3);
   margin-bottom: 32px;
@@ -22,7 +22,7 @@
 .legal-page li {
   color: var(--t2);
   line-height: 1.7;
-  font-size: 0.98rem;
+  font-size: 1.0625rem;
 }
 .legal-page p + p { margin-top: 12px; }
 .legal-page ul {
@@ -43,7 +43,7 @@
   margin-top: 48px;
   padding-top: 24px;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--t3);
   border-top: 1px solid var(--border);
 }

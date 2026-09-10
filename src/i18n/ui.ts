@@ -88,6 +88,7 @@ export const uiEn = {
       "An open selection of meetups, conferences and summits from Mexico's tech and innovation ecosystem, mostly in Mexico City. Hand-curated; the details and official link come from each organizer.",
     suggestCta: "Suggest an event",
     views: {
+      all: "All",
       week: "This week",
       next30: "Next 30 days",
       next60: "Next 60 days",

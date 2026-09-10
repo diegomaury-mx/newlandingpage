@@ -15,7 +15,7 @@
 }
 
 .events-hero__lede {
-  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
   line-height: 1.7;
   color: var(--t2);
   max-width: 60ch;
@@ -48,7 +48,7 @@
 
 .events-view-btn {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 9px 16px;
@@ -83,7 +83,7 @@
 
 .events-cat-chip {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.04em;
   padding: 6px 12px;
   border-radius: 999px;
@@ -119,7 +119,7 @@
 
 .events-month__label {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ember);
@@ -140,7 +140,7 @@
 .events-card__date {
   font-family: var(--mono);
   color: var(--t2);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
   padding-top: 3px;
 }
@@ -161,13 +161,13 @@
 }
 
 .events-card__meta {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--t3);
   margin-bottom: 10px;
 }
 
 .events-card__summary {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--t2);
   max-width: 62ch;
@@ -186,7 +186,7 @@
 
 .events-chip {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   padding: 4px 9px;
@@ -201,7 +201,7 @@
 }
 
 .events-card__parent {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--t3);
   margin-top: 8px;
 }
@@ -234,7 +234,7 @@
   background: var(--bg);
   min-height: 92px;
   padding: 6px 8px;
-  font-size: 11px;
+  font-size: 12px;
   /* min-width:0 — sin esto los <a> con white-space:nowrap y títulos largos
      fijan un min-width intrínseco enorme y revientan las 7 columnas 1fr
      (grid blowout); la cuadrícula colapsaba a ~3 columnas. */
@@ -256,7 +256,7 @@
 .events-cal-event {
   display: block;
   color: var(--t2);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.3;
   padding: 2px 0;
   border-left: 2px solid var(--ember);
