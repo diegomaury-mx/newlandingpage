@@ -68,15 +68,15 @@ export function isUpcoming(dates: EventDates, todayMx: string): boolean {
   return relevanceDay(dates) >= todayMx;
 }
 
+/** Época UTC (ms) de la medianoche de un día YYYY-MM-DD. */
+function dayEpoch(day: string): number {
+  const [y, m, d] = day.split("-").map(Number);
+  return Date.UTC(y, m - 1, d);
+}
+
 /** Diferencia en días naturales entre `day` (YYYY-MM-DD) y `todayMx`. */
 export function daysFromToday(day: string, todayMx: string): number {
-  const a = Date.UTC(...(day.split("-").map(Number) as [number, number, number]));
-  const b = Date.UTC(
-    ...(todayMx.split("-").map(Number) as [number, number, number]),
-  );
-  // Number("2026") etc; el mes viene 1-based, Date.UTC lo espera 0-based, pero
-  // como se aplica igual a ambos lados la diferencia se conserva.
-  return Math.round((a - b) / 86_400_000);
+  return Math.round((dayEpoch(day) - dayEpoch(todayMx)) / 86_400_000);
 }
 
 /** "Esta semana": empieza entre hoy y hoy+6 (inclusive), y sigue vigente. */

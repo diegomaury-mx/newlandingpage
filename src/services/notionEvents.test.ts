@@ -46,10 +46,17 @@ test("isUpcoming: rango que empezó ayer pero termina mañana sigue vigente", ()
   assert.equal(isUpcoming({ start: "2026-09-09", end: "2026-09-11" }, "2026-09-10"), true);
 });
 
-test("daysFromToday cuenta días naturales con signo", () => {
+test("daysFromToday cuenta días naturales con signo, incluso cruzando meses y años", () => {
   assert.equal(daysFromToday("2026-09-15", "2026-09-10"), 5);
   assert.equal(daysFromToday("2026-09-10", "2026-09-10"), 0);
   assert.equal(daysFromToday("2026-09-05", "2026-09-10"), -5);
+  assert.equal(daysFromToday("2026-11-08", "2026-09-30"), 39);
+  assert.equal(daysFromToday("2027-01-05", "2026-12-31"), 5);
+});
+
+test("isWithinDays: ventana de 60 días", () => {
+  assert.equal(isWithinDays({ start: "2026-11-05", end: null }, "2026-09-10", 60), true);
+  assert.equal(isWithinDays({ start: "2026-11-20", end: null }, "2026-09-10", 60), false);
 });
 
 test("isThisWeek: dentro de hoy..hoy+6 y vigente", () => {

@@ -14,7 +14,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Colección `events` con loader (`eventsLoader` en `src/services/notionLoaders.ts`) sobre la base "📆 Meetups y Eventos" (`collection://7c2e4e81…`). Filtro: `Publicación = Publicado` Y fecha de fin/inicio `>= hoy` en `America/Mexico_City`. Sin `Enlace Oficial` no hay tarjeta. No lee el body de las páginas.
   - Whitelist Zod `.strict()` (`makeEventDataSchema` en `src/services/notionEvents.ts`), espejo de la sección 8.2 del "Pipeline de Eventos · Data Contract v2". Propiedad fuera de la lista = build roto a propósito. 16 tests nuevos.
   - `Sede` (tipo `place`) omitida en v1 (la API de Notion no la expone de forma estable).
-  - Página `src/pages/eventos.astro` + `src/pages/en/events.astro` con componente `EventsAgenda.astro`: 4 vistas v1 (Esta semana / Próximos 30 días / Calendario / Por categoría), chips-filtro por categoría, CTA "Sugerir un evento" al formulario público, estado vacío, CTA de cierre. DS V2 "Ember on Ink".
+  - Página `src/pages/eventos.astro` + `src/pages/en/events.astro` con componente `EventsAgenda.astro`: vistas Esta semana / Próximos 30 días / Próximos 60 días / Calendario + filtro Por categoría (chips), CTA "Sugerir un evento" al formulario público, estado vacío, CTA de cierre. DS V2 "Ember on Ink".
   - `Resumen` es el único campo traducido a EN (DeepL, `en.summary`, fallback ES). El resto de la data no se traduce en v1.
   - Enlazada desde el footer (ES y EN) y el sitemap. Header pendiente de QA visual.
   - `src/pages/llms.txt.ts`: sección "Eventos (agenda pública)".

@@ -24,7 +24,7 @@ interface Copy {
   title: string;
   lede: string;
   suggestCta: string;
-  views: { week: string; next30: string; calendar: string; category: string };
+  views: { week: string; next30: string; next60: string; calendar: string; category: string };
   allCategories: string;
   viewCase: string;
   free: string;
@@ -146,6 +146,7 @@ function viewFlags(ev: EventData): string {
   const flags: string[] = [];
   if (isThisWeek(dates, today)) flags.push('week');
   if (isWithinDays(dates, today, 30)) flags.push('next30');
+  if (isWithinDays(dates, today, 60)) flags.push('next60');
   return flags.join(' ');
 }
 
@@ -169,11 +170,14 @@ const hasEvents = upcoming.length > 0;
   <div class="events-controls">
     <div class="section-inner">
       <div class="events-views" role="tablist" aria-label={copy.views.category}>
+        <button class="events-view-btn" role="tab" aria-selected="false" data-view="week">
+          {copy.views.week}
+        </button>
         <button class="events-view-btn" role="tab" aria-selected="true" data-view="next30">
           {copy.views.next30}
         </button>
-        <button class="events-view-btn" role="tab" aria-selected="false" data-view="week">
-          {copy.views.week}
+        <button class="events-view-btn" role="tab" aria-selected="false" data-view="next60">
+          {copy.views.next60}
         </button>
         <button class="events-view-btn" role="tab" aria-selected="false" data-view="calendar">
           {copy.views.calendar}

@@ -90,6 +90,7 @@ export const uiEn = {
     views: {
       week: "This week",
       next30: "Next 30 days",
+      next60: "Next 60 days",
       calendar: "Calendar",
       category: "By category",
     },
