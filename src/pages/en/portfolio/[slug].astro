@@ -50,7 +50,7 @@ const body = en.body || entry.data.body;
 const anchorMetric = en.anchorMetric || entry.data.anchorMetric;
 const reflection = en.reflection || entry.data.reflection;
 
-const bodyHtml = renderMarkdown(body, "en");
+const bodyHtml = renderMarkdown(body, "en", { demoteHeadings: true });
 const sections = extractSections(body);
 const editionTitles = entry.data.editions
   .map((id) => idToTitle[id])

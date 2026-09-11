@@ -56,7 +56,7 @@ function seoTitle(title: string): string {
   const match = Object.entries(SEO_SHORT_TITLES).find(([k]) => key.includes(k));
   return match ? match[1] : `${title} · Diego Maury`;
 }
-const bodyHtml = renderMarkdown(entry.data.body);
+const bodyHtml = renderMarkdown(entry.data.body, "es", { demoteHeadings: true });
 const sections = extractSections(entry.data.body);
 const editionTitles = entry.data.editions
   .map((id) => idToTitle[id])

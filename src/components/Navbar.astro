@@ -57,7 +57,7 @@ const navItems = site.navigation.map((item) => ({
       />
     </a>
 
-    <div class="nav__links">
+    <div class="nav__links" id="nav-links">
       {navItems.map((item) => (
         <a
           href={item.href}
@@ -111,6 +111,7 @@ const navItems = site.navigation.map((item) => ({
       class="nav__burger"
       aria-label={isEn ? uiEn.nav.openMenu : "Abrir menú"}
       aria-expanded="false"
+      aria-controls="nav-links"
       data-open-label={isEn ? uiEn.nav.openMenu : "Abrir menú"}
       data-close-label={isEn ? uiEn.nav.closeMenu : "Cerrar menú"}
     >

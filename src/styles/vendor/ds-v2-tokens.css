@@ -1,0 +1,144 @@
+/* estado: copia-vendoreada — no es fuente
+   Origen: Claude Design, proyecto "Diego Maury Design System V 2"
+   (019dd0ff-c961-76e9-9815-68e47ca79ab8), archivo v2-tokens.css.
+   Vendoreado: 2026-09-11, vía DesignSync get_file. Contenido exacto del
+   canónico al momento del vendoreo (trae su propio sello "estado: canónico"
+   más abajo, del archivo origen).
+   Este archivo NO se @import-ea en el build del sitio: trae su propio reset,
+   la carga de Google Fonts y utilidades que ya viven autohospedadas y con
+   otro nombre en este repo (ver src/styles/fonts.css, variables.css).
+   Su único consumidor es src/styles/ds-tokens-drift.test.ts, el guardia de
+   deriva que compara los tokens de color compartidos contra variables.css.
+   Para actualizar: repetir el get_file y reemplazar este archivo entero —
+   el diff del PR muestra exactamente qué token cambió en el DS canónico. */
+
+/* estado: canónico — 2026-09-11 */
+/* Diego Maury Design System v2.0 — Ember on Ink
+   Fuente de verdad de tokens CSS. Usar como @import en proyectos web.
+   Solo Plus Jakarta Sans + DM Mono. Sin efectos, sin gradientes.
+   Contrato: color + tipografía. Px literales son legales (P4b). */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400;1,700&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Color ── */
+  --color-bg-primary:    #0A0612;  /* Deep Ink — fondo principal */
+  --color-bg-secondary:  #1A1128;  /* Surface — cards, paneles, hover */
+  --color-border:        #6A291B;  /* Bordes y separadores */
+  --color-text-primary:  #FAF8FC;  /* @kind color */
+  --color-text-secondary:#DDDBE0;  /* @kind color */
+  --color-text-tertiary: #A8A6AC;  /* @kind color */
+  --color-accent:        #FF5C39;  /* Electric Ember — acento único */
+
+  /* ── Aliases cortos ── */
+  --bg:       var(--color-bg-primary);
+  --bg-2:     var(--color-bg-secondary);
+  --bg-stage: #06030F;  /* Deep Ink -2 — fondo de escenario fuera del lienzo (Deck, poster) */
+  --border:   var(--color-border);
+  --t1:       var(--color-text-primary);
+  --t2:       var(--color-text-secondary);
+  --t3:       var(--color-text-tertiary);
+  --ember:    var(--color-accent);
+
+  /* ── Tipografía ── */
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+  --sans: var(--font-sans); /* @kind font */
+  --mono: var(--font-mono); /* @kind font */
+
+  /* ── Modo Documento — claro, institucional (D2) ── */
+  --light-bg:     #FAF8FC; /* @kind color */  /* fondo institucional */
+  --light-text-1: #0A0612; /* @kind color */  /* texto primario — tinta · 18.7:1 AA */
+  --light-text-2: #3D2A52; /* @kind color */  /* texto secundario — ink profundo · 12.1:1 AA */
+  --light-border: #E4DAEE; /* @kind color */  /* bordes y separadores */
+  --light-accent: #FF5C39; /* @kind color */  /* solo gráfico, nunca texto (2.78:1, no pasa AA) */
+
+  /* ── Alias de compatibilidad de modo claro — DEPRECADOS, retirar en v3.0 ──
+     El nombre canónico es --light-*. Estos alias existen solo para no romper
+     las piezas que aún usan la nomenclatura vieja (--bg-light, etc.). No usar
+     en código nuevo. */
+  --bg-light:     var(--light-bg);
+  --t1-light:     var(--light-text-1);
+  --t2-light:     var(--light-text-2);
+  --border-light: var(--light-border);
+}
+
+/* ── Reset mínimo ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Base ── */
+body {
+  background: var(--bg);
+  color: var(--t1);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Utilidades de texto ── */
+.font-sans  { font-family: var(--sans); }
+.font-mono  { font-family: var(--mono); }
+.text-ember { color: var(--ember); }
+.text-t1    { color: var(--t1); }
+.text-t2    { color: var(--t2); }
+.text-t3    { color: var(--t3); }
+
+/* ── Utilidades de superficie ── */
+.bg-primary   { background: var(--bg); }
+.bg-secondary { background: var(--bg-2); }
+.border-default { border: 1px solid var(--border); }
+.ember-bar-top { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--ember); }
+.ember-bar-left { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--ember); border-radius: 2px; }
+
+/* ── Lockup base ── canónico: isotipo 32 · gap 2.4 · regla 1×30 ·
+   nombre 14 / 700 / +.04em · rol itálica 8.5.
+   Al escalar, mantén las razones respecto al isotipo:
+   gap .075 (0.75X) · regla .93 de alto · nombre .4375 · rol .266 */
+.lockup {
+  display: flex; align-items: center; gap: 2.4px;
+}
+.lockup-divider {
+  width: 1px; height: 30px; background: var(--t1); flex-shrink: 0;
+}
+.lockup-name {
+  font-size: 14px; font-weight: 700; line-height: 1.1;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--t1);
+}
+.lockup-role {
+  font-family: var(--sans); font-style: italic; font-weight: 400;
+  font-size: 8.5px; letter-spacing: 0.01em;
+  color: var(--t2); margin-top: 1.9px;
+}
+
+/* ── Etiquetas mono ── */
+.label-mono {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--t3);
+}
+.label-ember {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ember);
+}
+
+/* ── Tagline ── */
+.tagline-invite { /* "Hagamos que las cosas pasen." */
+  font-family: var(--mono); font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ember);
+}
+.tagline-first { /* "Hago que las cosas pasen." */
+  font-family: var(--mono); font-style: italic;
+  color: var(--t2); letter-spacing: 0.06em;
+}
+
+/* ── Accesibilidad — movimiento ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -72,6 +72,7 @@
   color: var(--t1);
   border-color: var(--ember);
   background: var(--bg-2);
+  font-weight: 500;
 }
 
 .events-cats {
@@ -101,6 +102,7 @@
   color: var(--t1);
   border-color: var(--t2);
   background: var(--bg-2);
+  font-weight: 500;
 }
 
 /* --- Lista de eventos ---------------------------------------------------- */

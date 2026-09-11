@@ -100,8 +100,17 @@ function renderResultCards(bodyRows: string[][], locale: "es" | "en"): string {
   return `<div class="result-grid">${cards}</div>`;
 }
 
+interface RenderMarkdownOptions {
+  /** Baja un `# heading_1` del body a `<h2>`. La página que llama ya pone su propio `<h1>` (ej. CaseArticle) y el body de Notion trae su propio heading_1 — sin esto quedan dos `<h1>` por página. */
+  demoteHeadings?: boolean;
+}
+
 /** Convierte el Markdown plano de un caso a HTML listo para `set:html`. `locale` solo afecta el label "Antes/Before" de las tarjetas de resultado. */
-export function renderMarkdown(markdown: string, locale: "es" | "en" = "es"): string {
+export function renderMarkdown(
+  markdown: string,
+  locale: "es" | "en" = "es",
+  { demoteHeadings = false }: RenderMarkdownOptions = {},
+): string {
   if (!markdown.trim()) return "";
   const blocks = markdown.split(/\n{2,}/);
   const html: string[] = [];
@@ -128,7 +137,8 @@ export function renderMarkdown(markdown: string, locale: "es" | "en" = "es"): st
       currentSectionId = slugify(heading);
       html.push(`<h2 id="${currentSectionId}">${renderInline(heading)}</h2>`);
     } else if (trimmed.startsWith("# ")) {
-      html.push(`<h1>${renderInline(trimmed.slice(2))}</h1>`);
+      const tag = demoteHeadings ? "h2" : "h1";
+      html.push(`<${tag}>${renderInline(trimmed.slice(2))}</${tag}>`);
     } else if (lines.every((line) => line.trim().startsWith("- "))) {
       const items = lines.map((line) => `<li>${renderInline(line.trim().slice(2))}</li>`).join("");
       html.push(`<ul>${items}</ul>`);
