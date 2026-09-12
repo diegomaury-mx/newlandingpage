@@ -21,6 +21,14 @@ interface CaseVideo {
   label: string;
 }
 
+interface RelatedCase {
+  slug: string;
+  title: string;
+  organization: string | null;
+  year: string | null;
+  logo: string | null;
+}
+
 interface Props {
   entryTitle: string;
   logo?: string;
@@ -44,6 +52,10 @@ interface Props {
   reflectionLabel: string;
   editionTitles: string[];
   caseArchiveLabel: string;
+  related: RelatedCase[];
+  relatedLabel: string;
+  viewCaseLabel: string;
+  portfolioBase: '/portfolio' | '/en/portfolio';
 }
 
 const {
@@ -69,6 +81,10 @@ const {
   reflectionLabel,
   editionTitles,
   caseArchiveLabel,
+  related,
+  relatedLabel,
+  viewCaseLabel,
+  portfolioBase,
 } = Astro.props as Props;
 
 const hasGalleryPhotos = evidenceMedia.length > 0;
@@ -153,6 +169,22 @@ const hasGalleryPhotos = evidenceMedia.length > 0;
       <div class="eyebrow">{caseArchiveLabel}</div>
       <div class="case-archive__row">
         {editionTitles.map((title) => <span class="case-archive__chip">{title}</span>)}
+      </div>
+    </section>
+  )}
+
+  {related.length > 0 && (
+    <section class="case-related">
+      <div class="eyebrow">{relatedLabel}</div>
+      <div class="case-related__grid">
+        {related.map((item) => (
+          <a class="case-related__card" href={`${portfolioBase}/${item.slug}`}>
+            {item.logo && <img class="case-related__logo" src={item.logo} alt="" width="20" height="20" loading="lazy" />}
+            <div class="case-related__meta">{item.organization ?? '—'} · {item.year ?? '—'}</div>
+            <div class="case-related__title">{item.title}</div>
+            <span class="case-related__link">{viewCaseLabel}</span>
+          </a>
+        ))}
       </div>
     </section>
   )}

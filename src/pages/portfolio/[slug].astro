@@ -14,6 +14,7 @@ import { slugify } from '../../utils/slug.ts';
 import { toLocalePath } from '../../utils/locale.ts';
 import CaseArticle from '../../components/case/CaseArticle.astro';
 import { caseDisplayTitle } from '../../utils/caseTitle.ts';
+import { relatedCases, type RelatedCase } from '../../utils/portfolioData.ts';
 import '../../styles/case.css';
 
 type CaseEntry = CollectionEntry<'cases'>;
@@ -26,16 +27,17 @@ export async function getStaticPaths() {
   const idToTitle = Object.fromEntries(allCases.map((c) => [c.id, c.data.title]));
   return published.map((entry) => ({
     params: { slug: slugify(entry.data.title) },
-    props: { entry, idToTitle },
+    props: { entry, idToTitle, related: relatedCases(entry, published, (c) => caseDisplayTitle(c.data)) },
   }));
 }
 
 interface Props {
   entry: CaseEntry;
   idToTitle: Record<string, string>;
+  related: RelatedCase[];
 }
 
-const { entry, idToTitle } = Astro.props as Props;
+const { entry, idToTitle, related } = Astro.props as Props;
 
 const displayTitle = caseDisplayTitle(entry.data);
 
@@ -126,5 +128,9 @@ const creativeWorkJsonLd = {
     reflectionLabel="Reflexión"
     editionTitles={editionTitles}
     caseArchiveLabel="Archivo de este caso"
+    related={related}
+    relatedLabel="Casos relacionados"
+    viewCaseLabel="Ver caso →"
+    portfolioBase="/portfolio"
   />
 </BaseLayout>

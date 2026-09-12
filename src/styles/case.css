@@ -99,6 +99,25 @@
 .case-archive__row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 .case-archive__chip { font-size: 14px; color: var(--t2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; }
 
+.case-related { padding: 48px 0 96px; border-top: 1px solid var(--border); }
+.case-related .eyebrow {
+  font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ember); display: flex; align-items: center; gap: 10px;
+}
+.case-related .eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--ember); }
+.case-related__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; }
+.case-related__card {
+  display: flex; flex-direction: column; gap: 6px; padding: 20px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--bg-2); text-decoration: none;
+  transition: border-color 0.2s var(--ease, ease);
+}
+.case-related__card:hover, .case-related__card:focus-visible { border-color: var(--ember); }
+.case-related__logo { width: 20px; height: 20px; object-fit: contain; opacity: 0.92; margin-bottom: 4px; flex-shrink: 0; }
+.case-related__meta { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t3); }
+.case-related__title { font-size: 15px; font-weight: 500; color: var(--t1); line-height: 1.4; }
+.case-related__link { font-size: 13px; color: var(--t2); margin-top: 4px; }
+.case-related__card:hover .case-related__link, .case-related__card:focus-visible .case-related__link { color: var(--ember); }
+
 .case-reflection { padding: 48px 0 56px; border-top: 1px solid var(--border); max-width: 68ch; }
 .case-reflection .eyebrow { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember); display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
 .case-reflection .eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--ember); }

@@ -115,6 +115,58 @@ export function capabilityShowcase(
   return { projects, tags, total: projects.length, capabilityCount: tags.length };
 }
 
+export interface RelatedCase {
+  slug: string;
+  title: string;
+  organization: string | null;
+  year: string | null;
+  logo: string | null;
+}
+
+/**
+ * Navegacion cruzada entre fichas de caso (2026-09-12): sin curaduria manual
+ * en Notion, se infiere de datos ya publicados. Misma `organization` pesa mas
+ * que cualquier cantidad de `capabilities` compartidas (dos ediciones del
+ * mismo cliente son mas relevantes entre si que dos clientes distintos con
+ * la misma capacidad); a igualdad de score, gana el mas reciente y luego
+ * orden alfabetico (desempate determinista, la API de Notion no garantiza
+ * orden estable). Score 0 (nada en comun) no se muestra.
+ */
+export function relatedCases(
+  current: CaseEntry,
+  allCases: CaseEntry[],
+  titleOf: (c: CaseEntry) => string,
+): RelatedCase[] {
+  const SAME_ORG_WEIGHT = 1000;
+  const currentCapabilities = new Set(current.data.capabilities);
+
+  const scored = allCases
+    .filter((c) => c.id !== current.id && !c.data.draft)
+    .map((c) => {
+      const sameOrg = Boolean(current.data.organization) && c.data.organization === current.data.organization;
+      const sharedCapabilities = c.data.capabilities.filter((cap) => currentCapabilities.has(cap)).length;
+      const score = (sameOrg ? SAME_ORG_WEIGHT : 0) + sharedCapabilities;
+      return { entry: c, score };
+    })
+    .filter(({ score }) => score > 0);
+
+  scored.sort((a, b) => {
+    if (a.score !== b.score) return b.score - a.score;
+    const yearA = Number(a.entry.data.year) || 0;
+    const yearB = Number(b.entry.data.year) || 0;
+    if (yearA !== yearB) return yearB - yearA;
+    return a.entry.data.title.localeCompare(b.entry.data.title);
+  });
+
+  return scored.slice(0, 3).map(({ entry: c }) => ({
+    slug: slugify(c.data.title),
+    title: titleOf(c),
+    organization: c.data.organization ?? null,
+    year: c.data.year ?? null,
+    logo: c.data.logo ?? null,
+  }));
+}
+
 export const IMPACT_ANCHOR_SLUGS =['incmty-participantes-inscritos', 'rodi-sofi'];
 export const IMPACT_SUPPORT_SLUGS = [
   'heineken-proyectos-evaluados',

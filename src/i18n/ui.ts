@@ -31,6 +31,8 @@ export const uiEn = {
     evidencePhotoAlt: (index: number) => `View evidence photo ${index}`,
     reflection: "Reflection",
     caseArchive: "Archive for this case",
+    relatedCases: "Related cases",
+    viewCase: "View case →",
     emptyBody:
       "This case doesn't have its narrative body (Context, Action, Result) written yet.",
   },
