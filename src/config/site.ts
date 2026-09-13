@@ -60,6 +60,10 @@ export const site = {
 		href: "/portfolio",
 	},
 	{
+		label: "Eventos",
+		href: "/eventos",
+	},
+	{
 		label: "Cómo trabajo",
 		href: "/#s5-como-trabajo",
 	},

@@ -18,6 +18,7 @@ export const uiEn = {
     items: {
       "/#s2-quien-soy": "About me",
       "/portfolio": "Portfolio",
+      "/eventos": "Events",
       "/#s5-como-trabajo": "How I work",
       "/#s8-siguiente-paso": "Contact",
     } as Record<string, string>,

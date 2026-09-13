@@ -33,8 +33,13 @@ const isEn = Astro.currentLocale === "en";
 const navAriaLabel = isEn ? uiEn.nav.ariaLabel : "Navegación principal";
 // `site.navigation` es la fuente unica de hrefs (ES); en EN se traduce el
 // label por href y se reescribe el href al prefijo /en (toLocalePath).
+// Excepcion: /eventos no comparte slug con su contraparte EN (/en/events,
+// no /en/eventos) — toLocalePath por si sola llevaria a un 404.
+const EN_HREF_OVERRIDES: Record<string, string> = {
+  "/eventos": "/en/events",
+};
 const navItems = site.navigation.map((item) => ({
-  href: isEn ? toLocalePath(item.href, "en") : item.href,
+  href: isEn ? (EN_HREF_OVERRIDES[item.href] ?? toLocalePath(item.href, "en")) : item.href,
   label: isEn ? (uiEn.nav.items[item.href] ?? item.label) : item.label,
 }));
 ---
