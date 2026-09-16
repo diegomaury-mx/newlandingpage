@@ -76,7 +76,7 @@ const enUrl = new URL(`/en/portfolio/${slugify(entry.data.title)}`, Astro.site).
 // og:image siempre necesita una URL absoluta; si la ficha no tiene banner
 // propio (fichas Soporte/Draft aun sin foto), cae a la misma imagen generica
 // que usa /portfolio en vez de omitir la meta tag.
-const FALLBACK_OG_IMAGE = '/assets/img/diego-maury.png';
+const FALLBACK_OG_IMAGE = '/assets/img/diego-maury.jpg';
 const ogImage = new URL(entry.data.banner || FALLBACK_OG_IMAGE, Astro.site).toString();
 
 const creativeWorkJsonLd = {

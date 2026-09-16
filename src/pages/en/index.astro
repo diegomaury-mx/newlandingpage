@@ -287,7 +287,7 @@ const pageTitle = (seoTitleEs && (await t(seoTitleEs))) || uiEn.home.fallbackTit
 const pageDescription = (seoDescriptionEs && (await t(seoDescriptionEs))) || uiEn.home.fallbackDescription;
 const canonicalUrl = new URL('/en', Astro.site).toString();
 const esUrl = new URL('/', Astro.site).toString();
-const ogImage = new URL('/assets/img/diego-maury.png', Astro.site).toString();
+const ogImage = new URL('/assets/img/diego-maury.jpg', Astro.site).toString();
 const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
