@@ -327,7 +327,10 @@ a.events-cal-event:hover {
   }
 
   .events-cal-event {
-    font-size: 0;
+    /* Antes font-size:0 — dejaba solo un guion de 4px, el nombre del evento
+       desaparecía por completo en móvil (hallazgo de accesibilidad, PR 6). */
+    font-size: 12px;
+    line-height: 1.25;
     border-left-width: 4px;
     padding: 4px 0;
   }
