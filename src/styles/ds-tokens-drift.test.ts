@@ -13,7 +13,9 @@
  * 2026-09-12) y hoy el sitio aún no la declara (llega con la migración a
  * Archivo autohospedada) — hasta entonces esta comparación es un no-op
  * porque el token no existe en variables.css todavía, y empieza a vigilar
- * en cuanto se agregue.
+ * en cuanto se agregue. Mismo trato para --border-control (D-B,
+ * 2026-09-15): el sitio aún no lo consume (llega con el PR del borde de
+ * control), así que hoy es un no-op y empieza a vigilar en cuanto se agregue.
  */
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -29,7 +31,17 @@ const VENDORED_TOKENS_PATH = resolve(__dirname, "vendor/ds-v2-tokens.css");
 /** Los tokens que este guardia compara: los 7 valores de color del contrato
  * de marca (ver tabla "Tokens canónicos" del runbook v2.3/v2.4) más la
  * familia de titular --display (D-H, 2026-09-12). */
-const SHARED_COLOR_TOKENS = ["bg", "bg-2", "border", "t1", "t2", "t3", "ember", "display"];
+const SHARED_COLOR_TOKENS = [
+  "bg",
+  "bg-2",
+  "border",
+  "t1",
+  "t2",
+  "t3",
+  "ember",
+  "display",
+  "border-control",
+];
 
 function extractRootBlock(css: string): string {
   const match = css.match(/:root\s*\{([\s\S]*?)\n\s*\}/);

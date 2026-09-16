@@ -78,7 +78,7 @@
   height: 30px;
   padding: 0 8px;
 
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-control);
   border-radius: 6px;
 
   color: var(--t2);
@@ -94,7 +94,7 @@
 
 .nav__lang-toggle:hover {
   color: var(--t1);
-  border-color: var(--t2);
+  border-color: var(--ember);
 }
 
 .nav-cta {

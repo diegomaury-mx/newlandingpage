@@ -1,7 +1,8 @@
 /* estado: copia-vendoreada — no es fuente
    Origen: Claude Design, proyecto "Diego Maury Design System V 2"
    (019dd0ff-c961-76e9-9815-68e47ca79ab8), archivo v2-tokens.css.
-   Vendoreado: 2026-09-15, vía DesignSync get_file. Contenido exacto del
+   Vendoreado: 2026-09-15 (segunda pasada, incluye --border-control D-B),
+   vía DesignSync get_file. Contenido exacto del
    canónico al momento del vendoreo (trae su propio sello "estado: canónico"
    más abajo, del archivo origen).
    Este archivo NO se @import-ea en el build del sitio: trae su propio reset,
@@ -48,6 +49,13 @@
   --t2:     var(--color-text-secondary);
   --t3:     var(--color-text-tertiary);
   --ember:  var(--color-accent);
+
+  /* ── Borde de control (D-B · 2026-09-15) ──
+     --border (#6A291B) da 1.86 a 1 sobre --bg y 1.34 a 1 sobre --bg-2, y no
+     alcanza el 3 a 1 que necesita el contorno de un control interactivo.
+     Tres candidatos evaluados, ver decisions.md D-B; único que pasa los
+     dos fondos: */
+  --border-control: #B06A4E;  /* 4.71 a 1 sobre --bg, 3.40 a 1 sobre --bg-2 */
 
   /* ── Tipografía · D-H 2026-09-12 ──
      Archivo pinta todo titular, en toda la escala. Plus Jakarta Sans queda
@@ -103,6 +111,13 @@ body {
 .border-default { border: 1px solid var(--border); }
 .ember-bar-top { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--ember); }
 .ember-bar-left { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--ember); border-radius: 2px; }
+
+/* ── Contorno de control (D-B) ──
+   Todo elemento accionable (botón fantasma, chip, toggle, tarjeta con rol
+   de botón) usa este contorno, no --border. El hover reusa --ember: no
+   entra un segundo color al sistema. */
+.border-control { border: 1px solid var(--border-control); }
+.border-control:hover { border-color: var(--ember); }
 
 /* ── Lockup base ── canónico: isotipo 32 · gap 8 · regla 1×30 ·
    nombre 14 / 700 / +.04em · rol itálica 8.5.
