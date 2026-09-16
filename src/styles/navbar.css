@@ -47,6 +47,9 @@
 }
 
 .nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 7px 13px;
   border-radius: 6px;
 
@@ -74,8 +77,8 @@
   align-items: center;
   justify-content: center;
 
-  min-width: 30px;
-  height: 30px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0 8px;
 
   border: 1px solid var(--border-control);
@@ -100,6 +103,8 @@
 .nav-cta {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-height: 44px;
 
   margin-left: 8px;
 
@@ -170,6 +175,7 @@
 
   .nav__link{
     width:100%;
+    min-height:44px;
     padding:12px 0;
     border-radius:0;
     font-size:17px;

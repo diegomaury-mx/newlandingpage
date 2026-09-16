@@ -127,11 +127,11 @@
     position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px;
     border: 1px solid var(--border); border-radius: 6px; padding: 16px 22px; background: var(--bg);
     font-family: var(--mono); font-size: 14px; font-weight: 500; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--ember); width: fit-content;
+    text-transform: uppercase; color: var(--t1); width: fit-content;
   }
   .problem-flow-node-start { justify-self: start; }
   .problem-flow-node-end { justify-self: end; }
-  .problem-flow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); flex-shrink: 0; }
+  .problem-flow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--t3); flex-shrink: 0; }
   .problem-flow-center {
     position: relative; z-index: 1; justify-self: center; display: flex; flex-direction: column;
     align-items: center; gap: 4px; padding: 0 28px; background: var(--bg-2);
@@ -140,7 +140,7 @@
     font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--t3); white-space: nowrap;
   }
-  .problem-flow-center-arrow { color: var(--ember); font-size: 16px; line-height: 1; }
+  .problem-flow-center-arrow { color: var(--t3); font-size: 16px; line-height: 1; }
   @media (max-width: 560px) {
     .problem-flow-row { grid-template-columns: 1fr; gap: 20px; }
     .problem-flow-line { display: none; }
@@ -251,9 +251,9 @@
   .ip-desc { font-size: 15px; color: var(--t2); line-height: 1.6; margin-bottom: 12px; }
   .ip-case-link {
     display: inline-block; margin-top: 16px; font-family: var(--mono);
-    font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: var(--ember); text-decoration: none;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: var(--t2); text-decoration: none;
   }
-  .ip-case-link:hover { text-decoration: underline; }
+  .ip-case-link:hover { color: var(--ember); text-decoration: underline; }
 
   /* ── PATTERN ACCORDION (Como trabajo) ── */
   .accordion-wrap { display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }

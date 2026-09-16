@@ -32,7 +32,7 @@ footer {
 .footer-tagline {
   max-width: 260px;
   margin-top: auto;
-  color: var(--ember);
+  color: var(--t2);
   font-family: var(--mono);
   font-size: 15px;
   font-weight: 500;

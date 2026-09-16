@@ -10,7 +10,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  a { color: var(--ember); }
+  /* Ember = señalización estructural (D-A): eyebrow/label + CTA, no color
+     por defecto de cada enlace en prosa. El enlace se distingue por
+     subrayado; el hover reusa --ember como en el resto de los controles
+     (mismo patrón que .border-control). */
+  a { color: var(--t1); text-decoration-color: var(--border-control); text-underline-offset: 2px; }
+  a:hover, a:focus-visible { color: var(--ember); }
   ::selection { background: var(--ember); color: var(--bg); }
   :focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
 
@@ -71,7 +76,8 @@
 
   /* ── BUTTONS ── */
   .btn-primary {
-    display: inline-flex; align-items: center; gap: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 44px;
     background: var(--ember); color: var(--bg); font-family: var(--mono);
     font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
     padding: 14px 26px; border-radius: 6px; border: none; cursor: pointer;
@@ -79,7 +85,8 @@
   }
   .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
   .btn-ghost {
-    display: inline-flex; align-items: center; gap: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 44px;
     background: transparent; color: var(--t1); font-family: var(--mono);
     font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
     padding: 13px 24px; border-radius: 6px; border: 1px solid var(--border-control);

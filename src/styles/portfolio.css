@@ -177,13 +177,6 @@
   filter: grayscale(0.35) contrast(1) brightness(0.8);
   transform: scale(1.02);
 }
-.card__media::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(10, 6, 18, 0.1) 0%, rgba(10, 6, 18, 0.72) 100%);
-  pointer-events: none;
-}
 .card__media img.card__logo {
   position: absolute;
   left: 20px;
@@ -209,8 +202,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(168, 166, 172, 0.05) 8px 9px);
-  border-bottom: 1px solid var(--border);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: 0.12em;
@@ -258,6 +251,10 @@
   padding: 22px 0 28px;
 }
 .chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 500;
