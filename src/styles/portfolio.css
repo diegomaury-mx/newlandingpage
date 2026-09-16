@@ -49,11 +49,12 @@
 .section:first-of-type { padding-top: calc(clamp(72px, 7vw, 112px) + 64px); }
 
 .hero h1 {
+  font-family: var(--display);
   font-size: clamp(2.2rem, 4.4vw, 3.6rem);
-  font-weight: 300;
-  letter-spacing: -0.032em;
-  line-height: 1.05;
-  max-width: 20ch;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  max-width: 36ch;
   margin-top: 8px;
 }
 .hero p {
