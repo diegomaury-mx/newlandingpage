@@ -21,6 +21,7 @@ interface Props {
   ogImage?: string;
   jsonLd?: unknown;
   enableGtm?: boolean;
+  enableClarity?: boolean;
   ctaHref?: string;
   ctaLabel?: string;
   // hreflang: pares { lang, url } de las versiones ES/EN de esta misma
@@ -42,6 +43,7 @@ const {
   ogImage,
   jsonLd,
   enableGtm = false,
+  enableClarity = false,
   ctaHref = site.links.scheduling,
   ctaLabel = "Hagamos que las cosas pasen",
   alternateUrls = [],
@@ -182,6 +184,7 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
 
   <body>
     {enableGtm && <script is:inline src="/js/gtm.js"></script>}
+    {enableClarity && <script is:inline src="/js/clarity.js"></script>}
 
     <a class="skip-link" href="#main">Saltar al contenido</a>
 
