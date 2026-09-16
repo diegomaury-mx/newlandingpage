@@ -6,9 +6,14 @@
  * el DS puede declarar tokens que el sitio no usa hoy (--light-*, --bg-stage):
  * solo lo COMPARTIDO no puede discrepar en silencio.
  *
- * No compara tipografía a propósito: el sitio autohospeda Plus Jakarta Sans /
- * DM Mono con fuentes de fallback propias (ver fonts.css), así que --sans/
- * --mono divergen del vendoreado por diseño, no por deriva.
+ * --sans y --mono quedan exentos a propósito: el sitio autohospeda Plus
+ * Jakarta Sans / DM Mono con fuentes de fallback propias (ver fonts.css),
+ * así que su valor literal diverge del vendoreado por diseño, no por deriva.
+ * --display NO queda exento: es la familia de titular (Archivo, D-H
+ * 2026-09-12) y hoy el sitio aún no la declara (llega con la migración a
+ * Archivo autohospedada) — hasta entonces esta comparación es un no-op
+ * porque el token no existe en variables.css todavía, y empieza a vigilar
+ * en cuanto se agregue.
  */
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -21,9 +26,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SITE_TOKENS_PATH = resolve(__dirname, "variables.css");
 const VENDORED_TOKENS_PATH = resolve(__dirname, "vendor/ds-v2-tokens.css");
 
-/** Los únicos tokens que este guardia compara: los 7 valores de color del
- * contrato de marca (ver tabla "Tokens canónicos" del runbook v2.3/v2.4). */
-const SHARED_COLOR_TOKENS = ["bg", "bg-2", "border", "t1", "t2", "t3", "ember"];
+/** Los tokens que este guardia compara: los 7 valores de color del contrato
+ * de marca (ver tabla "Tokens canónicos" del runbook v2.3/v2.4) más la
+ * familia de titular --display (D-H, 2026-09-12). */
+const SHARED_COLOR_TOKENS = ["bg", "bg-2", "border", "t1", "t2", "t3", "ember", "display"];
 
 function extractRootBlock(css: string): string {
   const match = css.match(/:root\s*\{([\s\S]*?)\n\s*\}/);

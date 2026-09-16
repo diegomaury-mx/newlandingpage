@@ -1,0 +1,156 @@
+/* estado: copia-vendoreada — no es fuente
+   Origen: Claude Design, proyecto "Diego Maury Design System V 2"
+   (019dd0ff-c961-76e9-9815-68e47ca79ab8), archivo v2-dimensions.css.
+   Vendoreado: 2026-09-15, vía DesignSync get_file. Contenido exacto del
+   canónico al momento del vendoreo (trae su propio sello "estado: canónico"
+   más abajo, del archivo origen).
+   Este archivo NO se @import-ea en el build del sitio — es referencia de
+   contrato, igual que ds-v2-tokens.css. Para actualizar: repetir el
+   get_file y reemplazar este archivo entero. */
+
+/* estado: canónico — 2026-09-13 */
+/* Diego Maury Design System — Contrato dimensional v2.5
+   Complemento de v2-tokens.css (color + tipografía). Aquí viven las medidas.
+   Fuente: "Contrato Dimensional.dc.html". Si este archivo y ese documento
+   se contradicen, gana este archivo y el documento se corrige.
+
+   Los px literales siguen siendo legales (P4b). Estos tokens existen para que
+   el chequeo pueda verificar que un literal cae en la lista, no para obligar
+   a escribir var() en cada declaración. */
+
+:root {
+  /* ── Espacio · base 4 · lista cerrada ──
+     No hay intermedios: si 32 es poco y 48 es mucho, la respuesta es 40. */
+  --sp-1:    4px;
+  --sp-2:    8px;
+  --sp-3:   12px;
+  --sp-4:   16px;
+  --sp-6:   24px;
+  --sp-8:   32px;
+  --sp-10:  40px;
+  --sp-12:  48px;
+  --sp-14:  56px;
+  --sp-18:  72px;
+  --sp-24:  96px;
+  --sp-32: 128px;
+
+  /* En deck 1920 y redes 1080, la misma lista × 2. */
+
+  /* ── Titular · D-H 2026-09-12 ──
+     Parámetros aprobados con la familia: Archivo 700 en toda la escala. */
+  --display-tracking: -0.035em;
+  --display-leading:   1.02;
+
+  /* ── Elementos ── */
+  --rule-thin:      1px;  /* filete fino — separa dentro de un mismo nivel */
+  --rule-thick:     2px;  /* filete grueso — abre un bloque o un caso */
+  --bar-screen:     3px;  /* barra Ember en pantalla */
+  --bar-fixed:      4px;  /* barra Ember en deck, redes e impresión */
+  --radius:         0;    /* en todo el sistema. No hay contenedores redondeados. */
+  --action-height: 56px;  /* bloque de acción en documento y web */
+  --touch-min:     44px;  /* área táctil mínima en pantalla */
+
+  /* ── Estados ──
+     Ningún estado introduce un color: el hover invierte tinta y acento. */
+  --focus-ring:         2px;
+  --focus-offset:       2px;
+  --focus-on-light: #0A0612;  /* Ember sobre papel no llega a 3:1 */
+  --focus-on-dark:  #FF5C39;
+  /* único valor temporal del contrato */
+  --state-duration: 120ms; /* @kind other */
+  --state-ease: cubic-bezier(0.2, 0, 0, 1); /* @kind other */
+
+  /* ── Lockup · razones sobre X = altura del isotipo ──
+     El lockup NO obedece la escala tipográfica de su superficie: es una
+     construcción, y sus cuerpos caen en valores fraccionarios. A X = 40,
+     el nombre mide 17.5px. Eso es correcto.
+     Histórico: el comentario anterior escribía 0.075 también como "(0.75X)",
+     diez veces mayor. Esa notación queda prohibida. */
+  --lockup-gap:        0.075;  /* isotipo → regla */
+  --lockup-gap-vert:   0.16;   /* lockup vertical, sin regla */
+  --lockup-rule-h:     0.93; /* @kind other */ /* alto de la regla, ancho 1px */
+  --lockup-name:       0.4375; /* @kind other */ /* cuerpo del nombre · peso 700 */
+  --lockup-role:       0.266; /* @kind other */ /* cuerpo del título */
+  --lockup-role-gap:   0.06;   /* aire entre nombre y título */
+  --lockup-clearspace: 0.5; /* @kind other */ /* área de respeto, los 4 lados */
+
+  /* Mínimos. Debajo de esto el logo no se usa. */
+  --iso-min-screen:     24px;
+  --lockup-min-screen:  32px;
+  --iso-min-print:       8mm; /* @kind spacing */
+  --lockup-min-print:   12mm; /* @kind spacing */
+}
+
+/* ── Escalas tipográficas por superficie ────────────────────────────────
+   Seis listas cerradas. Dentro de cada una no hay valores intermedios.
+
+   Regla de fluidez: SOLO en web, un valor puede declararse como clamp()
+   entre dos valores de su lista; los intermedios que calcula el navegador
+   son legítimos. Un extremo fuera de la lista no lo es. En documento, deck,
+   redes y firma —medida fija— todos los valores son discretos.
+
+   Reglas que cruzan las cinco:
+   · Todo titular se pinta con Archivo 700, tracking -0.035em (D-H). El peso
+     300 de Plus Jakarta Sans deja de ser el recurso de display y queda para
+     texto grande que no es titular.
+   · El peso 800 no existe (faux bold).
+   · Las cifras van en Plus Jakarta Sans 700 tabulares a cualquier tamaño,
+     nunca en mono y nunca en 300. El mono es para eyebrows, fechas,
+     labels y metadata. */
+
+:root {
+  /* Documento y web — carta/A4, propuestas, one-pager, CV, sitio */
+  --doc-hero:     52px;  /* cifra hero · 700 tabular */
+  --doc-title:    38px;  /* titular · Archivo 700 */
+  --doc-figure:   22px;  /* cifra normal · numeración */
+  --doc-step:     19px;  /* título de paso · 700 */
+  --doc-action:   17px;  /* bloque de acción y label de métrica · 700,
+                            sin uppercase forzado ni tracking mono */
+  --doc-body:     16px;
+  --doc-meta:     12px;  /* mono */
+}
+
+.surface-deck {
+  /* 1920 × 1080 — la escala de documento × 2 */
+  --deck-cover:  132px;  /* titular · Archivo 700 */
+  --deck-hero:   104px;  /* cifra hero · 700 tabular */
+  --deck-title:   76px;  /* titular · Archivo 700 */
+  --deck-figure:  44px;  /* cifra normal y subtítulo · 700 */
+  --deck-body:    34px;
+  --deck-meta:    24px;  /* mono · mínimo absoluto en 1920 */
+}
+
+.surface-social {
+  /* 1080 × 1080 y 1080 × 1350 */
+  --soc-hero:     88px;  /* cita · Archivo 700 · cifra hero · PJS 700 tabular */
+  --soc-quote:    64px;  /* cita larga · Archivo 700 */
+  --soc-figure:   40px;  /* 700 */
+  --soc-body:     28px;
+  --soc-meta:     20px;  /* mono */
+  /* El póster NO usa esta escala: ver .surface-poster. */
+}
+
+.surface-poster {
+  /* 1080 × 1080 y formatos de cartel. Se lee como cartel, no en el feed:
+     por eso no comparte escala con redes. Separada de 'social' el 2026-09-12,
+     cuando el póster cayó a 88px y perdió su razón de ser. */
+  --pos-cartel:  140px;  /* titular de cartel · Archivo 700 */
+  --pos-hero:     88px;  /* cifra hero · 700 tabular */
+  --pos-sub:      64px;  /* subtítulo · Archivo 700 */
+  --pos-figure:   40px;  /* cifra normal · 700 */
+  --pos-body:     28px;
+  --pos-meta:     20px;  /* mono */
+}
+
+.surface-signature {
+  /* Tabla HTML. Única superficie donde los hex van literales:
+     los clientes de correo no soportan variables CSS. */
+  --sig-name:     16px;  /* 700 */
+  --sig-body:     13px;
+  --sig-meta:     11px;  /* mono · mínimo absoluto del sistema */
+  --sig-iso:      32px;  /* X de la firma */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --state-duration: 0ms; /* @kind other */ }
+}
