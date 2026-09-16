@@ -51,7 +51,7 @@
   align-items: center;
   min-height: 44px;
   padding: 7px 13px;
-  border-radius: 6px;
+  border-radius: 0;
 
   color: var(--t2);
   text-decoration: none;
@@ -82,7 +82,7 @@
   padding: 0 8px;
 
   border: 1px solid var(--border-control);
-  border-radius: 6px;
+  border-radius: 0;
 
   color: var(--t2);
   text-decoration: none;
@@ -111,7 +111,7 @@
   padding: 9px 17px;
 
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
 
   background: var(--ember);
   color: var(--bg);
@@ -177,7 +177,7 @@
     width:100%;
     min-height:44px;
     padding:12px 0;
-    border-radius:0;
+    border-radius: 0;
     font-size:17px;
   }
 

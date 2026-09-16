@@ -1,6 +1,10 @@
 /* Agenda pública /eventos (+ /en/events). Quinta fuente de Diego CMS.
    DS V2 "Ember on Ink": un solo acento ember por pieza, sin gradientes ni
-   sombras decorativas, radios en escala {3,6,10}. */
+   sombras decorativas, radio 0 en todo el sistema (v2-dimensions.css
+   --radius, verificado por ds-dimension-check.mjs R10) — la escala
+   {3,6,10} que este comentario documentaba nunca existió en el contrato,
+   corregido 2026-09-16. Únicas excepciones: pills (999px) y formas
+   circulares funcionales (50%). */
 
 /* El script de filtros alterna el atributo `hidden`; sin esto, las reglas
    `display:grid|block` de author (`.events-card`, `.events-cal-grid`, etc.)
@@ -69,7 +73,7 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 9px 16px;
-  border-radius: 6px;
+  border-radius: 0;
   border: 1px solid var(--border-control);
   background: transparent;
   color: var(--t2);
@@ -215,7 +219,7 @@
   letter-spacing: 0.03em;
   text-transform: uppercase;
   padding: 4px 9px;
-  border-radius: 3px;
+  border-radius: 0;
   border: 1px solid var(--border);
   color: var(--t3);
 }
@@ -251,7 +255,7 @@
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 0;
   overflow: hidden;
 }
 
