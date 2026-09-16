@@ -9,6 +9,7 @@
     --t2:     #DDDBE0;
     --t3:     #A8A6AC;
     --ember:  #FF5C39;
+    --display: 'Archivo', 'Archivo Fallback', system-ui, sans-serif;
     --sans:   'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', system-ui, sans-serif;
     --mono:   'DM Mono', 'DM Mono Fallback', ui-monospace, monospace;
     --ease:   cubic-bezier(0.16, 1, 0.3, 1);

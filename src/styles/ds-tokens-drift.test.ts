@@ -6,16 +6,13 @@
  * el DS puede declarar tokens que el sitio no usa hoy (--light-*, --bg-stage):
  * solo lo COMPARTIDO no puede discrepar en silencio.
  *
- * --sans y --mono quedan exentos a propósito: el sitio autohospeda Plus
- * Jakarta Sans / DM Mono con fuentes de fallback propias (ver fonts.css),
- * así que su valor literal diverge del vendoreado por diseño, no por deriva.
- * --display NO queda exento: es la familia de titular (Archivo, D-H
- * 2026-09-12) y hoy el sitio aún no la declara (llega con la migración a
- * Archivo autohospedada) — hasta entonces esta comparación es un no-op
- * porque el token no existe en variables.css todavía, y empieza a vigilar
- * en cuanto se agregue. Mismo trato para --border-control (D-B,
- * 2026-09-15): el sitio aún no lo consume (llega con el PR del borde de
- * control), así que hoy es un no-op y empieza a vigilar en cuanto se agregue.
+ * --sans, --mono y --display quedan exentos de la comparación LITERAL a
+ * propósito: el sitio autohospeda las tres (ver fonts.css) con una fuente de
+ * fallback propia encadenada después del nombre real (p. ej. 'Archivo',
+ * 'Archivo Fallback', system-ui, sans-serif), así que su valor completo
+ * diverge del vendoreado por diseño, no por deriva. Lo que SÍ se vigila para
+ * las tres es que la familia PRIMARIA (el primer nombre de la lista) siga
+ * siendo la misma que en el canónico — ver el segundo test.
  */
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -28,20 +25,25 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SITE_TOKENS_PATH = resolve(__dirname, "variables.css");
 const VENDORED_TOKENS_PATH = resolve(__dirname, "vendor/ds-v2-tokens.css");
 
-/** Los tokens que este guardia compara: los 7 valores de color del contrato
- * de marca (ver tabla "Tokens canónicos" del runbook v2.3/v2.4) más la
- * familia de titular --display (D-H, 2026-09-12). */
+/** Los tokens que este guardia compara por valor literal: los 7 colores del
+ * contrato de marca (ver tabla "Tokens canónicos" del runbook v2.3/v2.4) más
+ * --border-control (D-B, 2026-09-15). Las familias tipográficas se vigilan
+ * aparte — ver PRIMARY_FONT_FAMILY_TOKENS más abajo. */
 const SHARED_COLOR_TOKENS = [
   "bg",
   "bg-2",
   "border",
+  "border-control",
   "t1",
   "t2",
   "t3",
   "ember",
-  "display",
-  "border-control",
 ];
+
+/** Tokens de familia tipográfica: solo se compara el primer nombre de la
+ * lista (la fuente real), no la cadena completa (que incluye el fallback
+ * autohospedado propio del sitio, ver comentario de cabecera). */
+const PRIMARY_FONT_FAMILY_TOKENS = ["display", "sans", "mono"];
 
 function extractRootBlock(css: string): string {
   const match = css.match(/:root\s*\{([\s\S]*?)\n\s*\}/);
@@ -76,9 +78,20 @@ function resolveValue(name: string, tokens: Map<string, string>, depth = 0): str
   return value.toLowerCase();
 }
 
+/** El primer nombre de una pila de font-family, sin comillas ni espacios. */
+function primaryFamily(value: string): string {
+  return value.split(",")[0].trim().replace(/^['"]|['"]$/g, "");
+}
+
+function loadTokens(): { site: Map<string, string>; vendored: Map<string, string> } {
+  return {
+    site: parseTokens(extractRootBlock(readFileSync(SITE_TOKENS_PATH, "utf8"))),
+    vendored: parseTokens(extractRootBlock(readFileSync(VENDORED_TOKENS_PATH, "utf8"))),
+  };
+}
+
 test("ningún token de color compartido entre variables.css y el DS vendoreado diverge en valor", () => {
-  const siteTokens = parseTokens(extractRootBlock(readFileSync(SITE_TOKENS_PATH, "utf8")));
-  const vendoredTokens = parseTokens(extractRootBlock(readFileSync(VENDORED_TOKENS_PATH, "utf8")));
+  const { site: siteTokens, vendored: vendoredTokens } = loadTokens();
 
   const mismatches: string[] = [];
   for (const name of SHARED_COLOR_TOKENS) {
@@ -96,6 +109,27 @@ test("ningún token de color compartido entre variables.css y el DS vendoreado d
     "Deriva detectada contra el Design System canónico. Si es intencional, " +
       "re-vendorea src/styles/vendor/ds-v2-tokens.css (DesignSync get_file) y " +
       "confirma con Diego; si no, corrige variables.css:\n" +
+      mismatches.join("\n"),
+  );
+});
+
+test("la familia primaria de --display/--sans/--mono no diverge del DS vendoreado", () => {
+  const { site: siteTokens, vendored: vendoredTokens } = loadTokens();
+
+  const mismatches: string[] = [];
+  for (const name of PRIMARY_FONT_FAMILY_TOKENS) {
+    if (!siteTokens.has(name) || !vendoredTokens.has(name)) continue;
+    const siteFamily = primaryFamily(resolveValue(name, siteTokens));
+    const vendoredFamily = primaryFamily(resolveValue(name, vendoredTokens));
+    if (siteFamily !== vendoredFamily) {
+      mismatches.push(`--${name}: variables.css=${siteFamily} · DS vendoreado=${vendoredFamily}`);
+    }
+  }
+
+  assert.equal(
+    mismatches.length,
+    0,
+    "La familia tipográfica primaria diverge del Design System canónico:\n" +
       mismatches.join("\n"),
   );
 });
