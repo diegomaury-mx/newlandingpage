@@ -27,8 +27,9 @@ const VENDORED_TOKENS_PATH = resolve(__dirname, "vendor/ds-v2-tokens.css");
 
 /** Los tokens que este guardia compara por valor literal: los 7 colores del
  * contrato de marca (ver tabla "Tokens canónicos" del runbook v2.3/v2.4) más
- * --border-control (D-B, 2026-09-15). Las familias tipográficas se vigilan
- * aparte — ver PRIMARY_FONT_FAMILY_TOKENS más abajo. */
+ * --border-control (D-B, 2026-09-15) y --ember-fill/--ember-fill-strong
+ * (D-J, 2026-09-16). Las familias tipográficas se vigilan aparte — ver
+ * PRIMARY_FONT_FAMILY_TOKENS más abajo. */
 const SHARED_COLOR_TOKENS = [
   "bg",
   "bg-2",
@@ -38,6 +39,8 @@ const SHARED_COLOR_TOKENS = [
   "t2",
   "t3",
   "ember",
+  "ember-fill",
+  "ember-fill-strong",
 ];
 
 /** Tokens de familia tipográfica: solo se compara el primer nombre de la
@@ -54,12 +57,13 @@ function extractRootBlock(css: string): string {
 }
 
 function parseTokens(rootBlock: string): Map<string, string> {
+  const withoutComments = rootBlock.replace(/\/\*[\s\S]*?\*\//g, "");
   const tokens = new Map<string, string>();
   const declaration = /--([\w-]+)\s*:\s*([^;]+);/g;
   let match: RegExpExecArray | null;
-  while ((match = declaration.exec(rootBlock)) !== null) {
+  while ((match = declaration.exec(withoutComments)) !== null) {
     const name = match[1];
-    const value = match[2].replace(/\/\*[\s\S]*?\*\//g, "").trim();
+    const value = match[2].trim();
     tokens.set(name, value);
   }
   return tokens;

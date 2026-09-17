@@ -9,6 +9,8 @@
     --t2:     #DDDBE0;
     --t3:     #A8A6AC;
     --ember:  #FF5C39;
+    --ember-fill:        rgba(255, 92, 57, .10);
+    --ember-fill-strong: rgba(255, 92, 57, .16);
     --display: 'Archivo', 'Archivo Fallback', system-ui, sans-serif;
     --sans:   'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', system-ui, sans-serif;
     --mono:   'DM Mono', 'DM Mono Fallback', ui-monospace, monospace;

@@ -34,10 +34,10 @@
 .case-prose li { margin-bottom: 8px; }
 .case-prose blockquote {
   margin: 0 0 14px; padding: 12px 18px; border-left: 2px solid var(--ember);
-  color: var(--t2); font-size: 15px; background: rgba(255, 92, 57, 0.04); border-radius: 0 6px 6px 0;
+  color: var(--t2); font-size: 15px; background: var(--ember-fill); border-radius: 0 6px 6px 0;
 }
 .case-prose hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-.case-prose a { text-decoration: none; border-bottom: 1px solid rgba(255, 92, 57, 0.4); }
+.case-prose a { text-decoration: none; border-bottom: 1px solid var(--border-control); }
 .case-prose a:hover { color: var(--t1); border-bottom-color: var(--t1); }
 .prose-table { margin: 0 0 20px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; overflow-x: auto; }
 .prose-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -83,7 +83,7 @@
 .evidence-video-list { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
 .evidence-video-link {
   display: inline-flex; align-items: center; gap: 8px; width: fit-content;
-  font-size: 15px; color: var(--t2); text-decoration: none; border-bottom: 1px solid rgba(255, 92, 57, 0.4);
+  font-size: 15px; color: var(--t2); text-decoration: none; border-bottom: 1px solid var(--border-control);
 }
 .evidence-video-link::before { content: '▶'; color: var(--ember); font-size: 9px; }
 .evidence-video-link:hover { color: var(--t1); border-bottom-color: var(--t1); }

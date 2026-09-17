@@ -1,8 +1,8 @@
 /* estado: copia-vendoreada — no es fuente
    Origen: Claude Design, proyecto "Diego Maury Design System V 2"
    (019dd0ff-c961-76e9-9815-68e47ca79ab8), archivo v2-tokens.css.
-   Vendoreado: 2026-09-15 (segunda pasada, incluye --border-control D-B),
-   vía DesignSync get_file. Contenido exacto del
+   Vendoreado: 2026-09-17 (tercera pasada, incluye --ember-fill/--ember-fill-strong
+   D-J), vía DesignSync get_file. Contenido exacto del
    canónico al momento del vendoreo (trae su propio sello "estado: canónico"
    más abajo, del archivo origen).
    Este archivo NO se @import-ea en el build del sitio: trae su propio reset,
@@ -14,7 +14,7 @@
    Para actualizar: repetir el get_file y reemplazar este archivo entero —
    el diff del PR muestra exactamente qué token cambió en el DS canónico. */
 
-/* estado: canónico — 2026-09-13 */
+/* estado: canónico — 2026-09-15 */
 /* Diego Maury Design System v2.0 — Ember on Ink
    Fuente de verdad de tokens CSS. Usar como @import en proyectos web.
    Archivo (titulares) + Plus Jakarta Sans (cuerpo, UI, cifras) + DM Mono
@@ -49,6 +49,17 @@
   --t2:     var(--color-text-secondary);
   --t3:     var(--color-text-tertiary);
   --ember:  var(--color-accent);
+
+  /* ── Relleno de estado · D-J 2026-09-16 ──────────────────────────────
+     Ember a opacidad declarada, para el fondo de un control activo. NO es
+     un segundo naranja (D-P3 habla de texto): es #FF5C39 a una opacidad
+     medida. Solo como relleno, nunca como color de texto ni de borde.
+     Texto Ember encima, compuesto sobre --bg:
+       --ember-fill        → 5.74:1
+       --ember-fill-strong → 5.50:1
+     Los dos pasan AA. Si el relleno se usa sobre --bg-2, medir de nuevo. */
+  --ember-fill:        rgba(255, 92, 57, .10);
+  --ember-fill-strong: rgba(255, 92, 57, .16);
 
   /* ── Borde de control (D-B · 2026-09-15) ──
      --border (#6A291B) da 1.86 a 1 sobre --bg y 1.34 a 1 sobre --bg-2, y no
@@ -118,6 +129,10 @@ body {
    entra un segundo color al sistema. */
 .border-control { border: 1px solid var(--border-control); }
 .border-control:hover { border-color: var(--ember); }
+
+/* ── Relleno de estado (D-J) ── */
+.ember-fill        { background: var(--ember-fill); }
+.ember-fill-strong { background: var(--ember-fill-strong); }
 
 /* ── Lockup base ── canónico: isotipo 32 · gap 8 · regla 1×30 ·
    nombre 14 / 700 / +.04em · rol itálica 8.5.
