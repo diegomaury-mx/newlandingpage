@@ -32,13 +32,32 @@
   /* ── TRUST GRID ── */
   .trust { margin-top: 44px; }
   .trust-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--t3); margin-bottom: 12px; }
-  .trust-track-wrap { position: relative; }
-  .trust-track { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .trust-track-wrap {
+    position: relative;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .trust-track {
+    display: flex;
+    gap: 12px;
+    width: max-content;
+    animation: marquee 32s linear infinite;
+  }
+  .trust-track-wrap:hover .trust-track,
+  .trust-track-wrap:focus-within .trust-track { animation-play-state: paused; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trust-track { animation: none; flex-wrap: wrap; width: 100%; }
+  }
   .trust-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  flex: 0 0 150px;
   height: 72px;
   background: rgba(250,248,252,.04);
   border: 1px solid var(--border);
