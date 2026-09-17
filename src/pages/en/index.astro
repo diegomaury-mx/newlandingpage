@@ -307,16 +307,10 @@ const personJsonLd = {
   alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
   ctaLabel={uiEn.nav.ctaLabel}
+  enableGtm
+  enableClarity
 >
 <link slot="head" rel="preload" as="image" href={heroImgSrc} fetchpriority="high" />
-
-<!-- Google Tag Manager -->
-<script is:inline src="/js/gtm.js"></script>
-<!-- End Google Tag Manager -->
-
-<!-- Microsoft Clarity -->
-<script is:inline src="/js/clarity.js"></script>
-<!-- End Microsoft Clarity -->
 
 <!-- S1 HERO -->
 <section class="section" id={SECTION_IDS.S1}>

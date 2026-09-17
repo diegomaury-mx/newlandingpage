@@ -59,6 +59,21 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
   <head>
     <meta charset="utf-8" />
 
+    {enableGtm && (
+      <script is:inline>
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+          const f = d.getElementsByTagName(s)[0];
+          const j = d.createElement(s);
+          const dl = l !== "dataLayer" ? "&l=" + l : "";
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, "script", "dataLayer", "GTM-NHT5827J");
+      </script>
+    )}
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1"
@@ -183,7 +198,16 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
   </head>
 
   <body>
-    {enableGtm && <script is:inline src="/js/gtm.js"></script>}
+    {enableGtm && (
+      <noscript>
+        <iframe
+          src="https://www.googletagmanager.com/ns.html?id=GTM-NHT5827J"
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden"
+        />
+      </noscript>
+    )}
     {enableClarity && <script is:inline src="/js/clarity.js"></script>}
 
     <a class="skip-link" href="#main">Saltar al contenido</a>
