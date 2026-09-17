@@ -336,6 +336,7 @@ const personJsonLd = {
     <div class="about-right" data-reveal style="--delay:.22s">
       {aboutBio && <p class="about-bio">{aboutBio}</p>}
       {aboutHeadline && <p class="about-bio">{aboutHeadline}</p>}
+      <a href="https://www.linkedin.com/in/diegomaury/" class="btn-primary" target="_blank" rel="noopener">Conectemos en LinkedIn</a>
     </div>
   </div>
   {aboutStats.length > 0 && (
@@ -361,6 +362,7 @@ const personJsonLd = {
         <div class="section-label" data-reveal>{problemLabel}</div>
         <h2 class="section-title problema-title" data-reveal style="--delay:.06s">{problemHeadline}</h2>
         {problemParas.map((p) => <p class="section-sub" data-reveal>{p}</p>)}
+        <a href="/portfolio" class="btn-primary" data-reveal style="--delay:.14s">Ver portafolio</a>
       </div>
       <div class="problema-media" data-reveal style="--delay:.1s">
         {problemaDiagramaReady ? (

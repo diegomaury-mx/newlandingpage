@@ -35,7 +35,7 @@
 }
 
 .nav-logo {
-  height: 34px;
+  height: 42px;
   width: auto;
   display: block;
 }
@@ -108,7 +108,7 @@
 
   margin-left: 8px;
 
-  padding: 9px 17px;
+  padding: 11px 20px;
 
   border: none;
   border-radius: 0;
@@ -118,11 +118,12 @@
 
   cursor: pointer;
   text-decoration: none;
+  white-space: nowrap;
 
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
-  letter-spacing: .12em;
+  letter-spacing: .1em;
   text-transform: uppercase;
 
   transition: opacity 150ms, transform 150ms;
@@ -149,7 +150,7 @@
   display: block;
 }
 
-@media (max-width:768px){
+@media (max-width:1180px){
 
   .nav__links{
     display:none;
@@ -184,10 +185,30 @@
   .nav-cta{
     margin-left:0;
     margin-top:12px;
+    /* el nowrap de escritorio (evita crecimiento en alto en la fila de
+       1 sola linea con todos los links) desborda horizontalmente aqui,
+       donde el layout ya es brand+right+burger sin esa fila completa */
+    white-space: normal;
+    /* el bump a 14px/padding mayor es para la fila completa de escritorio
+       (>1180px); aqui ya desbordaba 82px de alto en produccion (nav de
+       64px) y el bump lo agravaba a 94px — se revierte al tamano previo
+       para no empeorar un defecto preexistente fuera de alcance */
+    font-size: 12px;
+    padding: 9px 17px;
+    letter-spacing: .12em;
   }
 
   .nav__burger{
     display:block;
   }
 
+}
+
+@media (max-width:375px){
+  /* el logo a 42px (bump pedido por Diego) empuja EN+CTA+burger fuera
+     del viewport por debajo de 375px (breakpoint mobile-first minimo
+     del proyecto); se revierte a 34px solo aqui para no desbordar */
+  .nav-logo{
+    height: 34px;
+  }
 }
