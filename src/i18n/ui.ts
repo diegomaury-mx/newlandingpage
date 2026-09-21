@@ -111,6 +111,11 @@ export const uiEn = {
       "If you know an ecosystem event worth sharing, send it over. To talk about programs or partnerships, book a call.",
     scheduleCta: "Book a call",
     writeCta: "Write to me",
+    periodLabel: "Period",
+    categoryLabel: "Category",
+    typeLabel: "Type",
+    clearFilters: "Clear filters",
+    searchCategoryPlaceholder: "Search category…",
   },
   portfolio: {
     byTheNumbers: "By the numbers",
