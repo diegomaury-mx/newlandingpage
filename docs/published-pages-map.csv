@@ -1,7 +1,8 @@
 url,source_path,note
 /,src/pages/index.astro,Página principal generada por Astro
 /portfolio,src/pages/portfolio.astro,Listado de portfolio
-/llms.txt,src/pages/llms.txt.ts,Salida llms.txt dinámica
+/llms.txt,public/llms.txt,Estático desde 2026-09-21 (SSOT Notion)
+/llms-full.txt,public/llms-full.txt,Estático desde 2026-09-21 (SSOT Notion)
 
 /404.html,public/404.html,Página 404 (estática)
 /politicas-privacidad.html,public/politicas-privacidad.html,Política de privacidad (estática)

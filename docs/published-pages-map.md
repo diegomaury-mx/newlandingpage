@@ -12,7 +12,8 @@ Notas:
 
 - `/` : `src/pages/index.astro`
 - `/portfolio` : `src/pages/portfolio.astro`
-- `/llms.txt` : `src/pages/llms.txt.ts`
+- `/llms.txt` : `public/llms.txt` (estático desde 2026-09-21)
+- `/llms-full.txt` : `public/llms-full.txt` (estático desde 2026-09-21)
 
 ## Páginas estáticas en `public/`
 - `/404.html` : `public/404.html`

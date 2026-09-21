@@ -157,7 +157,7 @@ Generado automáticamente por `@astrojs/sitemap` (configurado en `astro.config.m
 
 ## 8. llms.txt
 
-`src/pages/llms.txt.ts` (implementado) genera el `llms.txt` real filtrando por canal `llms.txt` del CMS — distinto del `llms.txt`/`llms-full.txt` estático que vive en la raíz del repo (ver CLAUDE.md §1). No confundir ambos al editar.
+`llms.txt` y `llms-full.txt` son estáticos desde 2026-09-21 (`public/llms.txt`, `public/llms-full.txt`), sin generación desde el CMS. SSOT: página Notion "🤖 llms-full.txt (SSOT maestra) + llms.txt - diegomaury.mx" (ver CLAUDE.md §1). El antiguo `src/pages/llms.txt.ts` (dinámico, filtraba por canal `llms.txt` del CMS) se eliminó.
 
 ---
 

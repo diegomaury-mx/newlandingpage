@@ -1,7 +1,8 @@
 [
   {"url":"/","source":"src/pages/index.astro","note":"Página principal generada por Astro"},
   {"url":"/portfolio","source":"src/pages/portfolio.astro","note":"Listado de portfolio"},
-  {"url":"/llms.txt","source":"src/pages/llms.txt.ts","note":"Salida llms.txt dinámica"},
+  {"url":"/llms.txt","source":"public/llms.txt","note":"Estático desde 2026-09-21 (SSOT Notion)"},
+  {"url":"/llms-full.txt","source":"public/llms-full.txt","note":"Estático desde 2026-09-21 (SSOT Notion)"},
 
   {"url":"/404.html","source":"public/404.html","note":"Página 404 (estática)"},
   {"url":"/politicas-privacidad.html","source":"public/politicas-privacidad.html","note":"Política de privacidad (estática)"},
