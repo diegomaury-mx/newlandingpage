@@ -1,148 +1,30 @@
 # Diego Maury | Strategic Program Director
-## I integrate strategy, operations, and ecosystems to turn complexity into executable systems
-Contact: dm@diegomaury.mx | +52 56 5926 7516 | https://linkedin.com/in/diegomaury
-Portfolio: https://diegomaury.mx
-Full profile (extended): https://diegomaury.mx/llms-full.txt
-Location: Mexico City, GMT-6 (operates across LATAM)
 
----
+> Diego Maury is a Strategic Program Director who integrates strategy, operations, innovation, and AI-enabled systems to turn organizational complexity into executable systems. He works across corporate innovation, RevOps, process automation, and ecosystem programs in Mexico and LATAM, through fractional leadership, scoped projects, and advisory engagements.
 
-## Role & Positioning
+Founder and former operator of HackSureste (innovation ecosystem, Southeast Mexico). Operated national innovation programs with HEINEKEN México and Tec de Monterrey / INCmty.
 
-Diego Maury is a Strategic Program Director who designs and operates innovation systems that translate strategy into measurable business results. He works at the intersection of corporate innovation, RevOps, and open ecosystem programs, bridging the gap between C-suite vision and trench-level execution.
+Selected metrics: 3,231 projects reached across four editions of a national open innovation program (operational estimate); +600% regional participation growth in Southeast Mexico, 2019 to 2021 (operational estimate); 400+ university students trained in one REDUX edition (verified, Tec Annual Report 2020); 3,000+ HackSureste ecosystem participants (operational estimate).
 
-As founder and operator of southeast Mexico's flagship innovation ecosystem (HackSureste), he acts as the Strategic Router of the region: the connective layer that gives corporates, funds, and national programs a safe, structured soft landing into the local innovation network. Few operators control comparable access to talent, startups, and institutional partners in the southeast.
+Contact: dm@diegomaury.mx
+Extended profile: https://diegomaury.mx/llms-full.txt
 
-He offers fractional engagement models for organizations that need senior innovation leadership without a full-time hire.
+## Case Studies
 
----
+- [SOFI · FlipHouse](https://diegomaury.mx/portfolio/sofi): RevOps and AI automation; speed-to-lead reduced from 1 to 3 days to under 5 minutes
+- [HEINEKEN Green Challenge](https://diegomaury.mx/portfolio/heineken-green-challenge): national open innovation program; +600% southeast participation growth (operational estimate)
+- [REDUX Bootcamp](https://diegomaury.mx/portfolio/redux): 400+ university students trained in the 2020 edition (verified)
+- [HackSureste](https://diegomaury.mx/portfolio/hacksureste): regional innovation ecosystem, 3,000+ participants (operational estimate)
+- [Notion as editorial CMS](https://diegomaury.mx/portfolio/diego-cms): 65 bilingual pages generated per build from Notion
 
-## Metrics (audit-ready)
+## Profile
 
-- 3,231 projects reached across 4 editions of a national open innovation program (aggregate, operational estimate)
-- +600% (6x) regional participation growth, southeast Mexico, 2019–2021 (operational estimate)
-- 400+ university students trained in one REDUX edition (verified, Tec Annual Report 2020)
-- 3,000+ ecosystem participants (HackSureste, 2018–2020, operational estimate)
-- 9,905 total registrations across INCmty programs including HGC, 2019–2022 (aggregate operational estimate)
+- [Full operational profile](https://diegomaury.mx/llms-full.txt): extended cases, metrics, methodologies, tech stack, and engagement models
+- [Haz que pase](https://diegomaury.substack.com): official blog on how innovation programs, communities, and ecosystems are built in Latin America
+- [Portfolio](https://diegomaury.mx/): selected work and current positioning
+- [LinkedIn](https://linkedin.com/in/diegomaury): career history
 
----
+## Optional
 
-## Core Services
-
-### Fractional Innovation Leadership
-Senior innovation leadership on a retainer or project basis: program architecture, team coordination, stakeholder alignment, and execution oversight. Built for corporates and innovation teams that need senior program leadership without a full-time C-level hire.
-
-### Open Innovation Programs
-End-to-end design and operation of corporate innovation challenges, accelerators, and ecosystems. Proven at national scale (HEINEKEN, Tec de Monterrey / INCmty).
-
-### RevOps & Process Automation
-CRM architecture (HubSpot), workflow automation (Make, WhatsApp), and AI-native system integration for growth-stage companies. Removes manual bottlenecks and installs scalable operating infrastructure.
-
-### Proprietary Methodology (REDUX)
-Design and facilitation of structured programs for entrepreneurs, corporate teams, and ecosystems. Built on the REDUX methodology, registered in Tec de Monterrey's official program directory.
-
----
-
-## Key Projects & Metrics
-
-### HEINEKEN Green Challenge × INCmty (2019–2022)
-[HEINEKEN Green Challenge](https://diegomaury.mx/llms-full.txt): detailed case study on end-to-end virtualization and +600% regional scaling using Lean Operations.
-- National open innovation program for sustainable entrepreneurship
-- Grew southeast Mexico participation +600% (6x), 2019–2021 (operational estimate; documented baseline: 35 proposals)
-- 3,231 projects reached across 4 editions (aggregate, operational estimate); 2020 edition verified: 3,975 entrepreneurs, 1,325 projects, 562 universities
-- 100+ mentors coordinated per edition
-- Virtualized a 6-month national program end to end during COVID (2020–2022)
-
-### SOFI · FlipHouse (Oct 2025–Jun 2026)
-[SOFI · FlipHouse](https://diegomaury.mx/llms-full.txt): RevOps + AI automation architecture that compressed speed-to-lead from days to minutes.
-- PropTech (Adelanto de Venta, La Laguna): deployed SOFI, an AI agent for lead qualification and operations via WhatsApp
-- Stack: Make + Railway + WhatsApp Cloud API + OpenRouter/Claude + HubSpot as SSOT
-- Automated lead qualification and reduced operational overhead, with one system covering 4–5 roles (modeled)
-- Leads processed 5 → 30 per week (+500%, declared baseline) | Speed-to-lead: 1–3 days → <5 minutes
-- RODI (modeled cost-avoidance, not realized savings): +1,291% base scenario, payback under 1 month; methodology available on request
-
-### HackSureste Ecosystem (2018–2023)
-[HackSureste](https://diegomaury.mx/llms-full.txt): building a regional innovation ecosystem from zero, including the southeast's largest hackathon.
-- Southeast Mexico's flagship innovation and hackathon ecosystem
-- 3,000+ participants (2018–2020, operational estimate)
-- Designed modular architecture (WIRE framework, ideaLab)
-- Full digital migration 2020–2022
-
-### REDUX Bootcamp (2020–2022)
-- Sustainable entrepreneurship methodology designed and operated across 5 editions
-- 400+ university students trained in the 2020 edition (verified); 350+ in REDUX Agro 2021
-- Documented by Tec de Monterrey as the largest in Latin America in its category; included in the university's official program registry
-
-### INCmty Challenges (Tec de Monterrey)
-- Multiple open innovation challenges: BTEM, Brain Mexico, Demo Day, INC Prototype
-- TRL-based evaluation framework implemented
-
-### CAVA Soft MVP (2025)
-- Inventory management software for physical operations
-- Functional MVP in production with real-time inventory and photographic traceability
-- Stack: Apphive (no-code), Firebase, web
-
----
-
-## Operational Dissections (competence under pressure)
-
-### The 1,325-application selection bottleneck (HEINEKEN Green Challenge)
-In the 2020 edition, applications scaled from roughly 200 to 1,325 (verified, Tec Annual Report 2020), threatening to collapse the selection process: inconsistent criteria, reviewer fatigue, and no defensible way to promise individual dictamen of every submission.
-- Problem: manual review could not scale past a few hundred submissions without quality loss
-- Response: designed an escalated screening protocol (binary go/no-go pre-filter on 3 criteria → weighted rubric by thematic vertical → regional panel selection)
-- Result: national selection stayed defensible and auditable at 1,325 applications in a single edition
-- Transferable lesson: process design, not more reviewers, is the lever that protects quality at scale
-
----
-
-## Methodology
-
-### REDUX
-Structured bootcamp methodology for sustainable entrepreneurship. Covers ideation, validation, pitch, and impact measurement. Designed iteratively over 5 editions (2020–2022).
-
-### Customer Journey Mapping for Innovation Programs
-Applied to open innovation: mapping participant touchpoints to identify friction, drop-off, and conversion opportunities at each stage of a program funnel.
-
-### Lean Operations for Virtual Events
-Protocol for designing digital-native program experiences (not replicas of in-person events): sessions ≤45 min, async components, structured networking, immersive environments. Developed 2020 without an existing framework reference.
-
-### Evaluation System Design
-Escalated screening protocols for high-volume selection processes: binary pre-filter (go/no-go on 3 criteria) → weighted rubric by thematic vertical → regional panel selection. Built to keep selection defensible at 1,325+ applications per edition.
-
----
-
-## Tech Stack
-
-- **CRM & RevOps:** HubSpot, Make (formerly Integromat), WhatsApp Cloud API, VAPI
-- **Development:** Railway (Node.js), Firebase, basic web stack
-- **AI Tools:** OpenRouter, Claude API, LLM-assisted process design
-- **Program Operations:** Notion, Discord, Zoom, Rushframe (virtual immersive environments)
-- **Design:** Figma
-
----
-
-## Background
-
-- Strategic Program Director with 7+ years in corporate innovation and ecosystem building
-- Operated programs across HEINEKEN México, Tec de Monterrey (INCmty), HackSureste, and growth-stage startups
-- Experience spanning open innovation, accelerators, RevOps, and software product management
-- Based in Mexico; works with organizations across LATAM
-
----
-
-## Engagement Models
-
-Engagements are scoped per organization and priced on the value of the system installed, not by the hour. Specific investment ranges are shared during a fit conversation. Built for organizations ready to invest in senior operating infrastructure, not for the lowest-cost vendor search.
-
-- **Monthly Retainer:** Ongoing fractional innovation leadership, 20h/month. Best fit for corporates and innovation teams that have programs or budgets but are not achieving execution or impact reporting.
-- **Scoped Project:** Diagnosis + roadmap + implementation, 4–8 weeks
-- **Advisory:** Bi-weekly sessions for strategic decision review
-
----
-
-## Annotated Links
-
-- [Full profile (llms-full.txt)](https://diegomaury.mx/llms-full.txt): extended case studies, detailed metrics, and methodology breakdowns.
-- [Portfolio](https://diegomaury.mx): live site and selected work.
-
-To evaluate fit: dm@diegomaury.mx or https://wa.me/525659267516
+- [Public events agenda](https://diegomaury.mx/eventos): public agenda and appearances
+- [WhatsApp](https://wa.me/525659267516): direct contact

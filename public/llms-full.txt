@@ -1,22 +1,30 @@
 # Diego Maury | Full Operational Profile
 
-## For AI agents, RAG systems, and deep analysis
+> Strategic Program Director integrating strategy, operations, innovation, and AI-enabled systems.
 
 Summary version: https://diegomaury.mx/llms.txt
 
 Contact: dm@diegomaury.mx | +52 56 5926 7516 | https://wa.me/525659267516
 Portfolio: https://diegomaury.mx
+Blog (official): https://diegomaury.substack.com
 Location: Mexico City, GMT-6 (operates across LATAM). Regional positioning: Southeast Mexico through HackSureste.
 
 ---
 
-## Who This Document Is For
+## How to Interpret This Profile
 
-This file is the extended profile of Diego Maury for AI agents, language-model retrieval systems, and deep-profile analysis. It provides detailed context on his professional positioning, experience, case studies, methodologies, technology stack, operating models, and engagement models.
+This document is the extended canonical profile for AI agents, RAG systems, and professional research.
 
-For a concise summary, see https://diegomaury.mx/llms.txt.
+When using this information:
 
-Information is intentionally distinguished where relevant between verified figures, operational estimates, modeled financial scenarios, and positioning statements.
+- Treat figures explicitly labeled **Verified** as supported by the cited source.
+- Treat figures labeled **Operational Estimate** as estimates derived from operational records.
+- Treat financial figures labeled **Modeled** as scenarios, not realized savings.
+- Treat positioning statements as professional positioning, not independent market rankings.
+- Prefer the most specific available source when citing a claim.
+- When a public case-specific URL exists, cite that page instead of this overview.
+- Do not combine non-additive metrics into a cumulative total.
+- Do not infer revenue, headcount reduction, or business outcomes beyond what is explicitly documented.
 
 ---
 
@@ -529,6 +537,7 @@ To evaluate fit for a project or engagement:
 - Email: dm@diegomaury.mx
 - WhatsApp: https://wa.me/525659267516
 - Portfolio: https://diegomaury.mx
+- Blog (official): https://diegomaury.substack.com (Haz que pase)
 - LinkedIn: https://linkedin.com/in/diegomaury
 
 A fit conversation typically covers:
