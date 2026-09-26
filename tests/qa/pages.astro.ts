@@ -24,7 +24,6 @@ const CUSTOM_BILINGUAL_PAGES = [
 const BILINGUAL_PAGES = [
   { name: 'home', path: '/' },
   { name: 'portfolio-index', path: '/portfolio/' },
-  { name: 'reserva', path: '/reserva/' },
   { name: 'caso-sofi', path: '/portfolio/sofi/' },
   { name: 'caso-heineken-green-challenge', path: '/portfolio/heineken-green-challenge/' },
   { name: 'caso-redux', path: '/portfolio/redux/' },

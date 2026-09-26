@@ -14,3 +14,9 @@
 # no aportaba dato propio como pagina independiente. La ficha paso a
 # Estado publicacion=Archivado, asi que ya no genera pagina propia.
 /portfolio/idealab-by-hacksureste /portfolio/hacksureste/ 301
+
+# /reserva se archivo el 2026-09-26 (codigo en docs/archive/reserva-page-2026-09-26/,
+# fuera de src/pages): todo CTA de agendar debe ser el mismo Notion Calendar
+# canonico, sin pagina intermedia. Ambos locales redirigen directo.
+/reserva https://calendar.notion.so/meet/diegomaurymx/5aad3vun 301
+/en/reserva https://calendar.notion.so/meet/diegomaurymx/5aad3vun 301

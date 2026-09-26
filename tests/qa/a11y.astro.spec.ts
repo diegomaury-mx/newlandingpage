@@ -6,13 +6,13 @@ for (const page of ASTRO_QA_PAGES) {
   test(`a11y (astro): ${page.name}`, async ({ page: browserPage }) => {
     await browserPage.goto(page.path, { waitUntil: 'networkidle' });
 
-    // .senja-embed (widget de testimonios), los iframes de YouTube en
-    // evidencia visual y el embed de Substack (/reserva) son contenido de
-    // terceros: Playwright/Axe sí logra inspeccionar su DOM interno
-    // (cross-origin), pero su contraste/markup no es nuestro y no podemos
-    // corregirlo (el iframe de sesion-attribution 0x0 que Substack inyecta
-    // dentro de su propio /embed no trae title/aria-label). Se excluyen del
-    // gate de a11y.
+    // .senja-embed (widget de testimonios) y los iframes de YouTube en
+    // evidencia visual son contenido de terceros: Playwright/Axe sí logra
+    // inspeccionar su DOM interno (cross-origin), pero su contraste/markup
+    // no es nuestro y no podemos corregirlo. Se excluyen del gate de a11y.
+    // .newsletter-embed iframe (Substack) ya no tiene pagina viva que lo use
+    // (/reserva se archivo 2026-09-26), el exclude se deja inerte por si se
+    // reactiva.
     const results = await new AxeBuilder({ page: browserPage })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .exclude('.senja-embed')
