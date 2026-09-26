@@ -8,7 +8,7 @@
  * notion-copy-activo-ssot.
  */
 
-const SECTION_HEADING = /^# (S\d+b?|P\d+|SEO) · (.+)$/;
+const SECTION_HEADING = /^# (S\d+b?|P\d+|R\d+|SEO) · (.+)$/;
 
 export interface SiteCopySection {
   key: string;
@@ -66,7 +66,7 @@ export function paragraphs(blocks: string[]): string[] {
         !b.startsWith('```') &&
         !b.startsWith('[') &&
         !b.startsWith('- ') &&
-        !b.startsWith('1. '),
+        !/^\d+\.\s/.test(b),
     );
 }
 
@@ -205,5 +205,20 @@ export function parseFlowDiagram(raw: string): FlowDiagram | null {
     toLabel: labels[2],
     toItems: itemGroups[2] ?? [],
   };
+}
+
+/** Items de una lista numerada ("1. texto", "2. texto", ...), sin el prefijo. */
+export function numberedItems(blocks: string[]): string[] {
+  return blocks
+    .map((b) => b.trim())
+    .filter((b) => /^\d+\.\s/.test(b))
+    .map((b) => b.replace(/^\d+\.\s+/, ''));
+}
+
+/** Primer bloque de cita ("> texto"), sin el prefijo. Vacio si no hay ninguna. */
+export function quoteLine(blocks: string[]): string {
+  const line = blocks.find((b) => b.trim().startsWith('> '));
+  if (!line) return '';
+  return line.trim().slice(2).trim();
 }
 

@@ -9,9 +9,11 @@ import {
   heading1,
   heading2,
   headingCards,
+  numberedItems,
   paragraphs,
   parseFlowDiagram,
   parseSiteCopySections,
+  quoteLine,
   valueAfter,
 } from "./parseSiteCopy.ts";
 
@@ -170,4 +172,39 @@ test("parseFlowDiagram devuelve null si reconoce menos de 3 encabezados", () => 
   const raw = ["│ SOLO UNO │", "• item"].join("\n");
 
   assert.equal(parseFlowDiagram(raw), null);
+});
+
+test("parseSiteCopySections reconoce tambien claves R<n>", () => {
+  const markdown = ["# R1 · Hero", "Contenido R1", "# R2 · Como funciona", "Contenido R2"].join("\n\n");
+
+  const sections = parseSiteCopySections(markdown);
+
+  assert.deepEqual([...sections.keys()], ["R1", "R2"]);
+  assert.equal(sections.get("R1")?.label, "Hero");
+});
+
+test("paragraphs excluye TODOS los items de lista numerada, no solo '1. '", () => {
+  const blocks = ["1. Primer paso", "2. Segundo paso", "3. Tercer paso", "Nota final en texto corrido"];
+
+  assert.deepEqual(paragraphs(blocks), ["Nota final en texto corrido"]);
+});
+
+test("numberedItems extrae los textos de una lista numerada, sin el prefijo", () => {
+  const blocks = ["1. Primer paso", "Parrafo suelto", "2. Segundo paso", "3. Tercer paso"];
+
+  assert.deepEqual(numberedItems(blocks), ["Primer paso", "Segundo paso", "Tercer paso"]);
+});
+
+test("numberedItems devuelve arreglo vacio si no hay items numerados", () => {
+  assert.deepEqual(numberedItems(["Solo texto", "# Un heading"]), []);
+});
+
+test("quoteLine devuelve el primer bloque de cita sin el prefijo '> '", () => {
+  const blocks = ["# Heading", "> Una cita literal.", "Parrafo despues de la cita"];
+
+  assert.equal(quoteLine(blocks), "Una cita literal.");
+});
+
+test("quoteLine devuelve string vacio si no hay ninguna cita", () => {
+  assert.equal(quoteLine(["Solo texto", "# Un heading"]), "");
 });
