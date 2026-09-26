@@ -22,6 +22,7 @@ import {
   eventsLoader,
   imageSlotsLoader,
   metricsLoader,
+  reservaCopyLoader,
   siteCopyLoader,
   testimonialsLoader,
 } from './services/notionLoaders.ts';
@@ -198,6 +199,16 @@ const siteCopy = defineCollection({
   }),
 });
 
+// ─── Reserva conmigo (fuente: Reserva conmigo · diegomaury.mx, singleton) ─────
+
+const reservaCopy = defineCollection({
+  loader: reservaCopyLoader,
+  schema: z.object({
+    title: z.string(),
+    markdown: z.string(),
+  }),
+});
+
 // ─── Image Slots (fuente: 🖼️ CMS Imágenes — Portafolio D) ─────────────────────
 // Slots de imagen hoy hardcodeados en index.astro (foto de Diego, logos de
 // trust bar). `slot` es la llave tecnica que el codigo usa para buscar cada
@@ -267,6 +278,7 @@ export const collections = {
   cases,
   metrics,
   siteCopy,
+  reservaCopy,
   imageSlots,
   testimonials,
   events,
