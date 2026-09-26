@@ -1,0 +1,209 @@
+---
+// Version /en/reserva de src/pages/reserva.astro. Misma coleccion
+// reservaCopy; el parseo (parseSiteCopySections/heading1/heading2/paragraphs/
+// ctaLabels/numberedItems/quoteLine/valueAfter) corre igual sobre el markdown
+// en espanol y CADA STRING extraido se traduce a nivel de hoja con
+// translateCached() — mismo patron que en/portfolio.astro. Sin cuota de DeepL
+// disponible, translateCached devuelve el texto en espanol sin romper el build.
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+  parseSiteCopySections,
+  heading1,
+  heading2,
+  paragraphs,
+  ctaLabels,
+  numberedItems,
+  quoteLine,
+  valueAfter,
+} from '../../utils/parseSiteCopy.ts';
+import { translateCached } from '../../services/deeplTranslationCache.ts';
+import { toLocalePath } from '../../utils/locale.ts';
+import { uiEn } from '../../i18n/ui.ts';
+import '../../styles/portfolio.css';
+import '../../styles/reserva.css';
+
+const reservaCopyEntries = await getCollection('reservaCopy');
+const reservaCopyEntry = reservaCopyEntries.find((entry) => entry.id === 'reserva');
+const sections = reservaCopyEntry
+  ? parseSiteCopySections(reservaCopyEntry.data.markdown)
+  : new Map();
+
+const heroEyebrow = await translateCached('Reserva conmigo', 'EN-US', console);
+const CALENDAR_HREF = 'https://calendar.notion.so/meet/diegomaurymx/5aad3vun';
+const SENJA_HREF = 'https://senja.io/p/diegomaury/9awUK8';
+
+// --- R1 · Hero ---------------------------------------------------------------
+const r1 = sections.get('R1')?.blocks ?? [];
+const heroH1 = await translateCached(heading1(r1), 'EN-US', console);
+const heroParasEs = paragraphs(r1);
+const heroLede = await translateCached(heroParasEs[0] ?? '', 'EN-US', console);
+const heroSupport = await translateCached(heroParasEs[1] ?? '', 'EN-US', console);
+const heroCta = await translateCached(
+  ctaLabels(r1)[0] ?? 'Agenda tu llamada de diagnóstico',
+  'EN-US',
+  console,
+);
+
+// --- R2 · Como funciona --------------------------------------------------------
+const r2 = sections.get('R2')?.blocks ?? [];
+const howHeadline = await translateCached(sections.get('R2')?.label ?? 'Cómo funciona', 'EN-US', console);
+const howStepsEs = numberedItems(r2);
+const howSteps = await Promise.all(howStepsEs.map((step) => translateCached(step, 'EN-US', console)));
+const priceNote = await translateCached(paragraphs(r2)[0] ?? '', 'EN-US', console);
+
+// --- R3/R4 · Ofertas -----------------------------------------------------------
+const r3 = sections.get('R3')?.blocks ?? [];
+const r4 = sections.get('R4')?.blocks ?? [];
+const notionOfferTitle = await translateCached(heading2(r3), 'EN-US', console);
+const notionOfferParas = await Promise.all(paragraphs(r3).map((p) => translateCached(p, 'EN-US', console)));
+const programsOfferTitle = await translateCached(heading2(r4), 'EN-US', console);
+const programsOfferParas = await Promise.all(paragraphs(r4).map((p) => translateCached(p, 'EN-US', console)));
+
+// --- R5 · Quien te atiende -------------------------------------------------------
+const r5 = sections.get('R5')?.blocks ?? [];
+const attendQuote = await translateCached(quoteLine(r5), 'EN-US', console);
+const attendParas = await Promise.all(paragraphs(r5).map((p) => translateCached(p, 'EN-US', console)));
+
+const imageSlotEntries = await getCollection('imageSlots');
+function slotSrc(slotId: string, fallback: string): string {
+  const entry = imageSlotEntries.find((e) => e.id === slotId);
+  return entry?.data.status === 'Listo' && entry.data.imageUrl ? entry.data.imageUrl : fallback;
+}
+const attendPhoto = slotSrc('reserva-quien-atiende', '/cms-media/diego/diegomaurypng.png');
+
+// --- R6 · Testimonios --------------------------------------------------------
+const r6 = sections.get('R6')?.blocks ?? [];
+const testimonialsHeadline = await translateCached(heading2(r6), 'EN-US', console);
+const testimonialsLinkText = await translateCached(
+  paragraphs(r6)[0] ?? 'Leer testimonios completos',
+  'EN-US',
+  console,
+);
+
+// --- Newsletter (fijo, no editorial) -------------------------------------------
+const newsletterText = await translateCached(
+  'Suscríbete a mi newsletter para más reflexiones sobre sistemas, programas y ejecución.',
+  'EN-US',
+  console,
+);
+
+// --- R7 · CTA final ------------------------------------------------------------
+const r7 = sections.get('R7')?.blocks ?? [];
+const closingHeadline = await translateCached(heading2(r7), 'EN-US', console);
+const closingCta = await translateCached(
+  ctaLabels(r7)[0] ?? 'Agenda tu llamada de diagnóstico',
+  'EN-US',
+  console,
+);
+const closingParasEs = paragraphs(r7);
+const closingLineEs = closingParasEs[1] ?? closingParasEs[0] ?? '';
+const closingLine = await translateCached(closingLineEs, 'EN-US', console);
+
+// --- SEO -----------------------------------------------------------------------
+const pageTitle = 'Book a call · Diego Maury';
+const pageDescription = await translateCached(
+  'Agenda una llamada de diagnóstico de 25 minutos con Diego Maury: mentoría en sistemas con Notion o en diseño y operación de programas. Sin costo, sin pitch.',
+  'EN-US',
+  console,
+);
+const canonicalUrl = new URL('/en/reserva', Astro.site).toString();
+const esUrl = new URL('/reserva', Astro.site).toString();
+const ogImage = new URL('/assets/img/diego-maury.jpg', Astro.site).toString();
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl={canonicalUrl}
+  ogImage={ogImage}
+  alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
+  otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
+  ctaLabel={uiEn.nav.ctaLabel}
+  enableGtm
+  enableClarity
+>
+  <div class="portfolio-page">
+<section class="section hero">
+  <div class="wrap">
+    <div class="eyebrow">{heroEyebrow}</div>
+    <h1>{heroH1}</h1>
+    {heroLede && <p>{heroLede}</p>}
+    {heroSupport && <p>{heroSupport}</p>}
+    <div class="closing__ctas" style="justify-content:flex-start; margin-top:28px;">
+      <a class="btn-primary" href={CALENDAR_HREF} target="_blank" rel="noopener">{heroCta}</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="eyebrow eyebrow--plain">{howHeadline}</div>
+    {howSteps.length > 0 && (
+      <div class="reserva-steps">
+        {howSteps.map((step, i) => (
+          <div class="reserva-step">
+            <div class="reserva-step-n">Step {i + 1}</div>
+            <div class="reserva-step-d">{step}</div>
+          </div>
+        ))}
+      </div>
+    )}
+    {priceNote && <p class="reserva-price-note">{priceNote}</p>}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="offers">
+      <div class="offer-card">
+        {notionOfferTitle && <h3>{notionOfferTitle}</h3>}
+        {notionOfferParas.map((p) => <p>{p}</p>)}
+      </div>
+      <div class="offer-card">
+        {programsOfferTitle && <h3>{programsOfferTitle}</h3>}
+        {programsOfferParas.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap-narrow">
+    <div class="attend-grid">
+      <img class="attend-photo" src={attendPhoto} width="520" height="650" alt="Diego Maury" loading="lazy" />
+      <div class="attend-body">
+        {attendQuote && <blockquote class="attend-quote">{attendQuote}</blockquote>}
+        {attendParas.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap-narrow" style="text-align:center;">
+    {testimonialsHeadline && <h2>{testimonialsHeadline}</h2>}
+    <p><a class="btn-ghost" href={SENJA_HREF} target="_blank" rel="noopener">{testimonialsLinkText}</a></p>
+  </div>
+</section>
+
+<section class="section newsletter-section">
+  <div class="wrap-narrow">
+    <p>{newsletterText}</p>
+    <div class="newsletter-embed">
+      <iframe src="https://diegomaury.substack.com/embed" width="100%" height="320" frameborder="0" scrolling="no" title="Diego Maury's newsletter"></iframe>
+    </div>
+  </div>
+</section>
+
+<section class="section closing">
+  <div class="wrap-narrow">
+    {closingHeadline && <h2>{closingHeadline}</h2>}
+    {closingLine && <p>{closingLine}</p>}
+    <div class="closing__ctas">
+      <a class="btn-primary" href={CALENDAR_HREF} target="_blank" rel="noopener">{closingCta}</a>
+    </div>
+  </div>
+</section>
+  </div>
+</BaseLayout>
