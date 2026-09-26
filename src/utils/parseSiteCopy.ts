@@ -207,12 +207,21 @@ export function parseFlowDiagram(raw: string): FlowDiagram | null {
   };
 }
 
-/** Items de una lista numerada ("1. texto", "2. texto", ...), sin el prefijo. */
+/**
+ * Items de una lista numerada ("1. texto", "2. texto", ...), sin el prefijo.
+ *
+ * `blocksToMarkdown` fusiona items de `numbered_list_item` consecutivos en un
+ * solo bloque separado por saltos de linea simples (no "\n\n"), y cada linea
+ * lleva el prefijo LITERAL "1. " (Notion no persiste el numero secuencial en
+ * el texto) — por eso se separa por linea antes de filtrar, en vez de mirar
+ * solo el inicio del bloque completo.
+ */
 export function numberedItems(blocks: string[]): string[] {
   return blocks
-    .map((b) => b.trim())
-    .filter((b) => /^\d+\.\s/.test(b))
-    .map((b) => b.replace(/^\d+\.\s+/, ''));
+    .flatMap((b) => b.split('\n'))
+    .map((line) => line.trim())
+    .filter((line) => /^\d+\.\s/.test(line))
+    .map((line) => line.replace(/^\d+\.\s+/, ''));
 }
 
 /** Primer bloque de cita ("> texto"), sin el prefijo. Vacio si no hay ninguna. */

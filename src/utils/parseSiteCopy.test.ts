@@ -199,6 +199,12 @@ test("numberedItems devuelve arreglo vacio si no hay items numerados", () => {
   assert.deepEqual(numberedItems(["Solo texto", "# Un heading"]), []);
 });
 
+test("numberedItems separa items de numbered_list_item fusionados por blocksToMarkdown en un solo bloque multilinea con prefijo '1.' literal en cada linea", () => {
+  const mergedBlock = "1. Primer paso\n1. Segundo paso\n1. Tercer paso";
+
+  assert.deepEqual(numberedItems([mergedBlock]), ["Primer paso", "Segundo paso", "Tercer paso"]);
+});
+
 test("quoteLine devuelve el primer bloque de cita sin el prefijo '> '", () => {
   const blocks = ["# Heading", "> Una cita literal.", "Parrafo despues de la cita"];
 
