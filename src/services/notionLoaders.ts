@@ -26,6 +26,7 @@ import {
   fetchEvents,
   fetchImageSlots,
   fetchMetrics,
+  fetchReservaCopy,
   fetchSiteCopy,
   fetchTestimonials,
   getCheckbox,
@@ -589,5 +590,31 @@ export const siteCopyLoader: Loader = {
     };
     const data = await parseData({ id: "site", data: raw });
     store.set({ id: "site", data });
+  },
+};
+
+/** Singleton `reservaCopy`: id fijo `reserva`; cuerpo aplanado a Markdown. */
+export const reservaCopyLoader: Loader = {
+  name: "notion-reserva-copy",
+  load: async ({ store, logger, parseData }: LoaderContext) => {
+    store.clear();
+    if (!hasNotionToken()) {
+      if (import.meta.env.PROD) {
+        throw new Error(
+          "[notion-reserva-copy] NOTION_TOKEN requerido para el build de produccion.",
+        );
+      }
+      logger.warn(
+        "[notion-reserva-copy] NOTION_TOKEN ausente: reservaCopy vacio (scaffolding en dev).",
+      );
+      return;
+    }
+    const { page, blocks } = await fetchReservaCopy();
+    const raw = {
+      title: getTitle(page, "title"),
+      markdown: blocksToMarkdown(blocks),
+    };
+    const data = await parseData({ id: "reserva", data: raw });
+    store.set({ id: "reserva", data });
   },
 };
