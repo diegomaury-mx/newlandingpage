@@ -1,0 +1,41 @@
+CMS con Notion · diegomaury.mx — video explainer
+================================================
+
+Archivo:      video-explainer.mp4  (1.6 MB · 1080x1920 · 40.0s · con audio)
+Compuesto:    composition/index.html  (monolítico, 1 timeline GSAP, 6 escenas)
+Render:       npx hyperframes render  (check limpio: 0 errores, 1 warning cosmético de densidad)
+
+Escenas
+-------
+1 (0–5s)    Contexto — eyebrow "DIEGOMAURY.MX" + "Está construido con Astro."
+2 (5–11s)   El giro — "Pero el contenido no vive en el código." → "Vive en Notion." (ember)
+3 (11–19s)  Las 4 fuentes — lista escalonada: Casos de estudio (27 fichas publicadas) /
+            Copy del sitio (una página, no una base) / Métricas oficiales / Imágenes
+            SFX: click-soft ×4 (uno por fuente)
+4 (19–27s)  El gate — "Publicar exige dos marcas: 'Publicado' y 'Publicable'."
+            + regla en DM Mono: draft = NOT (Publicado AND Publicable)
+            SFX: ping (lock-in del beat clave)
+5 (27–35s)  Build automático — flujo Notion → Worker (webhook firmado · HMAC) → Cloudflare Pages,
+            conectores en ember. Pie: "3 de las 4 fuentes. Métricas entra en el siguiente build."
+6 (35–40s)  Recap + cierre de marca — "Notion es el CMS. Astro es el motor." + lockup
+            logo-vertical-tagline-dark (facetas ember + "HAGAMOS QUE LAS COSAS PASEN")
+
+Design system
+-------------
+Diego Maury Design System v2.0 — "Ember on Ink". Fuente canónica: proyecto Claude Design
+019dd0ff-c961-76e9-9815-68e47ca79ab8, leído vía DesignSync el 2026-08-31.
+Tokens exactos de v2-tokens.css. Regla cardinal respetada: un solo ember por escena, morado
+solo como estructura, sin gradientes/sombras/glow. Plus Jakarta Sans 700/500 + DM Mono 500.
+Assets del logo-pack del DS en composition/assets/logos/.
+Detalle completo: composition-brief.md § Visual Identity.
+
+Hechos verificados (sin voiceover, todo texto en pantalla)
+--------------------------------------------------------
+- 27 fichas publicadas de 30 filas (SQL directo contra el SSOT, 2026-08-21).
+- Doble gate de publicación: Estado publicación = Publicado AND checkbox Publicable.
+- El webhook cubre 3 de las 4 fuentes; Métricas oficiales entra en el siguiente rebuild.
+
+Audio
+-----
+Sin bed musical (decisión del usuario: opción C). Solo SFX mínimos de la librería local de
+media-use: 4× click-soft (S3), 1× ping (S4). Créditos en composition/assets/sfx/CREDITS.md.

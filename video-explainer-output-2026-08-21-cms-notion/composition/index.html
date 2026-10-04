@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>CMS con Notion · diegomaury.mx</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&display=block"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* ── Diego Maury Design System v2.0 — Ember on Ink (tokens canónicos) ── */
+      :root {
+        --bg: #0a0612;
+        --bg-2: #1a1128;
+        --border: #6a291b;
+        --t1: #faf8fc;
+        --t2: #dddbe0;
+        --t3: #a8a6ac;
+        --ember: #ff5c39;
+        --role: #9a8cb0;
+        --sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+        --mono: "DM Mono", ui-monospace, Menlo, monospace;
+        --r-md: 10px;
+        --r-lg: 16px;
+        --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg);
+      }
+      body {
+        font-family: var(--sans);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+
+      /* ── Superficies ── */
+      .fill {
+        position: absolute;
+        inset: 0;
+        background: var(--bg);
+      }
+      .bg-pattern {
+        position: absolute;
+        inset: 0;
+        opacity: 0.028;
+        background-image: repeating-linear-gradient(
+          135deg,
+          var(--t1) 0 1px,
+          transparent 1px 120px
+        );
+        pointer-events: none;
+      }
+
+      /* ── Escenas ── */
+      .clip {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 120px;
+      }
+      .stage {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        max-width: 840px;
+      }
+
+      /* ── Tipografía ── */
+      .eyebrow {
+        font-family: var(--mono);
+        font-weight: 500;
+        font-size: 24px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--t3);
+      }
+      .h {
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: 76px;
+        line-height: 1.14;
+        letter-spacing: -0.01em;
+        color: var(--t1);
+      }
+      .h .line,
+      .h-sm .line,
+      .recap .line {
+        display: block;
+      }
+      .h-sm {
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: 64px;
+        line-height: 1.15;
+        color: var(--t1);
+      }
+      .sub {
+        font-family: var(--sans);
+        font-style: italic;
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 1.4;
+        color: var(--role);
+      }
+      .ember {
+        color: var(--ember);
+      }
+
+      /* ── S3 · lista de fuentes ── */
+      .sources {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        margin-top: 12px;
+      }
+      .source-row {
+        display: flex;
+        align-items: baseline;
+        gap: 20px;
+        border-left: 2px solid var(--border);
+        padding-left: 28px;
+      }
+      .source-name {
+        font-family: var(--sans);
+        font-weight: 500;
+        font-size: 44px;
+        line-height: 1.1;
+        color: var(--t1);
+      }
+      .source-note {
+        font-family: var(--sans);
+        font-weight: 400;
+        font-size: 26px;
+        color: var(--t3);
+      }
+
+      /* ── S4 · regla del gate ── */
+      .rule-card {
+        position: relative;
+        margin-top: 24px;
+        align-self: flex-start;
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);
+        padding: 40px 44px 40px 52px;
+      }
+      .rule-bar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--ember);
+        border-radius: 2px;
+        transform-origin: top center;
+      }
+      .rule-code {
+        font-family: var(--mono);
+        font-weight: 500;
+        font-size: 31px;
+        line-height: 1.35;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        color: var(--t1);
+      }
+
+      /* ── S5 · flujo del build ── */
+      .flow {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        margin-top: 8px;
+      }
+      .node {
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);
+        padding: 26px 36px;
+        min-width: 520px;
+      }
+      .node-name {
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: 40px;
+        color: var(--t1);
+      }
+      .node-note {
+        font-family: var(--mono);
+        font-weight: 400;
+        font-size: 20px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--t3);
+        margin-top: 6px;
+      }
+      .connector {
+        width: 3px;
+        height: 56px;
+        margin-left: 48px;
+        background: var(--ember);
+        transform-origin: top center;
+      }
+      .flow-foot {
+        font-family: var(--sans);
+        font-style: italic;
+        font-weight: 400;
+        font-size: 26px;
+        color: var(--t3);
+        margin-top: 28px;
+      }
+
+      /* ── S6 · cierre de marca ── */
+      #s6 {
+        align-items: center;
+        text-align: center;
+      }
+      #s6 .stage {
+        align-items: center;
+        gap: 56px;
+      }
+      .recap {
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: 60px;
+        line-height: 1.25;
+        color: var(--t1);
+      }
+      .brand-lockup {
+        width: 620px;
+        height: auto;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="40"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- Fondo persistente -->
+      <div
+        class="clip"
+        id="bg"
+        data-start="0"
+        data-duration="40"
+        data-track-index="0"
+        style="padding: 0"
+      >
+        <div class="fill"></div>
+        <div class="bg-pattern"></div>
+      </div>
+
+      <!-- S1 · Contexto (0–5) -->
+      <section id="s1" class="clip" data-start="0" data-duration="5" data-track-index="1">
+        <div class="stage">
+          <div class="eyebrow" id="s1-eye">diegomaury.mx</div>
+          <div class="h" id="s1-h">
+            <span class="line s1-line">Está construido</span>
+            <span class="line s1-line">con Astro.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- S2 · El giro (5–11) -->
+      <section id="s2" class="clip" data-start="5" data-duration="6" data-track-index="1">
+        <div class="stage">
+          <div class="h" id="s2-l1">Pero el contenido no vive en el código.</div>
+          <div class="h" id="s2-l2">Vive en <span class="ember">Notion.</span></div>
+        </div>
+      </section>
+
+      <!-- S3 · Las 4 fuentes (11–19) -->
+      <section id="s3" class="clip" data-start="11" data-duration="8" data-track-index="1">
+        <div class="stage">
+          <div class="h-sm" id="s3-h">4 fuentes de Notion alimentan el sitio:</div>
+          <div class="sources">
+            <div class="source-row s3-row">
+              <span class="source-name">Casos de estudio</span>
+              <span class="source-note">27 fichas publicadas</span>
+            </div>
+            <div class="source-row s3-row">
+              <span class="source-name">Copy del sitio</span>
+              <span class="source-note">una página, no una base</span>
+            </div>
+            <div class="source-row s3-row">
+              <span class="source-name">Métricas oficiales</span>
+            </div>
+            <div class="source-row s3-row">
+              <span class="source-name">Imágenes</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S4 · El gate de publicación (19–27) -->
+      <section id="s4" class="clip" data-start="19" data-duration="8" data-track-index="1">
+        <div class="stage">
+          <div class="h-sm" id="s4-h">
+            <span class="line">Publicar exige dos marcas:</span>
+            <span class="line">&ldquo;Publicado&rdquo; y &ldquo;Publicable&rdquo;.</span>
+          </div>
+          <div class="rule-card" id="s4-card">
+            <div class="rule-bar" id="s4-bar"></div>
+            <div class="rule-code">draft = NOT (Publicado AND Publicable)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S5 · El build automático (27–35) -->
+      <section id="s5" class="clip" data-start="27" data-duration="8" data-track-index="1">
+        <div class="stage">
+          <div class="h-sm" id="s5-h">Editas en Notion. El sitio se reconstruye solo.</div>
+          <div class="flow">
+            <div class="node s5-node"><div class="node-name">Notion</div><div class="node-note">editas una fuente</div></div>
+            <div class="connector s5-conn"></div>
+            <div class="node s5-node"><div class="node-name">Worker</div><div class="node-note">webhook firmado · HMAC</div></div>
+            <div class="connector s5-conn"></div>
+            <div class="node s5-node"><div class="node-name">Cloudflare Pages</div><div class="node-note">rebuild automático</div></div>
+          </div>
+          <div class="flow-foot" id="s5-foot">3 de las 4 fuentes. Métricas entra en el siguiente build.</div>
+        </div>
+      </section>
+
+      <!-- S6 · Recap + cierre de marca (35–40) -->
+      <section id="s6" class="clip" data-start="35" data-duration="5" data-track-index="1">
+        <div class="stage">
+          <div class="recap" id="s6-recap">
+            <span class="line">Notion es el CMS.</span>
+            <span class="line">Astro es el motor.</span>
+          </div>
+          <svg
+            class="brand-lockup"
+            id="s6-logo"
+            viewBox="0 0 1584 909"
+            xmlns="http://www.w3.org/2000/svg"
+            style="fill-rule: evenodd; clip-rule: evenodd; stroke-linecap: square; stroke-miterlimit: 1.5"
+          >
+            <g transform="translate(592,20) scale(0.3972194637537239)">
+              <path d="M884.2,271.4l-355,307.2l355,-307.2Z" style="fill: none; stroke: #ff5c39; stroke-width: 41.9px" />
+              <path d="M131.3,709.5l398,-130.8l-75.1,310" style="fill: none; stroke: #ff5c39; stroke-width: 41.9px" />
+              <path d="M558.5,888.6l63.8,-280.4l260.9,-212.2" style="fill: none; stroke: #ff5c39; stroke-width: 41.9px" />
+              <path
+                d="M505.8,46.1l392,220l1.7,443l-390.3,223l-392,-220l-1.7,-443l390.3,-223Z"
+                style="fill: none; stroke: #faf8fc; stroke-width: 41.9px"
+              />
+            </g>
+            <text x="792" y="595.6" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="700" font-size="160" letter-spacing="6.4" fill="#FAF8FC">DIEGO MAURY</text>
+            <text x="792" y="732.1" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="400" font-style="italic" font-size="85.5" fill="#9A8CB0">Strategic Program Director</text>
+            <text x="792" y="871.2" text-anchor="middle" font-family="'DM Mono', ui-monospace, Menlo, monospace" font-size="71.5" letter-spacing="14.3" fill="#FF5C39">HAGAMOS QUE LAS COSAS PASEN</text>
+          </svg>
+        </div>
+      </section>
+      <!-- SFX — ticks de S3 (revelado de fuentes) + lock-in de la regla en S4 -->
+      <audio id="sfx-src-1" src="assets/sfx/click-soft.mp3" data-start="12.1" data-duration="0.37" data-track-index="10" data-volume="0.3"></audio>
+      <audio id="sfx-src-2" src="assets/sfx/click-soft.mp3" data-start="12.5" data-duration="0.37" data-track-index="10" data-volume="0.3"></audio>
+      <audio id="sfx-src-3" src="assets/sfx/click-soft.mp3" data-start="12.9" data-duration="0.37" data-track-index="10" data-volume="0.3"></audio>
+      <audio id="sfx-src-4" src="assets/sfx/click-soft.mp3" data-start="13.3" data-duration="0.37" data-track-index="10" data-volume="0.3"></audio>
+      <audio id="sfx-rule-lockin" src="assets/sfx/ping.mp3" data-start="21.7" data-duration="1.32" data-track-index="11" data-volume="0.34"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const E = "power3.out";
+
+      /* ── S1 (0–5) ── */
+      tl.fromTo("#s1-eye", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: E }, 0.3);
+      tl.fromTo(
+        "#s1 .s1-line",
+        { autoAlpha: 0, y: 40 },
+        { autoAlpha: 1, y: 0, duration: 0.6, ease: E, stagger: 0.14 },
+        0.7
+      );
+
+      /* ── S2 (5–11) ── */
+      tl.fromTo("#s2-l1", { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: E }, 5.4);
+      tl.fromTo("#s2-l2", { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: E }, 7.4);
+
+      /* ── S3 (11–19) ── */
+      tl.fromTo("#s3-h", { autoAlpha: 0, y: 32 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: E }, 11.3);
+      tl.fromTo(
+        "#s3 .s3-row",
+        { autoAlpha: 0, y: 28 },
+        { autoAlpha: 1, y: 0, duration: 0.5, ease: E, stagger: 0.4 },
+        12.1
+      );
+
+      /* ── S4 (19–27) · beat clave ── */
+      tl.fromTo("#s4-h", { autoAlpha: 0, y: 32 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: E }, 19.4);
+      tl.fromTo(
+        "#s4-card",
+        { autoAlpha: 0, scale: 0.92, y: 24 },
+        { autoAlpha: 1, scale: 1, y: 0, duration: 0.7, ease: "back.out(1.5)" },
+        21.6
+      );
+      tl.fromTo("#s4-bar", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: E }, 22.1);
+
+      /* ── S5 (27–35) ── */
+      tl.fromTo("#s5-h", { autoAlpha: 0, y: 32 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: E }, 27.3);
+      tl.fromTo(
+        "#s5 .s5-node",
+        { autoAlpha: 0, y: 26 },
+        { autoAlpha: 1, y: 0, duration: 0.45, ease: E, stagger: 0.55 },
+        28.1
+      );
+      tl.fromTo(
+        "#s5 .s5-conn",
+        { scaleY: 0 },
+        { scaleY: 1, duration: 0.35, ease: E, stagger: 0.55 },
+        28.5
+      );
+      tl.fromTo("#s5-foot", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: E }, 31.4);
+
+      /* ── S6 (35–40) ── */
+      tl.fromTo("#s6-recap", { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: E }, 35.3);
+      tl.fromTo("#s6-logo", { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.8, ease: E }, 36.3);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

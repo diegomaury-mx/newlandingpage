@@ -8,6 +8,9 @@ import "../styles/globals.css";
 
 import { site } from "../config/site";
 
+const DEFAULT_OG_IMAGE = "/og/og-home.png";
+const DEFAULT_OG_ALT = "Diego Maury, Strategic Program Director. Hagamos que las cosas pasen.";
+
 interface AlternateUrl {
   lang: string;
   url: string;
@@ -19,6 +22,7 @@ interface Props {
   canonicalUrl?: string;
   ogType?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   jsonLd?: unknown;
   enableGtm?: boolean;
   enableClarity?: boolean;
@@ -40,7 +44,8 @@ const {
   description = site.description,
   canonicalUrl,
   ogType = "website",
-  ogImage,
+  ogImage = DEFAULT_OG_IMAGE,
+  ogImageAlt = DEFAULT_OG_ALT,
   jsonLd,
   enableGtm = false,
   enableClarity = false,
@@ -51,6 +56,11 @@ const {
 }: Props = Astro.props;
 
 const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
+const ogLocale = Astro.currentLocale === "en" ? "en_US" : "es_MX";
+// Acepta ruta relativa o URL absoluta (banners de caso ya vienen absolutos).
+const absoluteOgImage = new URL(ogImage, Astro.site).toString();
+// Las dimensiones 1200x630 PNG solo aplican a las imagenes de /og/.
+const isStaticOgImage = ogImage.startsWith("/og/");
 ---
 
 <!doctype html>
@@ -157,16 +167,37 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
       />
     )}
 
-    {ogImage && (
-      <meta
-        property="og:image"
-        content={ogImage}
-      />
+    <meta
+      property="og:site_name"
+      content="Diego Maury"
+    />
+
+    <meta
+      property="og:locale"
+      content={ogLocale}
+    />
+
+    <meta
+      property="og:image"
+      content={absoluteOgImage}
+    />
+
+    {isStaticOgImage && (
+      <>
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
+      </>
     )}
 
     <meta
+      property="og:image:alt"
+      content={ogImageAlt}
+    />
+
+    <meta
       name="twitter:card"
-      content={ogImage ? "summary_large_image" : "summary"}
+      content="summary_large_image"
     />
 
     <meta
@@ -177,6 +208,16 @@ const htmlLang = Astro.currentLocale === "en" ? "en" : site.language;
     <meta
       name="twitter:description"
       content={description}
+    />
+
+    <meta
+      name="twitter:image"
+      content={absoluteOgImage}
+    />
+
+    <meta
+      name="twitter:image:alt"
+      content={ogImageAlt}
     />
 
     {jsonLd && (

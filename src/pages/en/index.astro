@@ -287,7 +287,9 @@ const pageTitle = (seoTitleEs && (await t(seoTitleEs))) || uiEn.home.fallbackTit
 const pageDescription = (seoDescriptionEs && (await t(seoDescriptionEs))) || uiEn.home.fallbackDescription;
 const canonicalUrl = new URL('/en', Astro.site).toString();
 const esUrl = new URL('/', Astro.site).toString();
-const ogImage = new URL('/assets/img/diego-maury.jpg', Astro.site).toString();
+const ogImage = '/og/og-home.png';
+const ogImageAlt =
+  'Diego Maury, Strategic Program Director. Hagamos que las cosas pasen.';
 const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -304,6 +306,7 @@ const personJsonLd = {
   title={pageTitle}
   description={pageDescription}
   ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
   alternateUrls={[{ lang: 'es', url: esUrl }, { lang: 'en', url: canonicalUrl }]}
   otherLocaleHref={toLocalePath(Astro.url.pathname, 'es')}
   ctaLabel={uiEn.nav.ctaLabel}

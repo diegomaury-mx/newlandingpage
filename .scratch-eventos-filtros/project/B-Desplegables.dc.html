@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Variación B — Desplegables tipo select</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#0A0612;font-family:'Plus Jakarta Sans',sans-serif;color:#FAF8FC}
+  .mono{font-family:'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
+  button{font-family:inherit;cursor:pointer}
+  ::-webkit-scrollbar{height:6px;width:6px}
+  ::-webkit-scrollbar-thumb{background:#6A291B}
+</style>
+</helmet>
+
+<div style="width:960px;box-sizing:border-box;padding:48px;display:flex;flex-direction:column;gap:56px;background:#0A0612;">
+
+  <!-- ===== CAPTION ===== -->
+  <div style="display:flex;flex-direction:column;gap:4px;">
+    <span class="mono" style="font-size:12px;color:#FF5C39;">Variación B</span>
+    <h1 style="margin:0;font-size:28px;font-weight:500;">Tres desplegables (selects) en línea</h1>
+    <p style="margin:0;font-size:15px;color:#A8A6AC;max-width:640px;">Patrón más convencional: Categoría, Tipo y Periodo se comportan como un &lt;select&gt;. Cada uno abre su propia lista; solo una abierta a la vez. Las selecciones activas bajan como chips removibles.</p>
+  </div>
+
+  <!-- ===== ESTADO 1: CERRADO ===== -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <span class="mono" style="font-size:11px;color:#A8A6AC;">Estado cerrado</span>
+
+    <div style="border:1px solid #6A291B;padding:32px;display:flex;flex-direction:column;gap:20px;">
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button style="display:flex;align-items:center;gap:10px;background:#1A1128;color:#FAF8FC;border:1px solid #6A291B;padding:10px 16px;font-size:13px;">
+          <span style="color:#A8A6AC;">Periodo:</span> Todos
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A8A6AC" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <button style="display:flex;align-items:center;gap:10px;background:#1A1128;color:#FAF8FC;border:1px solid #FF5C39;padding:10px 16px;font-size:13px;">
+          <span style="color:#A8A6AC;">Categoría:</span> AI
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FF5C39" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <button style="display:flex;align-items:center;gap:10px;background:#1A1128;color:#FAF8FC;border:1px solid #6A291B;padding:10px 16px;font-size:13px;">
+          <span style="color:#A8A6AC;">Tipo:</span> Todos
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A8A6AC" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+
+        <label style="display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;color:#DDDBE0;">
+          <span style="width:15px;height:15px;border:1px solid #6A291B;display:inline-block;"></span>
+          Solo gratuitos
+        </label>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;border-top:1px solid #1A1128;padding-top:16px;">
+        <button style="display:flex;align-items:center;gap:6px;background:rgba(255,92,57,.10);color:#FAF8FC;border:1px solid #FF5C39;padding:6px 10px 6px 12px;font-size:12px;">
+          AI
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <button class="mono" style="margin-left:auto;background:none;border:none;color:#A8A6AC;font-size:11px;text-decoration:underline;text-underline-offset:3px;">Limpiar filtros</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ESTADO 2: ABIERTO (Categoría) ===== -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <span class="mono" style="font-size:11px;color:#A8A6AC;">Estado abierto — desplegable "Categoría"</span>
+
+    <div style="border:1px solid #6A291B;padding:32px;display:flex;flex-direction:column;gap:0;position:relative;">
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;position:relative;z-index:2;">
+        <button style="display:flex;align-items:center;gap:10px;background:#1A1128;color:#FAF8FC;border:1px solid #6A291B;padding:10px 16px;font-size:13px;opacity:.5;">
+          <span style="color:#A8A6AC;">Periodo:</span> Todos
+        </button>
+
+        <div style="position:relative;">
+          <button style="display:flex;align-items:center;gap:10px;background:#1A1128;color:#FF5C39;border:1px solid #FF5C39;padding:10px 16px;font-size:13px;position:relative;z-index:3;">
+            <span style="color:#A8A6AC;">Categoría:</span> AI
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FF5C39" stroke-width="2"><path d="M18 15l-6-6-6 6" transform="rotate(180 12 12)"/></svg>
+          </button>
+
+          <!-- panel de dropdown -->
+          <div style="position:absolute;top:calc(100% + 4px);left:0;width:320px;background:#1A1128;border:1px solid #FF5C39;padding:16px;display:flex;flex-direction:column;gap:12px;z-index:4;">
+            <div style="display:flex;align-items:center;gap:8px;border:1px solid #6A291B;padding:8px 12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A8A6AC" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+              <span style="font-size:12px;color:#A8A6AC;">Buscar…</span>
+            </div>
+            <div style="display:flex;flex-direction:column;max-height:220px;overflow-y:auto;">
+              <label style="display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:13px;background:rgba(255,92,57,.10);">
+                <span style="width:15px;height:15px;border:1px solid #FF5C39;background:rgba(255,92,57,.16);display:inline-flex;align-items:center;justify-content:center;">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FF5C39" stroke-width="3"><path d="M4 12l6 6L20 6"/></svg>
+                </span>
+                AI
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:13px;color:#DDDBE0;">
+                <span style="width:15px;height:15px;border:1px solid #6A291B;display:inline-block;"></span>
+                Analytics
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:13px;color:#DDDBE0;">
+                <span style="width:15px;height:15px;border:1px solid #6A291B;display:inline-block;"></span>
+                AWS
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:13px;color:#DDDBE0;">
+                <span style="width:15px;height:15px;border:1px solid #6A291B;display:inline-block;"></span>
+                BI
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:13px;color:#DDDBE0;">
+                <span style="width:15px;height:15px;border:1px solid #6A291B;display:inline-block;"></span>
+                Blockchain
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:13px;color:#DDDBE0;">
+                <span style="width:15px;height:15px;border:1px solid #6A291B;display:inline-block;"></span>
+                Ciberseguridad
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:13px;color:#DDDBE0;">
+                <span style="width:15px;height:15px;border:1px solid #6A291B;display:inline-block;"></span>
+                Cloud
+              </label>
+            </div>
+            <span class="mono" style="font-size:10px;color:#A8A6AC;">27 categorías · scroll para ver todas</span>
+          </div>
+        </div>
+
+        <button style="display:flex;align-items:center;gap:10px;background:#1A1128;color:#FAF8FC;border:1px solid #6A291B;padding:10px 16px;font-size:13px;opacity:.5;">
+          <span style="color:#A8A6AC;">Tipo:</span> Todos
+        </button>
+
+        <label style="display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;color:#DDDBE0;opacity:.5;">
+          <span style="width:15px;height:15px;border:1px solid #6A291B;display:inline-block;"></span>
+          Solo gratuitos
+        </label>
+      </div>
+
+      <!-- espacio para que el dropdown "empuje" visualmente sin mover el layout real -->
+      <div style="height:260px;"></div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":960,"height":1160}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

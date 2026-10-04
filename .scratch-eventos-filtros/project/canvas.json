@@ -1,0 +1,22 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-09-21T00:00:00Z" },
+  "title": "Filtros /eventos — rediseño",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "A-Boton-Filtros.dc.html": { "x": 0, "y": 0, "w": 960, "h": 1420, "title": "A — Botón Filtros" },
+    "B-Desplegables.dc.html": { "x": 1040, "y": 0, "w": 960, "h": 1160, "title": "B — Desplegables" }
+  },
+  "order": ["A-Boton-Filtros.dc.html", "B-Desplegables.dc.html"],
+  "notes": {
+    "intro": {
+      "x": 0,
+      "y": -140,
+      "text": "diegomaury.mx /eventos — dos formas de resolver el muro de chips (27 categorías + 10 tipos)",
+      "kind": "title1",
+      "maxW": 1900
+    }
+  },
+  "designSystems": []
+}

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Variación A — Botón "Filtros" con panel</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#0A0612;font-family:'Plus Jakarta Sans',sans-serif;color:#FAF8FC}
+  .mono{font-family:'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
+  button{font-family:inherit;cursor:pointer}
+  ::-webkit-scrollbar{height:6px;width:6px}
+  ::-webkit-scrollbar-thumb{background:#6A291B}
+</style>
+</helmet>
+
+<div style="width:960px;box-sizing:border-box;padding:48px;display:flex;flex-direction:column;gap:56px;background:#0A0612;">
+
+  <!-- ===== CAPTION ===== -->
+  <div style="display:flex;flex-direction:column;gap:4px;">
+    <span class="mono" style="font-size:12px;color:#FF5C39;">Variación A</span>
+    <h1 style="margin:0;font-size:28px;font-weight:500;">Botón "Filtros" con panel desplegable</h1>
+    <p style="margin:0;font-size:15px;color:#A8A6AC;max-width:640px;">Las 27+ categorías y los 10 tipos de evento se esconden detrás de un solo botón con contador. La franja de vistas (meses) se queda visible porque son solo 6-8 opciones.</p>
+  </div>
+
+  <!-- ===== ESTADO 1: CERRADO ===== -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <span class="mono" style="font-size:11px;color:#A8A6AC;">Estado cerrado</span>
+
+    <div style="border:1px solid #6A291B;padding:32px;display:flex;flex-direction:column;gap:20px;">
+
+      <!-- fila de vistas (se conserva) -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button style="background:#FF5C39;color:#0A0612;border:1px solid #FF5C39;padding:8px 16px;font-size:13px;font-weight:500;">Todos</button>
+        <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:8px 16px;font-size:13px;">Septiembre 2026</button>
+        <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:8px 16px;font-size:13px;">Octubre 2026</button>
+        <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:8px 16px;font-size:13px;">Noviembre 2026</button>
+        <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:8px 16px;font-size:13px;">Calendario</button>
+      </div>
+
+      <!-- barra de filtros -->
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:4px;border-top:1px solid #1A1128;">
+        <button style="display:flex;align-items:center;gap:8px;background:#1A1128;color:#FAF8FC;border:1px solid #6A291B;padding:10px 16px;font-size:13px;font-weight:500;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+          Filtros
+          <span style="background:#FF5C39;color:#0A0612;font-family:'DM Mono',monospace;font-size:11px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:999px;padding:0 4px;">2</span>
+        </button>
+
+        <span style="width:1px;height:20px;background:#6A291B;"></span>
+
+        <button style="display:flex;align-items:center;gap:6px;background:rgba(255,92,57,.10);color:#FAF8FC;border:1px solid #FF5C39;padding:6px 10px 6px 12px;font-size:12px;">
+          AI
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <button style="display:flex;align-items:center;gap:6px;background:rgba(255,92,57,.10);color:#FAF8FC;border:1px solid #FF5C39;padding:6px 10px 6px 12px;font-size:12px;">
+          Solo gratuitos
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+
+        <button class="mono" style="margin-left:auto;background:none;border:none;color:#A8A6AC;font-size:11px;text-decoration:underline;text-underline-offset:3px;">Limpiar filtros</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ESTADO 2: ABIERTO ===== -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <span class="mono" style="font-size:11px;color:#A8A6AC;">Estado abierto — panel de "Filtros"</span>
+
+    <div style="border:1px solid #6A291B;padding:32px;display:flex;flex-direction:column;gap:20px;position:relative;">
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;opacity:.45;">
+        <button style="background:#FF5C39;color:#0A0612;border:1px solid #FF5C39;padding:8px 16px;font-size:13px;font-weight:500;">Todos</button>
+        <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:8px 16px;font-size:13px;">Septiembre 2026</button>
+        <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:8px 16px;font-size:13px;">Octubre 2026</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;padding-top:4px;border-top:1px solid #1A1128;">
+        <button style="display:flex;align-items:center;gap:8px;background:rgba(255,92,57,.16);color:#FF5C39;border:1px solid #FF5C39;padding:10px 16px;font-size:13px;font-weight:500;">
+          Filtros
+          <span style="background:#FF5C39;color:#0A0612;font-family:'DM Mono',monospace;font-size:11px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:999px;padding:0 4px;">2</span>
+        </button>
+      </div>
+
+      <!-- panel -->
+      <div style="background:#1A1128;border:1px solid #FF5C39;padding:28px;display:flex;flex-direction:column;gap:24px;">
+
+        <div style="display:flex;align-items:center;gap:10px;border:1px solid #6A291B;padding:10px 14px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A8A6AC" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+          <span style="font-size:13px;color:#A8A6AC;">Buscar categoría o tipo…</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span class="mono" style="font-size:11px;color:#A8A6AC;">Categoría · 27</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;max-height:104px;overflow:hidden;position:relative;">
+            <button style="background:#FF5C39;color:#0A0612;border:1px solid #FF5C39;padding:6px 14px;font-size:12px;">AI</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Analytics</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">AWS</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">BI</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Blockchain</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Cloud</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Data</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Developers</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Fintech</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">GenAI</button>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:36px;background:linear-gradient(to bottom, rgba(26,17,40,0), #1A1128);"></div>
+          </div>
+          <span class="mono" style="font-size:10px;color:#A8A6AC;">↓ scroll dentro del panel para ver las 17 restantes</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span class="mono" style="font-size:11px;color:#A8A6AC;">Tipo de evento</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Competencia</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Conferencia</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Hackathon</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Meetup</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Networking</button>
+            <button style="background:transparent;color:#DDDBE0;border:1px solid #6A291B;padding:6px 14px;font-size:12px;">Workshop</button>
+          </div>
+        </div>
+
+        <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#DDDBE0;">
+          <span style="width:16px;height:16px;border:1px solid #FF5C39;background:rgba(255,92,57,.16);display:inline-flex;align-items:center;justify-content:center;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FF5C39" stroke-width="3"><path d="M4 12l6 6L20 6"/></svg>
+          </span>
+          Solo eventos gratuitos
+        </label>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #6A291B;padding-top:16px;">
+          <button class="mono" style="background:none;border:none;color:#A8A6AC;font-size:11px;text-decoration:underline;text-underline-offset:3px;">Limpiar todo</button>
+          <button style="background:#FF5C39;color:#0A0612;border:1px solid #FF5C39;padding:10px 24px;font-size:13px;font-weight:500;">Aplicar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":960,"height":1420}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
