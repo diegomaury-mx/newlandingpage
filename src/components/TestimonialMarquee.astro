@@ -87,8 +87,16 @@ const loop = [...items, ...items];
 )}
 
 <style>
+  /* Sangrado a todo el ancho del viewport: sale del .section-inner. El clip de
+     la seccion evita scroll horizontal por el ancho de la barra de scroll. */
+  :global(section:has(> .section-inner > .tm)) {
+    overflow-x: clip;
+  }
+
   .tm {
     margin-top: 8px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
     overflow: hidden;
     -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
