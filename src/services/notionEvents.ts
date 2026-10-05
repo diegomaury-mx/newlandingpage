@@ -6,10 +6,14 @@
  * sección 8 (espejo técnico en docs/platform/notion-astro-contract.md).
  *
  * Reglas duras del contrato aplicadas aquí:
+ * - Taxonomía v2 (2026-10-03): `Categorías` = Temas (25, máx. 3), `Conceptos`
+ *   (37, puede venir vacío) y `Tipo` (1 valor). Nunca se escriben listas fijas
+ *   aquí: los filtros se derivan de los datos que llegan. `Áreas` no se lee.
  * - Solo se lee la whitelist 8.2. `eventDataSchema` es `.strict()`: una
  *   propiedad fuera de la lista rompe el build a propósito (igual que el
  *   guardrail de las fichas Insignia).
- * - Filtro: `Publicación == "Publicado"` Y fecha de fin (o inicio si no hay
+ * - Filtro: `Publicación == "Publicado"` Y `Scope == "Dentro"` (fórmula de
+ *   Notion, solo filtro interno: no se publica) Y fecha de fin (o inicio si no hay
  *   fin) >= hoy en America/Mexico_City. Todo lo demás se descarta antes de
  *   renderizar. Sin `Enlace Oficial` no hay tarjeta.
  * - El loader NO lee el body de las páginas de evento, solo propiedades: los
@@ -22,6 +26,7 @@ import { z } from "zod";
 import type { PageObjectResponse } from "@notionhq/client";
 import {
   getDateRange,
+  getFormulaString,
   getMultiSelect,
   getRichText,
   getSelect,
@@ -48,6 +53,8 @@ export {
 export type { EventDates, EventViewFlag } from "./eventDates.ts";
 
 // --- Status de ticket (whitelist "Parcial") --------------------------------
+
+export const SCOPE_INSIDE_VALUE = "Dentro";
 
 export const TICKET_FREE_VALUE = "Gratuito";
 
@@ -111,7 +118,10 @@ export function makeEventDataSchema(zod: ZodLike) {
       city: zod.string().optional(),
       modality: zod.string().optional(),
       type: zod.string().optional(),
+      // Temas (taxonomía v2).
       categories: zod.array(zod.string()).default([]),
+      // Conceptos (taxonomía v2): opcionales, la mayoría de los eventos no los trae.
+      concepts: zod.array(zod.string()).default([]),
       organizer: zod.string().default(""),
       summary: zod.string().default(""),
       officialUrl: httpUrl,
@@ -159,6 +169,7 @@ export function mapEvent(
     modality: getSelect(page, "Modalidad"),
     type: getSelect(page, "Tipo"),
     categories: getMultiSelect(page, "Categorías"),
+    concepts: getMultiSelect(page, "Conceptos"),
     organizer: getRichText(page, "Organizador"),
     summary: cleanSummary(getRichText(page, "Resumen")),
     officialUrl: getUrl(page, "Enlace Oficial"),
@@ -167,14 +178,22 @@ export function mapEvent(
   };
 }
 
+/** Valor de la fórmula `Scope` de una fila (solo para el gate, no se publica). */
+export function readScope(page: PageObjectResponse): string | undefined {
+  return getFormulaString(page, "Scope");
+}
+
 /** True si la fila cumple el gate mínimo del loader (contrato 8.3):
- * `Publicación == Publicado`, tiene Enlace Oficial y sigue vigente. */
+ * `Publicación == Publicado`, `Scope == Dentro`, tiene Enlace Oficial y sigue
+ * vigente. La comparación de Scope es exacta (sensible a mayúsculas). */
 export function isPublishableEvent(
   raw: { officialUrl?: unknown; start?: unknown; end?: unknown },
   publicationValue: string | undefined,
+  scopeValue: string | undefined,
   todayMx: string,
 ): boolean {
   if (publicationValue !== "Publicado") return false;
+  if (scopeValue !== SCOPE_INSIDE_VALUE) return false;
   if (typeof raw.officialUrl !== "string" || !/^https?:\/\//i.test(raw.officialUrl)) {
     return false;
   }

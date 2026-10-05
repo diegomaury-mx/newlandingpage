@@ -180,6 +180,19 @@
   overflow-y: auto;
 }
 
+.events-dropdown-group {
+  margin: 8px 8px 2px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+
+.events-dropdown-group:first-child {
+  margin-top: 0;
+}
+
 .events-dropdown-checkbox {
   display: flex;
   align-items: center;
@@ -388,6 +401,12 @@
   border-radius: 0;
   border: 1px solid var(--border);
   color: var(--t3);
+}
+
+/* Concepto: etiqueta secundaria, sin borde, sobre superficie (jerarquía bajo el Tema). */
+.events-chip--concept {
+  border-color: transparent;
+  background: var(--bg-2);
 }
 
 .events-card__cta {

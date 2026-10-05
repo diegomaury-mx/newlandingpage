@@ -134,6 +134,16 @@ export function getMultiSelect(
   return prop.multi_select.map((option) => option.name);
 }
 
+/** formula de tipo string -> su valor (`undefined` si no es formula string). */
+export function getFormulaString(
+  page: PageObjectResponse,
+  name: string,
+): string | undefined {
+  const prop = getProp(page, name);
+  if (prop?.type !== "formula" || prop.formula.type !== "string") return undefined;
+  return prop.formula.string ?? undefined;
+}
+
 /** checkbox -> boolean (false si no aplica). */
 export function getCheckbox(page: PageObjectResponse, name: string): boolean {
   const prop = getProp(page, name);

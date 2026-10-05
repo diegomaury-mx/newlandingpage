@@ -4,22 +4,14 @@
  * La lógica de datos (filtro de vigencia, whitelist) vive en
  * services/notionEvents.ts y en el loader; aquí solo se renderiza.
  *
- * Las vistas (Todos / un botón por mes con eventos / Calendario) se resuelven
- * en cliente con un `<script>` bundleado: todos los eventos se renderizan una
- * vez y el JS solo alterna `hidden`. El valor de `data-view` es `all`,
- * `calendar` o `month:<YYYY-MM>`.
- *
- * "Según pasan los días": el script recalcula `hoy` (America/Mexico_City) en
- * cada carga con `eventDates.ts` (mismo módulo puro que el loader), oculta los
- * eventos ya sucedidos y recalcula los flags de vista sin esperar un rebuild.
- * El rebuild diario de Cloudflare mantiene además el HTML/SEO servido al día.
+ * Los filtros y vistas (Periodo / Categoría / Tipo / gratuitos) viven en
+ * EventsFilters.astro, que trae su propio `<script>` bundleado: aquí todos los
+ * eventos se renderizan una vez y el script solo alterna `hidden`.
+ * El rebuild diario de Cloudflare mantiene el HTML/SEO servido al día.
  */
 import { ticketLabel, type EventData } from '../services/notionEvents.ts';
-import {
-  eventViewFlags,
-  toCalendarDay,
-  todayInMexicoCity,
-} from '../services/eventDates.ts';
+import { eventViewFlags, toCalendarDay, todayInMexicoCity } from '../services/eventDates.ts';
+import EventsFilters from './EventsFilters.astro';
 import '../styles/events.css';
 
 interface Copy {
@@ -52,6 +44,8 @@ interface Copy {
   typeLabel: string;
   clearFilters: string;
   searchCategoryPlaceholder: string;
+  topicsGroup: string;
+  conceptsGroup: string;
 }
 
 interface Props {
@@ -118,18 +112,13 @@ for (const ev of upcoming) {
   bucket.events.push(ev);
 }
 
-// Categorías presentes en el contenido publicado (para los chips-filtro).
-const categories = [...new Set(upcoming.flatMap((e) => e.categories))].sort((a, b) =>
-  a.localeCompare(b, intlLocale),
-);
-
-// Tipos de evento presentes (Conferencia, Meetup, Hackathon…). La fila de
-// chips solo se muestra si hay al menos dos valores distintos: un filtro con
-// una sola opción no filtra nada.
-const eventTypes = [...new Set(upcoming.map((e) => e.type).filter((t): t is string => Boolean(t)))].sort(
-  (a, b) => a.localeCompare(b, intlLocale),
-);
-const showTypeFilter = eventTypes.length >= 2;
+// Opciones de filtro derivadas de los datos publicados (taxonomía v2): nunca
+// listas fijas. Temas = `categories`, Conceptos = `concepts` (puede venir vacío).
+const sortedUnique = (values: string[]) =>
+  [...new Set(values)].sort((a, b) => a.localeCompare(b, intlLocale));
+const topics = sortedUnique(upcoming.flatMap((e) => e.categories));
+const concepts = sortedUnique(upcoming.flatMap((e) => e.concepts));
+const eventTypes = sortedUnique(upcoming.map((e) => e.type).filter((t): t is string => Boolean(t)));
 
 function isFree(ev: EventData): boolean {
   return ticketLabel(ev.ticketStatus) === 'Gratuito';
@@ -193,116 +182,14 @@ const hasEvents = upcoming.length > 0;
 </section>
 
 {hasEvents && (
-  <div class="events-controls">
-    <div class="section-inner">
-      <div class="events-filters-bar">
-        <div class="events-dropdown" data-dropdown="period">
-          <button
-            type="button"
-            class="events-dropdown-trigger"
-            data-dropdown-trigger
-            aria-haspopup="listbox"
-            aria-expanded="false"
-          >
-            <span class="events-dropdown-trigger__label">{copy.periodLabel}</span>
-            <span class="events-dropdown-trigger__value" data-period-value>{copy.views.all}</span>
-            <svg class="events-dropdown-trigger__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-          <div class="events-dropdown-panel" data-dropdown-panel role="listbox" aria-label={copy.periodLabel} hidden>
-            <button type="button" class="events-dropdown-option" role="option" aria-selected="true" data-view="all">
-              {copy.views.all}
-            </button>
-            {months.map((month) => (
-              <button
-                type="button"
-                class="events-dropdown-option"
-                role="option"
-                aria-selected="false"
-                data-view={`month:${month.key}`}
-              >
-                {month.label}
-              </button>
-            ))}
-            <button type="button" class="events-dropdown-option" role="option" aria-selected="false" data-view="calendar">
-              {copy.views.calendar}
-            </button>
-          </div>
-        </div>
-
-        <div class="events-dropdown" data-dropdown="category">
-          <button
-            type="button"
-            class="events-dropdown-trigger"
-            data-dropdown-trigger
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <span class="events-dropdown-trigger__label">{copy.categoryLabel}</span>
-            <span class="events-dropdown-trigger__badge" data-cat-badge hidden>0</span>
-            <svg class="events-dropdown-trigger__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-          <div class="events-dropdown-panel events-dropdown-panel--wide" data-dropdown-panel role="group" aria-label={copy.categoryLabel} hidden>
-            <div class="events-dropdown-search">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-              <input
-                type="text"
-                class="events-dropdown-search__input"
-                placeholder={copy.searchCategoryPlaceholder}
-                aria-label={copy.searchCategoryPlaceholder}
-                data-cat-search
-              />
-            </div>
-            <div class="events-dropdown-list" data-cat-list>
-              {categories.map((cat) => (
-                <label class="events-dropdown-checkbox">
-                  <input type="checkbox" value={cat} data-cat-checkbox />
-                  <span>{cat}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {showTypeFilter && (
-          <div class="events-dropdown" data-dropdown="type">
-            <button
-              type="button"
-              class="events-dropdown-trigger"
-              data-dropdown-trigger
-              aria-haspopup="listbox"
-              aria-expanded="false"
-            >
-              <span class="events-dropdown-trigger__label">{copy.typeLabel}</span>
-              <span class="events-dropdown-trigger__value" data-type-value>{copy.allTypes}</span>
-              <svg class="events-dropdown-trigger__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-            </button>
-            <div class="events-dropdown-panel" data-dropdown-panel role="listbox" aria-label={copy.typeLabel} hidden>
-              <button type="button" class="events-dropdown-option" role="option" aria-selected="true" data-type-chip="">
-                {copy.allTypes}
-              </button>
-              {eventTypes.map((t) => (
-                <button type="button" class="events-dropdown-option" role="option" aria-selected="false" data-type-chip={t}>
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {hasFreeEvents && (
-          <label class="events-free-toggle">
-            <input type="checkbox" data-free-toggle />
-            <span class="events-free-toggle__text">{copy.onlyFree}</span>
-          </label>
-        )}
-      </div>
-
-      <div class="events-active-filters" data-active-filters hidden>
-        <div class="events-active-filters__chips" data-active-chips></div>
-        <button type="button" class="events-clear-all" data-clear-all>{copy.clearFilters}</button>
-      </div>
-    </div>
-  </div>
+  <EventsFilters
+    copy={copy}
+    months={months}
+    topics={topics}
+    concepts={concepts}
+    eventTypes={eventTypes}
+    hasFreeEvents={hasFreeEvents}
+  />
 )}
 
 {hasEvents ? (
@@ -318,7 +205,7 @@ const hasEvents = upcoming.length > 0;
                 data-event
                 data-views={viewFlags(ev)}
                 data-emonth={monthKey(ev.start)}
-                data-cats={ev.categories.join('|')}
+                data-cats={[...ev.categories, ...ev.concepts].join('|')}
                 data-type={ev.type ?? ''}
                 data-free={isFree(ev) ? 'y' : 'n'}
                 data-start={toCalendarDay(ev.start)}
@@ -332,9 +219,10 @@ const hasEvents = upcoming.length > 0;
                   <h2 class="events-card__title">{ev.name}</h2>
                   <p class="events-card__meta">{metaLine(ev)}</p>
                   {ev.summary && <p class="events-card__summary">{ev.summary}</p>}
-                  {ev.categories.length > 0 && (
+                  {(ev.categories.length > 0 || ev.concepts.length > 0) && (
                     <div class="events-card__chips">
                       {ev.categories.map((c) => <span class="events-chip">{c}</span>)}
+                      {ev.concepts.map((c) => <span class="events-chip events-chip--concept">{c}</span>)}
                     </div>
                   )}
                   {ev.parentName && (
@@ -420,313 +308,3 @@ const hasEvents = upcoming.length > 0;
     </div>
   </div>
 </section>
-
-<script>
-  import {
-    eventViewFlags,
-    isUpcoming,
-    todayInMexicoCity,
-  } from '../services/eventDates.ts';
-
-  (function () {
-    const list = document.querySelector<HTMLElement>('[data-events-list]');
-    const calendar = document.querySelector<HTMLElement>('[data-calendar]');
-    if (!list) return;
-    const emptyState = document.querySelector<HTMLElement>('[data-events-empty]');
-    const cards = [...document.querySelectorAll<HTMLElement>('[data-event]')];
-    const calEvents = [
-      ...document.querySelectorAll<HTMLElement>('[data-cal-event]'),
-    ];
-    const calMonths = [
-      ...document.querySelectorAll<HTMLElement>('[data-cal-month]'),
-    ];
-
-    // --- Desplegables: Periodo, Categoría (múltiple), Tipo -----------------
-    const dropdowns = [...document.querySelectorAll<HTMLElement>('[data-dropdown]')];
-    const periodValueEl = document.querySelector<HTMLElement>('[data-period-value]');
-    const typeValueEl = document.querySelector<HTMLElement>('[data-type-value]');
-    const catBadgeEl = document.querySelector<HTMLElement>('[data-cat-badge]');
-    const periodOptions = [...document.querySelectorAll<HTMLElement>('[data-view]')];
-    const typeOptions = [...document.querySelectorAll<HTMLElement>('[data-type-chip]')];
-    const catCheckboxes = [
-      ...document.querySelectorAll<HTMLInputElement>('[data-cat-checkbox]'),
-    ];
-    const catSearchInput = document.querySelector<HTMLInputElement>('[data-cat-search]');
-    const freeToggleInput = document.querySelector<HTMLInputElement>('[data-free-toggle]');
-    const activeFiltersRow = document.querySelector<HTMLElement>('[data-active-filters]');
-    const activeChipsContainer = document.querySelector<HTMLElement>('[data-active-chips]');
-    const clearAllBtn = document.querySelector<HTMLElement>('[data-clear-all]');
-
-    // Textos "todos" capturados del render del servidor: se reponen al
-    // deseleccionar sin necesitar una clave de copy nueva por cada estado.
-    const allTypesLabel = typeValueEl?.textContent ?? '';
-    const onlyFreeLabel =
-      document.querySelector('.events-free-toggle__text')?.textContent ?? '';
-
-    let view = 'all';
-    const cats = new Set<string>();
-    let type = '';
-    let freeOnly = false;
-
-    function closeAllDropdowns() {
-      dropdowns.forEach((d) => {
-        const trigger = d.querySelector<HTMLElement>('[data-dropdown-trigger]');
-        const panel = d.querySelector<HTMLElement>('[data-dropdown-panel]');
-        if (panel) {
-          panel.hidden = true;
-          panel.style.left = '';
-          panel.style.right = '';
-        }
-        if (trigger) trigger.setAttribute('aria-expanded', 'false');
-      });
-    }
-
-    dropdowns.forEach((d) => {
-      const trigger = d.querySelector<HTMLElement>('[data-dropdown-trigger]');
-      const panel = d.querySelector<HTMLElement>('[data-dropdown-panel]');
-      if (!trigger || !panel) return;
-      trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const wasOpen = !panel.hidden;
-        closeAllDropdowns();
-        panel.hidden = wasOpen;
-        trigger.setAttribute('aria-expanded', String(!wasOpen));
-        if (!wasOpen) {
-          // En pantallas angostas el panel puede salirse por la derecha si
-          // ancla desde el borde izquierdo del trigger (p.ej. Categoría, que
-          // no es el primer desplegable) — se invierte el ancla solo cuando
-          // hace falta, nunca de forma fija por breakpoint.
-          const rect = panel.getBoundingClientRect();
-          const overflowRight = rect.right - (window.innerWidth - 16);
-          if (overflowRight > 0) {
-            panel.style.left = 'auto';
-            panel.style.right = '0';
-          }
-          const search = panel.querySelector<HTMLInputElement>('[data-cat-search]');
-          if (search) search.focus();
-        }
-      });
-    });
-
-    document.addEventListener('click', (e) => {
-      const target = e.target as Node;
-      const insideAny = dropdowns.some((d) => d.contains(target));
-      if (!insideAny) closeAllDropdowns();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeAllDropdowns();
-    });
-
-    function updateCatBadge() {
-      if (!catBadgeEl) return;
-      catBadgeEl.hidden = cats.size === 0;
-      catBadgeEl.textContent = String(cats.size);
-    }
-
-    function renderActiveChips() {
-      if (!activeChipsContainer || !activeFiltersRow) return;
-      const chips: { label: string; onRemove: () => void }[] = [];
-
-      cats.forEach((c) => {
-        chips.push({
-          label: c,
-          onRemove: () => {
-            cats.delete(c);
-            const cb = catCheckboxes.find((el) => el.value === c);
-            if (cb) cb.checked = false;
-            updateCatBadge();
-            renderActiveChips();
-            apply();
-          },
-        });
-      });
-
-      if (type) {
-        chips.push({
-          label: type,
-          onRemove: () => {
-            type = '';
-            typeOptions.forEach((b) => {
-              b.setAttribute(
-                'aria-selected',
-                (b.getAttribute('data-type-chip') ?? '') === '' ? 'true' : 'false',
-              );
-            });
-            if (typeValueEl) typeValueEl.textContent = allTypesLabel;
-            renderActiveChips();
-            apply();
-          },
-        });
-      }
-
-      if (freeOnly) {
-        chips.push({
-          label: onlyFreeLabel,
-          onRemove: () => {
-            freeOnly = false;
-            if (freeToggleInput) freeToggleInput.checked = false;
-            renderActiveChips();
-            apply();
-          },
-        });
-      }
-
-      activeChipsContainer.replaceChildren(
-        ...chips.map(({ label, onRemove }) => {
-          const chip = document.createElement('button');
-          chip.type = 'button';
-          chip.className = 'events-active-chip';
-          const text = document.createElement('span');
-          text.textContent = label;
-          const x = document.createElement('span');
-          x.setAttribute('aria-hidden', 'true');
-          x.textContent = '×';
-          chip.append(text, x);
-          chip.addEventListener('click', onRemove);
-          return chip;
-        }),
-      );
-
-      activeFiltersRow.hidden = chips.length === 0;
-    }
-
-    const datesOf = (el: HTMLElement) => ({
-      start: el.getAttribute('data-start') ?? '',
-      end: el.getAttribute('data-end') || null,
-    });
-
-    function apply() {
-      // "Hoy" se recalcula en cada render: el sitio es estático, pero la
-      // vigencia de los eventos no espera al siguiente build.
-      const today = todayInMexicoCity();
-      const showCalendar = view === 'calendar';
-      list!.hidden = showCalendar;
-      if (calendar) calendar.hidden = !showCalendar;
-
-      let anyVisible = false;
-
-      if (showCalendar) {
-        calEvents.forEach((ev) => {
-          ev.hidden = !isUpcoming(datesOf(ev), today);
-        });
-        calMonths.forEach((m) => {
-          const visible = [
-            ...m.querySelectorAll<HTMLElement>('[data-cal-event]'),
-          ].some((e) => !e.hidden);
-          m.hidden = !visible;
-          if (visible) anyVisible = true;
-        });
-      } else {
-        cards.forEach((card) => {
-          const flags: string[] = eventViewFlags(datesOf(card), today);
-          card.setAttribute('data-views', flags.join(' '));
-          const cardCats = (card.getAttribute('data-cats') || '').split('|').filter(Boolean);
-          const isUp = isUpcoming(datesOf(card), today);
-          const okView =
-            view === 'all'
-              ? isUp
-              : view.indexOf('month:') === 0
-                ? isUp && card.getAttribute('data-emonth') === view.slice(6)
-                : flags.indexOf(view) !== -1;
-          const okCat = cats.size === 0 || cardCats.some((c) => cats.has(c));
-          const okType = !type || (card.getAttribute('data-type') || '') === type;
-          const okFree = !freeOnly || card.getAttribute('data-free') === 'y';
-          card.hidden = !(okView && okCat && okType && okFree);
-          if (!card.hidden) anyVisible = true;
-        });
-        document.querySelectorAll<HTMLElement>('[data-month]').forEach((m) => {
-          const visible = [
-            ...m.querySelectorAll<HTMLElement>('[data-event]'),
-          ].some((c) => !c.hidden);
-          m.hidden = !visible;
-        });
-      }
-
-      if (emptyState) emptyState.hidden = anyVisible;
-    }
-
-    periodOptions.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        view = btn.getAttribute('data-view') ?? 'all';
-        periodOptions.forEach((b) => {
-          b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
-        });
-        if (periodValueEl) periodValueEl.textContent = btn.textContent ?? '';
-        closeAllDropdowns();
-        apply();
-      });
-    });
-
-    catCheckboxes.forEach((cb) => {
-      const row = cb.closest<HTMLElement>('.events-dropdown-checkbox');
-      cb.addEventListener('change', () => {
-        if (cb.checked) cats.add(cb.value);
-        else cats.delete(cb.value);
-        row?.classList.toggle('is-checked', cb.checked);
-        updateCatBadge();
-        renderActiveChips();
-        apply();
-      });
-    });
-
-    typeOptions.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        type = btn.getAttribute('data-type-chip') ?? '';
-        typeOptions.forEach((b) => {
-          b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
-        });
-        if (typeValueEl) typeValueEl.textContent = btn.textContent ?? '';
-        closeAllDropdowns();
-        renderActiveChips();
-        apply();
-      });
-    });
-
-    if (catSearchInput) {
-      const catLabels = [
-        ...document.querySelectorAll<HTMLElement>('[data-cat-list] .events-dropdown-checkbox'),
-      ];
-      catSearchInput.addEventListener('input', () => {
-        const q = catSearchInput.value.trim().toLowerCase();
-        catLabels.forEach((row) => {
-          const text = (row.textContent || '').toLowerCase();
-          row.hidden = q.length > 0 && !text.includes(q);
-        });
-      });
-    }
-
-    if (freeToggleInput) {
-      freeToggleInput.addEventListener('change', () => {
-        freeOnly = freeToggleInput.checked;
-        renderActiveChips();
-        apply();
-      });
-    }
-
-    if (clearAllBtn) {
-      clearAllBtn.addEventListener('click', () => {
-        cats.clear();
-        catCheckboxes.forEach((cb) => {
-          cb.checked = false;
-          cb.closest<HTMLElement>('.events-dropdown-checkbox')?.classList.remove('is-checked');
-        });
-        updateCatBadge();
-        type = '';
-        typeOptions.forEach((b) => {
-          b.setAttribute(
-            'aria-selected',
-            (b.getAttribute('data-type-chip') ?? '') === '' ? 'true' : 'false',
-          );
-        });
-        if (typeValueEl) typeValueEl.textContent = allTypesLabel;
-        freeOnly = false;
-        if (freeToggleInput) freeToggleInput.checked = false;
-        renderActiveChips();
-        apply();
-      });
-    }
-
-    apply();
-  })();
-</script>

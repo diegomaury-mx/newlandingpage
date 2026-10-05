@@ -115,7 +115,9 @@ export const uiEn = {
     categoryLabel: "Category",
     typeLabel: "Type",
     clearFilters: "Clear filters",
-    searchCategoryPlaceholder: "Search category…",
+    searchCategoryPlaceholder: "Search topic or concept…",
+    topicsGroup: "Topics",
+    conceptsGroup: "Concepts",
   },
   portfolio: {
     byTheNumbers: "By the numbers",

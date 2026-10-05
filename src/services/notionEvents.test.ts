@@ -97,7 +97,11 @@ const validProps = {
   Tipo: { type: "select", select: { name: "Summit" } },
   Categorías: {
     type: "multi_select",
-    multi_select: [{ name: "Fintech" }, { name: "Startups" }],
+    multi_select: [{ name: "Finanzas y fintech" }, { name: "Startups" }],
+  },
+  Conceptos: {
+    type: "multi_select",
+    multi_select: [{ name: "Analítica" }],
   },
   Organizador: { type: "rich_text", rich_text: [{ plain_text: "Finnovista" }] },
   Resumen: { type: "rich_text", rich_text: [{ plain_text: "Punto de encuentro fintech." }] },
@@ -115,7 +119,8 @@ test("mapEvent produce exactamente la whitelist 8.2 y resuelve el evento padre",
     city: "CDMX",
     modality: "Presencial",
     type: "Summit",
-    categories: ["Fintech", "Startups"],
+    categories: ["Finanzas y fintech", "Startups"],
+    concepts: ["Analítica"],
     organizer: "Finnovista",
     summary: "Punto de encuentro fintech.",
     officialUrl: "https://finnosummit.com/2026",
@@ -145,7 +150,8 @@ function validData() {
     city: "CDMX",
     modality: "Presencial",
     type: "Summit",
-    categories: ["Fintech"],
+    categories: ["Finanzas y fintech"],
+    concepts: ["Analítica"],
     organizer: "Finnovista",
     summary: "Resumen.",
     officialUrl: "https://finnosummit.com/2026",
@@ -172,6 +178,14 @@ test("eventDataSchema: campos vacíos de la whitelist no rompen (caen a default)
   assert.equal(parsed.end, null);
   assert.equal(parsed.summary, "");
   assert.deepEqual(parsed.categories, []);
+  assert.deepEqual(parsed.concepts, []);
+});
+
+test("mapEvent: Conceptos ausente o vacío produce arreglo vacío", () => {
+  const { Conceptos: _omit, ...withoutConcepts } = validProps;
+  assert.deepEqual(mapEvent(fakePage(withoutConcepts)).concepts, []);
+  const empty = { ...validProps, Conceptos: { type: "multi_select", multi_select: [] } };
+  assert.deepEqual(mapEvent(fakePage(empty)).concepts, []);
 });
 
 test("eventDataSchema: sin Enlace Oficial válido no parsea", () => {
@@ -187,10 +201,18 @@ test("eventDataSchema: sin Enlace Oficial válido no parsea", () => {
 
 // --- isPublishableEvent (gate del loader) --------------------------------
 
-test("isPublishableEvent: exige Publicado + Enlace Oficial + vigencia", () => {
+test("isPublishableEvent: exige Publicado + Scope Dentro + Enlace Oficial + vigencia", () => {
   const base = { officialUrl: "https://x.com/e", start: "2026-09-20", end: null };
-  assert.equal(isPublishableEvent(base, "Publicado", "2026-09-10"), true);
-  assert.equal(isPublishableEvent(base, "Borrador", "2026-09-10"), false);
-  assert.equal(isPublishableEvent({ ...base, officialUrl: "" }, "Publicado", "2026-09-10"), false);
-  assert.equal(isPublishableEvent(base, "Publicado", "2026-09-25"), false);
+  assert.equal(isPublishableEvent(base, "Publicado", "Dentro", "2026-09-10"), true);
+  assert.equal(isPublishableEvent(base, "Borrador", "Dentro", "2026-09-10"), false);
+  assert.equal(isPublishableEvent({ ...base, officialUrl: "" }, "Publicado", "Dentro", "2026-09-10"), false);
+  assert.equal(isPublishableEvent(base, "Publicado", "Dentro", "2026-09-25"), false);
+});
+
+test("isPublishableEvent: Scope distinto de 'Dentro' (o ausente) excluye el evento", () => {
+  const base = { officialUrl: "https://x.com/e", start: "2026-09-20", end: null };
+  assert.equal(isPublishableEvent(base, "Publicado", "Sin clasificar", "2026-09-10"), false);
+  assert.equal(isPublishableEvent(base, "Publicado", "Fuera: condicional sin núcleo", "2026-09-10"), false);
+  assert.equal(isPublishableEvent(base, "Publicado", "dentro", "2026-09-10"), false);
+  assert.equal(isPublishableEvent(base, "Publicado", undefined, "2026-09-10"), false);
 });

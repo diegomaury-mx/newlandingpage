@@ -47,6 +47,7 @@ import {
   EVENT_TRANSLATABLE_FIELDS,
   isPublishableEvent,
   mapEvent,
+  readScope,
   todayInMexicoCity,
 } from "./notionEvents.ts";
 
@@ -555,7 +556,7 @@ export const eventsLoader: Loader = {
     let published = 0;
     for (const page of pages) {
       const raw = mapEvent(page, nameById);
-      if (!isPublishableEvent(raw, getSelect(page, "Publicación"), today)) continue;
+      if (!isPublishableEvent(raw, getSelect(page, "Publicación"), readScope(page), today)) continue;
       raw.en = await translateFields(raw, [...EVENT_TRANSLATABLE_FIELDS], logger);
       const data = await parseData({ id: page.id, data: raw });
       store.set({ id: page.id, data });
