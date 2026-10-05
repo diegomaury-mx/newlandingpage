@@ -43,13 +43,6 @@ export default {
     }
 
     console.log("Notion event received:", parsed.type);
-    // TEMPORAL (captura de payload): solo metadatos, nunca contenido de campos. Quitar tras validar.
-    console.log("TMP-PAYLOAD", JSON.stringify({
-      type: parsed.type,
-      entity: parsed.entity,
-      parent: parsed.data && parsed.data.parent,
-      updated_properties: parsed.data && parsed.data.updated_properties,
-    }));
 
     if (isEventsSource(parsed)) {
       if (!isRelevantEventsChange(parsed)) {
@@ -89,6 +82,8 @@ export default {
     // deja de listar eventos ya sucedidos aunque nadie edite Notion ni haga push).
     const r = await fetch(env.DEPLOY_HOOK_URL, { method: "POST" });
     console.log("Scheduled rebuild triggered (cron " + event.cron + "), status:", r.status);
+    // Este build ya incluye cualquier cambio pendiente de eventos: evita un build duplicado en el siguiente flush.
+    if (r.ok) await env.RELAY_KV.delete(PENDING_KEY);
   },
 };
 
