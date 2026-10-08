@@ -199,3 +199,9 @@ Bases: SSOT Proyectos (`88257bc9…`), CMS Imágenes (`8dda9726…`), Métricas 
 1. **E-1**: decidir si "15+ años" se corrige a "10+" o si se actualiza la métrica, y dar de alta (o retirar del copy) los claims "30+ programas", "400+ emprendedores", "#1 en el sureste" y "30+ proyectos".
 2. **E-3**: borrar los 3 slots huérfanos y actualizar el hub.
 3. **E-2/E-4/E-5/E-7**: ajustes de documentación y de contenido menores.
+
+**E-8 · "Evaluados" contradice la decisión del SSOT de Identidad (MEDIUM, provisional)**
+- Evidence: SSOT - Identidad §8 (14 ago 2026) prohíbe "proyectos evaluados" para HEINEKEN y exige "alcanzados o impactados". `llms.txt:29` y `llms-full.txt:55` dicen "projects evaluated" y la métrica se llama `heineken-proyectos-evaluados`. No se leyó el claim canónico de esa fila.
+- Severity: **MEDIUM (provisional)**.
+
+**Bajas decididas por Diego (2026-10-08):** "30+ proyectos liderados" (S2), "30+ programas" y "#1 en el sureste de México" (S6). Instrucciones de edición manual en `docs/superpowers/specs/2026-10-08-baja-cifras-sin-respaldo-copy.md`. El `ogImageAlt` de `/portfolio` y "400+ emprendedores" quedan por decidir.
