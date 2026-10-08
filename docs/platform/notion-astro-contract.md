@@ -1,6 +1,6 @@
 # Contrato de datos Notion → Astro (Fase A1 / Diego CMS)
 
-**Estado:** implementado en `src/content/config.ts` desde 2026-07-23 (`cases`/`metrics`/`siteCopy` con `loader:` real, validado con `astro build` contra Notion real). El sitio LIVE sigue siendo HTML editado a mano — este pipeline corre solo en el scaffold Astro (`dist/`, no desplegado). `organization` y `type` de `cases` quedaron **opcionales** pese a decir "requerido" abajo: 12/27 y 11/27 fichas reales aún no tienen esos campos llenos (contenido Draft/Archivo sin curar) y bloquear el build entero por eso no tenía sentido — solo la regla de Insignia+publicado (métrica ancla + evidencia) bloquea de verdad.
+**Estado:** implementado en `src/content.config.ts` (antes `src/content/config.ts`) desde 2026-07-23 (`cases`/`metrics`/`siteCopy` con `loader:` real, validado con `astro build` contra Notion real). El sitio LIVE sigue siendo HTML editado a mano — este pipeline corre solo en el scaffold Astro (`dist/`, no desplegado). `organization` y `type` de `cases` quedaron **opcionales** pese a decir "requerido" abajo: 12/27 y 11/27 fichas reales aún no tienen esos campos llenos (contenido Draft/Archivo sin curar) y bloquear el build entero por eso no tenía sentido — solo la regla de Insignia+publicado (métrica ancla + evidencia) bloquea de verdad.
 
 **Actualización 2026-07-23 (Fase 2 · Home/casos desde CMS):** `cases` ganó 4 campos que no estaban en la propuesta original de este documento: `body` (Markdown plano del cuerpo de la ficha, vía `blocksToMarkdown` extendido con soporte de tablas), `resultHeadline` (primer H1 del cuerpo — el resultado narrado como afirmación, usado como título de tarjeta y de página de caso), `hasVerifiedEvidence` (boolean derivado de la tabla bajo `## Evidencia`: true si al menos una fila tiene ✔) y `cardContext` (mapea a la propiedad Notion nueva **"Contexto tarjeta"**, texto libre de ~160 caracteres pensado para verse solo en tarjeta). Esto NO contradice la regla de la sección "Tratamiento de evidencia (cases)" de abajo (el bloque ✔/✖ sigue viviendo como narrativa en el `body`, no se estructuró en Zod fila por fila) — `hasVerifiedEvidence` es un derivado de un solo bit (¿hay al menos un ✔?), no una estructuración del contenido de cada fila.
 
@@ -16,7 +16,7 @@
 
 ## 1. `SSOT - Portafolio Proyectos` → `cases`
 
-**Corrección necesaria:** el schema `cases` que ya existe en `src/content/config.ts` (campos `context`, `challenge`, `objectives[]`, `actions[]`, `results[]`) es aspiracional y **no coincide con las propiedades reales de la base**. No se toca `config.ts` en esta tarea (eso es de la tarea "CMS: validar contenido con Zod"), pero el mapeo correcto contra el schema real, verificado 2026-07-19, es:
+**Corrección necesaria:** el schema `cases` que existía en `src/content/config.ts`, hoy `src/content.config.ts` (campos `context`, `challenge`, `objectives[]`, `actions[]`, `results[]`) es aspiracional y **no coincide con las propiedades reales de la base**. No se toca `config.ts` en esta tarea (eso es de la tarea "CMS: validar contenido con Zod"), pero el mapeo correcto contra el schema real, verificado 2026-07-19, es:
 
 | Propiedad Notion | Tipo Notion | Campo Zod propuesto | Default | Nota |
 |---|---|---|---|---|
