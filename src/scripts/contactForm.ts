@@ -48,7 +48,11 @@ function loadTurnstile(): Promise<void> {
     script.src = TURNSTILE_SRC;
     script.async = true;
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error("turnstile"));
+    script.onerror = () => {
+      turnstileLoading = null;
+      script.remove();
+      reject(new Error("turnstile"));
+    };
     document.head.appendChild(script);
   });
   return turnstileLoading;
@@ -147,6 +151,7 @@ function initForm(form: HTMLFormElement): void {
 
   function showSendError(): void {
     errorBox.hidden = false;
+    errorBox.focus();
     if (widgetId !== undefined) win.turnstile?.reset(widgetId);
     token = null;
   }

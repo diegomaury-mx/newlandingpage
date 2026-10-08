@@ -50,6 +50,75 @@ const ICONS = {
         {intro.map((paragraph) => <p class="contact-intro" data-reveal>{paragraph}</p>)}
       </div>
 
+      <div class="contact-panel" data-reveal style="--delay:.18s">
+        <a
+          class="btn-primary contact-panel__cta"
+          href={CALENDAR_HREF}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span set:html={ICONS.calendar} />{c.scheduleCta}
+        </a>
+        <p class="contact-panel__hint">{c.scheduleHint}</p>
+
+        <div class="contact-sep"><span>{c.separator}</span></div>
+
+        <form
+          class="contact-form"
+          method="post"
+          action="/api/contact"
+          data-contact-form
+          data-endpoint="/api/contact"
+          data-sitekey={turnstileSiteKey}
+          data-location="s8-contacto"
+          data-messages={formMessages}
+          novalidate
+        >
+          <div class="contact-field">
+            <label for={`${id}-name`}>{c.nameLabel}</label>
+            <input
+              id={`${id}-name`} name="name" type="text" autocomplete="name" maxlength="100"
+              placeholder={c.namePlaceholder} required aria-describedby={`${id}-name-error`}
+            />
+            <p class="contact-field__error" id={`${id}-name-error`} data-error-for="name" hidden></p>
+          </div>
+          <div class="contact-field">
+            <label for={`${id}-email`}>{c.emailFieldLabel}</label>
+            <input
+              id={`${id}-email`} name="email" type="email" autocomplete="email" maxlength="254"
+              placeholder={c.emailPlaceholder} required aria-describedby={`${id}-email-error`}
+            />
+            <p class="contact-field__error" id={`${id}-email-error`} data-error-for="email" hidden></p>
+          </div>
+          <div class="contact-field">
+            <label for={`${id}-message`}>{c.messageLabel}</label>
+            <textarea
+              id={`${id}-message`} name="message" rows="5" maxlength="2000"
+              placeholder={c.messagePlaceholder} required aria-describedby={`${id}-message-error`}
+            ></textarea>
+            <p class="contact-field__error" id={`${id}-message-error`} data-error-for="message" hidden></p>
+          </div>
+
+          <div class="contact-hp" aria-hidden="true">
+            <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <div data-contact-turnstile></div>
+
+          <p class="contact-feedback" data-contact-error role="alert" tabindex="-1" hidden>
+            {c.error} <a href={MAIL_HREF}>{email}</a>
+          </p>
+
+          <button type="submit" class="btn-ghost contact-form__submit" data-contact-submit>
+            <span set:html={ICONS.send} /><span data-submit-label>{c.send}</span>
+          </button>
+        </form>
+
+        <div class="contact-feedback" data-contact-success role="status" tabindex="-1" hidden>
+          <p class="contact-feedback__title">{c.successTitle}</p>
+          <p>{c.successBody}</p>
+        </div>
+      </div>
+
       <div class="contact-direct" data-reveal style="--delay:.12s">
         <h3 class="contact-direct__title">{c.directTitle}</h3>
         <ul class="contact-list">
@@ -94,75 +163,6 @@ const ICONS = {
         </ul>
         <span class="contact-sr" role="status" aria-live="polite" data-copy-status></span>
         {trustParts.length > 0 && <p class="contact-trust">{trustParts.join(' · ')}</p>}
-      </div>
-
-      <div class="contact-panel" data-reveal style="--delay:.18s">
-        <a
-          class="btn-primary contact-panel__cta"
-          href={CALENDAR_HREF}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span set:html={ICONS.calendar} />{c.scheduleCta}
-        </a>
-        <p class="contact-panel__hint">{c.scheduleHint}</p>
-
-        <div class="contact-sep" role="separator"><span>{c.separator}</span></div>
-
-        <form
-          class="contact-form"
-          method="post"
-          action="/api/contact"
-          data-contact-form
-          data-endpoint="/api/contact"
-          data-sitekey={turnstileSiteKey}
-          data-location="s8-contacto"
-          data-messages={formMessages}
-          novalidate
-        >
-          <div class="contact-field">
-            <label for={`${id}-name`}>{c.nameLabel}</label>
-            <input
-              id={`${id}-name`} name="name" type="text" autocomplete="name" maxlength="100"
-              placeholder={c.namePlaceholder} required aria-describedby={`${id}-name-error`}
-            />
-            <p class="contact-field__error" id={`${id}-name-error`} data-error-for="name" hidden></p>
-          </div>
-          <div class="contact-field">
-            <label for={`${id}-email`}>{c.emailFieldLabel}</label>
-            <input
-              id={`${id}-email`} name="email" type="email" autocomplete="email" maxlength="254"
-              placeholder={c.emailPlaceholder} required aria-describedby={`${id}-email-error`}
-            />
-            <p class="contact-field__error" id={`${id}-email-error`} data-error-for="email" hidden></p>
-          </div>
-          <div class="contact-field">
-            <label for={`${id}-message`}>{c.messageLabel}</label>
-            <textarea
-              id={`${id}-message`} name="message" rows="5" maxlength="2000"
-              placeholder={c.messagePlaceholder} required aria-describedby={`${id}-message-error`}
-            ></textarea>
-            <p class="contact-field__error" id={`${id}-message-error`} data-error-for="message" hidden></p>
-          </div>
-
-          <div class="contact-hp" aria-hidden="true">
-            <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
-          </div>
-          <div data-contact-turnstile></div>
-
-          <p class="contact-feedback" data-contact-error role="alert" hidden>
-            {c.error} <a href={MAIL_HREF}>{email}</a>
-          </p>
-
-          <button type="submit" class="btn-ghost contact-form__submit" data-contact-submit>
-            <span set:html={ICONS.send} /><span data-submit-label>{c.send}</span>
-          </button>
-        </form>
-
-        <div class="contact-feedback" data-contact-success role="status" tabindex="-1" hidden>
-          <p class="contact-feedback__title">{c.successTitle}</p>
-          <p>{c.successBody}</p>
-        </div>
       </div>
     </div>
   </div>

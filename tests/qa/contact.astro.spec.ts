@@ -130,3 +130,19 @@ test('sin desborde horizontal en la sección de contacto', async ({ page }) => {
   });
   expect(overflow).toBeLessThanOrEqual(0);
 });
+
+test('el primer foco tras el titular es Agendar, no Copiar (orden de DOM = orden visual en móvil)', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => {
+    const h = document.querySelector<HTMLElement>('#s8-siguiente-paso .contact-h');
+    h?.setAttribute('tabindex', '-1');
+    h?.focus();
+  });
+  await page.keyboard.press('Tab');
+  const focused = await page.evaluate(() => {
+    const el = document.activeElement as HTMLAnchorElement | null;
+    return { href: el?.getAttribute('href') ?? '', copy: el?.hasAttribute('data-copy-email') ?? false };
+  });
+  expect(focused.copy).toBe(false);
+  expect(focused.href).toContain('calendar.notion.so');
+});
