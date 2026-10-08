@@ -164,12 +164,14 @@ Bases: SSOT Proyectos (`88257bc9…`), CMS Imágenes (`8dda9726…`), Métricas 
 | Copy Oficial | 1 página con S1-S8, P1-P5, SEO y Footer | Verificación de Notion expirada desde 2026-08-12 |
 | Meetups y Eventos | 93 Publicado, 53 Borrador verificado, 48 Borrador sin verificar, 145 Retirado | Los 93 publicados están completos |
 
-**E-1 · Cifras del Copy sin respaldo vigente en Métricas (MEDIUM)**
-- Evidence: el sitio publicado muestra "15+ años de trayectoria" (curl a diegomaury.mx); la métrica `voluntariado-anios-trayectoria` dice "10+ años" y es la única con superficie Hero. El Copy S6 usa "30+ programas" de HackSureste Ops, pero `hacksureste-programas-desarrollados` es Publicabilidad Interna y solo permite `llms.txt`. "400+ emprendedores formados" (REDUX) y "#1 en el sureste de México" no tienen fila de métrica; la fila `redux-200-capacitados-retirada` está Retirada. "30+ proyectos liderados" tampoco tiene fila.
-- Finding: cuatro claims numéricos del Copy no tienen una métrica Vigente y Pública que los respalde, y uno contradice a la métrica canónica. `verify-metrics.cjs` solo revisa elementos con `data-metric`, así que no los detecta.
-- Impact: choca con la regla "una afirmación cuantitativa se publica con artefacto, creencia declarada o ✖". Los calificadores visibles ("cifra propia", "estimado") atenúan el riesgo pero no lo cierran. Falta confirmar que el S6 publicado repita esos textos (Observed en Notion, no en el HTML).
-- Severity: **MEDIUM**.
-- Cifras que sí cuadran: 9,905 (con calificador visible en el sitio), +600% HEINEKEN, 89.5%, 74.9% y "menos de 5 minutos".
+**E-1 · Cifras del Copy sin fila de métrica que las respalde (MEDIUM, parcialmente resuelto)**
+- Evidence: el sitio publicado muestra "15+ años de trayectoria". La métrica `voluntariado-anios-trayectoria` dice "10+ años", pero es otra cosa: solo liderazgo voluntario, 2015 a presente. El SSOT de Identidad (sección 8, "Experiencia") confirma "15+ años de trayectoria profesional, 7+ en innovación y ecosistemas". **Mi lectura inicial de que había una contradicción era incorrecta**: el sitio estaba bien y faltaba la fila de métrica.
+- Resuelto el 2026-10-08: Diego confirmó 15+ y se creó la fila `experiencia-anios-trayectoria` (Vigente, Pública, `own`, superficies Hero/Sitio web/CV/LinkedIn, calificador "cifra propia"). La métrica del voluntariado se dejó intacta.
+- Sigue abierto: el Copy S6 y S2 usan "30+ programas" (HackSureste Ops), "30+ proyectos liderados" y "#1 en el sureste de México", que no aparecen ni en Métricas ni en la sección 8 del SSOT de Identidad. "400+ emprendedores formados" (REDUX) corresponde en el SSOT a "400+ universitarios formados en REDUX 2020", cifra de una sola edición que no debe presentarse como total. `hacksureste-programas-desarrollados` (30+) es Interna y solo permite `llms.txt`.
+- Impact: `verify-metrics.cjs` solo revisa elementos con `data-metric`, así que estas frases no pasan por el verificador.
+- Severity: **MEDIUM** (pendiente: 30+ programas, 30+ proyectos, #1 en el sureste, y la redacción de "400+").
+- Pendiente de sincronización: la fila nueva aún no está en el espejo `assets/data/metrics.json`; el repo no tiene un script de sync (solo `verify-metrics.cjs`).
+- Cifras que sí cuadran con el SSOT de Identidad: 9,905 (con calificador visible), +600%, 89.5%, 74.9%, 3,000+ de HackSureste y "menos de 5 minutos".
 
 **E-2 · "Grado de evidencia" no tiene la opción `belief` (LOW)**
 - Evidence: Notion ofrece solo `published` y `own`; `src/content.config.ts:176` acepta `published | own | belief`; `CLAUDE.md` define tres grados.
