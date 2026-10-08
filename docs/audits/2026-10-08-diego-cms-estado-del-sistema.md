@@ -176,7 +176,7 @@ Bases: SSOT Proyectos (`88257bc9…`), CMS Imágenes (`8dda9726…`), Métricas 
 - Impact: ninguna métrica puede declararse `belief` desde Notion. Hoy no hay ninguna que lo necesite.
 
 **E-3 · Slots huérfanos y hub desactualizado en CMS Imágenes (LOW)**
-- Evidence: `foto-diego-colaboremos`, `reserva-hero` y `reserva-quien-atiende` no aparecen en ningún archivo de `src/`. Son residuos de S7 y de la página `/reserva` archivada. El hub de Notion habla de "10+ slots" y "4 logos de confianza"; la base tiene 30 slots y 14 logos Listo con nombre.
+- Evidence: `foto-diego-colaboremos`, `reserva-hero` y `reserva-quien-atiende` no aparecen en ningún archivo de `src/`. Son residuos de S7 y de la página `/reserva` archivada. El hub de Notion habla de "10+ slots" y "4 logos de confianza"; la base tiene 30 slots y 11 logos Listo con nombre en el cinturón (14 Listo si se cuentan los 3 `-evidencia`). **Corregido en Notion el 2026-10-08.**
 - Impact: ruido editorial. Subir una imagen a esos slots no cambia nada.
 
 **E-4 · Copy Oficial: Footer con Calendly, página con verificación expirada y un bloque con UUID suelto (LOW)**
