@@ -19,7 +19,9 @@ const SUGGEST_EVENT_FORM_URL =
 const events = (await getCollection('events')).map((entry) => entry.data as EventData);
 
 const canonicalUrl = new URL('/eventos', Astro.site).toString();
-const ogImage = new URL('/assets/img/diego-maury.jpg', Astro.site).toString();
+const ogImage = '/og/og-eventos.png';
+const ogImageAlt =
+  'Directorio de eventos tech y de innovación en México, curado por Diego Maury.';
 // Descripción breve para SEO/social; el lede visible (copy.lede) es más largo.
 const metaDescription =
   'Directorio curado de meetups, conferencias y summits de tecnología e innovación en México, con el enlace oficial de cada organizador. Actualizado continuamente.';
@@ -64,6 +66,7 @@ const copy = {
   description={metaDescription}
   canonicalUrl={canonicalUrl}
   ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
   enableGtm
   enableClarity
   otherLocaleHref="/en/events"

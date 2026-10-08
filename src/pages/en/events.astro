@@ -22,7 +22,9 @@ const events = (await getCollection('events')).map((entry) => {
 });
 
 const canonicalUrl = new URL('/en/events', Astro.site).toString();
-const ogImage = new URL('/assets/img/diego-maury.jpg', Astro.site).toString();
+const ogImage = '/og/og-eventos.png';
+const ogImageAlt =
+  'Directorio de eventos tech y de innovación en México, curado por Diego Maury.';
 const copy = uiEn.events;
 ---
 <BaseLayout
@@ -30,6 +32,7 @@ const copy = uiEn.events;
   description={copy.lede}
   canonicalUrl={canonicalUrl}
   ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
   enableGtm
   enableClarity
   otherLocaleHref="/eventos"
