@@ -44,7 +44,7 @@
   }
 
   /* El navbar fixed (64px) tapaba el encabezado destino al navegar por ancla (F-09). */
-  .section[id], .about-section[id] { scroll-margin-top: 80px; }
+  .section[id], .qs[id] { scroll-margin-top: 80px; }
 
   /* ── SCROLL REVEAL ── */
   [data-reveal] {

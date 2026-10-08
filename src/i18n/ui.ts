@@ -73,6 +73,7 @@ export const uiEn = {
     viewFullCase: 'View full case →',
     statAccumulatedTrajectory: 'Accumulated trajectory, own figure',
     statInnovationEcosystems: '7+ in innovation and ecosystems',
+    aboutCta: 'Connect on LinkedIn',
     fallbackTitle: 'Diego Maury · Strategic Program Director',
     fallbackDescription:
       'Strategic Program Director and innovation consultant: I design programs and systems that turn strategy into execution.',

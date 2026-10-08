@@ -18,6 +18,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from "../layouts/BaseLayout.astro";
 import TestimonialMarquee from "../components/TestimonialMarquee.astro";
 import ContactSection from "../components/ContactSection.astro";
+import AboutSection from "../components/AboutSection.astro";
 import { parseContactCopy } from '../utils/contactCopy.ts';
 import "../styles/home.css";
 import {
@@ -34,9 +35,11 @@ import {
   firstCodeBlock,
   parseFlowDiagram,
 } from '../utils/parseSiteCopy.ts';
+import { parseAbout } from '../utils/parseAbout.ts';
 import { toLocalePath } from '../utils/locale.ts';
 import {
   SECTION_IDS,
+  LINKEDIN_HREF,
   heroLogosFrom,
   systemsLogo,
   evidenceNodesFrom,
@@ -93,14 +96,8 @@ const heroLogos = heroLogosFrom(imageSlotEntries);
 
 // --- S2 · Quien soy ------------------------------------------------------------
 const s2 = sections.get('S2')?.blocks ?? [];
-const aboutHeadline = heading2(s2);
-const aboutParas = paragraphs(s2);
-const aboutTagline = aboutParas[0] ?? '';
-const aboutIntro = aboutParas.slice(1, 4);
-const aboutRoles = aboutParas.slice(4, 7);
-const aboutBio = aboutParas[7] ?? '';
-const aboutStatsLine = aboutParas[8] ?? '';
-const aboutStatsRaw = aboutStatsLine.split('•').map((s) => s.trim()).filter(Boolean);
+const about = parseAbout(s2);
+const aboutLabel = sections.get('S2')?.label ?? 'Quién soy';
 // Sub-labels ya publicados en el sitio LIVE (index.html, .metric-s) — no son
 // cifras nuevas, se reusan tal cual. El 3er stat ademas trae animacion
 // count-up, igual que en LIVE, usando el valor real de la coleccion `metrics`.
@@ -109,7 +106,7 @@ const STAT_SUBLABELS = [
   '7+ en innovación y ecosistemas',
   incmtyMetric?.data.mandatoryQualifier || 'Agregado de programas INCmty (HGC incluido), estimado',
 ];
-const aboutStats = aboutStatsRaw.map((raw, i) => {
+const aboutStats = about.statsRaw.map((raw, i) => {
   const match = raw.match(/^([\d.,]+\+?)\s*(.+)$/);
   const n = match ? match[1] : raw;
   const l = match ? match[2] : '';
@@ -295,58 +292,21 @@ const personJsonLd = {
 </section>
 
 <!-- S2 QUIEN SOY -->
-<section class="about-section" id={SECTION_IDS.S2}>
-  <div class="about-body">
-    <div class="about-header" data-reveal>
-      <div class="about-name">{heroName || 'Diego Maury'}</div>
-      {heroRole && <div class="about-title-txt">{heroRole}</div>}
-      {aboutTagline && <p class="about-tagline">{aboutTagline}</p>}
-    </div>
-
-    {aboutIntro.length > 0 && (
-      <div class="about-intro-full" data-reveal style="--delay:.14s">
-        {aboutIntro.map((p) => <p class="about-intro-p">{p}</p>)}
-      </div>
-    )}
-
-    {aboutRoles.length > 0 && (
-      <div class="about-roles" data-reveal style="--delay:.18s">
-        {aboutRoles.map((role) => (
-          <div class="about-role">
-            <div class="about-role-dot"></div>
-            <div class="about-role-txt">{role}</div>
-          </div>
-        ))}
-      </div>
-    )}
-
-    <div class="about-photo-wrap" data-reveal style="--delay:.1s">
-      <div class="about-circle-bg"></div>
-      <div class="about-photo-slot">
-        <img src={slotSrc('foto-diego-about', '/cms-media/diego/diegomaurypng.png')} width="700" height="700" alt={heroName || 'Diego Maury'} loading="lazy">
-      </div>
-    </div>
-
-    <div class="about-right" data-reveal style="--delay:.22s">
-      {aboutBio && <p class="about-bio">{aboutBio}</p>}
-      {aboutHeadline && <p class="about-bio">{aboutHeadline}</p>}
-      <a href="https://www.linkedin.com/in/diegomaury/" class="btn-primary" target="_blank" rel="noopener">Conectemos en LinkedIn</a>
-    </div>
-  </div>
-  {aboutStats.length > 0 && (
-    <div class="metrics-band">
-      <div class="metrics" data-reveal style="--delay:.26s">
-        {aboutStats.map((stat) => (
-          <div class="metric">
-            <div class="metric-n" data-count={stat.countTo || undefined}>{stat.n}</div>
-            <div class="metric-l">{stat.l}</div>
-            {stat.s && <div class="metric-s">{stat.s}</div>}
-          </div>
-        ))}
-      </div>
-    </div>
-  )}
-</section>
+<AboutSection
+  id={SECTION_IDS.S2}
+  eyebrow={aboutLabel}
+  headline={about.headline}
+  intro={about.intro}
+  stats={aboutStats}
+  rolesLabel={about.rolesLabel}
+  roles={about.roles}
+  methodLabel={about.methodLabel}
+  method={about.method}
+  ctaLabel="Conectemos en LinkedIn"
+  ctaHref={LINKEDIN_HREF}
+  photoSrc={slotSrc('foto-diego-about', '/cms-media/diego/diegomaurypng.png')}
+  photoAlt={heroName || 'Diego Maury'}
+/>
 
 <!-- S3 EL PROBLEMA QUE RESUELVO -->
 <section class="section" id={SECTION_IDS.S3}>

@@ -1,0 +1,102 @@
+---
+/**
+ * S2 · Quién soy, layout 1B (4 bandas apiladas): tesis + foto, cifras, roles
+ * en paralelo, método + CTA. Lo usan la home ES y la EN; todo el texto llega
+ * ya resuelto por la página (ES tal cual, EN traducido a nivel de hoja), así
+ * que el componente no parsea ni traduce nada. Estilos en home.css (`.qs-*`).
+ */
+interface Stat {
+  n: string;
+  l: string;
+  s: string;
+  countTo: string;
+}
+
+interface Role {
+  title: string;
+  text: string;
+}
+
+interface Props {
+  id: string;
+  eyebrow: string;
+  headline: string;
+  intro: string[];
+  stats: Stat[];
+  rolesLabel: string;
+  roles: Role[];
+  methodLabel: string;
+  method: string[];
+  ctaLabel: string;
+  ctaHref: string;
+  photoSrc: string;
+  photoAlt: string;
+}
+
+const {
+  id,
+  eyebrow,
+  headline,
+  intro,
+  stats,
+  rolesLabel,
+  roles,
+  methodLabel,
+  method,
+  ctaLabel,
+  ctaHref,
+  photoSrc,
+  photoAlt,
+} = Astro.props;
+---
+
+<section class="qs" id={id} aria-labelledby={`${id}-titulo`}>
+  <div class="qs-inner">
+    <div class="qs-thesis">
+      <div class="qs-copy" data-reveal>
+        {eyebrow && <div class="qs-eyebrow">{eyebrow}</div>}
+        {headline && <h2 class="qs-headline" id={`${id}-titulo`}>{headline}</h2>}
+        {intro.map((p) => <p class="qs-lede">{p}</p>)}
+      </div>
+      <div class="qs-photo" data-reveal style="--delay:.1s">
+        <img src={photoSrc} width="300" height="382" alt={photoAlt} loading="lazy">
+      </div>
+    </div>
+
+    {stats.length > 0 && (
+      <div class="qs-stats" data-reveal style="--delay:.14s">
+        {stats.map((stat) => (
+          <div class="qs-stat">
+            <div class="qs-stat-n" data-count={stat.countTo || undefined}>{stat.n}</div>
+            <div class="qs-stat-l">{stat.l}</div>
+            {stat.s && <div class="qs-stat-s">{stat.s}</div>}
+          </div>
+        ))}
+      </div>
+    )}
+
+    {roles.length > 0 && (
+      <div class="qs-roles" data-reveal style="--delay:.18s">
+        {rolesLabel && <div class="qs-label">{rolesLabel}</div>}
+        <div class="qs-roles-grid">
+          {roles.map((role) => (
+            <div class="qs-role">
+              {role.title && <div class="qs-role-title">{role.title}</div>}
+              <div class="qs-role-text">{role.text}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {(method.length > 0 || ctaLabel) && (
+      <div class="qs-method" data-reveal style="--delay:.22s">
+        <div class="qs-method-copy">
+          {methodLabel && <div class="qs-label">{methodLabel}</div>}
+          {method.map((p) => <p class="qs-method-text">{p}</p>)}
+        </div>
+        <a href={ctaHref} class="btn-ghost qs-cta" target="_blank" rel="noopener">{ctaLabel}</a>
+      </div>
+    )}
+  </div>
+</section>
