@@ -19,6 +19,8 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TestimonialMarquee from "../../components/TestimonialMarquee.astro";
+import ContactSection from "../../components/ContactSection.astro";
+import { parseContactCopy } from '../../utils/contactCopy.ts';
 import "../../styles/home.css";
 import {
   parseSiteCopySections,
@@ -179,23 +181,11 @@ const testimonialCardsEn = (await getCollection('testimonials'))
 
 // --- Destinos de CTA (ver homeContent.ts, resueltos por la etiqueta ORIGINAL en espanol) ---
 
-// --- S8 · Siguiente paso (parseo ES sin modificar) ----------------------------
+// --- S8 · Contacto (parseo ES sin modificar, traduccion a nivel de hoja) ------
 const s8 = sections.get('S8')?.blocks ?? [];
 const finalLabel = sections.get('S8')?.label ?? 'Siguiente paso';
 const finalHeadline = heading2(s8);
-const finalIntro = paragraphs(blocksBeforeHeading(s8, ['### ']));
-const finalStepCards = headingCards(s8, '### ');
-const finalSteps = finalStepCards.map((card) => ({
-  title: card.title,
-  description: card.paragraphs[0] ?? '',
-  tag: card.paragraphs[1] ?? '',
-}));
-const afterSteps = finalStepCards.length
-  ? blocksAfterHeading(s8, `### ${finalStepCards[finalStepCards.length - 1].title}`)
-  : [];
-const finalCtas = ctaLabels(afterSteps);
-const finalTrustLine = afterSteps.find((b) => b.includes('·') && !ctaLabels([b]).length)?.trim() ?? '';
-const finalTrustParts = finalTrustLine.split('·').map((s) => s.trim()).filter(Boolean);
+const { intro: finalIntro, trustParts: finalTrustParts } = parseContactCopy(s8);
 
 // --- SEO (parseo ES sin modificar) --------------------------------------------
 const seo = sections.get('SEO')?.blocks ?? [];
@@ -273,14 +263,6 @@ const testimonialsIntroEn = await tAll(testimonialsIntro);
 const finalLabelEn = await t(finalLabel);
 const finalHeadlineEn = await t(finalHeadline);
 const finalIntroEn = await tAll(finalIntro);
-const finalStepsEn = await Promise.all(
-  finalSteps.map(async (step) => ({
-    title: await t(step.title),
-    description: await t(step.description),
-    tag: await t(step.tag),
-  })),
-);
-const finalCtasEn = await tAll(finalCtas);
 const finalTrustPartsEn = await tAll(finalTrustParts);
 
 const pageTitle = (seoTitleEs && (await t(seoTitleEs))) || uiEn.home.fallbackTitle;
@@ -597,55 +579,15 @@ const personJsonLd = {
   </div>
 </section>
 
-<!-- S8 SIGUIENTE PASO -->
-<section class="section cta-section" id={SECTION_IDS.S8}>
-    <div class="section-inner cta-inner">
-      <div class="cta-label-center" data-reveal>{finalLabelEn}</div>
-      <h2 class="cta-h" data-reveal style="--delay:.06s">{finalHeadlineEn}</h2>
-      {finalIntroEn.map((p) => <p class="cta-sub" data-reveal>{p}</p>)}
-
-      {finalStepsEn.length > 0 && (
-        <div class="cta-steps" data-reveal style="--delay:.18s">
-          {finalStepsEn.map((step) => (
-            <div class="cta-step">
-              <div class="cta-step-n">{step.title}</div>
-              {step.description && <div class="cta-step-d">{step.description}</div>}
-              {step.tag && <div class="cta-step-tag">{step.tag}</div>}
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div class="cta-buttons" data-reveal style="--delay:.24s">
-        {finalCtas.length > 0 && (
-          <div class="hero-ctas">
-            {finalCtas.map((originalLabel, i) => {
-              const target = ctaTarget(originalLabel, '/en/portfolio');
-              return (
-                <a
-                  href={target.href}
-                  class={i === 0 ? 'btn-primary' : 'btn-ghost'}
-                  download={target.download}
-                  target={target.external ? '_blank' : undefined}
-                  rel={target.external ? 'noopener' : undefined}
-                >{finalCtasEn[i]}</a>
-              );
-            })}
-          </div>
-        )}
-        {finalTrustPartsEn.length > 0 && (
-          <div class="cta-trust">
-            {finalTrustPartsEn.map((part, i) => (
-              <>
-                {i > 0 && <span class="dot"></span>}
-                <span>{part}</span>
-              </>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  </section>
+<!-- S8 CONTACTO -->
+<ContactSection
+  id={SECTION_IDS.S8}
+  locale="en"
+  label={finalLabelEn}
+  headline={finalHeadlineEn}
+  intro={finalIntroEn}
+  trustParts={finalTrustPartsEn}
+/>
 
 <script>
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
