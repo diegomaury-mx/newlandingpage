@@ -89,3 +89,13 @@ test("validateContact: valores que no son string cuentan como vacíos", () => {
   const result = validateContact({ name: 5, email: {}, message: [] });
   assert.equal(result.ok, false);
 });
+
+test("validateContact: nombre con separador de línea Unicode (U+2028) es invalid", () => {
+  const result = validateContact({ ...VALID, name: "Ana\u2028Pérez" });
+  assert.deepEqual(result, { ok: false, fields: { name: "invalid" } });
+});
+
+test("validateContact: correo con NEL (U+0085) es invalid", () => {
+  const result = validateContact({ ...VALID, email: "ana\u0085@example.com" });
+  assert.deepEqual(result, { ok: false, fields: { email: "invalid" } });
+});

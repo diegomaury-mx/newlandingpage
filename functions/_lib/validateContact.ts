@@ -23,7 +23,7 @@ export type ValidationResult =
   | { ok: true; value: ContactInput }
   | { ok: false; fields: Partial<Record<ContactField, FieldError>> };
 
-const CONTROL_CHARS = /[\u0000-\u001f\u007f]/;
+const CONTROL_CHARS = /[\u0000-\u001f\u007f\u0085\u2028\u2029]/;
 // El mensaje admite saltos de linea (\n), retorno (\r) y tab (\t).
 const MESSAGE_FORBIDDEN = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

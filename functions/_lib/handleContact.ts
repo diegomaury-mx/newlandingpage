@@ -63,6 +63,12 @@ export async function handleContact(
   }
   const config = env as Required<ContactEnv>;
 
+  // Corte temprano por tamano declarado (x4: un caracter ocupa hasta 4 bytes en UTF-8).
+  const declared = Number(request.headers.get("content-length"));
+  if (Number.isFinite(declared) && declared > MAX_BODY_CHARS * 4) {
+    return json(413, { ok: false, error: "too_large" });
+  }
+
   const raw = await request.text();
   if (raw.length > MAX_BODY_CHARS) return json(413, { ok: false, error: "too_large" });
 

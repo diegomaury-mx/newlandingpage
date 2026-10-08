@@ -78,6 +78,19 @@ test("handleContact: cuerpo demasiado grande responde 413", async () => {
   assert.equal(res.status, 413);
 });
 
+test("handleContact: content-length declarado enorme responde 413 sin leer el cuerpo", async () => {
+  const { fn, calls } = fakeFetch();
+  const req = new Request("https://diegomaury.mx/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Content-Length": "1000000" },
+    body: JSON.stringify(VALID),
+  });
+  const res = await handleContact(req, ENV, fn);
+  assert.equal(res.status, 413);
+  assert.equal((await bodyOf(res)).error, "too_large");
+  assert.equal(calls.length, 0);
+});
+
 test("handleContact: honeypot lleno responde éxito falso sin llamar a nadie", async () => {
   const { fn, calls } = fakeFetch();
   const res = await handleContact(post({ ...VALID, website: "http://spam.example" }), ENV, fn);
