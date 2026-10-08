@@ -53,3 +53,6 @@ video-pitch-output/
 /test-results/
 /playwright-report/
 /blob-report/
+
+# Secretos locales de wrangler pages dev (Turnstile, token de correo). Nunca se versiona.
+.dev.vars

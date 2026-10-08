@@ -47,6 +47,21 @@ export const site = {
 	},
 
 	// ---------------------------------------------------------------------------
+	// Contacto (seccion S8 + /api/contact)
+	// ---------------------------------------------------------------------------
+
+	contactChannels: {
+		email: "dm@diegomaury.mx",
+
+		// Solo digitos con lada internacional, sin "+". Aparece solo dentro del
+		// enlace wa.me, nunca como texto visible.
+		whatsappNumber: "525659267516",
+
+		// Clave PUBLICA del widget Turnstile (el secret vive en Cloudflare Pages).
+		turnstileSiteKey: "0x4AAAAAAFRK6zB66v7YZRpf",
+	},
+
+	// ---------------------------------------------------------------------------
 	// Navigation
 	// ---------------------------------------------------------------------------
 
