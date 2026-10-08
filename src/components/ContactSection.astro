@@ -1,0 +1,171 @@
+---
+// Seccion S8 (contacto). La usan src/pages/index.astro (ES) y
+// src/pages/en/index.astro (EN): label, titular e intro llegan ya parseados de
+// Notion (y traducidos a nivel de hoja en EN); todo lo demas es texto fijo de
+// src/i18n/contact.ts. El numero de WhatsApp solo aparece dentro del href.
+import "../styles/contact.css";
+import { contactCopy, type ContactLocale } from "../i18n/contact.ts";
+import { site } from "../config/site.ts";
+import { CALENDAR_HREF, LINKEDIN_HREF, MAIL_HREF } from "../utils/homeContent.ts";
+import { buildWhatsappHref } from "../utils/contactLinks.ts";
+
+interface Props {
+  id: string;
+  locale: ContactLocale;
+  label: string;
+  headline: string;
+  intro: string[];
+  trustParts: string[];
+}
+
+const { id, locale, label, headline, intro, trustParts } = Astro.props;
+const c = contactCopy[locale];
+const { email, whatsappNumber, turnstileSiteKey } = site.contactChannels;
+const whatsappHref = buildWhatsappHref(whatsappNumber, c.whatsappPrefill);
+
+const formMessages = JSON.stringify({
+  errors: c.fieldErrors,
+  send: c.send,
+  sending: c.sending,
+  copy: c.copy,
+  copied: c.copied,
+});
+
+const SVG = 'width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+const ICONS = {
+  mail: `<svg ${SVG}><rect x="3" y="5" width="18" height="14"/><path d="M3 7l9 6 9-6"/></svg>`,
+  whatsapp: `<svg ${SVG}><path d="M20 12a8 8 0 0 1-11.9 7L4 20l1.1-4A8 8 0 1 1 20 12z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.6-2-1-1 .8c-1-.4-1.9-1.3-2.3-2.3l.8-1-1-2z"/></svg>`,
+  linkedin: `<svg ${SVG}><rect x="3" y="3" width="18" height="18"/><path d="M8 10v7M8 7v.01M12 17v-7M12 13c0-2 1.5-3 3-3s2 1 2 3v4"/></svg>`,
+  calendar: `<svg ${SVG}><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>`,
+  send: `<svg ${SVG}><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>`,
+};
+---
+
+<section class="section contact-section" id={id} aria-labelledby={`${id}-heading`}>
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-copy">
+        <div class="section-label" data-reveal>{label}</div>
+        <h2 class="contact-h" id={`${id}-heading`} data-reveal style="--delay:.06s">{headline}</h2>
+        {intro.map((paragraph) => <p class="contact-intro" data-reveal>{paragraph}</p>)}
+      </div>
+
+      <div class="contact-direct" data-reveal style="--delay:.12s">
+        <h3 class="contact-direct__title">{c.directTitle}</h3>
+        <ul class="contact-list">
+          <li class="contact-row">
+            <span class="contact-row__icon" set:html={ICONS.mail} />
+            <div class="contact-row__text">
+              <span class="contact-row__label">{c.emailLabel}</span>
+              <a class="contact-row__value" href={MAIL_HREF}>{email}</a>
+            </div>
+            <button type="button" class="btn-ghost contact-row__action" data-copy-email data-copy-value={email}>
+              <span data-copy-label>{c.copy}</span>
+            </button>
+          </li>
+          <li class="contact-row">
+            <span class="contact-row__icon" set:html={ICONS.whatsapp} />
+            <div class="contact-row__text">
+              <span class="contact-row__label">{c.whatsappLabel}</span>
+              <span class="contact-row__value">{c.whatsappValue}</span>
+            </div>
+            <a
+              class="btn-ghost contact-row__action"
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${c.whatsappAction} ${c.whatsappLabel}`}
+            >{c.whatsappAction}</a>
+          </li>
+          <li class="contact-row">
+            <span class="contact-row__icon" set:html={ICONS.linkedin} />
+            <div class="contact-row__text">
+              <span class="contact-row__label">{c.linkedinLabel}</span>
+              <span class="contact-row__value">{c.linkedinValue}</span>
+            </div>
+            <a
+              class="btn-ghost contact-row__action"
+              href={LINKEDIN_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${c.linkedinAction} ${c.linkedinLabel}`}
+            >{c.linkedinAction}</a>
+          </li>
+        </ul>
+        <span class="contact-sr" role="status" aria-live="polite" data-copy-status></span>
+        {trustParts.length > 0 && <p class="contact-trust">{trustParts.join(' · ')}</p>}
+      </div>
+
+      <div class="contact-panel" data-reveal style="--delay:.18s">
+        <a
+          class="btn-primary contact-panel__cta"
+          href={CALENDAR_HREF}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span set:html={ICONS.calendar} />{c.scheduleCta}
+        </a>
+        <p class="contact-panel__hint">{c.scheduleHint}</p>
+
+        <div class="contact-sep" role="separator"><span>{c.separator}</span></div>
+
+        <form
+          class="contact-form"
+          data-contact-form
+          data-endpoint="/api/contact"
+          data-sitekey={turnstileSiteKey}
+          data-location="s8-contacto"
+          data-messages={formMessages}
+          novalidate
+        >
+          <div class="contact-field">
+            <label for={`${id}-name`}>{c.nameLabel}</label>
+            <input
+              id={`${id}-name`} name="name" type="text" autocomplete="name" maxlength="100"
+              placeholder={c.namePlaceholder} required aria-describedby={`${id}-name-error`}
+            />
+            <p class="contact-field__error" id={`${id}-name-error`} data-error-for="name" hidden></p>
+          </div>
+          <div class="contact-field">
+            <label for={`${id}-email`}>{c.emailFieldLabel}</label>
+            <input
+              id={`${id}-email`} name="email" type="email" autocomplete="email" maxlength="254"
+              placeholder={c.emailPlaceholder} required aria-describedby={`${id}-email-error`}
+            />
+            <p class="contact-field__error" id={`${id}-email-error`} data-error-for="email" hidden></p>
+          </div>
+          <div class="contact-field">
+            <label for={`${id}-message`}>{c.messageLabel}</label>
+            <textarea
+              id={`${id}-message`} name="message" rows="5" maxlength="2000"
+              placeholder={c.messagePlaceholder} required aria-describedby={`${id}-message-error`}
+            ></textarea>
+            <p class="contact-field__error" id={`${id}-message-error`} data-error-for="message" hidden></p>
+          </div>
+
+          <div class="contact-hp" aria-hidden="true">
+            <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <div data-contact-turnstile></div>
+
+          <p class="contact-feedback" data-contact-error role="alert" hidden>
+            {c.error} <a href={MAIL_HREF}>{email}</a>
+          </p>
+
+          <button type="submit" class="btn-ghost contact-form__submit" data-contact-submit>
+            <span set:html={ICONS.send} /><span data-submit-label>{c.send}</span>
+          </button>
+        </form>
+
+        <div class="contact-feedback" data-contact-success role="status" tabindex="-1" hidden>
+          <p class="contact-feedback__title">{c.successTitle}</p>
+          <p>{c.successBody}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import "../scripts/contactForm.ts";
+</script>
