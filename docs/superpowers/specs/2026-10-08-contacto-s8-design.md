@@ -28,7 +28,7 @@ Criterios de éxito:
 | CTA primario | Agendar, hacia `https://calendar.notion.so/meet/diegomaurymx/5aad3vun`, leído de `site.links.scheduling` |
 | Pasos 01 a 03 | Se eliminan de la sección (Diego los tachó en el mockup) |
 | Iconos | SVG de línea en `--t2`, nunca Ember (regla D-A), `aria-hidden` |
-| Destino del formulario | Correo, vía Pages Function con binding `send_email` |
+| Destino del formulario | Correo, vía Pages Function y REST API de Cloudflare Email Service |
 | Hosting del endpoint | Pages Function en este repo, no Worker aparte |
 | Tiempo de respuesta | No se promete. Fuera de la sección y del copy nuevo |
 
@@ -86,7 +86,7 @@ Flujo:
 2. Parsear el cuerpo y validar con `validateContact`.
 3. Si el honeypot viene lleno, responder éxito falso sin enviar nada.
 4. Verificar el token de Turnstile contra la API de Cloudflare con `TURNSTILE_SECRET`.
-5. Enviar el correo con el binding `send_email` (Cloudflare Email Routing): remitente en `diegomaury.mx`, destino `dm@diegomaury.mx`, `Reply-To` con el correo del visitante.
+5. Enviar el correo con la REST API de Cloudflare Email Service (`POST /accounts/{id}/email/sending/send`): remitente `contacto@diegomaury.mx`, destino `dm@diegomaury.mx`, `Reply-To` con el correo del visitante. Se usa REST y no un binding `send_email` porque la documentación no confirma ese binding en Pages Functions y un `wrangler.jsonc` en Pages pasa a ser fuente de verdad de toda la configuración del proyecto.
 6. Responder JSON con estado de éxito o error.
 
 ### `functions/_lib/validateContact.ts`
@@ -101,9 +101,9 @@ Función pura y testeable:
 
 ### Requisitos de configuración
 
-- `dm@diegomaury.mx` debe estar verificado como dirección de destino en Email Routing (verificar al implementar).
-- Secret `TURNSTILE_SECRET` y clave pública del sitio, configurados por separado en `preview` y `production`.
-- Binding `send_email` declarado en la configuración del proyecto de Pages.
+- Dominio `diegomaury.mx` incorporado a Email Sending (Email Service) con remitente `contacto@diegomaury.mx`.
+- Secret `CF_EMAIL_API_TOKEN` (permiso Email Sending: Edit), secret `TURNSTILE_SECRET` y variable `CF_ACCOUNT_ID`, configurados por separado en `preview` y `production`.
+- Sin `wrangler.*` en el repo.
 
 ## 6 · Frontend: piezas y archivos
 
@@ -114,7 +114,7 @@ Función pura y testeable:
 | `src/styles/contact.css` | Nuevo | Incluye `[hidden]{display:none!important}` y `:focus-visible`. |
 | `src/pages/index.astro` | Editar | Usar `ContactSection`. Quitar parseo y render de `finalSteps`. |
 | `src/pages/en/index.astro` | Editar | Usar `ContactSection` con strings traducidas a nivel de hoja tras el parseo ES. |
-| `src/i18n/ui.ts` | Editar | Textos fijos nuevos (labels, botones, errores, confirmación) en `uiEn`, a mano, sin DeepL. |
+| `src/i18n/contact.ts` | Nuevo | Textos fijos ES y EN de la sección (reemplaza el uso de `uiEn`). |
 | `src/config/site.ts` | Editar | Enlace de WhatsApp con mensaje prellenado. |
 | `public/_headers` | Editar | `challenges.cloudflare.com` en `script-src` y `frame-src`, sin aflojar nada más. |
 | `functions/api/contact.ts` | Nuevo | Ver sección 5. |
@@ -133,7 +133,7 @@ Notas:
 ### Automáticas
 
 - Tests unitarios de `validateContact`: nombre vacío o largo, correo mal formado, mensaje corto o largo, honeypot lleno, HTML en el contenido. Cobertura mínima del 80% en esa pieza.
-- Tests de `contact.ts` con Turnstile y envío simulados: método no POST, token inválido, éxito, fallo del binding.
+- Tests de `contact.ts` con Turnstile y envío simulados: método no POST, token inválido, éxito, fallo de la llamada a Email Service.
 - `npm test` completo (incluida la guardia de deriva de tokens) y `astro check` en verde antes de commitear.
 - `npm run test:a11y:astro` sobre home ES y EN.
 
@@ -175,7 +175,7 @@ Notas:
 ## 10 · Datos requeridos al implementar
 
 - Número de WhatsApp (entra solo dentro del enlace `wa.me`, nunca como texto visible) y texto del mensaje prellenado.
-- Confirmación de que `dm@diegomaury.mx` está verificado en Email Routing.
+- Habilitar Email Sending para `diegomaury.mx` y crear el token con permiso Email Sending: Edit.
 - Creación del sitio de Turnstile y carga de sus claves como secrets en preview y production.
 - Decisión sobre las fichas `###` de los pasos en el bloque S8 de Notion: pueden quedarse (el código las ignora) o borrarse.
 
@@ -183,4 +183,4 @@ Notas:
 
 - El envío real solo es verificable en el entorno desplegado. Los secrets de `preview` y `production` pueden divergir: un fallo solo en preview es del entorno, no del código.
 - Turnstile en la CSP: cualquier error de `script-src` o `frame-src` rompe el widget en silencio. Verificar con la consola del navegador tras el despliegue.
-- Si Email Routing rechaza el remitente, el formulario falla al enviar. El mensaje de error debe dejar visible el correo directo como salida.
+- Si la cuenta no tiene derecho a Email Sending (error `10105 not_entitled`) o el remitente es rechazado, el formulario falla al enviar. El mensaje de error debe dejar visible el correo directo como salida.
