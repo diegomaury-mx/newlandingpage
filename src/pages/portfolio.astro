@@ -67,7 +67,6 @@ const copySections = siteCopyEntry
 
 const p1 = copySections.get('P1')?.blocks ?? [];
 const p2 = copySections.get('P2')?.blocks ?? [];
-const p3 = copySections.get('P3')?.blocks ?? [];
 const p5 = copySections.get('P5')?.blocks ?? [];
 
 const heroEyebrow = 'Strategic Program Director';
@@ -81,9 +80,6 @@ const heroLede =
 const insigniaEyebrow = copySections.get('P2')?.label ?? 'Casos insignia';
 const insigniaHeadline =
   heading2(p2) || 'No son los casos más grandes. Son los que puedo defender de principio a fin.';
-
-const soporteHeadline =
-  heading2(p3) || 'El resto del registro. Menos protagonismo, la misma disciplina.';
 
 // --- Cierre / CTA final ---------------------------------------------------
 // Sin este bloque no habia ningun CTA propio de /portfolio despues del

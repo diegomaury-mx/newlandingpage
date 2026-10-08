@@ -24,7 +24,7 @@ function renderInline(text: string): string {
   const escaped = escapeHtml(text);
   return escaped
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, url) =>
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label, url) =>
       SAFE_LINK_SCHEME.test(url) || url.startsWith("/") || url.startsWith("#")
         ? `<a href="${url}" target="_blank" rel="noopener">${label}</a>`
         : label,
