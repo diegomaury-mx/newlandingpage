@@ -5,9 +5,9 @@ export const CONTACT_FROM = "contacto@diegomaury.mx";
 const FROM_NAME = "diegomaury.mx";
 
 export interface ComposedEmail {
-  to: string;
-  from: { email: string; name: string };
-  replyTo: { email: string; name: string };
+  from: string;
+  to: string[];
+  reply_to: string;
   subject: string;
   text: string;
   html: string;
@@ -34,9 +34,9 @@ export function composeEmail(input: ContactInput): ComposedEmail {
     `<p>${escapeHtml(message).replace(/\r?\n/g, "<br>")}</p>`;
 
   return {
-    to: CONTACT_TO,
-    from: { email: CONTACT_FROM, name: FROM_NAME },
-    replyTo: { email, name },
+    from: `${FROM_NAME} <${CONTACT_FROM}>`,
+    to: [CONTACT_TO],
+    reply_to: email,
     subject: `Contacto desde diegomaury.mx: ${name}`,
     text,
     html,

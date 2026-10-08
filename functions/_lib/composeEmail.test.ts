@@ -14,15 +14,15 @@ test("escapeHtml: escapa los cinco caracteres peligrosos", () => {
 
 test("composeEmail: destino y remitente son los fijos del sitio", () => {
   const email = composeEmail(INPUT);
-  assert.equal(email.to, CONTACT_TO);
-  assert.equal(email.to, "dm@diegomaury.mx");
-  assert.equal(email.from.email, CONTACT_FROM);
-  assert.equal(email.from.email, "contacto@diegomaury.mx");
+  assert.deepEqual(email.to, [CONTACT_TO]);
+  assert.deepEqual(email.to, ["dm@diegomaury.mx"]);
+  assert.equal(email.from, `diegomaury.mx <${CONTACT_FROM}>`);
+  assert.equal(email.from, "diegomaury.mx <contacto@diegomaury.mx>");
 });
 
 test("composeEmail: Reply-To apunta al visitante", () => {
   const email = composeEmail(INPUT);
-  assert.deepEqual(email.replyTo, { email: "ana@example.com", name: "Ana Pérez" });
+  assert.equal(email.reply_to, "ana@example.com");
 });
 
 test("composeEmail: el asunto incluye el nombre", () => {

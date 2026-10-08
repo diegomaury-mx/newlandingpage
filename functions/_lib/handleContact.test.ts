@@ -7,8 +7,7 @@ mock.method(console, "error", () => {});
 
 const ENV = {
   TURNSTILE_SECRET: "secret",
-  CF_ACCOUNT_ID: "acc123",
-  CF_EMAIL_API_TOKEN: "tok",
+  RESEND_API_KEY: "re_key",
 };
 
 const VALID = {
@@ -42,7 +41,7 @@ function fakeFetch(options: { turnstile?: boolean | "throw"; email?: number | "t
     }
     if (options.email === "throw") throw new Error("red");
     const status = typeof options.email === "number" ? options.email : 200;
-    return Response.json({ success: status === 200 }, { status });
+    return Response.json(status === 200 ? { id: "em_1" } : { message: "x" }, { status });
   };
   return { fn, calls };
 }
@@ -129,12 +128,12 @@ test("handleContact: éxito verifica Turnstile y luego envía el correo correcto
   assert.match(String(calls[0].init?.body), /secret=secret/);
   assert.match(String(calls[0].init?.body), /response=t-ok/);
 
-  assert.match(calls[1].url, /\/accounts\/acc123\/email\/sending\/send$/);
+  assert.equal(calls[1].url, "https://api.resend.com/emails");
   const headers = calls[1].init?.headers as Record<string, string>;
-  assert.equal(headers.Authorization, "Bearer tok");
+  assert.equal(headers.Authorization, "Bearer re_key");
   const sent = JSON.parse(String(calls[1].init?.body)) as Record<string, unknown>;
-  assert.equal(sent.to, "dm@diegomaury.mx");
-  assert.deepEqual(sent.replyTo, { email: "ana@example.com", name: "Ana Pérez" });
+  assert.deepEqual(sent.to, ["dm@diegomaury.mx"]);
+  assert.equal(sent.reply_to, "ana@example.com");
 });
 
 test("handleContact: la API de correo con error responde 502 send_failed", async () => {

@@ -3,15 +3,14 @@ import { validateContact } from "./validateContact.ts";
 
 export interface ContactEnv {
   TURNSTILE_SECRET?: string;
-  CF_ACCOUNT_ID?: string;
-  CF_EMAIL_API_TOKEN?: string;
+  RESEND_API_KEY?: string;
 }
 
 export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 
 const MAX_BODY_CHARS = 10_000;
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
-const EMAIL_API_BASE = "https://api.cloudflare.com/client/v4/accounts";
+const RESEND_URL = "https://api.resend.com/emails";
 
 function json(status: number, body: Record<string, unknown>, extraHeaders: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
@@ -38,13 +37,12 @@ async function sendEmail(
   env: Required<ContactEnv>,
   fetchFn: FetchLike,
 ): Promise<boolean> {
-  const res = await fetchFn(`${EMAIL_API_BASE}/${env.CF_ACCOUNT_ID}/email/sending/send`, {
+  const res = await fetchFn(RESEND_URL, {
     method: "POST",
-    headers: { Authorization: `Bearer ${env.CF_EMAIL_API_TOKEN}`, "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  const data = (await res.json().catch(() => null)) as { success?: boolean } | null;
-  if (!res.ok || data?.success === false) {
+  if (!res.ok) {
     console.error("[contact] el envio de correo fallo", res.status);
     return false;
   }
@@ -59,7 +57,7 @@ export async function handleContact(
   if (request.method !== "POST") {
     return json(405, { ok: false, error: "method_not_allowed" }, { Allow: "POST" });
   }
-  if (!env.TURNSTILE_SECRET || !env.CF_ACCOUNT_ID || !env.CF_EMAIL_API_TOKEN) {
+  if (!env.TURNSTILE_SECRET || !env.RESEND_API_KEY) {
     console.error("[contact] falta configuracion (secrets o variables)");
     return json(500, { ok: false, error: "not_configured" });
   }
