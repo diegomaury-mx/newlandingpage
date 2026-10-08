@@ -57,6 +57,11 @@
   overflow-x: auto;
 }
 
+.docencia-areas-table-wrap:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 2px;
+}
+
 .docencia-areas-table {
   width: 100%;
   border-collapse: collapse;
