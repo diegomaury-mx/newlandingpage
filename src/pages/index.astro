@@ -17,6 +17,8 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from "../layouts/BaseLayout.astro";
 import TestimonialMarquee from "../components/TestimonialMarquee.astro";
+import ContactSection from "../components/ContactSection.astro";
+import { parseContactCopy } from '../utils/contactCopy.ts';
 import "../styles/home.css";
 import {
   parseSiteCopySections,
@@ -194,25 +196,14 @@ const testimonialCards = (await getCollection('testimonials'))
 
 // --- Destinos de CTA (ver homeContent.ts) --------------------------------------
 
-// --- S8 · Siguiente paso -------------------------------------------------------
-// Recuperada 2026-07-24 (spec docs/superpowers/specs/2026-07-24-recuperar-s8-y-cifras-s6.md):
-// no existia en el primer corte, Diego la pego en Notion despues.
+// --- S8 · Contacto -------------------------------------------------------------
+// Rediseno 2026-10-08 (spec docs/superpowers/specs/2026-10-08-contacto-s8-design.md):
+// sin pasos 01-03; label/titular/intro vienen de Notion, el resto es texto fijo
+// de src/i18n/contact.ts. Las fichas `###` pueden seguir en Notion, se ignoran.
 const s8 = sections.get('S8')?.blocks ?? [];
 const finalLabel = sections.get('S8')?.label ?? 'Siguiente paso';
 const finalHeadline = heading2(s8);
-const finalIntro = paragraphs(blocksBeforeHeading(s8, ['### ']));
-const finalStepCards = headingCards(s8, '### ');
-const finalSteps = finalStepCards.map((card) => ({
-  title: card.title,
-  description: card.paragraphs[0] ?? '',
-  tag: card.paragraphs[1] ?? '',
-}));
-const afterSteps = finalStepCards.length
-  ? blocksAfterHeading(s8, `### ${finalStepCards[finalStepCards.length - 1].title}`)
-  : [];
-const finalCtas = ctaLabels(afterSteps);
-const finalTrustLine = afterSteps.find((b) => b.includes('·') && !ctaLabels([b]).length)?.trim() ?? '';
-const finalTrustParts = finalTrustLine.split('·').map((s) => s.trim()).filter(Boolean);
+const { intro: finalIntro, trustParts: finalTrustParts } = parseContactCopy(s8);
 
 // --- SEO -------------------------------------------------------------------
 const seo = sections.get('SEO')?.blocks ?? [];
@@ -548,55 +539,15 @@ const personJsonLd = {
   </div>
 </section>
 
-<!-- S8 SIGUIENTE PASO -->
-<section class="section cta-section" id={SECTION_IDS.S8}>
-    <div class="section-inner cta-inner">
-      <div class="cta-label-center" data-reveal>{finalLabel}</div>
-      <h2 class="cta-h" data-reveal style="--delay:.06s">{finalHeadline}</h2>
-      {finalIntro.map((p) => <p class="cta-sub" data-reveal>{p}</p>)}
-
-      {finalSteps.length > 0 && (
-        <div class="cta-steps" data-reveal style="--delay:.18s">
-          {finalSteps.map((step) => (
-            <div class="cta-step">
-              <div class="cta-step-n">{step.title}</div>
-              {step.description && <div class="cta-step-d">{step.description}</div>}
-              {step.tag && <div class="cta-step-tag">{step.tag}</div>}
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div class="cta-buttons" data-reveal style="--delay:.24s">
-        {finalCtas.length > 0 && (
-          <div class="hero-ctas">
-            {finalCtas.map((label, i) => {
-              const t = ctaTarget(label, '/portfolio');
-              return (
-                <a
-                  href={t.href}
-                  class={i === 0 ? 'btn-primary' : 'btn-ghost'}
-                  download={t.download}
-                  target={t.external ? '_blank' : undefined}
-                  rel={t.external ? 'noopener' : undefined}
-                >{label}</a>
-              );
-            })}
-          </div>
-        )}
-        {finalTrustParts.length > 0 && (
-          <div class="cta-trust">
-            {finalTrustParts.map((part, i) => (
-              <>
-                {i > 0 && <span class="dot"></span>}
-                <span>{part}</span>
-              </>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  </section>
+<!-- S8 CONTACTO -->
+<ContactSection
+  id={SECTION_IDS.S8}
+  locale="es"
+  label={finalLabel}
+  headline={finalHeadline}
+  intro={finalIntro}
+  trustParts={finalTrustParts}
+/>
 
 <script>
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

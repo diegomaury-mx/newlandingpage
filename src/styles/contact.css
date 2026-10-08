@@ -1,0 +1,120 @@
+/* ── S8 · CONTACTO ─────────────────────────────────────────────────────────
+   Dos columnas en escritorio (copy + canales a la izquierda, panel a la
+   derecha) y una columna en movil con el orden copy > panel > canales.
+   Reglas del DS V2: radio 0, Ember solo en el label y el CTA primario,
+   sin gradientes ni sombras, piso tipografico 12px mono / 15px lectura. */
+
+/* Toda hoja de una pagina que use el.hidden declara esto (author gana al UA). */
+.contact-section [hidden] { display: none !important; }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "copy panel" "direct panel";
+  column-gap: clamp(40px, 5vw, 72px);
+  row-gap: 40px;
+  align-items: start;
+}
+.contact-copy { grid-area: copy; }
+.contact-direct { grid-area: direct; }
+.contact-panel { grid-area: panel; }
+
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas: "copy" "panel" "direct";
+    row-gap: 32px;
+  }
+}
+
+.contact-h {
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin-bottom: 20px;
+}
+.contact-intro { font-size: 1.05rem; color: var(--t2); line-height: 1.7; max-width: 52ch; }
+.contact-intro + .contact-intro { margin-top: 14px; }
+
+/* ── Canales directos ── */
+.contact-direct__title {
+  font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--t3); margin-bottom: 14px;
+}
+.contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.contact-row {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px;
+  padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 0;
+}
+.contact-row__icon {
+  display: grid; place-items: center; width: 44px; height: 44px;
+  border: 1px solid var(--border); color: var(--t2);
+}
+.contact-row__text { display: grid; gap: 2px; min-width: 0; }
+.contact-row__label {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3);
+}
+.contact-row__value { font-size: 1rem; color: var(--t1); overflow-wrap: anywhere; text-decoration: none; }
+a.contact-row__value:hover { text-decoration: underline; text-underline-offset: 3px; }
+.contact-row__action { padding: 10px 14px; white-space: nowrap; }
+@media (max-width: 480px) {
+  .contact-row { grid-template-columns: auto minmax(0, 1fr); }
+  .contact-row__action { grid-column: 1 / -1; width: 100%; }
+}
+.contact-trust {
+  margin-top: 20px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--t3);
+}
+.contact-sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ── Panel: agendar + formulario ── */
+.contact-panel {
+  background: var(--bg-2); border: 1px solid var(--border); border-radius: 0;
+  padding: clamp(20px, 3vw, 32px);
+}
+.contact-panel__cta { width: 100%; }
+.contact-panel__hint { margin-top: 10px; font-size: 15px; color: var(--t3); text-align: center; }
+.contact-sep {
+  display: flex; align-items: center; gap: 12px; margin: 26px 0 20px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--t3);
+}
+.contact-sep::before, .contact-sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.contact-field { margin-bottom: 16px; }
+.contact-field label {
+  display: block; margin-bottom: 6px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t3);
+}
+.contact-field input, .contact-field textarea {
+  width: 100%; min-height: 48px; padding: 12px 14px;
+  background: var(--bg); color: var(--t1); border: 1px solid var(--border-control); border-radius: 0;
+  font: inherit; font-size: 16px;
+}
+.contact-field textarea { min-height: 120px; resize: vertical; }
+.contact-field input::placeholder, .contact-field textarea::placeholder { color: var(--t3); }
+.contact-field input:focus-visible, .contact-field textarea:focus-visible,
+.contact-feedback:focus-visible {
+  outline: 2px solid var(--ember); outline-offset: 2px;
+}
+.contact-field [aria-invalid="true"] { border-color: var(--t1); }
+.contact-field__error { margin-top: 6px; font-size: 15px; color: var(--t1); line-height: 1.4; }
+
+/* Honeypot: fuera de pantalla (no display:none, los bots lo saltan). */
+.contact-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.contact-form__submit { width: 100%; }
+.contact-form__submit[aria-busy="true"] { opacity: 0.6; cursor: progress; }
+
+.contact-feedback {
+  padding: 18px 20px; border: 1px solid var(--border-control); border-radius: 0;
+  color: var(--t1); font-size: 1rem; line-height: 1.6;
+}
+.contact-feedback__title { font-weight: 700; margin-bottom: 6px; }
+.contact-feedback a { color: var(--t1); text-decoration: underline; text-underline-offset: 3px; }
+.contact-form .contact-feedback { margin-bottom: 16px; }
