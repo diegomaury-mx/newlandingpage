@@ -36,6 +36,7 @@ import {
   parseFlowDiagram,
 } from '../utils/parseSiteCopy.ts';
 import { parseAbout } from '../utils/parseAbout.ts';
+import { buildAboutStats } from '../utils/aboutStats.ts';
 import { toLocalePath } from '../utils/locale.ts';
 import {
   SECTION_IDS,
@@ -50,9 +51,6 @@ import {
 const siteCopyEntries = await getCollection('siteCopy');
 const siteCopy = siteCopyEntries.find((entry) => entry.id === 'site');
 const sections = siteCopy ? parseSiteCopySections(siteCopy.data.markdown) : new Map();
-
-const metricsEntries = await getCollection('metrics');
-const incmtyMetric = metricsEntries.find((entry) => entry.id === 'incmty-participantes-inscritos');
 
 // --- CMS Imagenes (base "🖼️ CMS Imágenes — Portafolio D") --------------------
 // Slots hoy editables desde Notion (foto de Diego, logos de trust bar). Un
@@ -98,20 +96,12 @@ const heroLogos = heroLogosFrom(imageSlotEntries);
 const s2 = sections.get('S2')?.blocks ?? [];
 const about = parseAbout(s2);
 const aboutLabel = sections.get('S2')?.label ?? 'Quién soy';
-// Sub-labels ya publicados en el sitio LIVE (index.html, .metric-s) — no son
-// cifras nuevas, se reusan tal cual. El 3er stat ademas trae animacion
-// count-up, igual que en LIVE, usando el valor real de la coleccion `metrics`.
-const STAT_SUBLABELS = [
-  'Trayectoria acumulada, cifra propia',
-  '7+ en innovación y ecosistemas',
-  incmtyMetric?.data.mandatoryQualifier || 'Agregado de programas INCmty (HGC incluido), estimado',
-];
-const aboutStats = about.statsRaw.map((raw, i) => {
-  const match = raw.match(/^([\d.,]+\+?)\s*(.+)$/);
-  const n = match ? match[1] : raw;
-  const l = match ? match[2] : '';
-  const countTo = i === 2 ? (incmtyMetric?.data.value ?? n).replace(/\D/g, '') : '';
-  return { n, l, s: STAT_SUBLABELS[i] ?? '', countTo };
+// Notas fijas ya publicadas en el sitio LIVE (index.html, .metric-s): no son
+// cifras nuevas. Van por TIPO de cifra (aboutStats.ts), no por posicion; una
+// cifra nueva en Notion sale sin nota.
+const aboutStats = buildAboutStats(about.statsRaw, about.statsRaw, {
+  projects: 'Trayectoria acumulada, cifra propia',
+  years: '7+ en innovación y ecosistemas',
 });
 
 // --- S3 · El problema que resuelvo ---------------------------------------------
@@ -547,39 +537,6 @@ const personJsonLd = {
       accPips.forEach((pip, pIdx) => pip.classList.toggle('is-active', pIdx === idx));
     });
   });
-
-  // ── Contadores de metricas ──
-  if (!prefersReduced) {
-    const countEls = document.querySelectorAll('[data-count]');
-    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
-
-    function animateCount(el: Element) {
-      const target = parseInt((el as HTMLElement).dataset.count ?? '0', 10);
-      const duration = 1400;
-      const start = performance.now();
-
-      function frame(now: number) {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const value = Math.round(easeOut(progress) * target);
-        el.textContent = value.toLocaleString('es-MX');
-        if (progress < 1) requestAnimationFrame(frame);
-      }
-
-      requestAnimationFrame(frame);
-    }
-
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          animateCount(entry.target);
-          counterObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    countEls.forEach((el) => counterObserver.observe(el));
-  }
 
   // ── Diagrama radial "Evidencia" ──
   const evidenceRadial = document.getElementById('evidenceRadial');

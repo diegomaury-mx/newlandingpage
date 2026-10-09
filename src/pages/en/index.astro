@@ -38,6 +38,7 @@ import {
   parseFlowDiagram,
 } from '../../utils/parseSiteCopy.ts';
 import { parseAbout } from '../../utils/parseAbout.ts';
+import { buildAboutStats } from '../../utils/aboutStats.ts';
 import { translateCached } from '../../services/deeplTranslationCache.ts';
 import { toLocalePath } from '../../utils/locale.ts';
 import { uiEn } from '../../i18n/ui.ts';
@@ -62,8 +63,6 @@ const siteCopyEntries = await getCollection('siteCopy');
 const siteCopy = siteCopyEntries.find((entry) => entry.id === 'site');
 const sections = siteCopy ? parseSiteCopySections(siteCopy.data.markdown) : new Map();
 
-const metricsEntries = await getCollection('metrics');
-const incmtyMetric = metricsEntries.find((entry) => entry.id === 'incmty-participantes-inscritos');
 
 const imageSlotEntries = await getCollection('imageSlots');
 function slotSrc(slotId: string, fallback: string): string {
@@ -96,18 +95,10 @@ const heroLogos = heroLogosFrom(imageSlotEntries);
 const s2 = sections.get('S2')?.blocks ?? [];
 const about = parseAbout(s2);
 const aboutLabel = sections.get('S2')?.label ?? 'Quién soy';
-const STAT_SUBLABELS_EN = [
-  uiEn.home.statAccumulatedTrajectory,
-  uiEn.home.statInnovationEcosystems,
-  incmtyMetric?.data.en.mandatoryQualifier || incmtyMetric?.data.mandatoryQualifier || 'Aggregate of INCmty programs (HGC included), estimated',
-];
-const aboutStatsRawEn = await tAll(about.statsRaw);
-const aboutStats = aboutStatsRawEn.map((raw, i) => {
-  const match = raw.match(/^([\d.,]+\+?)\s*(.+)$/);
-  const n = match ? match[1] : raw;
-  const l = match ? match[2] : '';
-  const countTo = i === 2 ? (incmtyMetric?.data.value ?? n).replace(/\D/g, '') : '';
-  return { n, l, s: STAT_SUBLABELS_EN[i] ?? '', countTo };
+// El tipo de cifra sale del texto en español; el texto visible, del traducido.
+const aboutStats = buildAboutStats(about.statsRaw, await tAll(about.statsRaw), {
+  projects: uiEn.home.statAccumulatedTrajectory,
+  years: uiEn.home.statInnovationEcosystems,
 });
 
 // --- S3 · El problema que resuelvo (parseo ES sin modificar) ------------------
@@ -595,38 +586,6 @@ const personJsonLd = {
     });
   });
 
-  // ── Contadores de metricas ──
-  if (!prefersReduced) {
-    const countEls = document.querySelectorAll('[data-count]');
-    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
-
-    function animateCount(el: Element) {
-      const target = parseInt((el as HTMLElement).dataset.count ?? '0', 10);
-      const duration = 1400;
-      const start = performance.now();
-
-      function frame(now: number) {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const value = Math.round(easeOut(progress) * target);
-        el.textContent = value.toLocaleString('en-US');
-        if (progress < 1) requestAnimationFrame(frame);
-      }
-
-      requestAnimationFrame(frame);
-    }
-
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          animateCount(entry.target);
-          counterObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    countEls.forEach((el) => counterObserver.observe(el));
-  }
 
   // ── Diagrama radial "Evidencia" ──
   const evidenceRadial = document.getElementById('evidenceRadial');

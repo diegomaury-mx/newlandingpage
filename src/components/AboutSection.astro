@@ -9,7 +9,6 @@ interface Stat {
   n: string;
   l: string;
   s: string;
-  countTo: string;
 }
 
 interface Role {
@@ -67,7 +66,7 @@ const {
       <div class="qs-stats" data-reveal style="--delay:.14s">
         {stats.map((stat) => (
           <div class="qs-stat">
-            <div class="qs-stat-n" data-count={stat.countTo || undefined}>{stat.n}</div>
+            <div class="qs-stat-n">{stat.n}</div>
             <div class="qs-stat-l">{stat.l}</div>
             {stat.s && <div class="qs-stat-s">{stat.s}</div>}
           </div>
