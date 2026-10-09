@@ -26,16 +26,10 @@ type CaseEntry = CollectionEntry<'cases'>;
 export async function getStaticPaths() {
   const allCases = await getCollection('cases');
   const published = allCases.filter((c) => !c.data.draft);
-  // Solo id->title EN (con fallback a ES) — no la coleccion completa con
-  // `body`/`banner`/etc. de las 27 fichas restantes por pagina.
-  const idToTitle = Object.fromEntries(
-    allCases.map((c) => [c.id, c.data.en.title || c.data.title]),
-  );
   return published.map((entry) => ({
     params: { slug: slugify(entry.data.title) },
     props: {
       entry,
-      idToTitle,
       related: relatedCases(entry, published, (c) => caseDisplayTitleEn(c.data, c.data.en)),
     },
   }));
@@ -43,11 +37,10 @@ export async function getStaticPaths() {
 
 interface Props {
   entry: CaseEntry;
-  idToTitle: Record<string, string>;
   related: RelatedCase[];
 }
 
-const { entry, idToTitle, related } = Astro.props as Props;
+const { entry, related } = Astro.props as Props;
 
 const en = entry.data.en;
 const title = en.title || entry.data.title;
@@ -58,9 +51,6 @@ const reflection = en.reflection || entry.data.reflection;
 
 const bodyHtml = renderMarkdown(body, "en", { demoteHeadings: true });
 const sections = extractSections(body);
-const editionTitles = entry.data.editions
-  .map((id) => idToTitle[id])
-  .filter((t): t is string => Boolean(t));
 
 const DESCRIPTION_MAX = 155;
 const rawDescription = en.objective || entry.data.objective || entry.data.cardContext || entry.data.role;
@@ -121,8 +111,6 @@ const creativeWorkJsonLd = {
     videoEvidenceLabel={uiEn.case.videoEvidence}
     reflection={reflection}
     reflectionLabel={uiEn.case.reflection}
-    editionTitles={editionTitles}
-    caseArchiveLabel={uiEn.case.caseArchive}
     related={related}
     relatedLabel={uiEn.case.relatedCases}
     viewCaseLabel={uiEn.case.viewCase}

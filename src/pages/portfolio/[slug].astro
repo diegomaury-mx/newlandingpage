@@ -22,22 +22,18 @@ type CaseEntry = CollectionEntry<'cases'>;
 export async function getStaticPaths() {
   const allCases = await getCollection('cases');
   const published = allCases.filter((c) => !c.data.draft);
-  // Solo id->title (no `body`/`banner`/etc. de las 27 fichas restantes) para
-  // resolver `editions` sin pasar la coleccion completa como prop por pagina.
-  const idToTitle = Object.fromEntries(allCases.map((c) => [c.id, c.data.title]));
   return published.map((entry) => ({
     params: { slug: slugify(entry.data.title) },
-    props: { entry, idToTitle, related: relatedCases(entry, published, (c) => caseDisplayTitle(c.data)) },
+    props: { entry, related: relatedCases(entry, published, (c) => caseDisplayTitle(c.data)) },
   }));
 }
 
 interface Props {
   entry: CaseEntry;
-  idToTitle: Record<string, string>;
   related: RelatedCase[];
 }
 
-const { entry, idToTitle, related } = Astro.props as Props;
+const { entry, related } = Astro.props as Props;
 
 const displayTitle = caseDisplayTitle(entry.data);
 
@@ -60,9 +56,6 @@ function seoTitle(title: string): string {
 }
 const bodyHtml = renderMarkdown(entry.data.body, "es", { demoteHeadings: true });
 const sections = extractSections(entry.data.body);
-const editionTitles = entry.data.editions
-  .map((id) => idToTitle[id])
-  .filter((title): title is string => Boolean(title));
 
 const DESCRIPTION_MAX = 155;
 const rawDescription = entry.data.objective || entry.data.cardContext || entry.data.role;
@@ -127,8 +120,6 @@ const creativeWorkJsonLd = {
     videoEvidenceLabel="Videos de evidencia"
     reflection={entry.data.reflection}
     reflectionLabel="Reflexión"
-    editionTitles={editionTitles}
-    caseArchiveLabel="Archivo de este caso"
     related={related}
     relatedLabel="Casos relacionados"
     viewCaseLabel="Ver caso →"

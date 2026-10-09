@@ -50,8 +50,6 @@ interface Props {
   videoEvidenceLabel: string;
   reflection: string;
   reflectionLabel: string;
-  editionTitles: string[];
-  caseArchiveLabel: string;
   related: RelatedCase[];
   relatedLabel: string;
   viewCaseLabel: string;
@@ -79,8 +77,6 @@ const {
   videoEvidenceLabel,
   reflection,
   reflectionLabel,
-  editionTitles,
-  caseArchiveLabel,
   related,
   relatedLabel,
   viewCaseLabel,
@@ -88,6 +84,12 @@ const {
 } = Astro.props as Props;
 
 const hasGalleryPhotos = evidenceMedia.length > 0;
+// La propiedad `Reflexión` de Notion trae los párrafos separados por línea en
+// blanco; un solo <p> los fundía en un bloque corrido.
+const reflectionParagraphs = reflection
+  .split(/\n{2,}/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
 ---
 
 <div class="case-identity-strip">
@@ -157,19 +159,10 @@ const hasGalleryPhotos = evidenceMedia.length > 0;
     </section>
   )}
 
-  {reflection.trim() && (
+  {reflectionParagraphs.length > 0 && (
     <section class="case-reflection">
       <div class="eyebrow">{reflectionLabel}</div>
-      <p>{reflection}</p>
-    </section>
-  )}
-
-  {editionTitles.length > 0 && (
-    <section class="case-archive">
-      <div class="eyebrow">{caseArchiveLabel}</div>
-      <div class="case-archive__row">
-        {editionTitles.map((title) => <span class="case-archive__chip">{title}</span>)}
-      </div>
+      {reflectionParagraphs.map((paragraph) => <p>{paragraph}</p>)}
     </section>
   )}
 

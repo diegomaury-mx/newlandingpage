@@ -90,15 +90,6 @@
 .evidence-video-embed { position: relative; aspect-ratio: 16 / 9; max-width: 480px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--bg-2); }
 .evidence-video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-.case-archive { padding: 48px 0 96px; border-top: 1px solid var(--border); }
-.case-archive .eyebrow {
-  font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--ember); display: flex; align-items: center; gap: 10px;
-}
-.case-archive .eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--ember); }
-.case-archive__row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-.case-archive__chip { font-size: 14px; color: var(--t2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; }
-
 .case-related { padding: 48px 0 96px; border-top: 1px solid var(--border); }
 .case-related .eyebrow {
   font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
@@ -122,6 +113,7 @@
 .case-reflection .eyebrow { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember); display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
 .case-reflection .eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--ember); }
 .case-reflection p { font-family: var(--sans, var(--font-display)); font-weight: 300; font-size: clamp(1.2rem, 1rem + 1vw, 1.55rem); line-height: 1.45; color: var(--t1); margin: 0; }
+.case-reflection p + p { margin-top: 1em; }
 
 @media (max-width: 1000px) {
   .case-split--3col { grid-template-columns: 320px 1fr; }
