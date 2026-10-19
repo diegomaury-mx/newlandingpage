@@ -114,6 +114,7 @@ export const uiEn = {
     periodLabel: "Period",
     categoryLabel: "Category",
     typeLabel: "Type",
+    modalityLabel: "Format",
     clearFilters: "Clear filters",
     searchCategoryPlaceholder: "Search topic or concept…",
     topicsGroup: "Topics",

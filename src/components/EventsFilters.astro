@@ -1,7 +1,8 @@
 ---
 /**
  * Barra de filtros de /eventos: Periodo (vista), Categoría (Temas + Conceptos,
- * múltiple, con buscador), Tipo (múltiple) y "Solo gratuitos".
+ * múltiple, con buscador), Tipo (múltiple), Modalidad (múltiple) y
+ * "Solo gratuitos".
  *
  * Presentacional: recibe las opciones ya derivadas de los datos publicados
  * (nunca listas fijas). El `<script>` bundleado alterna `hidden` sobre las
@@ -19,6 +20,7 @@ interface Copy {
   periodLabel: string;
   categoryLabel: string;
   typeLabel: string;
+  modalityLabel: string;
   clearFilters: string;
   searchCategoryPlaceholder: string;
   topicsGroup: string;
@@ -31,10 +33,11 @@ interface Props {
   topics: string[];
   concepts: string[];
   eventTypes: string[];
+  eventModalities: string[];
   hasFreeEvents: boolean;
 }
 
-const { copy, months, topics, concepts, eventTypes, hasFreeEvents } = Astro.props;
+const { copy, months, topics, concepts, eventTypes, eventModalities, hasFreeEvents } = Astro.props;
 
 const chevron =
   '<svg class="events-dropdown-trigger__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
@@ -145,6 +148,32 @@ const categoryGroups = [
         </div>
       )}
 
+      {eventModalities.length > 0 && (
+        <div class="events-dropdown" data-dropdown="modality">
+          <button
+            type="button"
+            class="events-dropdown-trigger"
+            data-dropdown-trigger
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="events-dropdown-trigger__label">{copy.modalityLabel}</span>
+            <span class="events-dropdown-trigger__badge" data-modality-badge hidden>0</span>
+            <Fragment set:html={chevron} />
+          </button>
+          <div class="events-dropdown-panel" data-dropdown-panel role="group" aria-label={copy.modalityLabel} hidden>
+            <div class="events-dropdown-list">
+              {eventModalities.map((m) => (
+                <label class="events-dropdown-checkbox">
+                  <input type="checkbox" value={m} data-modality-checkbox />
+                  <span>{m}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {hasFreeEvents && (
         <label class="events-free-toggle">
           <input type="checkbox" data-free-toggle />
@@ -176,9 +205,13 @@ const categoryGroups = [
     const periodValueEl = document.querySelector<HTMLElement>('[data-period-value]');
     const catBadgeEl = document.querySelector<HTMLElement>('[data-cat-badge]');
     const typeBadgeEl = document.querySelector<HTMLElement>('[data-type-badge]');
+    const modalityBadgeEl = document.querySelector<HTMLElement>('[data-modality-badge]');
     const periodOptions = [...document.querySelectorAll<HTMLElement>('[data-view]')];
     const catCheckboxes = [...document.querySelectorAll<HTMLInputElement>('[data-cat-checkbox]')];
     const typeCheckboxes = [...document.querySelectorAll<HTMLInputElement>('[data-type-checkbox]')];
+    const modalityCheckboxes = [
+      ...document.querySelectorAll<HTMLInputElement>('[data-modality-checkbox]'),
+    ];
     const catSearchInput = document.querySelector<HTMLInputElement>('[data-cat-search]');
     const freeToggleInput = document.querySelector<HTMLInputElement>('[data-free-toggle]');
     const activeFiltersRow = document.querySelector<HTMLElement>('[data-active-filters]');
@@ -192,6 +225,7 @@ const categoryGroups = [
     let view = 'all';
     const cats = new Set<string>();
     const types = new Set<string>();
+    const modalities = new Set<string>();
     let freeOnly = false;
 
     function closeAllDropdowns() {
@@ -251,6 +285,10 @@ const categoryGroups = [
         typeBadgeEl.hidden = types.size === 0;
         typeBadgeEl.textContent = String(types.size);
       }
+      if (modalityBadgeEl) {
+        modalityBadgeEl.hidden = modalities.size === 0;
+        modalityBadgeEl.textContent = String(modalities.size);
+      }
     }
 
     function uncheck(boxes: HTMLInputElement[], value: string) {
@@ -280,6 +318,7 @@ const categoryGroups = [
       };
       addSetChips(cats, catCheckboxes);
       addSetChips(types, typeCheckboxes);
+      addSetChips(modalities, modalityCheckboxes);
 
       if (freeOnly) {
         chips.push({
@@ -351,8 +390,10 @@ const categoryGroups = [
                 : flags.indexOf(view) !== -1;
           const okCat = cats.size === 0 || cardCats.some((c) => cats.has(c));
           const okType = types.size === 0 || types.has(card.getAttribute('data-type') || '');
+          const okModality =
+            modalities.size === 0 || modalities.has(card.getAttribute('data-modality') || '');
           const okFree = !freeOnly || card.getAttribute('data-free') === 'y';
-          card.hidden = !(okView && okCat && okType && okFree);
+          card.hidden = !(okView && okCat && okType && okModality && okFree);
           if (!card.hidden) anyVisible = true;
         });
         document.querySelectorAll<HTMLElement>('[data-month]').forEach((m) => {
@@ -397,6 +438,7 @@ const categoryGroups = [
     }
     bindCheckboxes(catCheckboxes, cats);
     bindCheckboxes(typeCheckboxes, types);
+    bindCheckboxes(modalityCheckboxes, modalities);
 
     if (catSearchInput) {
       const rows = [
@@ -433,7 +475,8 @@ const categoryGroups = [
       clearAllBtn.addEventListener('click', () => {
         cats.clear();
         types.clear();
-        [...catCheckboxes, ...typeCheckboxes].forEach((cb) => {
+        modalities.clear();
+        [...catCheckboxes, ...typeCheckboxes, ...modalityCheckboxes].forEach((cb) => {
           cb.checked = false;
           cb.closest<HTMLElement>('.events-dropdown-checkbox')?.classList.remove('is-checked');
         });
