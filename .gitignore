@@ -31,6 +31,8 @@ _ds_import/
 # QA visual (Playwright): screenshots regenerables, no se versionan
 qa-output/screenshots/
 qa-output/screenshots-astro/
+qa-output/contact-s8/
+qa-output/diag/
 
 # Reportes crudos de Lighthouse (auditoria): regenerables con npx lighthouse
 qa-output/lighthouse-baseline/
