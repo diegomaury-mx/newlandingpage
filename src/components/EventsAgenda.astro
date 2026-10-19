@@ -4,7 +4,7 @@
  * La lógica de datos (filtro de vigencia, whitelist) vive en
  * services/notionEvents.ts y en el loader; aquí solo se renderiza.
  *
- * Los filtros y vistas (Periodo / Categoría / Tipo / gratuitos) viven en
+ * Los filtros y vistas (Periodo / Categoría / Tipo / Modalidad / gratuitos) viven en
  * EventsFilters.astro, que trae su propio `<script>` bundleado: aquí todos los
  * eventos se renderizan una vez y el script solo alterna `hidden`.
  * El rebuild diario de Cloudflare mantiene el HTML/SEO servido al día.
@@ -42,6 +42,7 @@ interface Copy {
   periodLabel: string;
   categoryLabel: string;
   typeLabel: string;
+  modalityLabel: string;
   clearFilters: string;
   searchCategoryPlaceholder: string;
   topicsGroup: string;
@@ -119,6 +120,9 @@ const sortedUnique = (values: string[]) =>
 const topics = sortedUnique(upcoming.flatMap((e) => e.categories));
 const concepts = sortedUnique(upcoming.flatMap((e) => e.concepts));
 const eventTypes = sortedUnique(upcoming.map((e) => e.type).filter((t): t is string => Boolean(t)));
+const eventModalities = sortedUnique(
+  upcoming.map((e) => e.modality).filter((m): m is string => Boolean(m)),
+);
 
 function isFree(ev: EventData): boolean {
   return ticketLabel(ev.ticketStatus) === 'Gratuito';
@@ -188,6 +192,7 @@ const hasEvents = upcoming.length > 0;
     topics={topics}
     concepts={concepts}
     eventTypes={eventTypes}
+    eventModalities={eventModalities}
     hasFreeEvents={hasFreeEvents}
   />
 )}
@@ -207,6 +212,7 @@ const hasEvents = upcoming.length > 0;
                 data-emonth={monthKey(ev.start)}
                 data-cats={[...ev.categories, ...ev.concepts].join('|')}
                 data-type={ev.type ?? ''}
+                data-modality={ev.modality ?? ''}
                 data-free={isFree(ev) ? 'y' : 'n'}
                 data-start={toCalendarDay(ev.start)}
                 data-end={toCalendarDay(ev.end ?? ev.start)}

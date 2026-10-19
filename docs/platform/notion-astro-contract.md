@@ -195,7 +195,7 @@ Quinta fuente CMS: agenda pública de solo lectura en `/eventos` (+ `/en/events`
 | `Nombre` | title | `name` | Título de la tarjeta |
 | `Fecha del evento` | date (inicio, fin opcional) | `start` / `end` | Fecha o rango; agrupa por mes; alimenta la vista Calendario |
 | `Ciudad` | select | `city` | Chip / línea meta |
-| `Modalidad` | select | `modality` | Chip / línea meta |
+| `Modalidad` | select | `modality` | Línea meta + filtro "Modalidad" (opciones derivadas de los eventos publicados) |
 | `Tipo` | select | `type` | Chip / línea meta |
 | `Categorías` | multi_select | `categories` | Chips + filtro "Por categoría" |
 | `Organizador` | text | `organizer` | Línea meta |
