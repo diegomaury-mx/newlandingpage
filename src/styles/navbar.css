@@ -134,6 +134,11 @@
   transform: translateY(-1px);
 }
 
+/* Copia del CTA dentro del menu hamburguesa: solo se muestra <640px */
+.nav-cta--menu {
+  display: none;
+}
+
 .nav__burger {
   display: none;
 
@@ -156,7 +161,13 @@
     display:none;
 
     position:fixed;
-    inset:64px 0 0 0;
+    /* #nav lleva backdrop-filter, que lo vuelve el bloque contenedor de
+       este fixed: un bottom:0 se resolveria contra la barra de 64px y el
+       panel colapsaba a ~49px de alto. Altura explicita contra el viewport. */
+    inset:64px 0 auto 0;
+    height:calc(100vh - 64px);
+    height:calc(100dvh - 64px);
+    overflow-y:auto;
 
     flex-direction:column;
     align-items:flex-start;
@@ -164,8 +175,9 @@
 
     padding:24px 32px;
 
-    background:rgba(10,6,18,.98);
-    backdrop-filter:blur(16px);
+    /* opaco: un backdrop-filter anidado dentro de #nav (que ya lo tiene)
+       no difumina, y el contenido de la pagina se transparentaba */
+    background:var(--bg);
 
     border-top:1px solid var(--border);
   }
@@ -202,6 +214,22 @@
     display:block;
   }
 
+}
+
+@media (max-width:639px){
+  /* Debajo de ~600px el CTA no cabe en una linea junto a logo + toggle +
+     burger y se partia en 4 lineas (82px de alto en una barra de 64px).
+     Sale de la barra y vive al final del menu hamburguesa. */
+  .nav__right .nav-cta{
+    display:none;
+  }
+
+  .nav-cta--menu{
+    display:inline-flex;
+    margin-top:20px;
+    width:100%;
+    text-align:center;
+  }
 }
 
 @media (max-width:375px){

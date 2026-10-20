@@ -71,6 +71,18 @@ const navItems = site.navigation.map((item) => ({
           {item.label}
         </a>
       ))}
+      {/* Copia del CTA para movil (<640px): en la barra no cabe junto al
+          logo, el toggle y el burger sin partirse en varias lineas. */}
+      {ctaHref && ctaLabel && (
+        <a
+          class="nav-cta nav-cta--menu"
+          href={ctaHref}
+          target={ctaHref.startsWith("http") ? "_blank" : undefined}
+          rel={ctaHref.startsWith("http") ? "noopener" : undefined}
+        >
+          {ctaLabel}
+        </a>
+      )}
     </div>
 
     <div class="nav__right">
