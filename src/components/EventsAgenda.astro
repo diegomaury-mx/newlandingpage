@@ -19,6 +19,7 @@ interface Copy {
   title: string;
   lede: string;
   suggestCta: string;
+  portfolioCta: string;
   views: {
     all: string;
     week: string;
@@ -54,11 +55,12 @@ interface Props {
   events: EventData[];
   copy: Copy;
   suggestUrl: string;
+  portfolioUrl: string;
   scheduleUrl: string;
   emailUrl: string;
 }
 
-const { locale, events, copy, suggestUrl, scheduleUrl, emailUrl } = Astro.props;
+const { locale, events, copy, suggestUrl, portfolioUrl, scheduleUrl, emailUrl } = Astro.props;
 const intlLocale = locale === 'en' ? 'en-US' : 'es-MX';
 const today = todayInMexicoCity();
 
@@ -181,6 +183,7 @@ const hasEvents = upcoming.length > 0;
       <a class="btn-primary" href={suggestUrl} target="_blank" rel="noopener">
         {copy.suggestCta}
       </a>
+      <a class="btn-ghost" href={portfolioUrl}>{copy.portfolioCta}</a>
     </div>
   </div>
 </section>
