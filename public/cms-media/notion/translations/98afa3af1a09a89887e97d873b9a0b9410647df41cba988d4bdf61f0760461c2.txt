@@ -1,0 +1,1 @@
+A Notion AI block that hadn't been converted to text caused about 40 deployments to fail in a single day: automation amplifies both successes and oversights. Takeaway: Editorial integrity must be built into the pipeline (validation that breaks the build), not left to the editor's discretion.

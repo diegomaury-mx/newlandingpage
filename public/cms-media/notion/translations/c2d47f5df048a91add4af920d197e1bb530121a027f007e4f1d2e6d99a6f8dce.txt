@@ -1,0 +1,145 @@
+# I turned an inefficient lead generation process into an autonomous business operation.
+
+- Lead generation went from taking 1 to 3 days to less than 5 minutes. That is the key change highlighted in this case study.
+- Proven skills: RevOps and automation · AI systems · Governance and processes · Program management.
+- Context: PropTech (confidential) · Oct 2025 – Jun 2026 · Fractional operations leadership covering strategy, RevOps, marketing, automation, and AI.
+
+---
+
+## What is SOFI?
+
+> S = System · O = Orchestration · F = Flows · I = Intelligent
+
+It’s the AI agent I designed and built within the RevOps system: the “automated receptionist” that receives every lead coming in via WhatsApp, handles it, and qualifies it using three AI models working together (conversation, reasoning, and transcription), then organizes it in HubSpot so the sales team can follow up.
+
+## The Problem
+
+It wasn’t that we lacked manpower; it was that we lacked a system.
+
+A real estate agency offering financial services, generating leads through Meta (Facebook Ads).
+
+I noticed something that didn’t add up: more leads were coming in, but revenue wasn’t increasing.
+
+- It could take up to 3 days before the first contact. By then, the lead was already cold or had gone to the competition.
+- There was no lead scoring or prioritization criteria: they couldn’t distinguish between valuable, unviable, or casual leads, nor did they know who to follow up with first.
+- The CRM lacked process and governance: each department worked with its own version of the data and in its own way.
+
+> That isn’t fixed by hiring someone who responds faster. It’s fixed by building the system.
+
+## The Transformation
+
+| Before | After |
+| --- | --- |
+| Lead enters via a channel | Automatic capture |
+| Lands in a manual inbox | Automatic assignment |
+| Waits 1–3 days | Scored in less than 5 minutes |
+| Delayed human contact | Streamlined sales process in HubSpot |
+| Information scattered across departments | Measurable operation from a single location |
+
+## The Intervention
+
+Four decisions completely transformed the operation:
+
+| Decision | What I Did | Tech Stack |
+| --- | --- | --- |
+| 01 · Every lead goes to the right place | I connected the lead capture channels to HubSpot so that every lead would automatically enter the sales process, without relying on someone to check an inbox. | Meta Lead Ads · Make · HubSpot |
+| 02 · Organized information | I defined the stages, prioritization criteria, and data to be recorded at each step in HubSpot, so everyone would be working with the same information. | HubSpot · lifecycle · lead scoring · pipeline |
+| 03 · First response without relying on a person | I built SOFI to automatically receive and score leads, combining conversational AI, reasoning, and transcription. | SOFI |
+| 04 · Documented system | I documented the operation and centralized processes, reports, decisions, and follow-ups in one place. | Notion · processes · dashboards · reporting |
+
+SOFI also served as the director’s personal assistant: it provided him with daily, timely updates on the status of the lead pipeline and relevant information from the company’s database, without him having to search for it manually.
+
+## The Decision That Changed the System
+
+### Technology had to yield to human behavior.
+
+My original proposal was WhatsApp. The client insisted on voice, so we built the voice agent and put it to the test during nearly three months of active iteration: I tested various synthetic voice platforms and tweaked the prompt over and over again to make it sound natural.
+
+The feedback was clear and immediate: people hung up as soon as they heard it was a voice. No matter how natural it sounded, they couldn’t quite bring themselves to trust that they were talking to a machine.
+
+I proposed WhatsApp again, this time with the evidence in hand. The client accepted the change. I adapted the necessary part of the system and kept the same AI logic.
+
+> The channel is a business hypothesis. Not an architectural decision.
+
+## The Architecture
+
+> CAPTURE
+
+Meta · WhatsApp
+
+↓
+
+RECEIVE AND SCORE
+
+SOFI
+
+↓
+
+ORGANIZE
+
+HubSpot
+
+↓
+
+MEASURE AND IMPROVE
+
+Reporting · Notion
+
+Make connects the workflow between systems.
+
+## Technology Stack
+
+- HubSpot — CRM and single source of truth for the sales pipeline.
+- Make — cross-platform orchestration and automation.
+- WhatsApp Cloud API — primary channel for conversations with leads.
+- VAPI — AI-powered voice agent (the project’s original channel).
+- Twilio — telephony for the voice agent.
+- OpenRouter · Claude API — reasoning and conversation models.
+- Railway — system hosting and infrastructure.
+- Firebase · Supabase · Redis — storage, database, and real-time state.
+- Notion — operational control center, documentation, and reporting.
+
+## Results
+
+### Less than 5 minutes
+
+Lead response time. Before: 1 to 3 days. After: less than 5 minutes. Measured in CRM, Oct 2025 – Jun 2026.
+
+### 5 to 30 (+500%)
+
+Leads processed per week. After redesigning how leads were captured and assigned.
+
+### 3
+
+AI models working together. Conversation · reasoning · transcription.
+
+### +1,291%
+
+Modeled ROI. Base case: payback period less than 1 month. Modeled on avoided costs, not actual savings. Revenue under NDA.
+
+## Evidence
+
+| Result | Evidence | Status |
+| --- | --- | --- |
+| Speed-to-lead under 5 minutes | HubSpot CRM | Under NDA |
+| 5 to 30 leads per week | HubSpot CRM | Under NDA |
+| Modeled RODI +1,291% | Proprietary financial model | Modeled |
+| Operational SOFI | Architecture / demo | Publicity to be determined |
+
+The original artifacts are subject to an NDA. Evidence may be presented in anonymized form when possible.
+
+# Scope
+
+## What I Led
+
+Strategy · RevOps · Automation · AI · Governance · Program Management.
+
+## What I Did Not Lead
+
+Sales closing · Investment decisions · Real estate product results.
+
+## Conclusion
+
+The goal was not to build an AI agent. It was to ensure that a lead received attention within minutes, that the information was organized, and that the process could continue to function without relying on someone to monitor it.
+
+---

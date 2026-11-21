@@ -1,0 +1,6 @@
+1. End-to-end product definition: PRD including the problem, users (dining partners and establishments), and scope.
+2. Traceability system designed: Unique UUID per bottle, automated logging, and photographic evidence.
+3. Agile, one-person management: weekly mini-sprints using Scrum and Kanban, prioritized backlog with user stories and prior UX research (restaurant usage flows, references on Figma and Behance).
+4. App built on Apphive (no-code): custom modules, integrations with external APIs, and interaction testing with real users on mobile.
+5. Android beta released with an installation guide for users.
+6. Comprehensive operational documentation in Notion: development reports, screen and feature database, updates, and sprint dashboard.

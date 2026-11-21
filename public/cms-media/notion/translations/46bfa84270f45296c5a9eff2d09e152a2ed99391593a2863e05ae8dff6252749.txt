@@ -1,0 +1,63 @@
+# HackSureste: Building a Program That Could Continue Beyond the First Event
+
+In October 2018, I founded HackSureste to connect talent from southeastern Mexico with a community, a methodology, and partners. The challenge was to build a program that could sustain itself between events.
+
+I started without a sponsoring brand behind me, without an existing budget, and without a previous format to replicate. I had to secure partners, design the experience, and coordinate everything needed to make it happen again.
+
+Role: Founder & Innovation Program Director.
+
+Locations: Mérida and Ciudad del Carmen.
+
+Skills: ecosystem development, innovation program design, strategic partnerships, and program management.
+
+## Context
+
+HackSureste was born out of the lack of a clear gateway into the region’s innovation ecosystem. Those who wanted to develop their ideas needed to find people to work with, a methodology, and access to partners.
+
+The first edition brought together nearly 250 participants. To ensure its continuity, we needed a format we could replicate, active partners, and a community that would maintain connections between events.
+
+In 2020, another challenge arose. We had designed an experience to bring people together in a room, but we had to keep the program running during the pandemic. It was time to adapt our operations.
+
+## My Role
+
+I founded and led the program from its very first edition. I designed the strategy for the open innovation projects and built partnerships with universities, the government, and the private sector. I also facilitated the events, served as master of ceremonies, and designed and produced virtual experiences from 2020 to 2022.
+
+My responsibilities had specific limits: the technical development of the projects, their subsequent funding, and the judges’ decisions were beyond my purview.
+
+## What I Built
+
+1. A format we could replicate. I designed the hackathon methodology, and we replicated it in Mérida and Ciudad del Carmen. This allowed us to continue the program at different locations.
+1. A regional network of partners. I connected universities, government, and the private sector to support the program before, during, and after each edition.
+1. An alternative to continue online. Between March and April 2020, HackSureste WIRE hosted six free conferences and workshops in collaboration with RushFrame. We adapted the experience when in-person meetings were no longer feasible.
+1. Post-hackathon support. I expanded the program with ideaLab to train the teams, help them validate their proposals, and connect them with industry experts. The ideas that emerged during the 48-hour event required further development.
+1. Regional participation. The program welcomed participants from six states, as reported in the project profile. This information still requires supporting documentation.
+
+## The Decision and Its Cost
+
+I kept HackSureste as an independent initiative. That decision allowed us to bring together government, universities, companies, and the entrepreneurial community around the program.
+
+Honestly, it also made operations more difficult. We worked with a tighter budget, and each edition required us to coordinate resources, partners, and communication all over again. Independence came at a cost that had to be borne with each edition.
+
+## Results and Support
+
+| Result | Reported Data | Scope of Evidence |
+| --- | --- | --- |
+| Cumulative participants | 3,000+ between 2018 and 2020 | Internal estimate; no consolidated record by edition. Cannot be combined with other portfolio metrics. |
+| First edition | Approximately 250 participants | Estimate. The fact sheet includes photos and videos from the in-person editions. |
+| Geographic reach | Participants from 6 states | No record documenting participants’ state of origin. |
+| HackSureste WIRE | 6 free online conferences and workshops | March and April 2020, with RushFrame. The fact sheet links to livestreams and visual materials. |
+| ideaLab | Post-hackathon support | The fact sheet includes a presentation and booklet detailing the objectives, agenda, deliverables, and prizes. |
+
+Project documentation includes photos, videos, and records from partners such as IBM, Iktan, Bepensa, Grupo Gamma, COPARMEX, Universidad Modelo, and CETIEM.
+
+## What I Failed to Build
+
+I never turned the participant database into an operational asset. Although the program reports an estimated 3,000+ cumulative participants, I didn’t establish a community I could engage with the very next day.
+
+Each edition had to rebuild its audience from scratch through marketing. The relationship with those who had already participated didn’t sustain the next call for applications. That was a systemic error.
+
+The participant base should have been part of the program’s work from the start, with a way to maintain contact and ensure the relationship’s continuity.
+
+If you’re building a program of this type, define how you’ll stay in touch with participants before opening the next call for applications.
+
+The relationship also requires ongoing management.

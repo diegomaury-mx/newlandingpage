@@ -1,0 +1,72 @@
+# Notion as a Content Management System: I edit in Notion, and diegomaury.mx publishes automatically
+
+Personal project · diegomaury.mx · 2026 · Bilingual (ES/EN)
+
+## Background
+
+My personal website is a decision-making tool: it must allow a recruiter, hiring manager, or client to understand in less than 2 minutes what problems I solve, with what evidence, and why I’m a low-risk hire. Until July 2026, it was hand-coded static HTML.
+
+## Problem
+
+Every change to text, an image, or a figure required editing the code and performing a manual deployment. The friction between “I want to change this” and “it’s already published” came at a real cost: an outdated site that underrepresented my work. The problem was systemic: the content lived far from where I write and make decisions.
+
+## My Responsibilities
+
+I was responsible for:
+
+- System architecture and the Notion ↔ Astro data contract.
+- Editorial schema for the SSOT database: Insignia, Support, and Archive layers, and capabilities taxonomy.
+- Metrics governance: levels of evidence, blocking verifier, and blacklist of withdrawn figures.
+- Publication pipeline: Notion’s native webhook, Cloudflare Worker with HMAC validation, and build on Cloudflare Pages.
+- Writing, classification, and evidence for the 30 published entries.
+
+I was not responsible for:
+
+- Anything that could be delegated: this is a one-person project. The actual scope is defined by the platforms: Notion (API and webhooks), Astro (build), and Cloudflare (Pages and Worker) are third-party services; everything else—from the schema to the copy—is my own work.
+
+## System Built
+
+I designed a CMS where Notion is the single source of editorial truth. The guiding principle: the code defines how the site is displayed; Notion defines what content is published.
+
+- Four sources in Notion: portfolio case studies, copy for the Home page and /portfolio, static images, and official metrics.
+- The Astro build validates each entry using Zod. If an Insignia entry lacks an anchor metric and supporting evidence, the build intentionally fails, and the previous version of the site remains live.
+- Auto-publish: Notion’s native webhook reaches a Cloudflare Worker that validates the HMAC-SHA256 signature and triggers the rebuild. Within 90 to 115 seconds, the change goes LIVE without touching code or making a push.
+- Governed metrics: Each public metric has an immutable slug, evidence level, and source; a blocking validator prevents the publication of withdrawn metrics.
+- Images are downloaded during the build, cached locally, and compressed to WebP.
+
+### Architecture
+
+```
+
+Notion → Notion API → Astro (Zod validation) → Cloudflare Worker (webhook) → Cloudflare Pages → diegomaury.mx
+
+```
+
+## Trade-offs
+
+- I deliberately ruled out Make.com for auto-publishing: a custom Worker doesn’t consume the operations budget shared with SOFI and leaves signature validation in my hands.
+- I preferred a build that breaks rather than a site that lies: editorial integrity resides in the pipeline, not in discipline.
+
+## Results
+
+| Metric | Before | After |
+| --- | --- | --- |
+| Publish a content change | Edit code + manual deploy | Edit in Notion; LIVE in 90 to 115 s |
+| Tasks per change | 3 (code, images, deployment) | 1 (edit in Notion) |
+| Cached image size | 38 MB | 4.4 MB |
+| Site pages | Hand-edited static HTML | 65 bilingual pages per build |
+
+29 articles published with full quality gate (5 Insignia + 24 Support), as of October 2026.
+
+## Evidence
+
+| Claim | Status | Artifact |
+| --- | --- | --- |
+| The site is built and published from Notion | ✔ | diegomaury.mx |
+| Documented architecture and data contract | ✔ | Public repo notion-cms |
+| Published cases with three-tier evidence | ✔ | diegomaury.mx/portfolio |
+| Auto-publish with HMAC signature, no payment intermediaries | ✔ | notion-deploy-relay worker, operational since Aug. 13, 2026 |
+
+## What Went Wrong and What I’d Do Differently
+
+An AI block in Notion that hadn’t been converted to text broke about 40 deployments in a single day. Automation amplifies both successes and oversights: today, I would validate the content locally before the first auto-publish, not after. The takeaway: any organization already using Notion can turn its workspace into its site’s editorial CMS using this approach, without a third-party headless CMS.

@@ -1,0 +1,32 @@
+# I led the INCmty call for proposals, and applications grew by 32% in one year
+
+Key metric: 504 applicants for the 2021 INC B-Challenge, compared to 383 in 2020. Tecnológico de Monterrey 2021 Annual Report, p. 415.
+
+Role: National Program Director, Innovation & Entrepreneurship (2019–2022).
+
+INCmty is the largest entrepreneurship festival in Latin America, and its calls for entries serve as the gateway to the ecosystem. I led and managed all three programs (B-Challenge, Prototype, and Accelerator), designing each for a different stage of maturity: a bootcamp for ideas, a prototype track for college students and researchers, and an accelerator for early-stage startups. The operation involved partnerships with the government, the private sector, universities, and the startup ecosystem, as well as the evaluation and selection of projects.
+
+Key result: All three programs saw growth between 2020 and 2021. B-Challenge grew from 383 to 504 applicants, Prototype from 156 to 197, and Accelerator from 152 to 205 startups; the winner of the 2021 Accelerator received a seed round of one million dollars. Caveat: These figures represent applicants, not selected participants. The amount of the seed round refers to the winner and is not attributable to the program as a return.
+
+## Evidence
+
+| Claim | Status | Evidence |
+| --- | --- | --- |
+| Applicant figures for the 3 calls for applications (2020 and 2021) | ✔ | Tecnológico de Monterrey’s 2020 (p. 180) and 2021 (p. 415) Annual Reports |
+| The three calls for applications and the 2021 National Bootcamp took place | ✔ (own) | HackSureste / RushFrame playlist: recaps of B-Challenge 2021, Prototype 2021, INC Accelerator 2021, and the 2021 National Bootcamp. Own documentation |
+| My role as director of the calls for proposals | ✔ (own) | Institutional email signature diegomaury@incmty.com (INCmty · Tecnológico de Monterrey · Eugenio Garza Lagüera Institute of Entrepreneurship) with the internal title “Challenge and Call for Proposals Operations Coordinator.” Program-level supplement: REDUX Noroeste regional call for proposals (PDF, regional partnership with Zona Ei) |
+| My operational role in B-Challenge | ✔ (own) | INC B-Challenge Facilitators’ Manual (October 23 and 24): I am listed as the direct contact for the staff. The manual outlines the hourly schedule, mentor logistics on Discord, and the official rubric (Innovation 30%, Feasibility 30%, Problem Definition 30%, Pitch 10%) |
+| Event format: up to 70 teams of 2 to 5 people, 100% online | ✔ (own) | Call for entries documents: “What is B-Challenge” and “B-Challenge Discord Instructions” |
+
+## Archive
+
+- B-Challenge 2020 - INC Challenges (Archive layer)
+- INC Prototype 2021 (Support layer)
+- INCmty Accelerator 2021 (Support layer)
+- INCmty DisruptAir Challenge 2022 (Support layer)
+
+---
+
+Consolidation note (July 11, 2026): The figures were taken from Tec’s annual reports. The prize pool amounts marked "[data to be verified]" ($80,000 for B-Challenge 2020 and $120,000 for INC Prototype) have been removed: the reports do not confirm them.
+
+### Source documents (for internal use only; not published on the site)

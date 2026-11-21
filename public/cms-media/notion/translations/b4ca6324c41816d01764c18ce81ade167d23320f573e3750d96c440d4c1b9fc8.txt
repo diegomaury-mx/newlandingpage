@@ -1,0 +1,1 @@
+Notion as an editorial CMS: I edit in Notion and diegomaury.mx is published automatically.

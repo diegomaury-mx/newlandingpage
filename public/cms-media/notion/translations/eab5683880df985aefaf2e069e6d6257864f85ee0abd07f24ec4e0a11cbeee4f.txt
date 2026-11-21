@@ -1,0 +1,6 @@
+What I learned while building this app goes beyond the tool itself:
+1. You don’t need to be an expert in code, but you do need to be an expert in context: my real “stack” was my experience with agile methodologies, basic UX, and technology project leadership.
+2. The hardest part wasn’t the technology—it was prioritizing: deciding what not to build is also a form of building.
+3. Computational thinking is essential even without code: workflows, conditionals, and database structures.
+4. No-code doesn’t replace developers; it enables more ideas and ushers in a more democratic and exploratory phase of product development.
+Transferability: The method used (brief and control center in Notion, flow over tool, MVP, and iteration with real users) can be replicated in any organization that wants to validate digital solutions without investing in traditional development.

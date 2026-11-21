@@ -1,0 +1,1 @@
+A technical meetup for those who train, fine-tune, evaluate, and deploy their own models using Claude Code as a development tool. AWS handles the hosting and scaling of these models on its infrastructure.

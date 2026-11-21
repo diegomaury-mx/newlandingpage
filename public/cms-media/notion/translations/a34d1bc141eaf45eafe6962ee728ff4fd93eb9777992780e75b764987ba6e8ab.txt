@@ -1,0 +1,1 @@
+This is the workload per evaluator, not the total number of projects. Do not use "evaluated" as a metric for HGC projects; the total figure remains "projects reached."

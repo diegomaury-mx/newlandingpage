@@ -1,0 +1,8 @@
+- Comprehensive RevOps architecture: I reduced the speed-to-lead from 1 to 3 days to less than 5 minutes.
+- I increased the number of leads processed per week in the CRM from 5 to 30 (+500%) after redesigning the lead capture and routing processes.
+- I built SOFI, an AI-powered voice agent that orchestrates three models (reasoning, voice, and transcription) with end-to-end lead scoring.
+- SOFI also served as the director’s personal assistant, providing daily, timely updates on the status of the lead process and relevant information from the company’s database.
+- I designed the HubSpot pipeline and governance (properties, lead scoring, lifecycle) integrated with Meta Lead Ads via Make.
+- I built the operational control center in Notion as the single source of truth: processes, dashboards, meeting minutes, and weekly reports.
+- I designed the investment narrative and the institutional pitch deck (TAM/SAM/SOM and cash flow) for the capital raise.
+- Modeled RODI of +1,291% in the base case, with a payback period of less than 1 month. Important note: cost avoidance was modeled; actual savings were not realized; revenue is subject to an NDA; methodology available upon request.

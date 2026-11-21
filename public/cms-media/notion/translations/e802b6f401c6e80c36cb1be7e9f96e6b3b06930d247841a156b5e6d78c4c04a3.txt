@@ -1,0 +1,1 @@
+The site used to be hand-edited static HTML: every change to text, images, or numbers required editing the code and manually deploying the site. Today, the content lives in Notion, and the site validates, rebuilds, and publishes itself in less than 2 minutes.
