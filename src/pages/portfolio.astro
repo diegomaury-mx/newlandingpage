@@ -46,9 +46,11 @@ const testimonialCards = (await getCollection('testimonials'))
 const insignia = sortInsignia(published.filter((c) => c.data.layer === 'Insignia'), 'es');
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
 
-// Capability Showcase Grid: proyectos Soporte encabezados por capacidad, con
-// filtro por chip y expansion in-line (ver design_handoff_capability_showcase_grid).
+// Capability Showcase Grid: TODOS los proyectos (Insignia primero, luego
+// Soporte) encabezados por capacidad, con filtro por chip y expansion in-line
+// (ver design_handoff_capability_showcase_grid).
 const showcase = capabilityShowcase(
+  insignia,
   soporte,
   (c) => c.data.cardContext || c.data.objective || c.data.resultsAndActions,
   (c) => c.data.title,
@@ -262,7 +264,7 @@ const itemListJsonLd = {
     </div>
 
     {showcase.total === 0 ? (
-      <p class="empty-note">Sin fichas Soporte publicadas todavía.</p>
+      <p class="empty-note">Sin fichas publicadas todavía.</p>
     ) : (
       <Fragment>
         <div class="showcase-chips" role="group" aria-label="Filtrar por capacidad">
@@ -304,6 +306,7 @@ const itemListJsonLd = {
                 <div class="showcase-card__logo" aria-hidden="true">{p.initials}</div>
               )}
               <div>
+                {p.isInsignia && <div class="showcase-card__badge">Insignia</div>}
                 <h3 class="showcase-card__title">{p.title}</h3>
                 <div class="showcase-card__meta">{p.org} · {p.year ?? '—'}</div>
               </div>

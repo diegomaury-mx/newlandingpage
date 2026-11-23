@@ -322,6 +322,21 @@
   padding: 7px;
   background: var(--bg);
 }
+/* Etiqueta de ficha Insignia dentro del grid: neutra (D-A: Ember no se usa
+   como adorno), mismo lenguaje mono uppercase que lead/meta. */
+.showcase-card__badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--t2);
+  border: 1px solid var(--t3);
+  padding: 5px 8px;
+  margin-bottom: 10px;
+}
 .showcase-card__title {
   font-size: 19px;
   font-weight: 700;

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { relatedCases } from "./portfolioData.ts";
+import { capabilityShowcase, relatedCases } from "./portfolioData.ts";
 
 type FakeCase = {
   id: string;
@@ -122,4 +122,42 @@ test("relatedCases devuelve slug, title, organization, year y logo", () => {
   assert.deepEqual(result, [
     { slug: "b", title: "b", organization: "HEINEKEN", year: "2020", logo: "/logo.png" },
   ]);
+});
+
+const descOf = (c: FakeCase) => c.data.title;
+
+test("capabilityShowcase pone primero las Insignia (en el orden recibido) y luego Soporte por year desc", () => {
+  const insignia = [
+    makeCase({ id: "sofi", capabilities: ["RevOps"], year: "2024" }),
+    makeCase({ id: "cms", capabilities: ["AI"], year: "2026" }),
+  ];
+  const soporte = [
+    makeCase({ id: "old", capabilities: ["Gobernanza"], year: "2019" }),
+    makeCase({ id: "cava", capabilities: ["RevOps"], year: "2025" }),
+  ];
+
+  const result = capabilityShowcase(insignia as any, soporte as any, descOf as any, titleOf as any);
+
+  assert.deepEqual(result.projects.map((p) => p.id), ["sofi", "cms", "cava", "old"]);
+  assert.deepEqual(result.projects.map((p) => p.isInsignia), [true, true, false, false]);
+});
+
+test("capabilityShowcase cuenta proyectos y capacidades de ambas capas sin duplicar", () => {
+  const insignia = [makeCase({ id: "sofi", capabilities: ["RevOps", "AI"] })];
+  const soporte = [makeCase({ id: "cava", capabilities: ["RevOps", "Gobernanza"] })];
+
+  const result = capabilityShowcase(insignia as any, soporte as any, descOf as any, titleOf as any);
+
+  assert.equal(result.total, 2);
+  assert.deepEqual(result.tags, ["RevOps", "AI", "Gobernanza"]);
+  assert.equal(result.capabilityCount, 3);
+});
+
+test("capabilityShowcase incluye el chip de una capacidad que solo tiene una Insignia", () => {
+  const insignia = [makeCase({ id: "cms", capabilities: ["Sistemas con AI"] })];
+  const soporte = [makeCase({ id: "cava", capabilities: ["Gobernanza"] })];
+
+  const result = capabilityShowcase(insignia as any, soporte as any, descOf as any, titleOf as any);
+
+  assert.ok(result.tags.includes("Sistemas con AI"));
 });

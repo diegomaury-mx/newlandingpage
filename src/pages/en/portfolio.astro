@@ -57,6 +57,7 @@ const insignia = sortInsignia(published.filter((c) => c.data.layer === 'Insignia
 const soporte = published.filter((c) => c.data.layer === 'Soporte');
 
 const showcase = capabilityShowcase(
+  insignia,
   soporte,
   showcaseDesc,
   (c) => c.data.en.title || c.data.title,
@@ -314,6 +315,7 @@ const itemListJsonLd = {
                 <div class="showcase-card__logo" aria-hidden="true">{p.initials}</div>
               )}
               <div>
+                {p.isInsignia && <div class="showcase-card__badge">{uiEn.portfolio.showcaseInsigniaBadge}</div>}
                 <h3 class="showcase-card__title">{p.title}</h3>
                 <div class="showcase-card__meta">{p.org} · {p.year ?? '—'}</div>
               </div>

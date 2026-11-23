@@ -70,6 +70,8 @@ export interface ShowcaseProject {
   logo: string | null;
   initials: string;
   tags: string[];
+  /** Ficha de capa Insignia (lleva etiqueta propia en la tarjeta). */
+  isInsignia: boolean;
 }
 
 export interface CapabilityShowcase {
@@ -80,20 +82,23 @@ export interface CapabilityShowcase {
 }
 
 /**
- * Arma el "Capability Showcase Grid" de la seccion Soporte: proyectos
- * ordenados por año desc, encabezados por capacidad. `tags` son las
- * capacidades unicas en orden de primera aparicion — alimentan los
- * chips-filtro y el conteo del header, nunca se escriben a mano.
+ * Arma el "Capability Showcase Grid" de /portfolio: TODAS las fichas
+ * publicadas (Insignia + Soporte), para que filtrar por una capacidad muestre
+ * todos los casos donde se ejerció. Insignia van primero, en el orden recibido
+ * (llegan ya ordenadas por `sortInsignia`); Soporte después, por año desc.
+ * `tags` son las capacidades unicas en orden de primera aparicion — alimentan
+ * los chips-filtro y el conteo del header, nunca se escriben a mano.
  */
 export function capabilityShowcase(
+  insignia: CaseEntry[],
   soporte: CaseEntry[],
   descOf: (c: CaseEntry) => string,
   titleOf: (c: CaseEntry) => string,
 ): CapabilityShowcase {
-  const sorted = [...soporte].sort(
+  const soporteSorted = [...soporte].sort(
     (a, b) => (Number(b.data.year) || 0) - (Number(a.data.year) || 0),
   );
-  const projects: ShowcaseProject[] = sorted.map((c) => {
+  const toProject = (c: CaseEntry, isInsignia: boolean): ShowcaseProject => {
     const org = c.data.organization ?? '—';
     return {
       id: slugify(c.data.title),
@@ -104,8 +109,13 @@ export function capabilityShowcase(
       logo: c.data.logo ?? null,
       initials: orgInitials(org),
       tags: c.data.capabilities,
+      isInsignia,
     };
-  });
+  };
+  const projects: ShowcaseProject[] = [
+    ...insignia.map((c) => toProject(c, true)),
+    ...soporteSorted.map((c) => toProject(c, false)),
+  ];
   const tags: string[] = [];
   for (const project of projects) {
     for (const tag of project.tags) {
