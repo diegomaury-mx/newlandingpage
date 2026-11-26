@@ -169,7 +169,7 @@ Loader propio (`eventsLoader`): pre-filtra y resuelve `Evento principal` contra 
 | `Organizador` | text | `organizer` | meta |
 | `Resumen` | text | `summary` | `cleanSummary`; único campo traducido |
 | `Enlace Oficial` | url | `officialUrl` | CTA |
-| `Evento principal` | relation (self) | `parentName` | "Parte de …" |
+| `Evento principal` | relation (self) | `parentName` | el código la busca, pero la relación ya no existe en la base: "Parte de …" no se muestra |
 | `Status de Ticket` | select | `ticketStatus` | "Gratuito" solo con ese valor exacto |
 
 No se leen: `Áreas`, `Sede` (place, inestable en la API) ni las propiedades internas de venta/IA. Las opciones de filtro siempre se derivan de los eventos publicados. Temas/Conceptos/Tipo se muestran en español también en EN.
@@ -178,7 +178,7 @@ No se leen: `Áreas`, `Sede` (place, inestable en la API) ni las propiedades int
 
 ## Publicación automática
 
-Worker `notion-deploy-relay` (`docs/platform/relay/worker.next.js`): valida HMAC del webhook de Notion y dispara el Deploy Hook. Cambios en `cases`, `imageSlots`, `siteCopy`, `testimonials` disparan build directo. Eventos de `events` pasan por un filtro de propiedades públicas (`EVENTS_PUBLIC_PROPERTY_IDS`) y marcan `events_rebuild_pending` en KV; el cron `*/5` hace un solo build. Cron diario `0 13 * * *` UTC. `metrics` no publica sola: requiere sincronizar `metrics.json` y push.
+Worker `notion-deploy-relay` (`docs/platform/relay/worker.next.js`): valida HMAC del webhook de Notion y dispara el Deploy Hook. Cambios en `cases`, `imageSlots`, `siteCopy`, `testimonials` disparan build directo (testimonios comprobado 2026-11-25). Eventos de `events` pasan por un filtro de propiedades públicas (`EVENTS_PUBLIC_PROPERTY_IDS`) y marcan `events_rebuild_pending` en KV; el cron `*/5` hace un solo build. Cron diario `0 13 * * *` UTC. `metrics` no publica sola: requiere sincronizar `metrics.json` y push.
 
 ## Regla transversal
 
