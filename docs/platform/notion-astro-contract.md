@@ -1,215 +1,185 @@
-# Contrato de datos Notion → Astro (Fase A1 / Diego CMS)
+# Contrato de datos Notion → Astro (Diego CMS)
 
-**Estado:** implementado en `src/content.config.ts` (antes `src/content/config.ts`) desde 2026-07-23 (`cases`/`metrics`/`siteCopy` con `loader:` real, validado con `astro build` contra Notion real). El sitio LIVE sigue siendo HTML editado a mano — este pipeline corre solo en el scaffold Astro (`dist/`, no desplegado). `organization` y `type` de `cases` quedaron **opcionales** pese a decir "requerido" abajo: 12/27 y 11/27 fichas reales aún no tienen esos campos llenos (contenido Draft/Archivo sin curar) y bloquear el build entero por eso no tenía sentido — solo la regla de Insignia+publicado (métrica ancla + evidencia) bloquea de verdad.
+**Vigente al 2026-11-25.** Verificado contra `src/services/notionClient.ts` (`NOTION_SOURCES`), `src/services/notionLoaders.ts`, `src/services/notionEvents.ts`, `src/content.config.ts` y el schema real de cada base en Notion. Si este documento y el código difieren, gana el código y se corrige este archivo.
 
-**Actualización 2026-07-23 (Fase 2 · Home/casos desde CMS):** `cases` ganó 4 campos que no estaban en la propuesta original de este documento: `body` (Markdown plano del cuerpo de la ficha, vía `blocksToMarkdown` extendido con soporte de tablas), `resultHeadline` (primer H1 del cuerpo — el resultado narrado como afirmación, usado como título de tarjeta y de página de caso), `hasVerifiedEvidence` (boolean derivado de la tabla bajo `## Evidencia`: true si al menos una fila tiene ✔) y `cardContext` (mapea a la propiedad Notion nueva **"Contexto tarjeta"**, texto libre de ~160 caracteres pensado para verse solo en tarjeta). Esto NO contradice la regla de la sección "Tratamiento de evidencia (cases)" de abajo (el bloque ✔/✖ sigue viviendo como narrativa en el `body`, no se estructuró en Zod fila por fila) — `hasVerifiedEvidence` es un derivado de un solo bit (¿hay al menos un ✔?), no una estructuración del contenido de cada fila.
+Versión pública y guía de réplica: repo `github.com/diegomaury-mx/notion-cms` (`docs/02-notion-data-contract.md`, `docs/09-replicate.md`).
 
-**Fuentes cubiertas (las 3 confirmadas en Diego CMS, 2026-07-19):**
+## Cómo leer este contrato
 
-| # | Fuente Notion | Tipo | Alimenta |
+- Los helpers `get*` de `notionClient.ts` devuelven un valor neutro (`''`, `[]`, `undefined`) **sin error** si la propiedad no existe o cambió de tipo. Un renombre en Notion vacía el campo en silencio. Ante un campo vacío en el sitio, comparar nombre y tipo contra `GET /v1/data_sources/{id}`.
+- Zod (`content.config.ts`) es la validación estricta: un dato inválido aborta el build y el sitio anterior sigue vivo.
+- Todas las imágenes pasan por `notionImageCache.ts` (WebP ≤1600px, cache versionado en `public/cms-media/notion/`). Nunca se publica la URL S3 de Notion.
+- Los campos listados en `*_TRANSLATABLE_FIELDS` se traducen con DeepL a `data.en.*` (cache versionado en `public/cms-media/notion/translations/`). Sin cuota o sin llave, `/en/*` cae al español.
+
+## Fuentes
+
+| Colección | Fuente Notion | ID | Forma | id de entrada | Alimenta |
+|---|---|---|---|---|---|
+| `cases` | 🗂️ SSOT - Portafolio Proyectos | `88257bc9-e575-45e8-90df-f851f96e92f2` | data source | `page.id` | `/portfolio`, `/portfolio/[slug]`, `llms`, EN |
+| `metrics` | 📊 Métricas oficiales — Portafolio D | `213ea2d0-bffc-41b9-9877-92132551461c` | data source | `Slug` | franja "Por los números", cifras del hero |
+| `siteCopy` | Copy Oficial · diegomaury.mx (SSOT) | `d9ab8508-660a-43e8-ac45-9386dd7903d9` | página singleton | `site` | home S1-S8, `/portfolio` P1-P3 + P5 |
+| `imageSlots` | 🖼️ CMS Imágenes — Portafolio D | `8dda9726-a42d-407d-ba84-334b4a1ef7a1` | data source | `Slot` | foto de Diego, cinturón de logos |
+| `testimonials` | ⭐ Testimonios Diego - Typedream | `d2f2943f-9a0e-445b-bbad-16134ab2c977` | data source | `page.id` | `TestimonialMarquee` (home ES/EN, `/portfolio`) |
+| `events` | 📆 Meetups y Eventos: Ecosistema Tech & Innovation | `7c2e4e81-be2f-428c-ad64-73c05beea6b5` | data source | `page.id` | `/eventos`, `/en/events` |
+| `reservaCopy` | Reserva conmigo · diegomaury.mx (SSOT) | `3e70fe3c-51c5-815a-9517-df6e6806a4ef` | página singleton | `reserva` | **sin consumidor**: `/reserva` es un redirect 301 desde 2026-09-26. Se sigue cargando en cada build |
+
+La integración de Notion `Diego CMS` (solo lectura) debe tener acceso a las 7 fuentes.
+
+---
+
+## 1. `cases`
+
+**Publicación:** `draft = !(Estado publicación === "Publicado" && Publicable === true)`. Ambos gates son obligatorios en toda capa. Una ficha con `draft = true` no sale en rutas, sitemap ni llms.
+
+**Guardrail (`superRefine`):** `Capa = Insignia` y `draft = false` exige `Métrica ancla` no vacía **y** `Evidencia` (url). Si falta, el build falla.
+
+**URL de la ficha:** `slugify(title)`. La propiedad `Slug` existe en Notion pero el código no la lee: renombrar el título cambia la URL.
+
+| Propiedad Notion | Tipo | Campo | Notas |
 |---|---|---|---|
-| 1 | `SSOT - Portafolio Proyectos` (`collection://88257bc9-e575-45e8-90df-f851f96e92f2`) | Database, 27 fichas | Colección `cases` |
-| 2 | `Copy Oficial · diegomaury.mx (SSOT)` (página única `d9ab8508-660a-43e8-ac45-9386dd7903d9`) | Página, no database | Colección singleton `siteCopy` — implementada en `config.ts` desde 2026-07-23 |
-| 3 | `Métricas oficiales — Portafolio D` (`collection://213ea2d0-bffc-41b9-9877-92132551461c`) | Database, 11 métricas | Colección `metrics` — implementada en `config.ts` desde 2026-07-23 |
+| `title` | title | `title` | requerido |
+| `Titular de tarjeta` | text | `cardHeadline` | override del título. Cadena: `cardHeadline` → `resultHeadline` → `title` |
+| `Organización` | select | `organization` | opcional |
+| `Tipo` | **multi_select** | `type` | opciones unidas con ` · ` (ej. `No-Code · Sistema RevOps/AI`); línea meta de la ficha |
+| `Rol de Diego` | text | `role` | fallback de la meta description |
+| `Contexto tarjeta` | text | `cardContext` | ~160 car. para tarjeta; fallback de la meta description |
+| `Objetivo con métrica y timeframe` | text | `objective` | **no se lee hoy**: el código busca el nombre con un espacio final que ya no existe. No activarlo sin decisión de Diego: alimentaría la meta description y el `.md` de cada ficha, y varias fichas guardan ahí cifras sin respaldo |
+| `Resultados y acciones clave realizadas` | text | `resultsAndActions` | texto libre |
+| `Datos cuantitativos` | text | `quantData` | texto libre, no se renderiza |
+| `Métrica ancla` | text | `anchorMetric` | obligatorio en Insignia publicada; se muestra en el rail |
+| `Estado publicación` | select | `publicationStatus` | `Draft` / `En revisión` / `Publicado` / `Archivado` |
+| `Publicable` | checkbox | `publishable` | segundo gate |
+| `Capa` | select | `layer` | `Insignia` / `Soporte` / `Archivo` (requerido) |
+| `Canales` | multi_select | `channels` | `Sitio` / `LinkedIn` / `CV` / `llms.txt` |
+| `Capacidades` | multi_select | `capabilities` | 9 opciones; alimentan los chips del grid de capacidades |
+| `Evidencia` | url | `evidenceUrl` | `http(s)://` obligatorio por schema |
+| `Evidencia visual` | files | `evidenceMedia` | solo fotos, cacheadas; >20MB se descarta con warning |
+| `Videos de evidencia` | text | `evidenceVideos` | una URL por línea, `Etiqueta \| URL` opcional; YouTube/Drive se embeben. Nunca archivos de video |
+| `Caso maestro` / `Ediciones` | relation (self) | `masterCase` / `editions` | `Ediciones` no se renderiza |
+| `year` | select | `year` | |
+| `Orden Insignia` | number | `insigniaOrder` | orden de Insignia; sin valor: `year` desc, luego `title` |
+| `banner`, `logo` | files | `banner`, `logo` | primer archivo, cacheado. No se reemplazan por API (subida manual) |
+| `Reflexión` | text | `reflection` | cierre; un `<p>` por párrafo; solo si no está vacía |
+| `Fondo`, `Slug` | file / text | — | existen en Notion, no se leen |
+| *(cuerpo)* | bloques | `body` | `blocksToMarkdown` (tablas incluidas). `fetchBlockChildren` no desciende a `child_page`/`child_database`. Un `ai_block` rompe todos los builds |
+
+**Derivados:** `resultHeadline` (primer H1 del cuerpo), `hasVerifiedEvidence` (alguna fila ✔ bajo `## Evidencia`), `draft`, `en` (`CASE_TRANSLATABLE_FIELDS`: title, resultHeadline, cardHeadline, cardContext, objective, resultsAndActions, anchorMetric, body, reflection).
+
+**Render del cuerpo:** `## Resultado` con tabla `Métrica | Antes | Después` se pinta como tarjetas; cualquier otro encabezado cae a `.prose-table`. Plantilla canónica: "Plantilla v2 · Especificación de caso maestro" (Notion).
 
 ---
 
-## 1. `SSOT - Portafolio Proyectos` → `cases`
+## 2. `metrics`
 
-**Corrección necesaria:** el schema `cases` que existía en `src/content/config.ts`, hoy `src/content.config.ts` (campos `context`, `challenge`, `objectives[]`, `actions[]`, `results[]`) es aspiracional y **no coincide con las propiedades reales de la base**. No se toca `config.ts` en esta tarea (eso es de la tarea "CMS: validar contenido con Zod"), pero el mapeo correcto contra el schema real, verificado 2026-07-19, es:
+**Publicación:** `buildable = Estado === "Vigente" && Publicabilidad ∈ {"Pública", "A solicitud"}`. `metricBySlug` filtra por `buildable`; cada cifra renderiza su `mandatoryQualifier` sin excepción.
 
-| Propiedad Notion | Tipo Notion | Campo Zod propuesto | Default | Nota |
-|---|---|---|---|---|
-| `title` | title | `title` | — | requerido |
-| `Organización` | select (5 opciones) | `organization` | — | requerido |
-| `Tipo` | select (6 opciones) | `type` | — | requerido |
-| `Rol de Diego` | text | `role` | — | requerido |
-| `Objetivo con métrica y timeframe ` *(espacio final real)* | text | `objective` | — | referenciar la propiedad con el espacio al final |
-| `Resultados y acciones clave realizadas` | text | `resultsAndActions` | — | texto libre, no array — corrige la forma `actions[]`/`results[]` de la propuesta anterior |
-| `Datos cuantitativos` | text | `quantData` | — | texto libre, no estructurado |
-| `Métrica ancla` | text | `anchorMetric` | — | la cifra destacada del caso |
-| `Estado publicación` | select: Draft / En revisión / Publicado / Archivado | `publicationStatus` | `"Draft"` | ver regla de publicación abajo |
-| `Publicable` | checkbox | `publishable` | `false` | ver regla de publicación abajo |
-| `Capa` | select: Insignia / Soporte / Archivo | `layer` | — | Insignia = máx. 3, exige evidencia; Archivo nunca se publica |
-| `Canales` | multi: Sitio / LinkedIn / CV / llms.txt | `channels` | `[]` | filtra en qué superficie aparece |
-| `Capacidades` | multi (9 opciones canónicas) | `capabilities` | `[]` | máx. 3-4 por caso, lista cerrada en Taxonomía |
-| `Evidencia` | url | `evidenceUrl` | `undefined` | opcional — puede no existir (capa Soporte) |
-| `Evidencia visual` | file (multi) | `evidenceMedia` | `[]` | agregada 2026-08-11; **solo fotos**. Cada archivo se cachea localmente (`imageFields`, igual que `banner`/`logo`), con límite de 20MB por archivo — Cloudflare Pages rechaza assets >25MB, así que un archivo más pesado se omite con warning en vez de romper el build |
-| `Videos de evidencia` | text | `evidenceVideos` | `[]` | agregada 2026-08-11; texto libre, una URL por línea (formato opcional `Etiqueta \| URL`). **Regla dura: los videos son forzosamente un link externo (YouTube/Drive), nunca un archivo subido a Notion** — decisión explícita de Diego, evita romper el límite de tamaño de Cloudflare Pages con un video sin comprimir |
-| `Caso maestro` / `Ediciones` | relation (auto-relación) | `masterCase` / `editions` | `undefined` | agrupa ediciones bajo el maestro; capa Archivo solo se referencia desde aquí |
-| `year` | select | `year` | — | usar `year`, no `[DEPRECADO] Año` |
-| `Orden Insignia` | number | `insigniaOrder` | `undefined` | agregada 2026-08-16 (rediseño narrativo de /portfolio); orden manual de los 4 casos Insignia, sin valor va al final (fallback: year desc, luego título) |
-| `banner`, `logo` | file | `banner`, `logo` | `undefined` | assets |
-| `Contexto tarjeta` | text | `cardContext` | `''` | agregada 2026-07-23, no estaba en la propuesta original; frase corta (~160 car.) para tarjeta, separada de `Rol de Diego` para no truncar texto pensado para la página completa |
-| `Titular de tarjeta` | text | `cardHeadline` | `''` | agregada 2026-08-16; override manual del título de tarjeta/página/llms.txt, con prioridad sobre `resultHeadline`. Cadena de fallback completa: `cardHeadline` → `resultHeadline` (primer H1 del body) → `title` (nombre de la ficha). Vacía hasta que Diego migre una ficha puntual — no es obligatoria |
-| `Reflexión` | text | `reflection` | `''` | agregada 2026-08-11 (rediseño CAR, ver `docs/superpowers/specs/2026-08-11-case-template-car-redesign-design.md`); cierre editable sin tocar el `body`. Se renderiza como sección final de la página de caso solo si no está vacía |
-| Cuerpo de la página (contenido de la ficha) | rich text | `body` (Markdown, no MDX real) | `''` | fuente narrativa única: contexto, problema, sistema, autopsia y bloque de evidencia ✔/✖ viven aquí, no en propiedades. Implementado 2026-07-23 vía `blocksToMarkdown`; también alimenta `resultHeadline` (primer H1) y `hasVerifiedEvidence` (¿al menos un ✔ en la tabla de Evidencia?) |
-
-**No migrar:** las 5 propiedades `[DEPRECADO] *` (se eliminan al cerrar Fase B1, no se mapean a Zod).
-
-### Regla de publicación (cases)
-
-```
-draft = NOT (Estado publicación == "Publicado" AND Publicable == true)
-```
-
-Ya documentada en `docs/platform/cms-notion.md`. Astro nunca debe exponer una ficha con `draft = true` en rutas públicas, sitemap ni `llms.txt`.
-
-### Tratamiento de evidencia (cases)
-
-La evidencia **no** es un campo estructurado único: vive en dos lugares.
-1. `Evidencia` (url) — enlace único al respaldo principal, cuando existe.
-2. El bloque ✔/✖ dentro del cuerpo de la ficha (rich text) — tabla de afirmaciones cuantitativas con su grado (`institucional` / `propio` / `sin artefacto`), definida en la Plantilla v2. Astro debe parsear esto como parte del MDX del `body`, no intentar estructurarlo en Zod en el Sprint 1 (sobre-ingeniería prematura — YAGNI). Solo capa **Insignia** exige que este bloque no tenga filas ✖ sin justificar; Soporte puede declarar "sin cifras registradas".
-
----
-
-## 2. `Copy Oficial · diegomaury.mx (SSOT)` → `siteCopy`
-
-Esta fuente **no es una base de datos**: es una página única con contenido consolidado en secciones `S1`–`S8` (Hero, Quién soy, Problema, Evidencia, Cómo trabajo, Sistemas propios, Formas de trabajar, Siguiente paso) más un bloque de metadatos SEO. No tiene propiedades tipadas de Notion — es texto libre estructurado por encabezados Markdown.
-
-**Schema real implementado (`config.ts`, desde 2026-07-23):** `{ title: z.string(), markdown: z.string() }` — mucho más simple que la propuesta original de abajo. El loader (`siteCopyLoader`) trae el markdown crudo tal cual; la división por secciones `S1`–`S8` no vive en Zod, la hace `src/utils/parseSiteCopy.ts` en runtime (parseo por heading `S<n> ·`, con la defensa de clave-duplicada-gana-la-primera documentada en CLAUDE.md §"Gotcha del loader"). La propuesta de schema anidado hero/about/problem de abajo **no se implementó así** — se dejó como referencia histórica de la exploración original:
-
-```ts
-const siteCopy = defineCollection({
-  type: 'data',
-  schema: z.object({
-    hero: z.object({
-      label: z.string(),
-      h1: z.string(),
-      subheadline: z.string(),
-      ctaPrimary: z.string(),
-      ctaSecondary: z.string(),
-      anchorMetricSlugs: z.array(z.string()).length(3), // referencia a `metrics`, no valores literales
-    }),
-    about: z.object({ tagline: z.string(), bio: z.string(), roles: z.array(z.string()) }),
-    problem: z.object({ title: z.string(), body: z.string() }),
-    howIWork: z.array(z.object({ step: z.string(), title: z.string(), body: z.string() })),
-    seo: z.object({ title: z.string(), description: z.string().max(160), ogTitle: z.string(), ogDescription: z.string() }),
-  }),
-});
-```
-
-**Regla clave — no duplicar cifras:** el copy nunca lleva un valor numérico literal para una métrica ancla; referencia el `slug` de `Métricas oficiales` y el build resuelve el valor + calificador obligatorio en tiempo de build (mismo principio que el placeholder `{{metrica:slug}}` que ya usa la Maqueta Sitio v2 en Notion). Esto es el motivo real por el que Copy Oficial y el sitio se desincronizaron el 2026-07-17–19 (hallazgo de la tarea anterior de este chain): sin esa indirección, cada cambio de copy puede pisar una cifra ya corregida en Métricas oficiales.
-
-**Regla de publicación (copy):** no existe estado `Draft`/`Publicado` en esta página — es un documento vivo de una sola versión vigente. La "publicación" es el acto de sincronizar manualmente contra el HTML live (ver callout de la página, actualizado 2026-07-19). En Astro, todo el contenido de `siteCopy` se considera siempre publicable; no aplica el filtro `draft`.
-
-**Tratamiento de evidencia (copy):** no aplica directamente — el copy no lleva su propio bloque de evidencia. Cualquier cifra citada hereda el grado de evidencia de `Métricas oficiales` vía el slug referenciado.
-
-**Bloques `P1`-`P4` (agregados 2026-08-16, rediseño narrativo de `/portfolio`):** mismo mecanismo que `S1`-`S8`, mismo parser (`SECTION_HEADING` en `parseSiteCopy.ts` ahora acepta también el prefijo `P`). Viven en la misma página, columna Versión Actual.
-
-| Bloque | Contenido | Se lee con |
+| Propiedad Notion | Tipo | Campo |
 |---|---|---|
-| `P1 · Hero portfolio` | `## <H1>` + primer párrafo (lede) | `heading2(p1)`, `paragraphs(p1)[0]` |
-| `P2 · Casos insignia` | el label del heading (`· <label>`) es el eyebrow; `## <H2>` es la transición narrativa | `.label` de la sección, `heading2(p2)` |
-| `P3 · Soporte` | igual patrón que P2 | `.label`, `heading2(p3)` |
-| `P4 · Archivo` | un solo párrafo (nota del acordeón) | `paragraphs(p4)[0]` |
+| `Métrica` | title | `metric` |
+| `Slug` | text | `slug` (kebab-case, llave estable) |
+| `Valor` | text | `value` |
+| `Claim canónico` | text | `canonicalClaim` |
+| `Calificador obligatorio` | text | `mandatoryQualifier` |
+| `Timeframe` | text | `timeframe` |
+| `Entidad/Programa` | select | `entity` |
+| `Superficies permitidas` | multi_select | `allowedSurfaces` |
+| `Estado` | select | `status` (`Vigente` / `Condicionada` / `Retirada` / `En revisión`) |
+| `Publicabilidad` | select | `publicability` (`Pública` / `Interna` / `A solicitud` / `No publicable`) |
+| `Grado de evidencia` | select | `evidenceGrade` (`published` / `own` / `belief`) |
+| `Riesgo reputacional` | select | `reputationalRisk` |
+| `URL / Evidencia` | url | `evidenceUrl` |
+| `Fuente` | text | `source` |
+| `Nota de uso` | text | `usageNote` |
+| `Ficha relacionada` | relation | `relatedCase` |
 
-Si un bloque falta o está vacío, `portfolio.astro` cae a un copy por defecto (mismo texto que el borrador del spec) — nunca rompe el build ni deja una sección vacía.
-
----
-
-## 3. `Métricas oficiales — Portafolio D` → `metrics`
-
-Ya tiene un espejo funcional fuera de Astro: `assets/data/metrics.json` + `tools/verify-metrics.js` (ver `docs/superpowers/specs/2026-07-15-ssot-metricas-design.md`). El contrato Astro solo formaliza lo que ese verificador ya impone.
-
-| Propiedad Notion | Tipo Notion | Campo Zod propuesto | Default | Nota |
-|---|---|---|---|---|
-| `Métrica` | title | `metric` | — | requerido |
-| `Slug` | text | `slug` | — | identificador estable, kebab-case, nunca cambia — llave primaria de facto |
-| `Valor` | text | `value` | — | valor publicable con formato exacto |
-| `Claim canónico` | text | `canonicalClaim` | — | frase publicable completa |
-| `Calificador obligatorio` | text | `mandatoryQualifier` | — | debe acompañar siempre al valor publicado |
-| `Timeframe` | text | `timeframe` | — | — |
-| `Entidad/Programa` | select (6 opciones) | `entity` | — | — |
-| `Superficies permitidas` | multi (7 opciones) | `allowedSurfaces` | `[]` | Hero / Caso de estudio / llms.txt / CV / Pitch deck / LinkedIn / Sitio web |
-| `Estado` | select: Vigente / Condicionada / Retirada / En revisión | `status` | — | ver regla de publicación |
-| `Publicabilidad` | select: Pública / Interna / A solicitud / No publicable | `publicability` | — | ver regla de publicación |
-| `Grado de evidencia` | select: published / own | `evidenceGrade` | — | published = tercero lo publica; own = registro/estimación propia |
-| `Riesgo reputacional` | select: Bajo / Medio / Alto | `reputationalRisk` | — | — |
-| `URL / Evidencia` | url | `evidenceUrl` | `undefined` | — |
-| `Fuente` | text | `source` | `undefined` | respaldo cuando no hay URL |
-| `Nota de uso` | text | `usageNote` | `undefined` | restricciones de publicación |
-| `Ficha relacionada` | relation → `SSOT - Portafolio Proyectos` | `relatedCase` | `undefined` | — |
-
-### Regla de publicación (metrics)
-
-```
-buildable = (Estado == "Vigente") AND (Publicabilidad IN ["Pública", "A solicitud"])
-```
-
-Una métrica `Retirada` o `En revisión` nunca debe resolver un placeholder `{{metrica:slug}}` en build — el build debe fallar (no renderizar con valor stale) si algo la referencia. Esto es exactamente lo que ya hace `tools/verify-metrics.js` sobre HTML estático; en Astro se vuelve una validación de build en tiempo de `getCollection('metrics')` + resolución de placeholders antes de `astro build`.
-
-### Tratamiento de evidencia (metrics)
-
-Es la única de las 3 fuentes con evidencia ya completamente estructurada por diseño: `Grado de evidencia` + `URL / Evidencia` + `Fuente` + `Riesgo reputacional` viven como propiedades tipadas, no como texto libre. Astro debe renderizar el `Calificador obligatorio` siempre pegado al `Valor` en cualquier superficie — nunca el valor solo.
+Espejo aparte: `assets/data/metrics.json` + `node tools/verify-metrics.cjs` (gate manual pre-commit, exige exit 0; no valida EN, riesgo aceptado). `en`: `METRIC_TRANSLATABLE_FIELDS` (metric, canonicalClaim, mandatoryQualifier, usageNote).
 
 ---
 
-## Regla transversal (las 3 fuentes)
+## 3. `siteCopy` (y `reservaCopy`)
 
-Ninguna fuente permite valores no verificados en contenido publicable. El build de Astro debe fallar en frío (sitio LIVE anterior permanece activo) si:
-- una ficha con `draft = false` no tiene `Métrica ancla` + `Evidencia` cuando `Capa == "Insignia"`,
-- `siteCopy` referencia un slug de métrica que no existe en `metrics` o cuyo `buildable` es `false`,
-- una fila de `metrics` con `Estado != "Vigente"` es referenciada por cualquier fuente.
+Página, no base. Schema `{ title, markdown }`; la estructura la impone `src/utils/parseSiteCopy.ts` en las páginas, partiendo por `# S<n> · …` / `# P<n> · …`. El código usa el **código** (`S1`, `P5`), nunca el nombre después del `·`. Clave duplicada: gana la primera.
 
-Nota histórica: hasta 2026-07-23 este documento marcaba `src/content/config.ts` como fuera de alcance ("eso es la tarea de validar con Zod"). ​Esa tarea y la Fase 2 completa (Home/casos/SEO) ya están implementadas — ver la actualización al inicio de este documento y CLAUDE.md sección 1.
+| Bloque | Consumidor | Estructura obligatoria |
+|---|---|---|
+| `S1` Hero | `index.astro` | ver página Notion |
+| `S2` Quién soy | `AboutSection.astro` vía `parseAbout` | `##` titular, intro, cifras `N etiqueta • N etiqueta`, `###` roles, párrafos `Rol: descripción`, `###` método, párrafo |
+| `S3` | `index.astro` | |
+| `S4` Evidencia | `index.astro` (radial) | `#` título, intro, `**Centro**` + párrafo, bloque de código (un campo por línea), cierre. Plantilla: `docs/superpowers/specs/2026-08-12-s4-evidencia-radial-copy-notion.md` |
+| `S5`, `S6`, `S6b` | `index.astro` | por estructura |
+| `S7` | **no existe** en código | |
+| `S8` Contacto | `ContactSection.astro` vía `parseContactCopy` | label, titular, intro. Las fichas `###` se ignoran |
+| `P1`-`P3`, `P5` | `portfolio.astro` | P1 `##` + lede; P2/P3 label + `##`; P5 CTA de cierre. `P4` retirado |
+| `SEO` | layout/footer | |
+
+La home EN corre el mismo parseo ES y traduce cada string ya extraído (`t()`/`tAll()`); nunca se traduce el markdown crudo. Reestructurar el copy en Notion rompe secciones sin avisar: adaptar el parser antes.
+
+`reservaCopy` usa el mismo loader de singleton; hoy no tiene consumidor.
 
 ---
 
-## 4. `🖼️ CMS Imágenes — Portafolio D` → `imageSlots` (agregada 2026-07-25)
+## 4. `imageSlots`
 
-Cuarta fuente, agregada para eliminar imágenes hardcodeadas en `index.astro` (foto de Diego repetida 3 veces, 5 logos de un `LOGO_MAP` en código). Database nueva bajo la página "Portafolio D" (`collection://8dda9726-a42d-407d-ba84-334b4a1ef7a1`), NO es una extensión de `SSOT - Portafolio Proyectos` (los `banner`/`logo` de cada caso siguen viviendo ahí, ya funcionaban vía Files & media desde antes — ver sección 1).
-
-| Propiedad Notion | Tipo Notion | Campo Zod | Nota |
+| Propiedad Notion | Tipo | Campo | Notas |
 |---|---|---|---|
-| `Slot` | title | `slot` | Llave técnica exacta usada en el código (`slotSrc('<slot>', fallback)` en `index.astro`); no renombrar sin actualizar el código |
-| `Imagen` | files | `imageUrl` | Opcional — slot sin archivo subido |
-| `Tamaño requerido` | text | `sizeRequired` | Referencia para quien sube el archivo |
-| `Formato requerido` | select: PNG/JPG/WebP/SVG | `formatRequired` | — |
-| `Estado` | status: Sin empezar/En curso/Listo | `status` | Solo `"Listo"` con `imageUrl` presente hace que el sitio use la imagen de Notion; cualquier otro caso cae al path hardcodeado (fallback), nunca rompe el build |
-| `Descripcion` | text | `description` | Dónde vive el slot en el código (sección, archivo, línea aprox.) |
+| `Slot` | title | `slot` | llave técnica (`slotSrc('<slot>', fallback)`); no renombrar sin tocar código |
+| `Imagen` | files | `imageUrl` | cacheada |
+| `Tamaño requerido` | text | `sizeRequired` | |
+| `Formato requerido` | select | `formatRequired` | |
+| `Estado` | status | `status` | solo `Listo` + imagen activa el slot |
+| `Descripcion` | text | `description` | |
+| `Nombre` | text | `nombre` | alt text; obligatorio para logos |
 
-**Regla de resolución (`slotSrc`, en `index.astro`):**
-```
-usa imageUrl SOLO SI status == "Listo" AND imageUrl existe; si no, usa el fallback hardcodeado
-```
-
-**Gotcha corregido (2026-08-03, no reintroducir):** `imageUrl` (y `banner`/`logo` de `cases`) NUNCA es la URL cruda de Notion en el dato ya cargado por el loader. La API de Notion devuelve una URL firmada de S3 (`prod-files-secure.s3...`) que expira en ~1h (`X-Amz-Expires=3600`); como Cloudflare Pages solo reconstruye en cada push (no hay rebuild diario), esa firma expiraba antes de la siguiente visita y la imagen se rompía en producción. `createDataSourceLoader` (`notionLoaders.ts`) descarga cada campo listado en `imageFields` con `cacheNotionImage` (`notionImageCache.ts`) y lo reemplaza por una copia local en `public/cms-media/notion/` (gitignored, se regenera en cada build) antes de guardarlo en el store. Si la descarga falla, el campo queda `undefined` y el fallback hardcodeado de `slotSrc`/las plantillas de caso se usa igual — no rompe el build.
-
-Slots dados de alta al crear la base (2026-07-25): `foto-diego`, `logo-heineken`, `logo-tec-de-monterrey`, `logo-incmty`, `logo-ebc`, `logo-fliphouse`. Todos en `Estado = Sin empezar` — el sitio sigue usando los paths hardcodeados hasta que Diego suba cada archivo y cambie el Estado a `Listo`.
+**Cinturón de logos:** filas con `slot` que empieza en `logo-`, no termina en `-evidencia`, `Listo`, con imagen y `Nombre`; orden alfabético por `Nombre`; `BLOCKED_LOGO_NAMES` las excluye por `Nombre`. Regla dura: toda foto nueva del sitio entra como fila aquí.
 
 ---
 
-## 5. `📆 Meetups y Eventos: Ecosistema Tech & Innovation` → `events` (agregada 2026-09-09)
+## 5. `testimonials`
 
-Quinta fuente CMS: agenda pública de solo lectura en `/eventos` (+ `/en/events`). Base `collection://7c2e4e81-be2f-428c-ad64-73c05beea6b5`, contrato maestro "📆 Pipeline de Eventos · Data Contract v2" (Notion), sección 8. Ante conflicto, gana el contrato de Notion.
+**Gate:** la fila entra si `Review` tiene texto, `Role` ≠ `Miembro de Wella México` y la cita no es un stub de video (`/testimonio en video|video testimonial/i`). `Texto` (versión expandida por IA) nunca se usa.
 
-**Filtro del loader (`eventsLoader` en `notionLoaders.ts`):** solo entran filas con `Publicación == "Publicado"` Y fecha de fin (o inicio si no hay fin) `>= hoy` en `America/Mexico_City`. Sin `Enlace Oficial` válido (`http(s)://`) no hay tarjeta. El loader NO lee el body de las páginas (los bloques `ai_block` de Notion no aplican).
-
-**Frescura entre builds (2026-09-10):** el filtro de vigencia es de build time, así que se refuerza en dos capas más. (1) El `<script>` de `EventsAgenda.astro` recalcula `hoy` (America/Mexico_City) en cada carga con `src/services/eventDates.ts` y oculta client-side los eventos ya sucedidos y recalcula los flags de vista, sin esperar un rebuild. (2) El Worker `notion-deploy-relay` tiene un Cron Trigger diario (`0 13 * * *`) que dispara el Deploy Hook, así el HTML/SEO servido también deja de listar eventos pasados aunque nadie edite Notion.
-
-**Whitelist de publicación (sección 8.2 del contrato). El schema (`eventDataSchema` en `src/services/notionEvents.ts`) es `.strict()`: una propiedad fuera de esta lista rompe el build a propósito.**
-
-| Propiedad Notion | Tipo | Campo Zod | Render |
+| Propiedad Notion | Tipo | Campo | Notas |
 |---|---|---|---|
-| `Nombre` | title | `name` | Título de la tarjeta |
-| `Fecha del evento` | date (inicio, fin opcional) | `start` / `end` | Fecha o rango; agrupa por mes; alimenta la vista Calendario |
-| `Ciudad` | select | `city` | Chip / línea meta |
-| `Modalidad` | select | `modality` | Línea meta + filtro "Modalidad" (opciones derivadas de los eventos publicados) |
-| `Tipo` | select | `type` | Chip / línea meta |
-| `Categorías` | multi_select | `categories` | Chips + filtro "Por categoría" |
-| `Organizador` | text | `organizer` | Línea meta |
-| `Resumen` | text | `summary` | Máx. 3 líneas (clamp CSS); único campo traducido a EN (DeepL, `en.summary`, fallback ES) |
-| `Enlace Oficial` | url | `officialUrl` | CTA "Ver evento" (`target=_blank rel=noopener`); obligatorio |
-| `Evento principal` | relation (self) | `parentName` | Solo el nombre del evento padre ("Parte de …"); el loader resuelve el id contra todas las filas |
-| `Status de Ticket` | select | `ticketStatus` | Parcial: `ticketLabel()` muestra "Gratuito" solo si ese es el valor exacto; cualquier otro valor o vacío → "Consultar en el enlace" |
+| `Name` | title | `name` | requerido |
+| `Role` | text | `role` | traducido |
+| `company` | text | `company` | opcional |
+| `Review` | text | `quote` | cita publicada; se limpian `<mark>` y `Â¡`/`Â¿` |
+| `Photo` | files | `photo` | cacheada; sin foto, iniciales |
+| `url` | url | `link` | `http(s)://` obligatorio: una url inválida rompe el build |
 
-**No se leen ni se mapean:** Estado, Prioridad, AI Score, AI Evaluación, Notas, Mi Rol, Contacto, Email, Empresas de interés, Leads captados, Monto vendido, Seguimiento de venta, Vendedor asignado, Fotos, Fuente, Frecuencia, Días restantes, Última sincronización, Última actualización. `Publicación` se usa solo como filtro, no se renderiza.
+`en`: `TESTIMONIAL_TRANSLATABLE_FIELDS` (quote, role).
 
-**`Sede` (tipo `place`): OMITIDA en v1.** La API de Notion no la expone de forma estable (`notAvailableInQuerySql`), y el contrato 8.3 autoriza omitirla si no está disponible. No está en el schema.
+---
 
-**Fallbacks:** campos vacíos de la whitelist no rompen (default a `''`/`[]`/`null`). Cero eventos publicados = estado vacío con copy fijo, nunca build roto.
+## 6. `events`
 
-El CTA "Sugerir un evento" apunta a `https://diegomaury.notion.site/8bc145de2ef046298ab63720d95787a4` (Notion Site pública del formulario, funciona sin cuenta); el sitio nunca recibe ni procesa envíos.
+Loader propio (`eventsLoader`): pre-filtra y resuelve `Evento principal` contra todas las filas. No lee el body. Schema `makeEventDataSchema` es `.strict()`.
 
-**Pendiente de Diego:** (1) compartir la base con la integración `Diego CMS` (Connections → Diego CMS en el menú ••• de la base) — **bloquea el build de producción**; (2) dar de alta la base en la suscripción de webhooks de `notion-deploy-relay` para rebuild automático al cambiar `Publicación`.
+**Gate (`isPublishableEvent`):** `Publicación === "Publicado"` **y** `Scope === "Dentro"` (fórmula, comparación exacta) **y** `Enlace Oficial` con `http(s)://` (sin esquema se descarta a propósito) **y** fin (o inicio) ≥ hoy en `America/Mexico_City`. El cliente vuelve a ocultar eventos pasados en cada carga (`eventDates.ts`).
+
+| Propiedad Notion | Tipo | Campo | Render |
+|---|---|---|---|
+| `Nombre` | title | `name` | título |
+| `Fecha del evento` | date | `start` / `end` | agrupa por mes y alimenta el calendario |
+| `Ciudad` | select | `city` | meta |
+| `Modalidad` | select | `modality` | filtro |
+| `Tipo` | select | `type` | filtro (1 valor) |
+| `Categorías` | multi_select | `categories` | Temas (máx. 3), filtro |
+| `Conceptos` | multi_select | `concepts` | puede venir vacío |
+| `Organizador` | text | `organizer` | meta |
+| `Resumen` | text | `summary` | `cleanSummary`; único campo traducido |
+| `Enlace Oficial` | url | `officialUrl` | CTA |
+| `Evento principal` | relation (self) | `parentName` | "Parte de …" |
+| `Status de Ticket` | select | `ticketStatus` | "Gratuito" solo con ese valor exacto |
+
+No se leen: `Áreas`, `Sede` (place, inestable en la API) ni las propiedades internas de venta/IA. Las opciones de filtro siempre se derivan de los eventos publicados. Temas/Conceptos/Tipo se muestran en español también en EN.
+
+---
+
+## Publicación automática
+
+Worker `notion-deploy-relay` (`docs/platform/relay/worker.next.js`): valida HMAC del webhook de Notion y dispara el Deploy Hook. Cambios en `cases`, `imageSlots`, `siteCopy`, `testimonials` disparan build directo. Eventos de `events` pasan por un filtro de propiedades públicas (`EVENTS_PUBLIC_PROPERTY_IDS`) y marcan `events_rebuild_pending` en KV; el cron `*/5` hace un solo build. Cron diario `0 13 * * *` UTC. `metrics` no publica sola: requiere sincronizar `metrics.json` y push.
+
+## Regla transversal
+
+El build falla en frío si: una Insignia publicada no tiene `Métrica ancla` + `Evidencia`; cualquier dato viola su schema Zod; o falta `NOTION_TOKEN` en producción. Todo lo demás (imagen que no baja, traducción sin cuota, sección de copy sin estructura) degrada sin romper.
