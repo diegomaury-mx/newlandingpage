@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { mock, test } from "node:test";
-import { handleContact, type FetchLike } from "./handleContact.ts";
+import { handleContact, isAllowedTurnstileHostname, type FetchLike } from "./handleContact.ts";
 
 // Los caminos de error del handler llaman console.error a proposito.
 mock.method(console, "error", () => {});
@@ -31,13 +31,13 @@ interface Call {
   init?: RequestInit;
 }
 
-function fakeFetch(options: { turnstile?: boolean | "throw"; email?: number | "throw" } = {}) {
+function fakeFetch(options: { turnstile?: boolean | "throw"; email?: number | "throw"; hostname?: string } = {}) {
   const calls: Call[] = [];
   const fn: FetchLike = async (url, init) => {
     calls.push({ url, init });
     if (url.includes("turnstile")) {
       if (options.turnstile === "throw") throw new Error("red");
-      return Response.json({ success: options.turnstile !== false });
+      return Response.json({ success: options.turnstile !== false, hostname: options.hostname ?? "diegomaury.mx" });
     }
     if (options.email === "throw") throw new Error("red");
     const status = typeof options.email === "number" ? options.email : 200;
@@ -161,4 +161,21 @@ test("handleContact: la API de correo inalcanzable responde 502 send_failed", as
   const res = await handleContact(post(VALID), ENV, fn);
   assert.equal(res.status, 502);
   assert.equal((await bodyOf(res)).error, "send_failed");
+});
+
+test("handleContact: Turnstile resuelto en un hostname ajeno responde 400 captcha", async () => {
+  const { fn, calls } = fakeFetch({ hostname: "sitio-ajeno.example" });
+  const res = await handleContact(post(VALID), ENV, fn);
+  assert.equal(res.status, 400);
+  assert.equal((await bodyOf(res)).error, "captcha");
+  assert.equal(calls.length, 1);
+});
+
+test("isAllowedTurnstileHostname acepta el dominio, www, Pages, previews y localhost", () => {
+  for (const host of ["diegomaury.mx", "www.diegomaury.mx", "newlandingpage-6fo.pages.dev", "abc123.newlandingpage-6fo.pages.dev", "localhost"]) {
+    assert.equal(isAllowedTurnstileHostname(host), true, host);
+  }
+  for (const host of ["evil.mx", "diegomaury.mx.evil.com", "otro.pages.dev", "", undefined]) {
+    assert.equal(isAllowedTurnstileHostname(host), false, String(host));
+  }
 });

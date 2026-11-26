@@ -25,7 +25,8 @@ function renderInline(text: string): string {
   return escaped
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label, url) =>
-      SAFE_LINK_SCHEME.test(url) || url.startsWith("/") || url.startsWith("#")
+      // "//host" es protocol-relative: externo disfrazado de interno.
+      SAFE_LINK_SCHEME.test(url) || (url.startsWith("/") && !url.startsWith("//")) || url.startsWith("#")
         ? `<a href="${url}" target="_blank" rel="noopener">${label}</a>`
         : label,
     );

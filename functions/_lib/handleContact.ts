@@ -19,6 +19,17 @@ function json(status: number, body: Record<string, unknown>, extraHeaders: Recor
   });
 }
 
+// Hostnames donde puede resolverse el widget (los mismos configurados en
+// Turnstile). Un token resuelto en otro sitio no vale aqui.
+const TURNSTILE_HOSTS = new Set(["diegomaury.mx", "www.diegomaury.mx", "newlandingpage-6fo.pages.dev", "localhost"]);
+const PAGES_PREVIEW_SUFFIX = ".newlandingpage-6fo.pages.dev";
+
+export function isAllowedTurnstileHostname(hostname: string | undefined): boolean {
+  if (!hostname) return false;
+  const host = hostname.toLowerCase();
+  return TURNSTILE_HOSTS.has(host) || host.endsWith(PAGES_PREVIEW_SUFFIX);
+}
+
 async function verifyTurnstile(
   token: string,
   secret: string,
@@ -28,8 +39,8 @@ async function verifyTurnstile(
   const form = new URLSearchParams({ secret, response: token });
   if (remoteIp) form.set("remoteip", remoteIp);
   const res = await fetchFn(TURNSTILE_VERIFY_URL, { method: "POST", body: form });
-  const data = (await res.json().catch(() => null)) as { success?: boolean } | null;
-  return data?.success === true;
+  const data = (await res.json().catch(() => null)) as { success?: boolean; hostname?: string } | null;
+  return data?.success === true && isAllowedTurnstileHostname(data.hostname);
 }
 
 async function sendEmail(

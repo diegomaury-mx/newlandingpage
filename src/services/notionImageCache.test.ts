@@ -25,3 +25,11 @@ test("sanitizeCacheKey reemplaza cualquier caracter fuera de [a-zA-Z0-9._-] por 
 test("sanitizeCacheKey deja intactas letras, numeros, punto, guion bajo y guion", () => {
   assert.equal(sanitizeCacheKey("banner_HGC-2026.v2"), "banner_HGC-2026.v2");
 });
+
+test("extensionFromUrl solo acepta extensiones de imagen", () => {
+  assert.equal(extensionFromUrl("https://s3.example.com/pagina.html"), undefined);
+  assert.equal(extensionFromUrl("https://s3.example.com/script.js"), undefined);
+  assert.equal(extensionFromUrl("https://s3.example.com/logo.svg"), "svg");
+  assert.equal(extensionFromUrl("https://s3.example.com/anim.gif"), "gif");
+  assert.equal(extensionFromUrl("https://s3.example.com/foto.jpeg"), "jpeg");
+});

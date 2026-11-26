@@ -73,3 +73,10 @@ test("el rail-nav (extractSections) sigue derivando 3 secciones de un body CAR",
   assert.match(html, /<h2 id="accion">Acción<\/h2>/);
   assert.match(html, /<h2 id="resultado">Resultado<\/h2>/);
 });
+
+test("un link protocol-relative (//host) no se renderiza como enlace", () => {
+  const html = renderMarkdown("Mira [esto](//evil.example) y [aquello](/portfolio).");
+  assert.doesNotMatch(html, /href="\/\/evil/);
+  assert.match(html, /esto/);
+  assert.match(html, /href="\/portfolio"/);
+});

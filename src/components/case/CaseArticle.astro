@@ -149,7 +149,7 @@ const reflectionParagraphs = reflection
           const embedSrc = toEmbeddableVideoUrl(video.url);
           return embedSrc ? (
             <div class="evidence-video-embed">
-              <iframe src={embedSrc} title={video.label} loading="lazy" allowfullscreen></iframe>
+              <iframe src={embedSrc} title={video.label} loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
           ) : (
             <a class="evidence-video-link" href={video.url} target="_blank" rel="noopener">{video.label}</a>
